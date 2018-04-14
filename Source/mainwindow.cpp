@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent)
     setLayout();
     setTrayIcon();
 
-    statusBar()->showMessage("Total Clicked");
+    statusBar()->showMessage("Total Pressed");
 }
 
 MainWindow::~MainWindow()
@@ -91,30 +91,53 @@ void MainWindow::setLayout()
     mainVLayout = new QVBoxLayout;
     mainWidget->setLayout(mainVLayout);
 
-    keyPressedTimesLabel = new QLabel(mainWidget);
-    mainVLayout->addWidget(keyPressedTimesLabel);
-    keyPressedTimesLabel->setAlignment(Qt::AlignCenter);
-    keyPressedTimesLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    keyPressedTimesLabel->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 50px; }");
-    keyPressedTimes = 0;
-    keyPressedTimesLabel->setText(QString::number(keyPressedTimes));
+    lblsVLayout = new QVBoxLayout;
+    mainVLayout->addLayout(lblsVLayout);
 
-    nextPageHLayout = new QHBoxLayout;
-    mainVLayout->addLayout(nextPageHLayout);
+    totalPressedTimesLabel = new QLabel(mainWidget);
+    lblsVLayout->addWidget(totalPressedTimesLabel);
+    totalPressedTimesLabel->setAlignment(Qt::AlignCenter);
+    totalPressedTimesLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    totalPressedTimesLabel->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 50px; }");
+    keyPressedTimes = 0;
+    totalPressedTimesLabel->setText(QString::number(keyPressedTimes));
+
+    frequentlyPressedKeys.resize(5);
+    for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
+        frequentlyPressedKeys[i] = new QLabel(mainWidget);
+        lblsVLayout->addWidget(frequentlyPressedKeys[i]);
+        frequentlyPressedKeys[i]->hide();
+        frequentlyPressedKeys[i]->setAlignment(Qt::AlignCenter);
+        frequentlyPressedKeys[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        frequentlyPressedKeys[i]->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 50px; }");
+    }
+
+    btnHLayout = new QHBoxLayout;
+    mainVLayout->addLayout(btnHLayout);
 
     QSpacerItem *leftBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
-    nextPageHLayout->addSpacerItem(leftBtnSpacer);
+    btnHLayout->addSpacerItem(leftBtnSpacer);
 
-    nextArrowBtn = new QToolButton(mainWidget);
-    nextPageHLayout->addWidget(nextArrowBtn);
-    nextArrowBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    nextArrowBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    nextArrowBtn->setIcon(QIcon(":/next.png"));
-    nextArrowBtn->setText("Next");
+    nextPageBtn = new QToolButton(mainWidget);
+    btnHLayout->addWidget(nextPageBtn);
+//    nextPageBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    nextPageBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    nextPageBtn->setIcon(QIcon(":/next.png"));
+    nextPageBtn->setText("Next");
+    nextPageBtn->setLayoutDirection(Qt::RightToLeft);
 
-    QSpacerItem *rightBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
-    nextPageHLayout->addSpacerItem(rightBtnSpacer);
+    previousPageBtn = new QToolButton(mainWidget);
+    btnHLayout->addWidget(previousPageBtn);
+    previousPageBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    previousPageBtn->setIcon(QIcon(":/back.png"));
+    previousPageBtn->setText("Back");
+    previousPageBtn->hide();
 
+    QSpacerItem *rightBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    btnHLayout->addSpacerItem(rightBtnSpacer);
+
+    connect(nextPageBtn, &QToolButton::clicked, this, &MainWindow::showNextPage);
+    connect(previousPageBtn, &QToolButton::clicked, this, &MainWindow::showPreviousPage);
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &MainWindow::keyPressed);
 }
 
@@ -164,7 +187,7 @@ void MainWindow::keyPressed(QString pressedKey)
         pressedKeyMap.insert(pressedKey, 1);
     }
     keyPressedTimes++;
-    keyPressedTimesLabel->setText(QString::number(keyPressedTimes));
+    totalPressedTimesLabel->setText(QString::number(keyPressedTimes));
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -180,4 +203,27 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore(); //then do not quit the program
         this->hide(); //instead of closing the program, just hide the main window
     }
+}
+
+void MainWindow::showNextPage()
+{
+    totalPressedTimesLabel->hide();
+    nextPageBtn->hide();
+    previousPageBtn->show();
+    for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
+        frequentlyPressedKeys[i]->show();
+        frequentlyPressedKeys[i]->setText(QString::number(i));
+    }
+    statusBar()->showMessage("Frequently Pressed");
+}
+
+void MainWindow::showPreviousPage()
+{
+    totalPressedTimesLabel->show();
+    nextPageBtn->show();
+    previousPageBtn->hide();
+    for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
+        frequentlyPressedKeys[i]->hide();
+    }
+    statusBar()->showMessage("Total Pressed");
 }

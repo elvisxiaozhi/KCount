@@ -19,11 +19,12 @@ public:
 
 private:
     QWidget *mainWidget;
-    QVBoxLayout *mainVLayout;
-    QHBoxLayout *nextPageHLayout;
+    QVBoxLayout *mainVLayout, *lblsVLayout;
+    QHBoxLayout *btnHLayout;
     QSystemTrayIcon *trayIcon;
-    QLabel *keyPressedTimesLabel;
-    QToolButton *nextArrowBtn;
+    QLabel *totalPressedTimesLabel;
+    QVector<QLabel *> frequentlyPressedKeys;
+    QToolButton *nextPageBtn, *previousPageBtn;
     unsigned long long int keyPressedTimes;
     QAction *startOnBootAction;
     QMap<QString, unsigned long long int> pressedKeyMap;
@@ -34,6 +35,10 @@ private slots:
     void keyPressed(QString);
     void trayIconActivated(QSystemTrayIcon::ActivationReason);
     void closeEvent(QCloseEvent *);
+
+private slots:
+    void showNextPage();
+    void showPreviousPage();
 };
 
 #endif // MAINWINDOW_H
