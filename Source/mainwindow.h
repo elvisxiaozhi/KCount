@@ -27,7 +27,7 @@ private:
     void setTrayIcon();
 
 private slots:
-    void keyPressed();
+    void keyPressed(QString);
     void trayIconActivated(QSystemTrayIcon::ActivationReason);
     void closeEvent(QCloseEvent *);
 };

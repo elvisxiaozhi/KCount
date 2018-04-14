@@ -21,7 +21,6 @@ LRESULT CALLBACK MyLowLevelKeyBoardProc(int nCode, WPARAM wParam, LPARAM lParam)
 
     if (wParam == WM_KEYDOWN) {
         qDebug() << "Key Pressed!";
-        Emitter::Instance()->keyPressed();
 
         //Get the key information
         KBDLLHOOKSTRUCT cKey = *((KBDLLHOOKSTRUCT*)lParam);
@@ -54,6 +53,8 @@ LRESULT CALLBACK MyLowLevelKeyBoardProc(int nCode, WPARAM wParam, LPARAM lParam)
 
         //Print the output
         qDebug() << "Key: " << cKey.vkCode << " " << QString::fromUtf16((ushort*)buffer) << " " << QString::fromUtf16((ushort*)lpszName);
+
+        Emitter::Instance()->keyPressed(QString::fromUtf16((ushort*)lpszName));
     }
 
     return CallNextHookEx(hHook, nCode, wParam, lParam);
@@ -132,8 +133,15 @@ void MainWindow::setTrayIcon()
     connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
 }
 
-void MainWindow::keyPressed()
+void MainWindow::keyPressed(QString pressedKey)
 {
+    if(pressedKeyMap.contains(pressedKey)) {
+        unsigned long long int newValue = pressedKeyMap.value(pressedKey) + 1;
+        pressedKeyMap.insert(pressedKey, newValue);
+    }
+    else {
+        pressedKeyMap.insert(pressedKey, 1);
+    }
     keyPressedTimes++;
     keyPressedTimesLabel->setText(QString::number(keyPressedTimes));
 }

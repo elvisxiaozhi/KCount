@@ -11,7 +11,7 @@ public:
     explicit SignalEmitter(QObject *parent = nullptr);
 
 signals:
-    void keyPressed();
+    void keyPressed(QString);
 
 public slots:
 };
