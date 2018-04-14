@@ -20,14 +20,9 @@ private:
     QLabel *keyPressedTimesLabel;
     unsigned long long int keyPressedTimes;
     QAction *startOnBootAction;
+    QMap<QString, unsigned long long int> pressedKeyMap;
     void setLayout();
     void setTrayIcon();
-    void keyPressEvent(QKeyEvent *);
-    bool event(QEvent *);
-
-signals:
-    void keyPressed();
-
 };
 
 #endif // MAINWINDOW_H
