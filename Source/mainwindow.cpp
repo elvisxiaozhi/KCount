@@ -188,6 +188,17 @@ void MainWindow::keyPressed(QString pressedKey)
     }
     keyPressedTimes++;
     totalPressedTimesLabel->setText(QString::number(keyPressedTimes));
+
+    QString biggestKey = pressedKeyMap.begin().key();
+    size_t biggestValue = pressedKeyMap.begin().value();
+    QMap<QString, unsigned long long int>::iterator it;
+    for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
+        if(it.value() > biggestValue) {
+            biggestKey = it.key();
+            biggestValue = it.value();
+        }
+    }
+    frequentlyPressedKeys[0]->setText(biggestKey + ": " + QString::number(biggestValue));
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -212,7 +223,6 @@ void MainWindow::showNextPage()
     previousPageBtn->show();
     for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
         frequentlyPressedKeys[i]->show();
-        frequentlyPressedKeys[i]->setText(QString::number(i));
     }
     statusBar()->showMessage("Frequently Pressed");
 }
