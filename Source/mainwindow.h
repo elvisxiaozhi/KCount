@@ -28,6 +28,7 @@ private:
     unsigned long long int keyPressedTimes;
     QAction *startOnBootAction;
     QMap<QString, unsigned long long int> pressedKeyMap;
+    QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
     void setLayout();
     void setTrayIcon();
 

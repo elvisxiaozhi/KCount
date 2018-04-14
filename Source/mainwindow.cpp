@@ -189,16 +189,25 @@ void MainWindow::keyPressed(QString pressedKey)
     keyPressedTimes++;
     totalPressedTimesLabel->setText(QString::number(keyPressedTimes));
 
-    QString biggestKey = pressedKeyMap.begin().key();
-    size_t biggestValue = pressedKeyMap.begin().value();
+    mapVector.clear();
     QMap<QString, unsigned long long int>::iterator it;
     for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
-        if(it.value() > biggestValue) {
-            biggestKey = it.key();
-            biggestValue = it.value();
+        mapVector.push_back(std::make_pair(it.key(), it.value()));
+    }
+    std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long long int>& a, std::pair<QString, unsigned long long int>& b){
+        return a.second > b.second;
+    });
+
+    if(mapVector.size() > 5) {
+        for(int i = 0; i < 5; i++) {
+            frequentlyPressedKeys[i]->setText(mapVector[i].first + ": " + QString::number(mapVector[i].second));
         }
     }
-    frequentlyPressedKeys[0]->setText(biggestKey + ": " + QString::number(biggestValue));
+    else {
+        for(int i = 0; i < mapVector.size(); i++) {
+            frequentlyPressedKeys[i]->setText(mapVector[i].first + ": " + QString::number(mapVector[i].second));
+        }
+    }
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
