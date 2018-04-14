@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>keyboard_tray_icon.png</file>
+        <file>next.png</file>
     </qresource>
 </RCC>

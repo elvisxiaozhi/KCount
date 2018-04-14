@@ -3,8 +3,10 @@
 
 #include <QMainWindow>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QSystemTrayIcon>
 #include <QAction>
+#include <QToolButton>
 #include <QLabel>
 
 class MainWindow : public QMainWindow
@@ -18,8 +20,10 @@ public:
 private:
     QWidget *mainWidget;
     QVBoxLayout *mainVLayout;
+    QHBoxLayout *nextPageHLayout;
     QSystemTrayIcon *trayIcon;
     QLabel *keyPressedTimesLabel;
+    QToolButton *nextArrowBtn;
     unsigned long long int keyPressedTimes;
     QAction *startOnBootAction;
     QMap<QString, unsigned long long int> pressedKeyMap;

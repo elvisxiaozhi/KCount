@@ -5,6 +5,8 @@
 #include <QDebug>
 #include "signalemitter.h"
 #include <QCloseEvent>
+#include <QStatusBar>
+#include <QSpacerItem>
 //#pragma comment(lib, "user32.lib")
 
 HHOOK hHook = NULL;
@@ -70,6 +72,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     setLayout();
     setTrayIcon();
+
+    statusBar()->showMessage("Total Clicked");
 }
 
 MainWindow::~MainWindow()
@@ -94,6 +98,23 @@ void MainWindow::setLayout()
     keyPressedTimesLabel->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 50px; }");
     keyPressedTimes = 0;
     keyPressedTimesLabel->setText(QString::number(keyPressedTimes));
+
+    nextPageHLayout = new QHBoxLayout;
+    mainVLayout->addLayout(nextPageHLayout);
+
+    QSpacerItem *leftBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
+    nextPageHLayout->addSpacerItem(leftBtnSpacer);
+
+    nextArrowBtn = new QToolButton(mainWidget);
+    nextPageHLayout->addWidget(nextArrowBtn);
+    nextArrowBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    nextArrowBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    nextArrowBtn->setIcon(QIcon(":/next.png"));
+    nextArrowBtn->setText("Next");
+
+    QSpacerItem *rightBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Fixed);
+    nextPageHLayout->addSpacerItem(rightBtnSpacer);
+
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &MainWindow::keyPressed);
 }
 
