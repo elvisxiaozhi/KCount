@@ -1,10 +1,10 @@
 #include "mainwindow.h"
-#include <QSystemTrayIcon>
 #include <QMenu>
 #include <QKeyEvent>
 #include <windows.h>
 #include <QDebug>
 #include "signalemitter.h"
+#include <QCloseEvent>
 //#pragma comment(lib, "user32.lib")
 
 HHOOK hHook = NULL;
@@ -76,14 +76,10 @@ MainWindow::~MainWindow()
 
 }
 
-void MainWindow::testing()
-{
-    qDebug() << "Yes@";
-    Emitter::Instance()->keyPressed();
-}
-
 void MainWindow::setLayout()
 {
+    this->setWindowTitle("Keylogger");
+
     mainWidget = new QWidget(this);
     setCentralWidget(mainWidget);
 
@@ -97,12 +93,12 @@ void MainWindow::setLayout()
     keyPressedTimesLabel->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 50px; }");
     keyPressedTimes = 0;
     keyPressedTimesLabel->setText(QString::number(keyPressedTimes));
-    connect(Emitter::Instance(), &SignalEmitter::keyPressed, [this](){ qDebug() << "Dasa"; });
+    connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &MainWindow::keyPressed);
 }
 
 void MainWindow::setTrayIcon()
 {
-    QSystemTrayIcon *trayIcon = new QSystemTrayIcon(QIcon(":/keyboard_tray_icon.png"), this);
+    trayIcon = new QSystemTrayIcon(QIcon(":/keyboard_tray_icon.png"), this);
     trayIcon->show();
 
     QMenu *trayIconMenu = new QMenu;
@@ -132,5 +128,27 @@ void MainWindow::setTrayIcon()
     QAction *quitAction = new QAction("Quit", trayIconMenu);
     trayIconMenu->addAction(quitAction);
 
-    connect(quitAction, &QAction::triggered, [this, trayIcon](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
+    connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
+}
+
+void MainWindow::keyPressed()
+{
+    keyPressedTimes++;
+    keyPressedTimesLabel->setText(QString::number(keyPressedTimes));
+}
+
+void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    if(reason == 2 || reason == 3) { //tray icon was double clicked or clicked
+        this->showNormal(); //to show a normal size of the main window
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if(trayIcon->isVisible()) { //if tray icon can be seen in the task bar
+        event->ignore(); //then do not quit the program
+        this->hide(); //instead of closing the program, just hide the main window
+    }
 }
