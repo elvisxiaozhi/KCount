@@ -9,6 +9,7 @@
 #include <QToolButton>
 #include <QLabel>
 #include <QSettings>
+#include "label.h"
 
 class MainWindow : public QMainWindow
 {
@@ -23,8 +24,8 @@ private:
     QVBoxLayout *mainVLayout, *lblsVLayout;
     QHBoxLayout *btnHLayout;
     QSystemTrayIcon *trayIcon;
-    QLabel *totalPressedTimesLabel;
-    QVector<QLabel *> frequentlyPressedKeys;
+    Label *totalPressedTimesLabel;
+    QVector<Label *> frequentlyPressedKeys;
     QToolButton *nextPageBtn, *previousPageBtn;
     unsigned long long int keyPressedTimes;
     QAction *startOnBootAction;

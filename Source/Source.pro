@@ -26,12 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    signalemitter.cpp
+    signalemitter.cpp \
+    label.cpp
 
 HEADERS += \
         mainwindow.h \
     singleton.h \
-    signalemitter.h
+    signalemitter.h \
+    label.h
 
 RESOURCES += \
     ../Icons/icons.qrc

@@ -96,22 +96,16 @@ void MainWindow::setLayout()
     lblsVLayout = new QVBoxLayout;
     mainVLayout->addLayout(lblsVLayout);
 
-    totalPressedTimesLabel = new QLabel(mainWidget);
+    totalPressedTimesLabel = new Label;
     lblsVLayout->addWidget(totalPressedTimesLabel);
-    totalPressedTimesLabel->setAlignment(Qt::AlignCenter);
-    totalPressedTimesLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    totalPressedTimesLabel->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 50px; }");
     keyPressedTimes = 0;
     totalPressedTimesLabel->setText(QString::number(keyPressedTimes));
 
     frequentlyPressedKeys.resize(5);
     for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
-        frequentlyPressedKeys[i] = new QLabel(mainWidget);
+        frequentlyPressedKeys[i] = new Label;
         lblsVLayout->addWidget(frequentlyPressedKeys[i]);
         frequentlyPressedKeys[i]->hide();
-        frequentlyPressedKeys[i]->setAlignment(Qt::AlignCenter);
-        frequentlyPressedKeys[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        frequentlyPressedKeys[i]->setStyleSheet("QLabel { background-color: #FAD7A0; color: #8E44AD; font-size: 50px; }");
     }
 
     btnHLayout = new QHBoxLayout;
