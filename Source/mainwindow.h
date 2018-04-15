@@ -8,6 +8,7 @@
 #include <QAction>
 #include <QToolButton>
 #include <QLabel>
+#include <QSettings>
 
 class MainWindow : public QMainWindow
 {
@@ -27,6 +28,7 @@ private:
     QToolButton *nextPageBtn, *previousPageBtn;
     unsigned long long int keyPressedTimes;
     QAction *startOnBootAction;
+    QSettings *startOnBootSettings;
     QMap<QString, unsigned long long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
     void setLayout();
@@ -40,6 +42,7 @@ private slots:
 private slots:
     void showNextPage();
     void showPreviousPage();
+    void startOnBootActionChanged();
 };
 
 #endif // MAINWINDOW_H

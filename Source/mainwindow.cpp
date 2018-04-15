@@ -7,6 +7,8 @@
 #include <QCloseEvent>
 #include <QStatusBar>
 #include <QSpacerItem>
+#include <QSettings>
+#include <QCoreApplication>
 //#pragma comment(lib, "user32.lib")
 
 HHOOK hHook = NULL;
@@ -145,6 +147,7 @@ void MainWindow::setTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(QIcon(":/keyboard_tray_icon.png"), this);
     trayIcon->show();
+    trayIcon->setToolTip("Keylogger Alpha Verion");
 
     QMenu *trayIconMenu = new QMenu;
     trayIcon->setContextMenu(trayIconMenu);
@@ -152,12 +155,15 @@ void MainWindow::setTrayIcon()
     startOnBootAction = new QAction("Start on Boot", trayIcon);
     trayIconMenu->addAction(startOnBootAction);
     startOnBootAction->setCheckable(true);
-    if(startOnBootAction->isChecked()) {
+
+    startOnBootSettings = new QSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+    if(startOnBootSettings->contains("Day-Counter")) {
         startOnBootAction->setChecked(true);
     }
     else {
-        startOnBootAction->setCheckable(false);
+        startOnBootAction->setChecked(false);
     }
+
     QAction *settingsAction = new QAction("Settings", trayIconMenu);
     trayIconMenu->addAction(settingsAction);
 
@@ -174,6 +180,7 @@ void MainWindow::setTrayIcon()
     trayIconMenu->addAction(quitAction);
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
+    connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
 }
 
@@ -233,6 +240,7 @@ void MainWindow::showNextPage()
     for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
         frequentlyPressedKeys[i]->show();
     }
+
     statusBar()->showMessage("Frequently Pressed");
 }
 
@@ -244,5 +252,16 @@ void MainWindow::showPreviousPage()
     for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
         frequentlyPressedKeys[i]->hide();
     }
+
     statusBar()->showMessage("Total Pressed");
+}
+
+void MainWindow::startOnBootActionChanged()
+{
+    if(startOnBootAction->isChecked()) {
+        startOnBootSettings->setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
+    }
+    else {
+        startOnBootSettings->remove("Day-Counter");
+    }
 }
