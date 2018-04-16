@@ -10,6 +10,8 @@
 #include <QLabel>
 #include <QSettings>
 #include "label.h"
+#include <QSqlDatabase>
+#include <QSqlTableModel>
 
 class MainWindow : public QMainWindow
 {
@@ -32,8 +34,11 @@ private:
     QSettings *startOnBootSettings;
     QMap<QString, unsigned long long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
+    QSqlDatabase dataBase;
+    QSqlTableModel *tabelMode;
     void setLayout();
     void setTrayIcon();
+    void connectToDateBase();
 
 private slots:
     void keyPressed(QString);

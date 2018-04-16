@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QCoreApplication>
 //#pragma comment(lib, "user32.lib")
+#include <QSqlError>
 
 HHOOK hHook = NULL;
 
@@ -176,6 +177,20 @@ void MainWindow::setTrayIcon()
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
+}
+
+void MainWindow::connectToDateBase()
+{
+#define ACCESS "Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ=C:\\Users\\Theodore\\Desktop\\1.mdb"
+    dataBase = QSqlDatabase::addDatabase("QODBC");
+    dataBase.setDatabaseName(ACCESS);
+    if(!dataBase.open()) {
+        qDebug() << dataBase.lastError().text();
+    }
+
+    tabelMode = new QSqlTableModel(this);
+    tabelMode->setTable("Table");
+    tabelMode->select();
 }
 
 void MainWindow::keyPressed(QString pressedKey)
