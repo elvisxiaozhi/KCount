@@ -11,8 +11,11 @@
 #include <QCoreApplication>
 //#pragma comment(lib, "user32.lib")
 #include <QSqlError>
+#include <QDir>
 
 HHOOK hHook = NULL;
+
+//#define ACCESS "Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ=C:\\Users\\Theodore\\Desktop\\UserData.mdb"
 
 void UpdateKeyState(BYTE *keystate, int keycode)
 {
@@ -77,6 +80,10 @@ MainWindow::MainWindow(QWidget *parent)
     setTrayIcon();
 
     statusBar()->showMessage("Total Pressed");
+
+    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\UserData.mdb";
+    accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePlace);
+    connectToDateBase();
 }
 
 MainWindow::~MainWindow()
@@ -181,16 +188,16 @@ void MainWindow::setTrayIcon()
 
 void MainWindow::connectToDateBase()
 {
-#define ACCESS "Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ=C:\\Users\\Theodore\\Desktop\\1.mdb"
     dataBase = QSqlDatabase::addDatabase("QODBC");
-    dataBase.setDatabaseName(ACCESS);
-    if(!dataBase.open()) {
+    dataBase.setDatabaseName(accessString);
+    if(dataBase.open()) {
+        qDebug() << "Database opened";
+        dataBase.close();
+        qDebug() << "Database closed";
+    }
+    else {
         qDebug() << dataBase.lastError().text();
     }
-
-    tabelMode = new QSqlTableModel(this);
-    tabelMode->setTable("Table");
-    tabelMode->select();
 }
 
 void MainWindow::keyPressed(QString pressedKey)
