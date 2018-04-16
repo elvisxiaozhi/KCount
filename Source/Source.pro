@@ -29,14 +29,16 @@ SOURCES += \
         mainwindow.cpp \
     signalemitter.cpp \
     label.cpp \
-    hook.cpp
+    hook.cpp \
+    database.cpp
 
 HEADERS += \
         mainwindow.h \
     singleton.h \
     signalemitter.h \
     label.h \
-    hook.h
+    hook.h \
+    database.h
 
 RESOURCES += \
     ../Icons/icons.qrc

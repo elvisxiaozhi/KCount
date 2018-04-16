@@ -10,10 +10,6 @@
 #include <QSpacerItem>
 #include <QSettings>
 #include <QCoreApplication>
-#include <QSqlError>
-#include <QDir>
-
-////#define ACCESS "Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ=C:\\Users\\Theodore\\Desktop\\UserData.mdb"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,9 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     statusBar()->showMessage("Total Pressed");
 
-    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\UserData.mdb";
-    accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePlace);
-    connectToDateBase();
+    setDataBase.connectToDataBase();
 }
 
 MainWindow::~MainWindow()
@@ -127,20 +121,6 @@ void MainWindow::setTrayIcon()
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
-}
-
-void MainWindow::connectToDateBase()
-{
-    dataBase = QSqlDatabase::addDatabase("QODBC");
-    dataBase.setDatabaseName(accessString);
-    if(dataBase.open()) {
-        qDebug() << "Database opened";
-        dataBase.close();
-        qDebug() << "Database closed";
-    }
-    else {
-        qDebug() << dataBase.lastError().text();
-    }
 }
 
 void MainWindow::keyPressed(QString pressedKey)
