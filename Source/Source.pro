@@ -28,13 +28,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     signalemitter.cpp \
-    label.cpp
+    label.cpp \
+    hook.cpp
 
 HEADERS += \
         mainwindow.h \
     singleton.h \
     signalemitter.h \
-    label.h
+    label.h \
+    hook.h
 
 RESOURCES += \
     ../Icons/icons.qrc
