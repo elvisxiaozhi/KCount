@@ -28,21 +28,16 @@ private:
     Label *totalPressedTimesLabel;
     QVector<Label *> frequentlyPressedKeys;
     QToolButton *nextPageBtn, *previousPageBtn;
-    unsigned long long int keyPressedTimes;
     QAction *startOnBootAction;
     QSettings *startOnBootSettings;
-    QMap<QString, unsigned long long int> pressedKeyMap;
-    QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
     DataBase setDataBase;
     void setLayout();
     void setTrayIcon();
 
 private slots:
-    void keyPressed(QString);
+    void updateLabels();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);
     void closeEvent(QCloseEvent *);
-
-private slots:
     void showNextPage();
     void showPreviousPage();
     void startOnBootActionChanged();

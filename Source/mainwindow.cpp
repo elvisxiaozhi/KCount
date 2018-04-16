@@ -43,8 +43,7 @@ void MainWindow::setLayout()
 
     totalPressedTimesLabel = new Label;
     lblsVLayout->addWidget(totalPressedTimesLabel);
-    keyPressedTimes = 0;
-    totalPressedTimesLabel->setText(QString::number(keyPressedTimes));
+    totalPressedTimesLabel->setText(QString::number(setDataBase.keyPressedTimes));
 
     frequentlyPressedKeys.resize(5);
     for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
@@ -79,7 +78,8 @@ void MainWindow::setLayout()
 
     connect(nextPageBtn, &QToolButton::clicked, this, &MainWindow::showNextPage);
     connect(previousPageBtn, &QToolButton::clicked, this, &MainWindow::showPreviousPage);
-    connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &MainWindow::keyPressed);
+    connect(&setDataBase, &DataBase::keyPressedDone, this, &MainWindow::updateLabels);
+    connect(Emitter::Instance(), &SignalEmitter::keyPressed, &setDataBase, &DataBase::keyPressed);
 }
 
 void MainWindow::setTrayIcon()
@@ -123,35 +123,17 @@ void MainWindow::setTrayIcon()
     connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
 }
 
-void MainWindow::keyPressed(QString pressedKey)
+void MainWindow::updateLabels()
 {
-    if(pressedKeyMap.contains(pressedKey)) {
-        unsigned long long int newValue = pressedKeyMap.value(pressedKey) + 1;
-        pressedKeyMap.insert(pressedKey, newValue);
-    }
-    else {
-        pressedKeyMap.insert(pressedKey, 1);
-    }
-    keyPressedTimes++;
-    totalPressedTimesLabel->setText(QString::number(keyPressedTimes));
-
-    mapVector.clear();
-    QMap<QString, unsigned long long int>::iterator it;
-    for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
-        mapVector.push_back(std::make_pair(it.key(), it.value()));
-    }
-    std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long long int>& a, std::pair<QString, unsigned long long int>& b){
-        return a.second > b.second;
-    });
-
-    if(mapVector.size() > 5) {
+    totalPressedTimesLabel->setText(QString::number(setDataBase.keyPressedTimes));
+    if(setDataBase.mapVector.size() > 5) {
         for(int i = 0; i < 5; i++) {
-            frequentlyPressedKeys[i]->setText(mapVector[i].first + ": " + QString::number(mapVector[i].second));
+            frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
         }
     }
     else {
-        for(int i = 0; i < mapVector.size(); i++) {
-            frequentlyPressedKeys[i]->setText(mapVector[i].first + ": " + QString::number(mapVector[i].second));
+        for(int i = 0; i < setDataBase.mapVector.size(); i++) {
+            frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
         }
     }
 }
