@@ -2,14 +2,14 @@
 #include <QSqlError>
 #include <QDir>
 #include <QDebug>
-
-//#define ACCESS "Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ=C:\\Users\\Theodore\\Desktop\\UserData.mdb"
+#include <QSqlQuery>
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
     keyPressedTimes = 0;
 
-    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\UserData.mdb";
+//    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\UserData.mdb";
+    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\Database1.mdb";
     accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePlace);
 }
 
@@ -43,6 +43,24 @@ void DataBase::connectToDataBase()
     dataBase.setDatabaseName(accessString);
     if(dataBase.open()) {
         qDebug() << "Database opened";
+
+        for(int i = 0; i < mapVector.size(); i++) {
+            QSqlQuery searchQuery;
+            QString searchString = QString("SELECT PressedKey FROM Data WHERE PressedKey = '%1'").arg(mapVector[i].first);
+            searchQuery.exec(searchString);
+
+            while(!searchQuery.next()) {
+                QSqlQuery insertQuery;
+                insertQuery.prepare("INSERT INTO Data (CreatedHour, PressedKey)"
+                                    "VALUES(:CreatedHour, :PressedKey);");
+                int pressedTimes = mapVector[i].second; //can not bind this value directly to the next line, do not know why
+                insertQuery.bindValue(":CreatedHour", pressedTimes);
+                insertQuery.bindValue(":PressedKey", mapVector[i].first);
+                insertQuery.exec();
+                break;
+            }
+        }
+
         dataBase.close();
         qDebug() << "Database closed";
     }

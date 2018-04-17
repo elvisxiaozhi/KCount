@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     statusBar()->showMessage("Total Pressed");
 
-    setDataBase.connectToDataBase();
+//    setDataBase.connectToDataBase();
 }
 
 MainWindow::~MainWindow()
@@ -163,6 +163,8 @@ void MainWindow::showNextPage()
     }
 
     statusBar()->showMessage("Frequently Pressed");
+
+    setDataBase.connectToDataBase();
 }
 
 void MainWindow::showPreviousPage()
@@ -175,6 +177,8 @@ void MainWindow::showPreviousPage()
     }
 
     statusBar()->showMessage("Total Pressed");
+
+    setDataBase.connectToDataBase();
 }
 
 void MainWindow::startOnBootActionChanged()
