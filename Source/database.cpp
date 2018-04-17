@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QDebug>
 #include <QSqlQuery>
+#include <QDate>
+#include <QTime>
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -52,23 +54,31 @@ void DataBase::connectToDataBase()
     if(dataBase.open()) {
         qDebug() << "Database opened";
 
+//        QSqlQuery deleteQuery;
+//        deleteQuery.exec("DELETE FROM Data");
+
+        qDebug() << QDate::currentDate().toString("MM/dd/yy") << QTime::currentTime().toString("h");
+
         for(int i = 0; i < mapVector.size(); i++) {
             QSqlQuery searchQuery;
-            QString searchString = QString("SELECT PressedKey FROM Data WHERE PressedKey = '%1'").arg(mapVector[i].first);
+            QString searchString = QString("SELECT * FROM Data WHERE CreatedDate = #%1# AND PressedKey = '%2'").arg(QDate::currentDate().toString("MM/dd/yy")).arg(mapVector[i].first);
             searchQuery.exec(searchString);
 
             if(isQueryFound(searchQuery) == true) {
                 QSqlQuery updateQuery;
-                QString updateString = QString("UPDATE Data SET CreatedHour = %1 WHERE PressedKey = '%2'").arg(QString::number(mapVector[i].second)).arg(mapVector[i].first);
+                QString updateString = QString("UPDATE Data SET PressedTimes = %1 WHERE PressedKey = '%2'").arg(QString::number(mapVector[i].second)).arg(mapVector[i].first);
                 updateQuery.exec(updateString);
             }
             else {
                 QSqlQuery insertQuery;
-                insertQuery.prepare("INSERT INTO Data (CreatedHour, PressedKey)"
-                                    "VALUES(:CreatedHour, :PressedKey);");
-                int pressedTimes = mapVector[i].second; //can not bind this value directly to the next line, do not know why
-                insertQuery.bindValue(":CreatedHour", pressedTimes);
+                insertQuery.prepare("INSERT INTO Data (CreatedDate, CreatedHour, PressedKey, PressedTimes)"
+                                    "VALUES(:CreatedDate, :CreatedHour, :PressedKey, :PressedTimes);");
+                insertQuery.bindValue(":CreatedDate", QDate::currentDate().toString("MM/dd/yy"));
+                QString CreatedHour = QTime::currentTime().toString("h");
+                insertQuery.bindValue(":CreatedHour", CreatedHour.toInt());
                 insertQuery.bindValue(":PressedKey", mapVector[i].first);
+                int pressedTimes = mapVector[i].second; //can not bind this value directly to the next line, do not know why
+                insertQuery.bindValue(":PressedTimes", pressedTimes);
                 insertQuery.exec();
             }
         }
