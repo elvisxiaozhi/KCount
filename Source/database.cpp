@@ -8,8 +8,7 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
 {
     keyPressedTimes = 0;
 
-//    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\UserData.mdb";
-    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\Database1.mdb";
+    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\UserData.mdb";
     accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePlace);
 }
 
@@ -49,6 +48,7 @@ void DataBase::connectToDataBase()
 {
     dataBase = QSqlDatabase::addDatabase("QODBC");
     dataBase.setDatabaseName(accessString);
+
     if(dataBase.open()) {
         qDebug() << "Database opened";
 
@@ -58,7 +58,9 @@ void DataBase::connectToDataBase()
             searchQuery.exec(searchString);
 
             if(isQueryFound(searchQuery) == true) {
-                qDebug() << "Found"; //update query here
+                QSqlQuery updateQuery;
+                QString updateString = QString("UPDATE Data SET CreatedHour = %1 WHERE PressedKey = '%2'").arg(QString::number(mapVector[i].second)).arg(mapVector[i].first);
+                updateQuery.exec(updateString);
             }
             else {
                 QSqlQuery insertQuery;
