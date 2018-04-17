@@ -127,7 +127,7 @@ void MainWindow::setTrayIcon()
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
-    connect(quitAction, &QAction::triggered, [this](){ trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
+    connect(quitAction, &QAction::triggered, [this](){ setDataBase.updateDatabase(); trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
 }
 
 void MainWindow::updateLabels()
@@ -170,8 +170,6 @@ void MainWindow::showNextPage()
     }
 
     statusBar()->showMessage("Frequently Pressed");
-
-    setDataBase.updateDatabase();
 }
 
 void MainWindow::showPreviousPage()
@@ -184,8 +182,6 @@ void MainWindow::showPreviousPage()
     }
 
     statusBar()->showMessage("Total Pressed");
-
-    setDataBase.updateDatabase();
 }
 
 void MainWindow::startOnBootActionChanged()

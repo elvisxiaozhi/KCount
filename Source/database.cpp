@@ -105,7 +105,7 @@ void DataBase::readDatabase()
         qDebug() << "Database opened and ready to read";
 
         QSqlQuery readQuery;
-        QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QTime::currentTime().toString("h"));
+        QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().toString("MM/dd/yy"));
         readQuery.exec(readString);
 
         while(readQuery.next()) {
