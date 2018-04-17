@@ -18,6 +18,7 @@ public:
 private:
     QSqlDatabase dataBase;
     QString accessString;
+    bool isQueryFound(QSqlQuery);
 
 signals:
     void keyPressedDone();

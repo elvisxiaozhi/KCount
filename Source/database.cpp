@@ -13,6 +13,14 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
     accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePlace);
 }
 
+bool DataBase::isQueryFound(QSqlQuery searchQuery)
+{
+    while(searchQuery.next()) {
+        return true;
+    }
+    return false;
+}
+
 void DataBase::keyPressed(QString pressedKey)
 {
     if(pressedKeyMap.contains(pressedKey)) {
@@ -49,7 +57,10 @@ void DataBase::connectToDataBase()
             QString searchString = QString("SELECT PressedKey FROM Data WHERE PressedKey = '%1'").arg(mapVector[i].first);
             searchQuery.exec(searchString);
 
-            while(!searchQuery.next()) {
+            if(isQueryFound(searchQuery) == true) {
+                qDebug() << "Found"; //update query here
+            }
+            else {
                 QSqlQuery insertQuery;
                 insertQuery.prepare("INSERT INTO Data (CreatedHour, PressedKey)"
                                     "VALUES(:CreatedHour, :PressedKey);");
@@ -57,7 +68,6 @@ void DataBase::connectToDataBase()
                 insertQuery.bindValue(":CreatedHour", pressedTimes);
                 insertQuery.bindValue(":PressedKey", mapVector[i].first);
                 insertQuery.exec();
-                break;
             }
         }
 
