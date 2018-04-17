@@ -49,6 +49,17 @@ void MainWindow::setLayout()
         frequentlyPressedKeys[i]->hide();
     }
 
+    if(setDataBase.mapVector.size() > 5) {
+        for(int i = 0; i < 5; i++) {
+            frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
+        }
+    }
+    else {
+        for(int i = 0; i < setDataBase.mapVector.size(); i++) {
+            frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
+        }
+    }
+
     btnHLayout = new QHBoxLayout;
     mainVLayout->addLayout(btnHLayout);
 

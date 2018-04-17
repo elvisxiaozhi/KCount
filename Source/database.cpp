@@ -109,8 +109,7 @@ void DataBase::readDatabase()
         readQuery.exec(readString);
 
         while(readQuery.next()) {
-            qDebug() << readQuery.value(0).toString();
-            qDebug() << readQuery.value(1).toInt();
+            pressedKeyMap.insert(readQuery.value(0).toString(), readQuery.value(1).toInt());
         }
 
         dataBase.close();
@@ -120,6 +119,17 @@ void DataBase::readDatabase()
         qDebug() << dataBase.lastError().text();
     }
 
+    mapVector.clear();
+    QMap<QString, unsigned long long int>::iterator it;
+    for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
+        mapVector.push_back(std::make_pair(it.key(), it.value()));
+    }
+    std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long long int>& a, std::pair<QString, unsigned long long int>& b){
+        return a.second > b.second;
+    });
+    for(int i = 0; i < mapVector.size(); i++) {
+        keyPressedTimes += mapVector[i].second;
+    }
 }
 
 void DataBase::updateTimer()
