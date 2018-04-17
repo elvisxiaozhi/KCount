@@ -15,7 +15,6 @@ public:
     unsigned long long int keyPressedTimes;
     QMap<QString, unsigned long long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
-    void updateDatabase();
 
 private:
     QSqlDatabase dataBase;
@@ -28,6 +27,10 @@ private:
 signals:
     void keyPressedDone();
     void databaseOpened();
+
+public slots:
+    void updateDatabase();
+    void readDatabase();
 
 private slots:
     void keyPressed(QString);

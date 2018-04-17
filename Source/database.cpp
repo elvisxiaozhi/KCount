@@ -16,6 +16,8 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
     dataBase = QSqlDatabase::addDatabase("QODBC");
     dataBase.setDatabaseName(accessString);
 
+    readDatabase();
+
     setTimer();
 
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &DataBase::keyPressed);
@@ -95,6 +97,29 @@ void DataBase::updateDatabase()
     else {
         qDebug() << dataBase.lastError().text();
     }
+}
+
+void DataBase::readDatabase()
+{
+    if(dataBase.open()) {
+        qDebug() << "Database opened and ready to read";
+
+        QSqlQuery readQuery;
+        QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QTime::currentTime().toString("h"));
+        readQuery.exec(readString);
+
+        while(readQuery.next()) {
+            qDebug() << readQuery.value(0).toString();
+            qDebug() << readQuery.value(1).toInt();
+        }
+
+        dataBase.close();
+        qDebug() << "Database read and closed";
+    }
+    else {
+        qDebug() << dataBase.lastError().text();
+    }
+
 }
 
 void DataBase::updateTimer()

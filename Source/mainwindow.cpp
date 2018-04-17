@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
     setTrayIcon();
 
     statusBar()->showMessage("Total Pressed");
-
-//    setDataBase.connectToDataBase();
 }
 
 MainWindow::~MainWindow()
