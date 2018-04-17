@@ -4,7 +4,6 @@
 #include <windows.h>
 #include <QDebug>
 #include "hook.h"
-#include "signalemitter.h"
 #include <QCloseEvent>
 #include <QStatusBar>
 #include <QSpacerItem>
@@ -79,7 +78,6 @@ void MainWindow::setLayout()
     connect(nextPageBtn, &QToolButton::clicked, this, &MainWindow::showNextPage);
     connect(previousPageBtn, &QToolButton::clicked, this, &MainWindow::showPreviousPage);
     connect(&setDataBase, &DataBase::keyPressedDone, this, &MainWindow::updateLabels);
-    connect(Emitter::Instance(), &SignalEmitter::keyPressed, &setDataBase, &DataBase::keyPressed);
 }
 
 void MainWindow::setTrayIcon()
@@ -164,7 +162,7 @@ void MainWindow::showNextPage()
 
     statusBar()->showMessage("Frequently Pressed");
 
-    setDataBase.connectToDataBase();
+    setDataBase.updateDatabase();
 }
 
 void MainWindow::showPreviousPage()
@@ -178,7 +176,7 @@ void MainWindow::showPreviousPage()
 
     statusBar()->showMessage("Total Pressed");
 
-    setDataBase.connectToDataBase();
+    setDataBase.updateDatabase();
 }
 
 void MainWindow::startOnBootActionChanged()

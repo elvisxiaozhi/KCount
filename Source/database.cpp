@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include <QDate>
 #include <QTime>
+#include "signalemitter.h"
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -12,6 +13,12 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
 
     QString filePlace = QDir::currentPath().replace("/", "\\") + "\\UserData.mdb";
     accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePlace);
+    dataBase = QSqlDatabase::addDatabase("QODBC");
+    dataBase.setDatabaseName(accessString);
+
+    setTimer();
+
+    connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &DataBase::keyPressed);
 }
 
 bool DataBase::isQueryFound(QSqlQuery searchQuery)
@@ -20,6 +27,14 @@ bool DataBase::isQueryFound(QSqlQuery searchQuery)
         return true;
     }
     return false;
+}
+
+void DataBase::setTimer()
+{
+    currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
+    timer = new QTimer(this);
+    timer->start(1000 * 60 * 60 - 1000 * 60 * QString(currentTimeStringList[1]).toInt() - 1000 * QString(currentTimeStringList[2]).toInt()); //1 sec * 60 (= 1 minute) * 60 (= 1 hour)
+    connect(timer, &QTimer::timeout, this, &DataBase::updateTimer);
 }
 
 void DataBase::keyPressed(QString pressedKey)
@@ -46,19 +61,10 @@ void DataBase::keyPressed(QString pressedKey)
     emit keyPressedDone();
 }
 
-void DataBase::connectToDataBase()
+void DataBase::updateDatabase()
 {
-    dataBase = QSqlDatabase::addDatabase("QODBC");
-    dataBase.setDatabaseName(accessString);
-
     if(dataBase.open()) {
         qDebug() << "Database opened";
-
-//        QSqlQuery deleteQuery;
-//        deleteQuery.exec("DELETE FROM Data");
-
-        qDebug() << QDate::currentDate().toString("MM/dd/yy") << QTime::currentTime().toString("h");
-
         for(int i = 0; i < mapVector.size(); i++) {
             QSqlQuery searchQuery;
             QString searchString = QString("SELECT * FROM Data WHERE CreatedDate = #%1# AND PressedKey = '%2'").arg(QDate::currentDate().toString("MM/dd/yy")).arg(mapVector[i].first);
@@ -84,9 +90,16 @@ void DataBase::connectToDataBase()
         }
 
         dataBase.close();
-        qDebug() << "Database closed";
+        qDebug() << "Database updated and closed";
     }
     else {
         qDebug() << dataBase.lastError().text();
     }
+}
+
+void DataBase::updateTimer()
+{
+    timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
+    currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
+    updateDatabase();
 }
