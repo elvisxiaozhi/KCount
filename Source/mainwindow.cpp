@@ -16,8 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
     Hook setHook;
     setLayout();
     setTrayIcon();
-
-    statusBar()->showMessage("Total Pressed");
 }
 
 MainWindow::~MainWindow()
@@ -40,24 +38,12 @@ void MainWindow::setLayout()
 
     totalPressedTimesLabel = new Label;
     lblsVLayout->addWidget(totalPressedTimesLabel);
-    totalPressedTimesLabel->setText(QString::number(setDataBase.keyPressedTimes));
 
     frequentlyPressedKeys.resize(5);
     for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
         frequentlyPressedKeys[i] = new Label;
         lblsVLayout->addWidget(frequentlyPressedKeys[i]);
         frequentlyPressedKeys[i]->hide();
-    }
-
-    if(setDataBase.mapVector.size() > 5) {
-        for(int i = 0; i < 5; i++) {
-            frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
-        }
-    }
-    else {
-        for(int i = 0; i < setDataBase.mapVector.size(); i++) {
-            frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
-        }
     }
 
     btnHLayout = new QHBoxLayout;
@@ -84,6 +70,8 @@ void MainWindow::setLayout()
     QSpacerItem *rightBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
     btnHLayout->addSpacerItem(rightBtnSpacer);
 
+    statusBar()->showMessage("Total Pressed");
+
     connect(nextPageBtn, &QToolButton::clicked, this, &MainWindow::showNextPage);
     connect(previousPageBtn, &QToolButton::clicked, this, &MainWindow::showPreviousPage);
     connect(&setDataBase, &DataBase::keyPressedDone, this, &MainWindow::updateLabels);
@@ -103,7 +91,7 @@ void MainWindow::setTrayIcon()
     startOnBootAction->setCheckable(true);
 
     startOnBootSettings = new QSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-    if(startOnBootSettings->contains("Day-Counter")) {
+    if(startOnBootSettings->contains("Keylogger")) {
         startOnBootAction->setChecked(true);
     }
     else {
@@ -130,7 +118,7 @@ void MainWindow::setTrayIcon()
     connect(quitAction, &QAction::triggered, [this](){ setDataBase.updateDatabase(); trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
 }
 
-void MainWindow::updateLabels()
+void MainWindow::setLblText()
 {
     totalPressedTimesLabel->setText(QString::number(setDataBase.keyPressedTimes));
     if(setDataBase.mapVector.size() > 5) {
@@ -145,10 +133,20 @@ void MainWindow::updateLabels()
     }
 }
 
+void MainWindow::updateLabels()
+{
+    if(this->isActiveWindow()) {
+
+        setLblText();
+    }
+}
+
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == 2 || reason == 3) { //tray icon was double clicked or clicked
         this->showNormal(); //to show a normal size of the main window
+
+        setLblText();
     }
 }
 
@@ -187,9 +185,9 @@ void MainWindow::showPreviousPage()
 void MainWindow::startOnBootActionChanged()
 {
     if(startOnBootAction->isChecked()) {
-        startOnBootSettings->setValue("Day-Counter", QCoreApplication::applicationFilePath().replace('/', '\\'));
+        startOnBootSettings->setValue("Keylogger", QCoreApplication::applicationFilePath().replace('/', '\\'));
     }
     else {
-        startOnBootSettings->remove("Day-Counter");
+        startOnBootSettings->remove("Keylogger");
     }
 }

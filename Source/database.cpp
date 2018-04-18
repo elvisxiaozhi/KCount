@@ -108,6 +108,7 @@ void DataBase::readDatabase()
         QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().toString("MM/dd/yy"));
         readQuery.exec(readString);
 
+        pressedKeyMap.clear();
         while(readQuery.next()) {
             pressedKeyMap.insert(readQuery.value(0).toString(), readQuery.value(1).toInt());
         }
@@ -127,6 +128,7 @@ void DataBase::readDatabase()
     std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long long int>& a, std::pair<QString, unsigned long long int>& b){
         return a.second > b.second;
     });
+    keyPressedTimes = 0;
     for(int i = 0; i < mapVector.size(); i++) {
         keyPressedTimes += mapVector[i].second;
     }

@@ -33,6 +33,7 @@ private:
     DataBase setDataBase;
     void setLayout();
     void setTrayIcon();
+    void setLblText();
 
 private slots:
     void updateLabels();
