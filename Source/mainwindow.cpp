@@ -135,8 +135,7 @@ void MainWindow::setLblText()
 
 void MainWindow::updateLabels()
 {
-    if(this->isActiveWindow()) {
-
+    if(this->isHidden() == false) {
         setLblText();
     }
 }
