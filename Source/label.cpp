@@ -35,7 +35,7 @@ void Label::setContextMenu()
     viewChoiceGroup->addAction(dayAct);
     viewChoiceGroup->addAction(monthAct);
     viewChoiceGroup->addAction(yearAct);
-    hourAct->setChecked(true);
+    dayAct->setChecked(true);
 
     viewMenu->addAction(hourAct);
     viewMenu->addAction(dayAct);

@@ -23,6 +23,7 @@ private:
     QTimer *timer;
     QStringList currentTimeStringList;
     void setTimer();
+    void sortMap();
     void insertNewData(int);
 
 signals:

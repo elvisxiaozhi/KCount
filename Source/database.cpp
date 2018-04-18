@@ -39,6 +39,18 @@ void DataBase::setTimer()
     connect(timer, &QTimer::timeout, this, &DataBase::updateTimer);
 }
 
+void DataBase::sortMap()
+{
+    mapVector.clear();
+    QMap<QString, unsigned long long int>::iterator it;
+    for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
+        mapVector.push_back(std::make_pair(it.key(), it.value()));
+    }
+    std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long long int>& a, std::pair<QString, unsigned long long int>& b){
+        return a.second > b.second;
+    });
+}
+
 void DataBase::insertNewData(int vectorIndex)
 {
     QSqlQuery insertQuery;
@@ -65,14 +77,7 @@ void DataBase::keyPressed(QString pressedKey)
 
     keyPressedTimes++;
 
-    mapVector.clear();
-    QMap<QString, unsigned long long int>::iterator it;
-    for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
-        mapVector.push_back(std::make_pair(it.key(), it.value()));
-    }
-    std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long long int>& a, std::pair<QString, unsigned long long int>& b){
-        return a.second > b.second;
-    });
+    sortMap();
 
     emit keyPressedDone();
 }
@@ -83,15 +88,15 @@ void DataBase::updateDatabase()
         qDebug() << "Database opened";
         for(int i = 0; i < mapVector.size(); i++) {
             QSqlQuery searchQuery;
-            QString searchString = QString("SELECT * FROM Data WHERE CreatedDate = #%1# AND PressedKey = '%2'").arg(QDate::currentDate().toString("MM/dd/yy")).arg(mapVector[i].first);
+            QString searchString = QString("SELECT * FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2 AND PressedKey = '%3'").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QTime::currentTime().toString("h").toInt()).arg(mapVector[i].first);
             searchQuery.exec(searchString);
 
             if(isQueryFound(searchQuery) == true) {
-                QSqlQuery searchCreatedHourQuery;
-                QString searchCreatedHourString = QString("SELECT * FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QTime::currentTime().toString("h").toInt());
-                searchCreatedHourQuery.exec(searchCreatedHourString);
+                QSqlQuery searchPressedKeyQuery;
+                QString searchPressedKeyString = QString("SELECT * FROM Data WHERE CreatedDate = #%1# AND PressedKey = '%2'").arg(QDate::currentDate().toString("MM/dd/yy")).arg(mapVector[i].first);
+                searchPressedKeyQuery.exec(searchPressedKeyString);
 
-                if(isQueryFound((searchCreatedHourQuery)) == true) {
+                if(isQueryFound((searchPressedKeyQuery)) == true) {
                     QSqlQuery updateQuery;
                     QString updateString = QString("UPDATE Data SET PressedTimes = %1 WHERE PressedKey = '%2'").arg(QString::number(mapVector[i].second)).arg(mapVector[i].first);
                     updateQuery.exec(updateString);
@@ -122,7 +127,7 @@ void DataBase::readDatabase()
         QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().toString("MM/dd/yy"));
         readQuery.exec(readString);
 
-//        pressedKeyMap.clear();
+        pressedKeyMap.clear();
         while(readQuery.next()) {
             pressedKeyMap.insert(readQuery.value(0).toString(), readQuery.value(1).toInt());
         }
@@ -134,15 +139,7 @@ void DataBase::readDatabase()
         qDebug() << dataBase.lastError().text();
     }
 
-    mapVector.clear();
-    QMap<QString, unsigned long long int>::iterator it;
-    for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
-        mapVector.push_back(std::make_pair(it.key(), it.value()));
-    }
-    std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long long int>& a, std::pair<QString, unsigned long long int>& b){
-        return a.second > b.second;
-    });
-    keyPressedTimes = 0;
+    sortMap();
     for(int i = 0; i < mapVector.size(); i++) {
         keyPressedTimes += mapVector[i].second;
     }
