@@ -41,6 +41,7 @@ private slots:
     void closeEvent(QCloseEvent *);
     void showNextPage();
     void showPreviousPage();
+    void showAboutPage();
     void startOnBootActionChanged();
 };
 
