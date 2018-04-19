@@ -17,11 +17,12 @@ public:
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
 
 private:
+    QString filePath;
     QSqlDatabase dataBase;
-    QString accessString;
     bool isQueryFound(QSqlQuery);
     QTimer *timer;
     QStringList currentTimeStringList;
+    void makeDataFile();
     void setTimer();
     void sortMap();
     void insertNewData(int);

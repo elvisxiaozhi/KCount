@@ -1,6 +1,7 @@
 #include "database.h"
 #include <QSqlError>
 #include <QDir>
+#include <QStandardPaths>
 #include <QDebug>
 #include <QSqlQuery>
 #include <QDate>
@@ -9,10 +10,11 @@
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
+    makeDataFile();
+
     keyPressedTimes = 0;
 
-    QString filePlace = QDir::currentPath().replace("/", "\\") + "\\UserData.mdb";
-    accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePlace);
+    QString accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePath);
     dataBase = QSqlDatabase::addDatabase("QODBC");
     dataBase.setDatabaseName(accessString);
 
@@ -29,6 +31,20 @@ bool DataBase::isQueryFound(QSqlQuery searchQuery)
         return true;
     }
     return false;
+}
+
+void DataBase::makeDataFile()
+{
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    QString dataPath = homePath.first() + "/AppData/Local/Keylogger";
+    if(!QDir().exists(dataPath)) {
+        QDir().mkdir(dataPath);
+    }
+
+    filePath = dataPath + "/UserData.mdb";
+    if(!QFile().exists(filePath)) {
+        QDir().rename(QDir::currentPath() + "/UserData.mdb", filePath);
+    }
 }
 
 void DataBase::setTimer()
