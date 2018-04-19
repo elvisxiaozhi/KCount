@@ -11,6 +11,7 @@
 #include <QSettings>
 #include "label.h"
 #include "database.h"
+#include "about.h"
 
 class MainWindow : public QMainWindow
 {
@@ -31,17 +32,17 @@ private:
     QAction *startOnBootAction;
     QSettings *startOnBootSettings;
     DataBase setDataBase;
+    About setAboutPage;
     void setLayout();
     void setTrayIcon();
     void setLblText();
+    void closeEvent(QCloseEvent *);
 
 private slots:
     void updateLabels();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);
-    void closeEvent(QCloseEvent *);
     void showNextPage();
     void showPreviousPage();
-    void showAboutPage();
     void startOnBootActionChanged();
 };
 

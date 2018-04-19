@@ -30,7 +30,8 @@ SOURCES += \
     signalemitter.cpp \
     label.cpp \
     hook.cpp \
-    database.cpp
+    database.cpp \
+    about.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +39,8 @@ HEADERS += \
     signalemitter.h \
     label.h \
     hook.h \
-    database.h
+    database.h \
+    about.h
 
 RESOURCES += \
     ../Icons/icons.qrc

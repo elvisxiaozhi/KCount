@@ -120,7 +120,7 @@ void MainWindow::setTrayIcon()
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(updateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/Keyboard-Tracker/releases")); });
-    connect(aboutAction, &QAction::triggered, this, &MainWindow::showAboutPage);
+    connect(aboutAction, &QAction::triggered, [this](){ setAboutPage.show(); });
     connect(quitAction, &QAction::triggered, [this](){ setDataBase.updateDatabase(); trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
 }
 
@@ -185,25 +185,6 @@ void MainWindow::showPreviousPage()
     }
 
     statusBar()->showMessage("Total Pressed");
-}
-
-void MainWindow::showAboutPage()
-{
-    QMessageBox aboutMsBox;
-    aboutMsBox.setWindowTitle("About");
-    aboutMsBox.setText("<b>A Theodore Tang Production</b><br><br> For more info, visit the <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/Keyboard-Tracker'>website</a>.");
-    aboutMsBox.setInformativeText("© 2018");
-    aboutMsBox.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    aboutMsBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint); //hide message box icon
-    aboutMsBox.setStyleSheet("QLabel{min-width: 300px; qproperty-alignment: 'AlignCenter';}");
-    int ret = aboutMsBox.exec();
-
-    switch (ret) {
-    case QMessageBox::Close:
-        aboutMsBox.close();
-    default:
-        break;
-    }
 }
 
 void MainWindow::startOnBootActionChanged()
