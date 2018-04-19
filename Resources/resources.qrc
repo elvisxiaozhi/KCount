@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/Icons">
+        <file>Icons/back.png</file>
+        <file>Icons/keyboard_tray_icon.png</file>
+        <file>Icons/next.png</file>
+    </qresource>
+    <qresource prefix="/Sounds">
+        <file>Sounds/click.wav</file>
+    </qresource>
+</RCC>

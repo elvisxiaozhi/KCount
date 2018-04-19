@@ -11,6 +11,7 @@
 #include <QCoreApplication>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QSound>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -58,14 +59,14 @@ void MainWindow::setLayout()
     btnHLayout->addWidget(nextPageBtn);
 //    nextPageBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     nextPageBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    nextPageBtn->setIcon(QIcon(":/next.png"));
+    nextPageBtn->setIcon(QIcon(":/Icons/Icons/next.png"));
     nextPageBtn->setText("Next");
     nextPageBtn->setLayoutDirection(Qt::RightToLeft);
 
     previousPageBtn = new QToolButton(mainWidget);
     btnHLayout->addWidget(previousPageBtn);
     previousPageBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    previousPageBtn->setIcon(QIcon(":/back.png"));
+    previousPageBtn->setIcon(QIcon(":/Icons/Icons/back.png"));
     previousPageBtn->setText("Back");
     previousPageBtn->hide();
 
@@ -81,7 +82,7 @@ void MainWindow::setLayout()
 
 void MainWindow::setTrayIcon()
 {
-    trayIcon = new QSystemTrayIcon(QIcon(":/keyboard_tray_icon.png"), this);
+    trayIcon = new QSystemTrayIcon(QIcon(":/Icons/Icons/keyboard_tray_icon.png"), this);
     trayIcon->show();
     trayIcon->setToolTip("Keylogger Alpha Verion");
 
@@ -173,6 +174,7 @@ void MainWindow::showNextPage()
     }
 
     statusBar()->showMessage("Frequently Pressed");
+    QSound::play(":/Sounds/Sounds/click.wav"); //sound after everything
 }
 
 void MainWindow::showPreviousPage()
@@ -185,6 +187,7 @@ void MainWindow::showPreviousPage()
     }
 
     statusBar()->showMessage("Total Pressed");
+    QSound::play(":/Sounds/Sounds/click.wav");
 }
 
 void MainWindow::startOnBootActionChanged()

@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT += sql
+QT += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -43,4 +44,4 @@ HEADERS += \
     about.h
 
 RESOURCES += \
-    ../Icons/icons.qrc
+    ../Resources/resources.qrc
