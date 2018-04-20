@@ -12,6 +12,7 @@
 #include "label.h"
 #include "database.h"
 #include "about.h"
+#include "settings.h"
 
 class MainWindow : public QMainWindow
 {
@@ -32,6 +33,7 @@ private:
     QAction *startOnBootAction;
     QSettings *startOnBootSettings;
     DataBase setDataBase;
+    Settings setSettingsPage;
     About setAboutPage;
     void setLayout();
     void setTrayIcon();

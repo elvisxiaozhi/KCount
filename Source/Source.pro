@@ -32,7 +32,8 @@ SOURCES += \
     label.cpp \
     hook.cpp \
     database.cpp \
-    about.cpp
+    about.cpp \
+    settings.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
     label.h \
     hook.h \
     database.h \
-    about.h
+    about.h \
+    settings.h
 
 RESOURCES += \
     ../Resources/resources.qrc
