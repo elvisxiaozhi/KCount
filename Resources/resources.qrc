@@ -6,5 +6,6 @@
     </qresource>
     <qresource prefix="/Sounds">
         <file>Sounds/click.wav</file>
+        <file>Sounds/ding.wav</file>
     </qresource>
 </RCC>

@@ -139,6 +139,9 @@ void MainWindow::setLblText()
             frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
         }
     }
+    if(setDataBase.keyPressedTimes % 1000 == 0) {
+        QSound::play(":/Sounds/Sounds/ding.wav");
+    }
 }
 
 void MainWindow::updateLabels()

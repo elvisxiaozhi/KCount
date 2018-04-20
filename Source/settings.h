@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGroupBox>
 
 class Settings : public QWidget
 {
@@ -14,10 +15,11 @@ public:
 
 private:
     void closeEvent(QCloseEvent *);
-    QVBoxLayout *mainVLayout;
-    QHBoxLayout *btnHLayout;
+    QVBoxLayout *mainVLayout, *settingsContentVLayout, *generalVLayout;
+    QGroupBox *mainGBox;
     QVector<QPushButton *> settingsBtns;
     void setBasicLayout();
+    void setGeneralPage();
 
 signals:
 
