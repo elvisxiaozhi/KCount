@@ -7,12 +7,14 @@
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QObject>
+#include <QSettings>
 
 class Settings : public QWidget
 {
     Q_OBJECT
 public:
     explicit Settings(QWidget *parent = nullptr);
+    QSettings *settings;
 
 private:
     void closeEvent(QCloseEvent *);
@@ -21,6 +23,8 @@ private:
     QVector<QPushButton *> settingsBtns;
     void setBasicLayout();
     void setGeneralPage();
+    void setSoundAlertLayout();
+    void setAutoSaveLayout();
 
 signals:
 
