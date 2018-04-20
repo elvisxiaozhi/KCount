@@ -16,7 +16,7 @@ LRESULT CALLBACK MyLowLevelKeyBoardProc(int nCode, WPARAM wParam, LPARAM lParam)
     //WPARAM is WM_KEYDOWn, WM_KEYUP, WM_SYSKEYDOWN, or WM_SYSKEYUP
     //LPARAM is the key information
 
-    if (wParam == WM_KEYDOWN) {
+    if (wParam == WM_KEYUP) { //Note: KEYUP not KEYDOWN
         qDebug() << "Key Pressed!";
 
         //Get the key information
