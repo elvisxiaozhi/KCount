@@ -140,8 +140,8 @@ void MainWindow::setLblText()
         }
     }
 
-    if(setSettingsPage.settings->value("SettingsPage/soundAlertCheckBox") == true) {
-        if(setDataBase.keyPressedTimes % 1000 == 0) {
+    if(setSettingsPage.soundAlertCheckBox->isChecked()) {
+        if(setDataBase.keyPressedTimes % setSettingsPage.reachingNumEdit->text().toInt() == 0) {
             QSound::play(":/Sounds/Sounds/ding.wav");
         }
     }

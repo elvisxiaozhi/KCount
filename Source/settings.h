@@ -8,19 +8,23 @@
 #include <QGroupBox>
 #include <QObject>
 #include <QSettings>
+#include <QCheckBox>
+#include <QLineEdit>
 
 class Settings : public QWidget
 {
     Q_OBJECT
 public:
     explicit Settings(QWidget *parent = nullptr);
-    QSettings *settings;
+    QCheckBox *soundAlertCheckBox;
+    QLineEdit *reachingNumEdit;
 
 private:
     void closeEvent(QCloseEvent *);
     QVBoxLayout *mainVLayout, *settingsContentVLayout, *generalVLayout;
     QGroupBox *mainGBox;
     QVector<QPushButton *> settingsBtns;
+    QSettings *settings;
     void setBasicLayout();
     void setGeneralPage();
     void setSoundAlertLayout();

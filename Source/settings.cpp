@@ -2,11 +2,9 @@
 #include <QCloseEvent>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QIntValidator>
 #include <QSpinBox>
 #include <QDebug>
-#include <QCheckBox>
 
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
@@ -83,15 +81,20 @@ void Settings::setSoundAlertLayout()
     QLabel *soundAlertLabel = new QLabel(soundAlertGBox);
     soundAlertLabel->setText("Sound alert when reaching specific numbers");
 
-    QCheckBox *soundAlertCheckBox = new QCheckBox(soundAlertGBox);
+    soundAlertCheckBox = new QCheckBox(soundAlertGBox);
 
     settings = new QSettings("My Company", "Keylogger");
 
-    if(settings->value("SettingsPage/soundAlertCheckBox") == true) {
-        soundAlertCheckBox->setChecked(true);
+    if(settings->value("SettingsPage/soundAlertCheckBox").isValid()) {
+        if(settings->value("SettingsPage/soundAlertCheckBox") == true) {
+            soundAlertCheckBox->setChecked(true);
+        }
+        else {
+            soundAlertCheckBox->setChecked(false);
+        }
     }
     else {
-        soundAlertCheckBox->setChecked(false);
+        soundAlertCheckBox->setChecked(true);
     }
 
     QHBoxLayout *soundAlertHLayout = new QHBoxLayout;
@@ -102,9 +105,14 @@ void Settings::setSoundAlertLayout()
     QLabel *reachingNumLbl = new QLabel(soundAlertCheckBox);
     reachingNumLbl->setText("Make a sound when reaching each: ");
 
-    QLineEdit *reachingNumEdit = new QLineEdit(soundAlertCheckBox);
+    reachingNumEdit = new QLineEdit(soundAlertCheckBox);
     reachingNumEdit->setFixedWidth(50);
-    reachingNumEdit->setText(QString::number(settings->value("SettingsPage/reachingNumEdit").toInt()));
+    if(settings->value("SettingsPage/reachingNumEdit").isValid()) {
+        reachingNumEdit->setText(QString::number(settings->value("SettingsPage/reachingNumEdit").toInt()));
+    }
+    else {
+        reachingNumEdit->setText(QString::number(1000));
+    }
     reachingNumEdit->setValidator(new QIntValidator(1, 10000, reachingNumEdit));
 
     QLabel *reachingNumUnit = new QLabel(soundAlertCheckBox);
@@ -124,8 +132,8 @@ void Settings::setSoundAlertLayout()
 
     soundAlertGBox->setLayout(soundAlertVLayout);
 
-    connect(soundAlertCheckBox, &QCheckBox::clicked, [this, soundAlertCheckBox](){ settings->setValue("SettingsPage/soundAlertCheckBox", soundAlertCheckBox->isChecked()); });
-    connect(reachingNumEdit, &QLineEdit::textChanged, [this, reachingNumEdit](QString text){ settings->setValue("SettingsPage/reachingNumEdit", text); });
+    connect(soundAlertCheckBox, &QCheckBox::clicked, [this](){ settings->setValue("SettingsPage/soundAlertCheckBox", soundAlertCheckBox->isChecked()); });
+    connect(reachingNumEdit, &QLineEdit::textChanged, [this](QString text){ settings->setValue("SettingsPage/reachingNumEdit", text); });
 }
 
 void Settings::setAutoSaveLayout()
@@ -134,19 +142,31 @@ void Settings::setAutoSaveLayout()
     settingsContentVLayout->addWidget(autoSaveGBox);
 
     QCheckBox *autoSaveCheckBox = new QCheckBox(autoSaveGBox);
-    autoSaveCheckBox->setChecked(true);
-    if(settings->value("SettingsPage/autoSaveCheckBox") == true) {
-        autoSaveCheckBox->setChecked(true);
+
+    if(settings->value("SettingsPage/autoSaveCheckBox").isValid()) {
+        if(settings->value("SettingsPage/autoSaveCheckBox") == true) {
+            autoSaveCheckBox->setChecked(true);
+        }
+        else {
+            autoSaveCheckBox->setChecked(false);
+        }
     }
     else {
-        autoSaveCheckBox->setChecked(false);
+        autoSaveCheckBox->setChecked(true);
     }
 
     QLabel *autoSaveLabel = new QLabel(autoSaveGBox);
     autoSaveLabel->setText("Automatically save to database in every: ");
 
     QSpinBox *autoSaveInterval = new QSpinBox(autoSaveGBox);
-    autoSaveInterval->setValue(settings->value("SettingsPage/autoSaveInterval").toInt());
+
+    if(settings->value("SettingsPage/autoSaveInterval").isValid()) {
+        autoSaveInterval->setValue(settings->value("SettingsPage/autoSaveInterval").toInt());
+    }
+    else {
+        autoSaveInterval->setValue(1);
+    }
+
     autoSaveInterval->setMaximum(24);
     autoSaveInterval->setMinimum(1);
 
