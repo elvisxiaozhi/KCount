@@ -5,6 +5,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QIntValidator>
+#include <QSpinBox>
+#include <QDebug>
 
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
@@ -62,6 +64,9 @@ void Settings::setBasicLayout()
     mainVLayout->addLayout(bottomBtnHLayout);
 
     setGeneralPage();
+
+    connect(okButton, &QPushButton::clicked, [this](){ this->hide(); });
+    connect(cancelButton, &QPushButton::clicked, [this](){ this->hide(); });
 }
 
 void Settings::setGeneralPage()
@@ -77,7 +82,7 @@ void Settings::setGeneralPage()
     QHBoxLayout *soundAlertHLayout = new QHBoxLayout;
     soundAlertHLayout->addWidget(soundAlertCheckBox);
     soundAlertHLayout->addWidget(soundAlertLabel);
-    soundAlertHLayout->addStretch(1);
+    soundAlertHLayout->addStretch();
 
     QLabel *reachingNumLbl = new QLabel(soundAlertCheckBox);
     reachingNumLbl->setText("Make a sound when reaching each: ");
@@ -87,18 +92,51 @@ void Settings::setGeneralPage()
     reachingNumEdit->setText(QString::number(1000));
     reachingNumEdit->setValidator(new QIntValidator(1, 10000, reachingNumEdit));
 
+    QLabel *reachingNumUnit = new QLabel(soundAlertCheckBox);
+    reachingNumUnit->setText("Presses");
+
     QHBoxLayout *reachingNumHLayout = new QHBoxLayout;
     reachingNumHLayout->addWidget(reachingNumLbl);
     reachingNumHLayout->addWidget(reachingNumEdit);
-    reachingNumHLayout->addStretch(1);
+    reachingNumHLayout->addWidget(reachingNumUnit);
+    reachingNumHLayout->addStretch();
 
     QVBoxLayout *soundAlertVLayout = new QVBoxLayout;
-    soundAlertVLayout->addStretch(1);
+    soundAlertVLayout->addStretch();
     soundAlertVLayout->addLayout(soundAlertHLayout);
     soundAlertVLayout->addLayout(reachingNumHLayout);
-    soundAlertVLayout->addStretch(1);
+    soundAlertVLayout->addStretch();
 
     soundAlertGBox->setLayout(soundAlertVLayout);
+
+    QGroupBox *autoSaveGBox = new QGroupBox("Auto Save", this);
+    settingsContentVLayout->addWidget(autoSaveGBox);
+
+    QCheckBox *autoSaveCheckBox = new QCheckBox(autoSaveGBox);
+    autoSaveCheckBox->setChecked(true);
+
+    QLabel *autoSaveLabel = new QLabel(autoSaveGBox);
+    autoSaveLabel->setText("Automatically save to database in every: ");
+
+    QSpinBox *autoSaveInterval = new QSpinBox(autoSaveGBox);
+    autoSaveInterval->setValue(1);
+    autoSaveInterval->setMaximum(24);
+    autoSaveInterval->setMinimum(1);
+
+    QLabel *autoSaveUnitLabel = new QLabel(autoSaveGBox);
+    autoSaveUnitLabel->setText("Hour");
+
+    QHBoxLayout *autoSaveHLayout = new QHBoxLayout;
+    autoSaveHLayout->addWidget(autoSaveCheckBox);
+    autoSaveHLayout->addWidget(autoSaveLabel);
+    autoSaveHLayout->addWidget(autoSaveInterval);
+    autoSaveHLayout->addWidget(autoSaveUnitLabel);
+    autoSaveHLayout->addStretch();
+
+    autoSaveGBox->setLayout(autoSaveHLayout);
+
+    connect(autoSaveInterval, QOverload<int>::of(&QSpinBox::valueChanged),
+          [=](int i){ qDebug() << i; });
 }
 
 void Settings::setFlatBtn()
