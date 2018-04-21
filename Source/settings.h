@@ -34,6 +34,7 @@ private:
     void setGeneralPage();
     void setSoundAlertLayout();
     void setAutoSaveLayout();
+    void setResetLayout();
 
 signals:
 
@@ -43,6 +44,7 @@ public slots:
 private slots:
     void setFlatBtn();
     void saveChanges();
+    void resetSettings();
 };
 
 #endif // SETTINGS_H

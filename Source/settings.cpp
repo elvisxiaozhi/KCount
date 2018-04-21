@@ -76,13 +76,7 @@ void Settings::setGeneralPage()
 
     setSoundAlertLayout();
     setAutoSaveLayout();
-
-//    settings->remove("SettingsPage/soundAlertCheckBox");
-//    settings->remove("SettingsPage/reachingNumEdit");
-//    settings->remove("SettingsPage/autoSaveCheckBox");
-//    settings->remove("SettingsPage/autoSaveInterval");
-
-    resetChanges();
+    setResetLayout();
 }
 
 void Settings::setSoundAlertLayout()
@@ -162,6 +156,48 @@ void Settings::setAutoSaveLayout()
             [=](int i){ autoSaveIntervalNum = i; });
 }
 
+void Settings::setResetLayout()
+{
+    QGroupBox *resetGBox = new QGroupBox("Reset", this);
+    settingsContentVLayout->addWidget(resetGBox);
+
+    QLabel *resetLabel = new QLabel(resetGBox);
+    resetLabel->setText("<b>Be Careful!!! None of these actions changes can be undone!!!</b>");
+
+    QHBoxLayout *resetLblHLayout = new QHBoxLayout;
+    resetLblHLayout->addStretch();
+    resetLblHLayout->addWidget(resetLabel);
+    resetLblHLayout->addStretch();
+
+    QPushButton *resetSettingsBtn = new QPushButton(resetGBox);
+    resetSettingsBtn->setText("Reset Settings");
+
+    QPushButton *clearDatabaseBtn = new QPushButton(resetGBox);
+    clearDatabaseBtn->setText("Clear Database");
+
+    QPushButton *resetAllBtn = new QPushButton(resetGBox);
+    resetAllBtn->setText("Reset All");
+
+    QPushButton *deleteEverythingBtn = new QPushButton(resetGBox);
+    deleteEverythingBtn->setText("Delete Everything");
+
+    QHBoxLayout *resetBtnHLayout = new QHBoxLayout;
+
+    resetBtnHLayout->addWidget(resetSettingsBtn);
+    resetBtnHLayout->addWidget(clearDatabaseBtn);
+    resetBtnHLayout->addWidget(resetAllBtn);
+    resetBtnHLayout->addWidget(deleteEverythingBtn);
+
+    QVBoxLayout *resetVLayout = new QVBoxLayout;
+    resetGBox->setLayout(resetVLayout);
+    resetVLayout->addStretch();
+    resetVLayout->addLayout(resetLblHLayout);
+    resetVLayout->addLayout(resetBtnHLayout);
+    resetVLayout->addStretch();
+
+    connect(resetSettingsBtn, &QPushButton::clicked, this, &Settings::resetSettings);
+}
+
 void Settings::setFlatBtn()
 {
     QPushButton *btnSender = qobject_cast<QPushButton *>(sender());
@@ -183,6 +219,15 @@ void Settings::saveChanges()
     settings->setValue("SettingsPage/autoSaveCheckBox", isAutoSaveCheckBoxChecked);
     settings->setValue("SettingsPage/autoSaveInterval", autoSaveIntervalNum);
     this->hide();
+}
+
+void Settings::resetSettings()
+{
+    settings->remove("SettingsPage/soundAlertCheckBox");
+    settings->remove("SettingsPage/reachingNumEdit");
+    settings->remove("SettingsPage/autoSaveCheckBox");
+    settings->remove("SettingsPage/autoSaveInterval");
+    qDebug() << "Settings have been reset";
 }
 
 void Settings::resetChanges()
