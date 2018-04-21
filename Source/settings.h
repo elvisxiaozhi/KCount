@@ -37,8 +37,11 @@ private:
     void setSoundAlertLayout();
     void setAutoSaveLayout();
     void setResetLayout();
+    void resetSettings();
+    void resetAll();
 
 signals:
+    void refreshLabels();
 
 public slots:
     void resetChanges();
@@ -48,7 +51,7 @@ private slots:
     void saveChanges();
     void showResetSettingsMsBox();
     void showClearDatabaseMsbox();
-    void resetSettings();
+    void showResetAllMsBox();
 };
 
 #endif // SETTINGS_H

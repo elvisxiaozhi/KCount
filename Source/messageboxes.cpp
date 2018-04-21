@@ -23,6 +23,9 @@ void MessageBoxes::showQuestionMsBox(int msBoxType)
         case 2:
             emit clearDatabaseConfirmed();
             break;
+        case 3:
+            emit resetAllConfirmed();
+            break;
         default:
             break;
         }

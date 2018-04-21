@@ -15,6 +15,7 @@ public:
 signals:
     void resetSettingsConfirmed();
     void clearDatabaseConfirmed();
+    void resetAllConfirmed();
 
 public slots:
     void showQuestionMsBox(int);

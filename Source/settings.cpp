@@ -12,10 +12,20 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint); //hide message box icon
     setBasicLayout();
 
-    connect(&setMsBox, &MessageBoxes::resetSettingsConfirmed, this, &Settings::resetSettings);
+    connect(&setMsBox, &MessageBoxes::resetSettingsConfirmed, [this](){
+        resetSettings();
+        setMsBox.successMsBox.setText("Settings have been reset.");
+        setMsBox.showSuccessMsBox();
+    });
     connect(&setMsBox, &MessageBoxes::clearDatabaseConfirmed, [this](){
         clearDatabase();
         setMsBox.successMsBox.setText("Database has been cleared.");
+        setMsBox.showSuccessMsBox();
+        emit refreshLabels();
+    });
+    connect(&setMsBox, &MessageBoxes::resetAllConfirmed, [this](){
+        resetAll();
+        setMsBox.successMsBox.setText("Everything has been reset to default.");
         setMsBox.showSuccessMsBox();
     });
 }
@@ -205,6 +215,7 @@ void Settings::setResetLayout()
 
     connect(resetSettingsBtn, &QPushButton::clicked, this, &Settings::showResetSettingsMsBox);
     connect(clearDatabaseBtn, &QPushButton::clicked, this, &Settings::showClearDatabaseMsbox);
+    connect(resetAllBtn, &QPushButton::clicked, this, &Settings::showResetAllMsBox);
 }
 
 void Settings::setFlatBtn()
@@ -244,6 +255,14 @@ void Settings::showClearDatabaseMsbox()
     setMsBox.showQuestionMsBox(2);
 }
 
+void Settings::showResetAllMsBox()
+{
+    setMsBox.questionMsBox.setWindowTitle("Reset All");
+    setMsBox.questionMsBox.setText("Are you sure you want to reset everything?");
+    setMsBox.questionMsBox.setDetailedText("This will reset all your settings, clear the datebase and delete all the user data.");
+    setMsBox.showQuestionMsBox(3);
+}
+
 void Settings::resetSettings()
 {
     settings->remove("SettingsPage/soundAlertCheckBox");
@@ -251,8 +270,15 @@ void Settings::resetSettings()
     settings->remove("SettingsPage/autoSaveCheckBox");
     settings->remove("SettingsPage/autoSaveInterval");
     qDebug() << "Settings have been reset";
-    setMsBox.successMsBox.setText("Settings have been reset.");
-    setMsBox.showSuccessMsBox();
+}
+
+void Settings::resetAll()
+{
+    resetSettings();
+    clearDatabase();
+    DataBase::deleteDataFile();
+
+    qDebug() << "Everything has been reset to default";
 }
 
 void Settings::resetChanges()

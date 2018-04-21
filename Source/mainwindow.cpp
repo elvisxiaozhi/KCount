@@ -19,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent)
     Hook setHook;
     setLayout();
     setTrayIcon();
+
+//    connect(&setSettingsPage, &Settings::refreshLabels, [this](){
+//        setDataBase.readDatabase();
+//        setLblText();
+//    });
 }
 
 MainWindow::~MainWindow()

@@ -18,12 +18,11 @@ public:
     unsigned long long int keyPressedTimes;
     QMap<QString, unsigned long long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
-
-//    static QSqlDatabase testDatabase;
+    static QString dataPath;
+    static void deleteDataFile();
 
 private:
     QString filePath;
-//    QSqlDatabase dataBase;
     bool isQueryFound(QSqlQuery);
     QTimer *timer;
     QStringList currentTimeStringList;
