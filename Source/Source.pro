@@ -33,7 +33,8 @@ SOURCES += \
     hook.cpp \
     database.cpp \
     about.cpp \
-    settings.cpp
+    settings.cpp \
+    messageboxes.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     hook.h \
     database.h \
     about.h \
-    settings.h
+    settings.h \
+    messageboxes.h
 
 RESOURCES += \
     ../Resources/resources.qrc

@@ -11,6 +11,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QSpinBox>
+#include "messageboxes.h"
 
 class Settings : public QWidget
 {
@@ -30,6 +31,7 @@ private:
     bool isSoundAlertCheckBoxChecked, isAutoSaveCheckBoxChecked;
     QString reachingNum;
     int autoSaveIntervalNum;
+    MessageBoxes setMsBox;
     void setBasicLayout();
     void setGeneralPage();
     void setSoundAlertLayout();
@@ -44,6 +46,7 @@ public slots:
 private slots:
     void setFlatBtn();
     void saveChanges();
+    void showResetSettingsMsBox();
     void resetSettings();
 };
 

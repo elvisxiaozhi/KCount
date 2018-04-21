@@ -10,6 +10,8 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     setWindowTitle("Settings");
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint); //hide message box icon
     setBasicLayout();
+
+    connect(&setMsBox, &MessageBoxes::resetSettingsConfirmed, this, &Settings::resetSettings);
 }
 
 void Settings::closeEvent(QCloseEvent *event)
@@ -195,7 +197,7 @@ void Settings::setResetLayout()
     resetVLayout->addLayout(resetBtnHLayout);
     resetVLayout->addStretch();
 
-    connect(resetSettingsBtn, &QPushButton::clicked, this, &Settings::resetSettings);
+    connect(resetSettingsBtn, &QPushButton::clicked, this, &Settings::showResetSettingsMsBox);
 }
 
 void Settings::setFlatBtn()
@@ -221,6 +223,14 @@ void Settings::saveChanges()
     this->hide();
 }
 
+void Settings::showResetSettingsMsBox()
+{
+    setMsBox.questionMsBox.setWindowTitle("Reset Settings");
+    setMsBox.questionMsBox.setText("Are you sure you want to reset all the settings?");
+    setMsBox.questionMsBox.setDetailedText("heyheyehy");
+    setMsBox.showQuestionMsBox(1);
+}
+
 void Settings::resetSettings()
 {
     settings->remove("SettingsPage/soundAlertCheckBox");
@@ -228,6 +238,8 @@ void Settings::resetSettings()
     settings->remove("SettingsPage/autoSaveCheckBox");
     settings->remove("SettingsPage/autoSaveInterval");
     qDebug() << "Settings have been reset";
+    setMsBox.successMsBox.setText("Settings have been reset.");
+    setMsBox.showSuccessMsBox();
 }
 
 void Settings::resetChanges()
