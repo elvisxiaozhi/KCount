@@ -10,14 +10,16 @@
 #include <QSettings>
 #include <QCheckBox>
 #include <QLineEdit>
+#include <QSpinBox>
 
 class Settings : public QWidget
 {
     Q_OBJECT
 public:
     explicit Settings(QWidget *parent = nullptr);
-    QCheckBox *soundAlertCheckBox;
+    QCheckBox *soundAlertCheckBox, *autoSaveCheckBox;
     QLineEdit *reachingNumEdit;
+    QSpinBox *autoSaveInterval;
 
 private:
     void closeEvent(QCloseEvent *);
@@ -25,6 +27,9 @@ private:
     QGroupBox *mainGBox;
     QVector<QPushButton *> settingsBtns;
     QSettings *settings;
+    bool isSoundAlertCheckBoxChecked, isAutoSaveCheckBoxChecked;
+    QString reachingNum;
+    int autoSaveIntervalNum;
     void setBasicLayout();
     void setGeneralPage();
     void setSoundAlertLayout();
@@ -33,9 +38,11 @@ private:
 signals:
 
 public slots:
+    void resetChanges();
 
 private slots:
     void setFlatBtn();
+    void saveChanges();
 };
 
 #endif // SETTINGS_H

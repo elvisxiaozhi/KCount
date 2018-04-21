@@ -3,7 +3,6 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QIntValidator>
-#include <QSpinBox>
 #include <QDebug>
 
 Settings::Settings(QWidget *parent) : QWidget(parent)
@@ -63,14 +62,27 @@ void Settings::setBasicLayout()
 
     setGeneralPage();
 
-    connect(okButton, &QPushButton::clicked, [this](){ this->hide(); });
+    connect(okButton, &QPushButton::clicked, this, &Settings::saveChanges);
     connect(cancelButton, &QPushButton::clicked, [this](){ this->hide(); });
 }
 
 void Settings::setGeneralPage()
 {
+    //must initiate first, or the general settings will not show correctly
+    isSoundAlertCheckBoxChecked = true;
+    reachingNum = QString::number(1000);
+    autoSaveIntervalNum = 1;
+    isAutoSaveCheckBoxChecked = true;
+
     setSoundAlertLayout();
     setAutoSaveLayout();
+
+//    settings->remove("SettingsPage/soundAlertCheckBox");
+//    settings->remove("SettingsPage/reachingNumEdit");
+//    settings->remove("SettingsPage/autoSaveCheckBox");
+//    settings->remove("SettingsPage/autoSaveInterval");
+
+    resetChanges();
 }
 
 void Settings::setSoundAlertLayout()
@@ -85,18 +97,6 @@ void Settings::setSoundAlertLayout()
 
     settings = new QSettings("My Company", "Keylogger");
 
-    if(settings->value("SettingsPage/soundAlertCheckBox").isValid()) {
-        if(settings->value("SettingsPage/soundAlertCheckBox") == true) {
-            soundAlertCheckBox->setChecked(true);
-        }
-        else {
-            soundAlertCheckBox->setChecked(false);
-        }
-    }
-    else {
-        soundAlertCheckBox->setChecked(true);
-    }
-
     QHBoxLayout *soundAlertHLayout = new QHBoxLayout;
     soundAlertHLayout->addWidget(soundAlertCheckBox);
     soundAlertHLayout->addWidget(soundAlertLabel);
@@ -107,12 +107,6 @@ void Settings::setSoundAlertLayout()
 
     reachingNumEdit = new QLineEdit(soundAlertCheckBox);
     reachingNumEdit->setFixedWidth(50);
-    if(settings->value("SettingsPage/reachingNumEdit").isValid()) {
-        reachingNumEdit->setText(QString::number(settings->value("SettingsPage/reachingNumEdit").toInt()));
-    }
-    else {
-        reachingNumEdit->setText(QString::number(1000));
-    }
     reachingNumEdit->setValidator(new QIntValidator(1, 10000, reachingNumEdit));
 
     QLabel *reachingNumUnit = new QLabel(soundAlertCheckBox);
@@ -132,8 +126,8 @@ void Settings::setSoundAlertLayout()
 
     soundAlertGBox->setLayout(soundAlertVLayout);
 
-    connect(soundAlertCheckBox, &QCheckBox::clicked, [this](){ settings->setValue("SettingsPage/soundAlertCheckBox", soundAlertCheckBox->isChecked()); });
-    connect(reachingNumEdit, &QLineEdit::textChanged, [this](QString text){ settings->setValue("SettingsPage/reachingNumEdit", text); });
+    connect(soundAlertCheckBox, &QCheckBox::clicked, [this](){ isSoundAlertCheckBoxChecked = soundAlertCheckBox->isChecked(); });
+    connect(reachingNumEdit, &QLineEdit::textChanged, [this](QString text){ reachingNum = text; });
 }
 
 void Settings::setAutoSaveLayout()
@@ -141,31 +135,12 @@ void Settings::setAutoSaveLayout()
     QGroupBox *autoSaveGBox = new QGroupBox("Auto Save", this);
     settingsContentVLayout->addWidget(autoSaveGBox);
 
-    QCheckBox *autoSaveCheckBox = new QCheckBox(autoSaveGBox);
-
-    if(settings->value("SettingsPage/autoSaveCheckBox").isValid()) {
-        if(settings->value("SettingsPage/autoSaveCheckBox") == true) {
-            autoSaveCheckBox->setChecked(true);
-        }
-        else {
-            autoSaveCheckBox->setChecked(false);
-        }
-    }
-    else {
-        autoSaveCheckBox->setChecked(true);
-    }
+    autoSaveCheckBox = new QCheckBox(autoSaveGBox);
 
     QLabel *autoSaveLabel = new QLabel(autoSaveGBox);
     autoSaveLabel->setText("Automatically save to database in every: ");
 
-    QSpinBox *autoSaveInterval = new QSpinBox(autoSaveGBox);
-
-    if(settings->value("SettingsPage/autoSaveInterval").isValid()) {
-        autoSaveInterval->setValue(settings->value("SettingsPage/autoSaveInterval").toInt());
-    }
-    else {
-        autoSaveInterval->setValue(1);
-    }
+    autoSaveInterval = new QSpinBox(autoSaveGBox);
 
     autoSaveInterval->setMaximum(24);
     autoSaveInterval->setMinimum(1);
@@ -182,9 +157,9 @@ void Settings::setAutoSaveLayout()
 
     autoSaveGBox->setLayout(autoSaveHLayout);
 
-    connect(autoSaveCheckBox, &QCheckBox::clicked, [=](){ settings->setValue("SettingsPage/autoSaveCheckBox", autoSaveCheckBox->isChecked()); });
+    connect(autoSaveCheckBox, &QCheckBox::clicked, [=](){ isAutoSaveCheckBoxChecked = autoSaveCheckBox->isChecked(); });
     connect(autoSaveInterval, QOverload<int>::of(&QSpinBox::valueChanged),
-            [=](int i){ settings->setValue("SettingsPage/autoSaveInterval", i); });
+            [=](int i){ autoSaveIntervalNum = i; });
 }
 
 void Settings::setFlatBtn()
@@ -198,5 +173,55 @@ void Settings::setFlatBtn()
         else {
             settingsBtns[i]->setFlat(true);
         }
+    }
+}
+
+void Settings::saveChanges()
+{
+    settings->setValue("SettingsPage/soundAlertCheckBox", isSoundAlertCheckBoxChecked);
+    settings->setValue("SettingsPage/reachingNumEdit", reachingNum);
+    settings->setValue("SettingsPage/autoSaveCheckBox", isAutoSaveCheckBoxChecked);
+    settings->setValue("SettingsPage/autoSaveInterval", autoSaveIntervalNum);
+    this->hide();
+}
+
+void Settings::resetChanges()
+{
+    if(settings->value("SettingsPage/soundAlertCheckBox").isValid()) {
+        if(settings->value("SettingsPage/soundAlertCheckBox") == true) {
+            soundAlertCheckBox->setChecked(true);
+        }
+        else {
+            soundAlertCheckBox->setChecked(false);
+        }
+    }
+    else {
+        soundAlertCheckBox->setChecked(true);
+    }
+
+    if(settings->value("SettingsPage/reachingNumEdit").isValid()) {
+        reachingNumEdit->setText(QString::number(settings->value("SettingsPage/reachingNumEdit").toInt()));
+    }
+    else {
+        reachingNumEdit->setText(QString::number(1000));
+    }
+
+    if(settings->value("SettingsPage/autoSaveCheckBox").isValid()) {
+        if(settings->value("SettingsPage/autoSaveCheckBox") == true) {
+            autoSaveCheckBox->setChecked(true);
+        }
+        else {
+            autoSaveCheckBox->setChecked(false);
+        }
+    }
+    else {
+        autoSaveCheckBox->setChecked(true);
+    }
+
+    if(settings->value("SettingsPage/autoSaveInterval").isValid()) {
+        autoSaveInterval->setValue(settings->value("SettingsPage/autoSaveInterval").toInt());
+    }
+    else {
+        autoSaveInterval->setValue(1);
     }
 }
