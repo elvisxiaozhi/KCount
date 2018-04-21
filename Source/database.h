@@ -7,6 +7,9 @@
 #include <QVector>
 #include <QTimer>
 
+extern void clearDatabase();
+extern QSqlDatabase dataBase;
+
 class DataBase : public QObject
 {
     Q_OBJECT
@@ -16,9 +19,11 @@ public:
     QMap<QString, unsigned long long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
 
+//    static QSqlDatabase testDatabase;
+
 private:
     QString filePath;
-    QSqlDatabase dataBase;
+//    QSqlDatabase dataBase;
     bool isQueryFound(QSqlQuery);
     QTimer *timer;
     QStringList currentTimeStringList;

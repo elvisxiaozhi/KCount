@@ -47,6 +47,7 @@ private slots:
     void setFlatBtn();
     void saveChanges();
     void showResetSettingsMsBox();
+    void showClearDatabaseMsbox();
     void resetSettings();
 };
 

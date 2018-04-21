@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QIntValidator>
 #include <QDebug>
+#include "database.h"
 
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
@@ -12,6 +13,11 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     setBasicLayout();
 
     connect(&setMsBox, &MessageBoxes::resetSettingsConfirmed, this, &Settings::resetSettings);
+    connect(&setMsBox, &MessageBoxes::clearDatabaseConfirmed, [this](){
+        clearDatabase();
+        setMsBox.successMsBox.setText("Database has been cleared.");
+        setMsBox.showSuccessMsBox();
+    });
 }
 
 void Settings::closeEvent(QCloseEvent *event)
@@ -198,6 +204,7 @@ void Settings::setResetLayout()
     resetVLayout->addStretch();
 
     connect(resetSettingsBtn, &QPushButton::clicked, this, &Settings::showResetSettingsMsBox);
+    connect(clearDatabaseBtn, &QPushButton::clicked, this, &Settings::showClearDatabaseMsbox);
 }
 
 void Settings::setFlatBtn()
@@ -227,8 +234,14 @@ void Settings::showResetSettingsMsBox()
 {
     setMsBox.questionMsBox.setWindowTitle("Reset Settings");
     setMsBox.questionMsBox.setText("Are you sure you want to reset all the settings?");
-    setMsBox.questionMsBox.setDetailedText("heyheyehy");
     setMsBox.showQuestionMsBox(1);
+}
+
+void Settings::showClearDatabaseMsbox()
+{
+    setMsBox.questionMsBox.setWindowTitle("Clear DataBase");
+    setMsBox.questionMsBox.setText("Are you sure you want to clear the database?");
+    setMsBox.showQuestionMsBox(2);
 }
 
 void Settings::resetSettings()

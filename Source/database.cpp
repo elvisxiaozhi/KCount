@@ -8,6 +8,8 @@
 #include <QTime>
 #include "signalemitter.h"
 
+QSqlDatabase dataBase;
+
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
     makeDataFile();
@@ -166,4 +168,18 @@ void DataBase::updateTimer()
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
     currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
     updateDatabase();
+}
+
+void clearDatabase()
+{
+    if(dataBase.open()) {
+        qDebug() << "Database opened and ready to delete";
+        QSqlQuery deleteQuery;
+        deleteQuery.exec("DELETE FROM Data");
+        dataBase.close();
+        qDebug() << "Database has been cleared";
+    }
+    else {
+        qDebug() << dataBase.lastError().text();
+    }
 }

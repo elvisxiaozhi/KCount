@@ -20,6 +20,9 @@ void MessageBoxes::showQuestionMsBox(int msBoxType)
         case 1:
             emit resetSettingsConfirmed();
             break;
+        case 2:
+            emit clearDatabaseConfirmed();
+            break;
         default:
             break;
         }
