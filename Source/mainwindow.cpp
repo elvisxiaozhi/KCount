@@ -20,10 +20,13 @@ MainWindow::MainWindow(QWidget *parent)
     setLayout();
     setTrayIcon();
 
-//    connect(&setSettingsPage, &Settings::refreshLabels, [this](){
-//        setDataBase.readDatabase();
-//        setLblText();
-//    });
+    connect(&setSettingsPage, &Settings::uncheckStartOnBootAct, [this](){ startOnBootAction->setChecked(false); }); //set startOnBootAction unchecked when reset the settings
+    connect(&setSettingsPage, &Settings::databaseCleared, [this](){ //when database is cleared, clear map and vector and total pressed times, so the lbls can set to 0
+        setDataBase.pressedKeyMap.clear();
+        setDataBase.mapVector.clear();
+        setDataBase.keyPressedTimes = 0;
+        setLblText(); //this line is used for refreshing lbls when the main window is activated
+    });
 }
 
 MainWindow::~MainWindow()
@@ -62,7 +65,6 @@ void MainWindow::setLayout()
 
     nextPageBtn = new QToolButton(mainWidget);
     btnHLayout->addWidget(nextPageBtn);
-//    nextPageBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     nextPageBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     nextPageBtn->setIcon(QIcon(":/Icons/Icons/next.png"));
     nextPageBtn->setText("Next");

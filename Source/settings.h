@@ -42,7 +42,8 @@ private:
     void resetAll();
 
 signals:
-    void refreshLabels();
+    void databaseCleared();
+    void uncheckStartOnBootAct();
 
 public slots:
     void resetChanges();

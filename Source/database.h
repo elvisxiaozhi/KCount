@@ -25,7 +25,7 @@ public:
 
 private:
     QString filePath;
-    bool isQueryFound(QSqlQuery);
+    bool isQueryFound(QSqlQuery) const;
     QTimer *timer;
     QStringList currentTimeStringList;
     void makeDataFile();

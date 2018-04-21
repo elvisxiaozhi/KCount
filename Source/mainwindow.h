@@ -38,6 +38,8 @@ private:
     void setLblText();
     void closeEvent(QCloseEvent *);
 
+signals:
+
 private slots:
     void updateLabels();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);

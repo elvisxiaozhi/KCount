@@ -35,7 +35,7 @@ void DataBase::deleteDataFile()
     deleteFilePath.removeRecursively();
 }
 
-bool DataBase::isQueryFound(QSqlQuery searchQuery)
+bool DataBase::isQueryFound(QSqlQuery searchQuery) const
 {
     while(searchQuery.next()) {
         return true;

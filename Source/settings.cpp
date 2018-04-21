@@ -23,7 +23,7 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
         clearDatabase();
         setMsBox.successMsBox.setText("Database has been cleared.");
         setMsBox.showSuccessMsBox();
-        emit refreshLabels();
+        emit databaseCleared();
     });
     connect(&setMsBox, &MessageBoxes::resetAllConfirmed, [this](){
         resetAll();
@@ -270,6 +270,7 @@ void Settings::resetSettings()
     settings->remove("SettingsPage");
     startOnBootSetting.remove("Keylogger");
     DataBase::dataFilePathSettings.remove("DataFilePath");
+    emit uncheckStartOnBootAct();
     qDebug() << "Settings have been reset";
 }
 
