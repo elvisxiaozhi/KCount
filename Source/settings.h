@@ -21,6 +21,7 @@ public:
     QCheckBox *soundAlertCheckBox, *autoSaveCheckBox;
     QLineEdit *reachingNumEdit;
     QSpinBox *autoSaveInterval;
+    static QSettings startOnBootSetting;
 
 private:
     void closeEvent(QCloseEvent *);

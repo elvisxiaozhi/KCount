@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QVector>
 #include <QTimer>
+#include <QSettings>
 
 extern void clearDatabase();
 extern QSqlDatabase dataBase;
@@ -20,6 +21,7 @@ public:
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
     static QString dataPath;
     static void deleteDataFile();
+    static QSettings dataFilePathSettings;
 
 private:
     QString filePath;

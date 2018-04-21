@@ -8,7 +8,6 @@
 #include <QAction>
 #include <QToolButton>
 #include <QLabel>
-#include <QSettings>
 #include "label.h"
 #include "database.h"
 #include "about.h"
@@ -31,7 +30,6 @@ private:
     QVector<Label *> frequentlyPressedKeys;
     QToolButton *nextPageBtn, *previousPageBtn;
     QAction *startOnBootAction;
-    QSettings *startOnBootSettings;
     DataBase setDataBase;
     Settings setSettingsPage;
     About setAboutPage;

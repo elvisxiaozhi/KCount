@@ -98,12 +98,8 @@ void MainWindow::setTrayIcon()
     trayIconMenu->addAction(startOnBootAction);
     startOnBootAction->setCheckable(true);
 
-    startOnBootSettings = new QSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-    if(startOnBootSettings->contains("Keylogger")) {
+    if(Settings::startOnBootSetting.value("Keylogger").isValid()) {
         startOnBootAction->setChecked(true);
-    }
-    else {
-        startOnBootAction->setChecked(false);
     }
 
     QAction *settingsAction = new QAction("Settings", trayIconMenu);
@@ -205,9 +201,9 @@ void MainWindow::showPreviousPage()
 void MainWindow::startOnBootActionChanged()
 {
     if(startOnBootAction->isChecked()) {
-        startOnBootSettings->setValue("Keylogger", QCoreApplication::applicationFilePath().replace('/', '\\'));
+        Settings::startOnBootSetting.setValue("Keylogger", QCoreApplication::applicationFilePath().replace('/', '\\'));
     }
     else {
-        startOnBootSettings->remove("Keylogger");
+        Settings::startOnBootSetting.remove("Keylogger");
     }
 }

@@ -10,6 +10,7 @@
 
 QSqlDatabase dataBase;
 QString DataBase::dataPath;
+QSettings DataBase::dataFilePathSettings("My Computer", "Keylogger");
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -52,8 +53,13 @@ void DataBase::makeDataFile()
 
     filePath = dataPath + "/UserData.mdb";
     if(!QFile().exists(filePath)) {
-        QFile::copy(QDir::currentPath() + "/UserData.mdb", filePath);
-//        QDir().rename(QDir::currentPath() + "/UserData.mdb", filePath); //move file
+        if(dataFilePathSettings.value("DataPath").isValid()) {
+            QFile::copy(dataFilePathSettings.value("DataFilePath").toString(), filePath);
+        }
+        else {
+            QFile::copy(QDir::currentPath() + "/UserData.mdb", filePath);
+        }
+        dataFilePathSettings.setValue("DataFilePath", QDir::currentPath() + "/UserData.mdb");
     }
 }
 

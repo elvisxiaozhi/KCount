@@ -6,6 +6,8 @@
 #include <QDebug>
 #include "database.h"
 
+QSettings Settings::startOnBootSetting("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Settings");
@@ -265,10 +267,9 @@ void Settings::showResetAllMsBox()
 
 void Settings::resetSettings()
 {
-    settings->remove("SettingsPage/soundAlertCheckBox");
-    settings->remove("SettingsPage/reachingNumEdit");
-    settings->remove("SettingsPage/autoSaveCheckBox");
-    settings->remove("SettingsPage/autoSaveInterval");
+    settings->remove("SettingsPage");
+    startOnBootSetting.remove("Keylogger");
+    DataBase::dataFilePathSettings.remove("DataFilePath");
     qDebug() << "Settings have been reset";
 }
 
