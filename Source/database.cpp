@@ -182,17 +182,11 @@ void DataBase::readDatabase(int readMode)
 
             break;
         case 2: //read database within a day
-            readQueryStr = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1#").arg(currentDate);
+            readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
             readQuery.exec(readQueryStr);
             while(readQuery.next()) {
-                QSqlQuery countQuery;
-                QString countString = QString("SELECT SUM(PressedTimes) FROM Data WHERE PressedKey = '%1'").arg(readQuery.value(0).toString());
-                countQuery.exec(countString);
-                while(countQuery.next()) {
-                    pressedKeyMap.insert(readQuery.value(0).toString(), countQuery.value(0).toInt()); //insert pressed key and the sum of PressedTimes to map
-                }
+                pressedKeyMap.insert(readQuery.value(0).toString(), readQuery.value(1).toInt());
             }
-
             break;
         default:
             break;
