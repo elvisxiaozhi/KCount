@@ -31,7 +31,7 @@ private:
     void makeDataFile();
     void setTimer();
     void sortMap();
-    void insertNewData(int);
+    void insertNewData(int, int);
 
 signals:
     void keyPressedDone();

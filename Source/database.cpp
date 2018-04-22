@@ -83,7 +83,7 @@ void DataBase::sortMap()
     });
 }
 
-void DataBase::insertNewData(int vectorIndex)
+void DataBase::insertNewData(int vectorIndex, int keyPressedTimesEarlierToday)
 {
     QSqlQuery insertQuery;
     insertQuery.prepare("INSERT INTO Data (CreatedDate, CreatedHour, PressedKey, PressedTimes)"
@@ -93,7 +93,7 @@ void DataBase::insertNewData(int vectorIndex)
     insertQuery.bindValue(":CreatedHour", CreatedHour.toInt());
     insertQuery.bindValue(":PressedKey", mapVector[vectorIndex].first);
     int pressedTimes = mapVector[vectorIndex].second; //can not bind this value directly to the next line, do not know why
-    insertQuery.bindValue(":PressedTimes", pressedTimes);
+    insertQuery.bindValue(":PressedTimes", pressedTimes - keyPressedTimesEarlierToday);
     insertQuery.exec();
 }
 
@@ -127,20 +127,27 @@ void DataBase::updateDatabase()
             hasPressedKeyAtCurrentHourQuery.exec(hasPressedKeyAtCurrentHourStr);
 
             if(isQueryFound(hasPressedKeyAtCurrentHourQuery) == true) {
-                qDebug() << hasPressedKeyAtCurrentHourQuery.value(2).toInt() << hasPressedKeyAtCurrentHourQuery.value(3).toString() << hasPressedKeyAtCurrentHourQuery.value(4).toInt() << mapVector[i].second;
                 QSqlQuery hasPressedKeyEarlierTodayQuery;
                 QString hasPressedKeyEarlierTodayStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour < %2 AND PressedKey = '%3'").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QTime::currentTime().toString("h").toInt()).arg(hasPressedKeyAtCurrentHourQuery.value(3).toString());
                 hasPressedKeyEarlierTodayQuery.exec(hasPressedKeyEarlierTodayStr);
                 while(hasPressedKeyEarlierTodayQuery.next()) {
                     int keyPressedTimesEarlierToday = hasPressedKeyEarlierTodayQuery.value(0).toInt();
-                    qDebug() << keyPressedTimesEarlierToday << mapVector[i].second;
                     QSqlQuery updatePessedKeyAtCurrentHourQuery;
                     QString updatePessedKeyAtCurrentHourStr = QString("UPDATE Data SET PressedTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND PressedKey = '%4'").arg(QString::number(mapVector[i].second - keyPressedTimesEarlierToday)).arg(currentDate).arg(currentHour).arg(mapVector[i].first);
                     updatePessedKeyAtCurrentHourQuery.exec(updatePessedKeyAtCurrentHourStr);
                 }
             }
             else {
-                insertNewData(i);
+                QSqlQuery hasPressedKeyEarlierTodayQuery;
+                QString hasPressedKeyEarlierTodayStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour < %2 AND PressedKey = '%3'").arg(currentDate).arg(currentHour).arg(mapVector[i].first);
+                hasPressedKeyEarlierTodayQuery.exec(hasPressedKeyEarlierTodayStr);
+                if(isQueryFound(hasPressedKeyEarlierTodayQuery) == true) {
+                    int keyPressedTimesEarlierToday = hasPressedKeyEarlierTodayQuery.value(0).toInt();
+                    insertNewData(i, keyPressedTimesEarlierToday);
+                }
+                else {
+                    insertNewData(i, 0);
+                }
             }
         }
 
