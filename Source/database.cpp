@@ -22,7 +22,7 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
     dataBase = QSqlDatabase::addDatabase("QODBC");
     dataBase.setDatabaseName(accessString);
 
-    readDatabase();
+    readDatabaseByDay();
 
     setTimer();
 
@@ -150,16 +150,17 @@ void DataBase::updateDatabase()
     }
 }
 
-void DataBase::readDatabase()
+void DataBase::readDatabaseByHour()
 {
     if(dataBase.open()) {
-        qDebug() << "Database opened and ready to read";
-
-        QSqlQuery readQuery;
-        QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().toString("MM/dd/yy"));
-        readQuery.exec(readString);
+        qDebug() << "Database opened and ready to read by hour";
 
         pressedKeyMap.clear();
+
+        QSqlQuery readQuery;
+        QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QTime::currentTime().toString("h").toInt());
+        readQuery.exec(readString);
+
         while(readQuery.next()) {
             pressedKeyMap.insert(readQuery.value(0).toString(), readQuery.value(1).toInt());
         }
@@ -172,6 +173,43 @@ void DataBase::readDatabase()
     }
 
     sortMap();
+
+    keyPressedTimes = 0;
+    for(int i = 0; i < mapVector.size(); i++) {
+        keyPressedTimes += mapVector[i].second;
+    }
+}
+
+void DataBase::readDatabaseByDay()
+{
+    if(dataBase.open()) {
+        qDebug() << "Database opened and ready to read";
+
+        pressedKeyMap.clear();
+
+        QSqlQuery readQuery;
+        QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().toString("MM/dd/yy"));
+        readQuery.exec(readString);
+
+        while(readQuery.next()) {
+            QSqlQuery countQuery;
+            QString countString = QString("SELECT SUM(PressedTimes) FROM Data WHERE PressedKey = '%1'").arg(readQuery.value(0).toString());
+            countQuery.exec(countString);
+            while(countQuery.next()) {
+                pressedKeyMap.insert(readQuery.value(0).toString(), countQuery.value(0).toInt()); //insert pressed key and the sum of PressedTimes to map
+            }
+        }
+
+        dataBase.close();
+        qDebug() << "Database read and closed";
+    }
+    else {
+        qDebug() << dataBase.lastError().text();
+    }
+
+    sortMap();
+
+    keyPressedTimes = 0;
     for(int i = 0; i < mapVector.size(); i++) {
         keyPressedTimes += mapVector[i].second;
     }
@@ -182,6 +220,8 @@ void DataBase::updateTimer()
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
     currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
     updateDatabase();
+
+    readDatabaseByDay(); //because each hour the data will store to database once, and map and vector will be cleared in each hour, so when updating database, it needs to reload data to map and vector
 }
 
 void clearDatabase()

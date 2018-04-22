@@ -42,5 +42,5 @@ void Label::setContextMenu()
     viewMenu->addAction(monthAct);
     viewMenu->addAction(yearAct);
 
-    connect(this, &Label::customContextMenuRequested, [this, contextMenu](){ contextMenu->exec(QCursor::pos()); });
+    connect(this, &Label::customContextMenuRequested, [=](){ contextMenu->exec(QCursor::pos()); });
 }

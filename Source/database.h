@@ -39,7 +39,8 @@ signals:
 
 public slots:
     void updateDatabase();
-    void readDatabase();
+    void readDatabaseByHour();
+    void readDatabaseByDay();
 
 private slots:
     void keyPressed(QString);
