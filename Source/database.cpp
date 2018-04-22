@@ -22,7 +22,7 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
     dataBase = QSqlDatabase::addDatabase("QODBC");
     dataBase.setDatabaseName(accessString);
 
-    readDatabase(1);
+    readDatabase(2);
 
     setTimer();
 
@@ -73,7 +73,7 @@ void DataBase::setTimer()
 
 void DataBase::sortMap()
 {
-    mapVector.clear();
+    mapVector.clear(); //when sort map, the vector needs to clear the old data and reload new data from map to sort
     QMap<QString, unsigned long long int>::iterator it;
     for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
         mapVector.push_back(std::make_pair(it.key(), it.value()));

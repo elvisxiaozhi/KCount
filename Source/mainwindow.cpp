@@ -55,6 +55,8 @@ void MainWindow::setLayout()
         frequentlyPressedKeys[i] = new Label;
         lblsVLayout->addWidget(frequentlyPressedKeys[i]);
         frequentlyPressedKeys[i]->hide();
+
+        connect(frequentlyPressedKeys[i], &Label::viewNodeChanged, this, &MainWindow::changeViewMode);
     }
 
     btnHLayout = new QHBoxLayout;
@@ -82,6 +84,7 @@ void MainWindow::setLayout()
 
     statusBar()->showMessage("Total Pressed");
 
+    connect(totalPressedTimesLabel, &Label::viewNodeChanged, this, &MainWindow::changeViewMode);
     connect(nextPageBtn, &QToolButton::clicked, this, &MainWindow::showNextPage);
     connect(previousPageBtn, &QToolButton::clicked, this, &MainWindow::showPreviousPage);
     connect(&setDataBase, &DataBase::keyPressedDone, this, &MainWindow::updateLabels);
@@ -208,4 +211,10 @@ void MainWindow::startOnBootActionChanged()
     else {
         Settings::startOnBootSetting.remove("Keylogger");
     }
+}
+
+void MainWindow::changeViewMode(int viewMode) //when changing the view mode, re-read the database base on the view mode and then update lbls
+{
+    setDataBase.readDatabase(viewMode);
+    updateLabels();
 }

@@ -18,10 +18,10 @@ void Label::setContextMenu()
     QMenu *viewMenu = new QMenu("View", contextMenu);
     contextMenu->addMenu(viewMenu);
 
-    QAction *hourAct = new QAction("Hour", viewMenu);
+    hourAct = new QAction("Hour", viewMenu);
     hourAct->setCheckable(true);
 
-    QAction *dayAct = new QAction("Day", viewMenu);
+    dayAct = new QAction("Day", viewMenu);
     dayAct->setCheckable(true);
 
     QAction *monthAct = new QAction("Month", viewMenu);
@@ -43,4 +43,16 @@ void Label::setContextMenu()
     viewMenu->addAction(yearAct);
 
     connect(this, &Label::customContextMenuRequested, [=](){ contextMenu->exec(QCursor::pos()); });
+    connect(hourAct, &QAction::changed, this, &Label::emitViewModeSignal);
+    connect(dayAct, &QAction::changed, this, &Label::emitViewModeSignal);
+}
+
+void Label::emitViewModeSignal()
+{
+    if(hourAct->isChecked()) {
+        emit viewNodeChanged(1);
+    }
+    if(dayAct->isChecked()) {
+        emit viewNodeChanged(2);
+    }
 }

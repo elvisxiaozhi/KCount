@@ -46,6 +46,7 @@ private slots:
     void showNextPage();
     void showPreviousPage();
     void startOnBootActionChanged();
+    void changeViewMode(int);
 };
 
 #endif // MAINWINDOW_H
