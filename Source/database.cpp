@@ -22,7 +22,7 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
     dataBase = QSqlDatabase::addDatabase("QODBC");
     dataBase.setDatabaseName(accessString);
 
-    readDatabaseByDay();
+    readDatabase(1);
 
     setTimer();
 
@@ -159,54 +159,43 @@ void DataBase::updateDatabase()
     }
 }
 
-void DataBase::readDatabaseByHour()
-{
-    if(dataBase.open()) {
-        qDebug() << "Database opened and ready to read by hour";
-
-        pressedKeyMap.clear();
-
-        QSqlQuery readQuery;
-        QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QTime::currentTime().toString("h").toInt());
-        readQuery.exec(readString);
-
-        while(readQuery.next()) {
-            pressedKeyMap.insert(readQuery.value(0).toString(), readQuery.value(1).toInt());
-        }
-
-        dataBase.close();
-        qDebug() << "Database read and closed";
-    }
-    else {
-        qDebug() << dataBase.lastError().text();
-    }
-
-    sortMap();
-
-    keyPressedTimes = 0;
-    for(int i = 0; i < mapVector.size(); i++) {
-        keyPressedTimes += mapVector[i].second;
-    }
-}
-
-void DataBase::readDatabaseByDay()
+void DataBase::readDatabase(int readMode)
 {
     if(dataBase.open()) {
         qDebug() << "Database opened and ready to read";
 
-        pressedKeyMap.clear();
+        pressedKeyMap.clear(); //clear the old data and re-read new data
 
         QSqlQuery readQuery;
-        QString readString = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().toString("MM/dd/yy"));
-        readQuery.exec(readString);
+        QString readQueryStr;
 
-        while(readQuery.next()) {
-            QSqlQuery countQuery;
-            QString countString = QString("SELECT SUM(PressedTimes) FROM Data WHERE PressedKey = '%1'").arg(readQuery.value(0).toString());
-            countQuery.exec(countString);
-            while(countQuery.next()) {
-                pressedKeyMap.insert(readQuery.value(0).toString(), countQuery.value(0).toInt()); //insert pressed key and the sum of PressedTimes to map
+        QString currentDate = QDate::currentDate().toString("MM/dd/yy");
+        int currentHour = QTime::currentTime().toString("h").toInt();
+
+        switch (readMode) {
+        case 1: //read database within an hour
+            readQueryStr = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+            readQuery.exec(readQueryStr);
+            while(readQuery.next()) {
+                pressedKeyMap.insert(readQuery.value(0).toString(), readQuery.value(1).toInt());
             }
+
+            break;
+        case 2: //read database within a day
+            readQueryStr = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1#").arg(currentDate);
+            readQuery.exec(readQueryStr);
+            while(readQuery.next()) {
+                QSqlQuery countQuery;
+                QString countString = QString("SELECT SUM(PressedTimes) FROM Data WHERE PressedKey = '%1'").arg(readQuery.value(0).toString());
+                countQuery.exec(countString);
+                while(countQuery.next()) {
+                    pressedKeyMap.insert(readQuery.value(0).toString(), countQuery.value(0).toInt()); //insert pressed key and the sum of PressedTimes to map
+                }
+            }
+
+            break;
+        default:
+            break;
         }
 
         dataBase.close();
@@ -218,7 +207,7 @@ void DataBase::readDatabaseByDay()
 
     sortMap();
 
-    keyPressedTimes = 0;
+    keyPressedTimes = 0; //clear the old pressed times and re-count
     for(int i = 0; i < mapVector.size(); i++) {
         keyPressedTimes += mapVector[i].second;
     }
@@ -230,7 +219,7 @@ void DataBase::updateTimer()
     currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
     updateDatabase();
 
-    readDatabaseByDay(); //because each hour the data will store to database once, and map and vector will be cleared in each hour, so when updating database, it needs to reload data to map and vector
+    readDatabase(2); //because in a peroid of time, the data will store to database, and map and vector will be cleared, so when updating database, it needs to re-read data to map and vector
 }
 
 void clearDatabase()

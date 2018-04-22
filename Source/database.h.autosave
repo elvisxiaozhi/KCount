@@ -39,8 +39,6 @@ signals:
 
 public slots:
     void updateDatabase();
-    void readDatabaseWithinAnHour();
-    void readDatabaseWithinADay();
     void readDatabase(int);
 
 private slots:
