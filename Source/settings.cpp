@@ -5,6 +5,8 @@
 #include <QIntValidator>
 #include <QDebug>
 #include "database.h"
+#include <QProcess>
+#include <QApplication>
 
 QSettings Settings::startOnBootSetting("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 
@@ -26,10 +28,11 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
         emit databaseCleared();
     });
     connect(&setMsBox, &MessageBoxes::resetAllConfirmed, [this](){
-        resetAll();
+        resetAll(); //because resetAll() function needs to call resetSettings() and clearDatabase() and does not want showSuccessMsBox()
         setMsBox.successMsBox.setText("Everything has been reset to default.");
         setMsBox.showSuccessMsBox();
     });
+    connect(&setMsBox, &MessageBoxes::deleteAppConfirmed, this, &Settings::deleteApp);
 }
 
 void Settings::closeEvent(QCloseEvent *event)
@@ -198,15 +201,15 @@ void Settings::setResetLayout()
     QPushButton *resetAllBtn = new QPushButton(resetGBox);
     resetAllBtn->setText("Reset All");
 
-    QPushButton *deleteEverythingBtn = new QPushButton(resetGBox);
-    deleteEverythingBtn->setText("Delete Everything");
+    QPushButton *deleteAppBtn = new QPushButton(resetGBox);
+    deleteAppBtn->setText("Delete App");
 
     QHBoxLayout *resetBtnHLayout = new QHBoxLayout;
 
     resetBtnHLayout->addWidget(resetSettingsBtn);
     resetBtnHLayout->addWidget(clearDatabaseBtn);
     resetBtnHLayout->addWidget(resetAllBtn);
-    resetBtnHLayout->addWidget(deleteEverythingBtn);
+    resetBtnHLayout->addWidget(deleteAppBtn);
 
     QVBoxLayout *resetVLayout = new QVBoxLayout;
     resetGBox->setLayout(resetVLayout);
@@ -218,6 +221,7 @@ void Settings::setResetLayout()
     connect(resetSettingsBtn, &QPushButton::clicked, this, &Settings::showResetSettingsMsBox);
     connect(clearDatabaseBtn, &QPushButton::clicked, this, &Settings::showClearDatabaseMsbox);
     connect(resetAllBtn, &QPushButton::clicked, this, &Settings::showResetAllMsBox);
+    connect(deleteAppBtn, &QPushButton::clicked, this, &Settings::showDeleteAppMsBox);
 }
 
 void Settings::setFlatBtn()
@@ -265,11 +269,31 @@ void Settings::showResetAllMsBox()
     setMsBox.showQuestionMsBox(3);
 }
 
+void Settings::showDeleteAppMsBox()
+{
+    setMsBox.questionMsBox.setWindowTitle("Delete App");
+    setMsBox.questionMsBox.setText("Are you sure you want to delete this app?");
+    setMsBox.questionMsBox.setDetailedText("This will delete this app and everything relevant to this app completely.");
+    setMsBox.showQuestionMsBox(4);
+}
+
+void Settings::deleteApp()
+{
+    QString batFilePath = writeBatFile();
+    resetAll();
+    setMsBox.successMsBox.setText("Keylogger has been successfully removed from this computer");
+    setMsBox.successMsBox.setInformativeText("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/Keyboard-Tracker/releases'>website</a>.");
+    setMsBox.showSuccessMsBox();
+
+    QProcess::startDetached("cmd.exe", QStringList() << "/c" << batFilePath);
+    qApp->quit();
+}
+
 void Settings::resetSettings()
 {
     settings->remove("SettingsPage");
     startOnBootSetting.remove("Keylogger");
-    DataBase::dataFilePathSettings.remove("DataFilePath");
+    DataBase::appPathSetting.remove("AppPath");
     emit uncheckStartOnBootAct();
     qDebug() << "Settings have been reset";
 }
@@ -278,9 +302,25 @@ void Settings::resetAll()
 {
     resetSettings();
     clearDatabase();
-    DataBase::deleteDataFile();
+    DataBase::deleteDataFile(DataBase::dataPath);
 
     qDebug() << "Everything has been reset to default";
+}
+
+QString Settings::writeBatFile()
+{
+    QString batFilePath = QString(DataBase::appPathSetting.value("AppPath").toString() + "/%1.bat").arg("Delete Keylogger");
+    QFile batFile(batFilePath);
+    if(batFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        QTextStream textStream(&batFile);
+        textStream << QString("@RD /S /Q \"%1\"").arg(DataBase::appPathSetting.value("AppPath").toString());
+        qDebug() << "Done";
+    }
+    else {
+        qDebug() << batFile.errorString();
+    }
+
+    return batFilePath;
 }
 
 void Settings::resetChanges()

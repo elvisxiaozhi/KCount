@@ -20,8 +20,8 @@ public:
     QMap<QString, unsigned long long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
     static QString dataPath;
-    static void deleteDataFile();
-    static QSettings dataFilePathSettings;
+    static void deleteDataFile(QString);
+    static QSettings appPathSetting;
 
 private:
     QString filePath;

@@ -40,6 +40,7 @@ private:
     void setResetLayout();
     void resetSettings();
     void resetAll();
+    QString writeBatFile();
 
 signals:
     void databaseCleared();
@@ -54,6 +55,8 @@ private slots:
     void showResetSettingsMsBox();
     void showClearDatabaseMsbox();
     void showResetAllMsBox();
+    void showDeleteAppMsBox();
+    void deleteApp();
 };
 
 #endif // SETTINGS_H

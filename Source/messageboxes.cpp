@@ -26,6 +26,9 @@ void MessageBoxes::showQuestionMsBox(int msBoxType)
         case 3:
             emit resetAllConfirmed();
             break;
+        case 4:
+            emit deleteAppConfirmed();
+            break;
         default:
             break;
         }

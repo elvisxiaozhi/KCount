@@ -10,7 +10,7 @@
 
 QSqlDatabase dataBase;
 QString DataBase::dataPath;
-QSettings DataBase::dataFilePathSettings("My Computer", "Keylogger");
+QSettings DataBase::appPathSetting("My Computer", "Keylogger");
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -29,9 +29,9 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &DataBase::keyPressed);
 }
 
-void DataBase::deleteDataFile()
+void DataBase::deleteDataFile(QString deleteDataPath)
 {
-    static QDir deleteFilePath(dataPath);
+    static QDir deleteFilePath(deleteDataPath);
     deleteFilePath.removeRecursively();
 }
 
@@ -53,13 +53,13 @@ void DataBase::makeDataFile()
 
     filePath = dataPath + "/UserData.mdb";
     if(!QFile().exists(filePath)) {
-        if(dataFilePathSettings.value("DataPath").isValid()) {
-            QFile::copy(dataFilePathSettings.value("DataFilePath").toString(), filePath);
+        if(appPathSetting.value("DataPath").isValid()) {
+            QFile::copy(appPathSetting.value("AppPath").toString() + "/UserData.mdb", filePath);
         }
         else {
             QFile::copy(QDir::currentPath() + "/UserData.mdb", filePath);
         }
-        dataFilePathSettings.setValue("DataFilePath", QDir::currentPath() + "/UserData.mdb");
+        appPathSetting.setValue("AppPath", QDir::currentPath());
     }
 }
 
