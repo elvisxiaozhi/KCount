@@ -145,18 +145,19 @@ void MainWindow::setLblText()
             frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
         }
     }
-
-    if(setSettingsPage.soundAlertCheckBox->isChecked()) {
-        if(setDataBase.keyPressedTimes % setSettingsPage.reachingNumEdit->text().toInt() == 0) {
-            QSound::play(":/Sounds/Sounds/ding.wav");
-        }
-    }
 }
 
 void MainWindow::updateLabels()
 {
     if(this->isHidden() == false) {
         setLblText();
+    }
+
+    //keyPressedDone will emit each time when a key pressed, and the will call this function
+    if(setSettingsPage.soundAlertCheckBox->isChecked()) {
+        if(setDataBase.keyPressedTimes % setSettingsPage.reachingNumEdit->text().toInt() == 0) {
+            QSound::play(":/Sounds/Sounds/ding.wav");
+        }
     }
 }
 

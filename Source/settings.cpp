@@ -100,6 +100,11 @@ void Settings::setGeneralPage()
     setSoundAlertLayout();
     setAutoSaveLayout();
     setResetLayout();
+
+    //call resetChanges function when the program run to initiate variables
+    //see updateLabels() in MainWinodw to see why
+    //because if this function does not call, setSettingsPage.reachingNumEdit->text().toInt() will be 0 when the program run and the program will crash when reset the value to reachingNumEdit
+    resetChanges();
 }
 
 void Settings::setSoundAlertLayout()
