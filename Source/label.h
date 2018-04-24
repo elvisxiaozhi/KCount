@@ -14,6 +14,8 @@ private:
     void setContextMenu();
     QAction *hourAct;
     QAction *dayAct;
+    QAction *monthAct;
+    QAction *yearAct;
 
 signals:
     void viewNodeChanged(int);

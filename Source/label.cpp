@@ -24,10 +24,10 @@ void Label::setContextMenu()
     dayAct = new QAction("Day", viewMenu);
     dayAct->setCheckable(true);
 
-    QAction *monthAct = new QAction("Month", viewMenu);
+    monthAct = new QAction("Month", viewMenu);
     monthAct->setCheckable(true);
 
-    QAction *yearAct = new QAction("Year", viewMenu);
+    yearAct = new QAction("Year", viewMenu);
     yearAct->setCheckable(true);
 
     QActionGroup *viewChoiceGroup = new QActionGroup(viewMenu);
@@ -43,8 +43,10 @@ void Label::setContextMenu()
     viewMenu->addAction(yearAct);
 
     connect(this, &Label::customContextMenuRequested, [=](){ contextMenu->exec(QCursor::pos()); });
-    connect(hourAct, &QAction::changed, this, &Label::emitViewModeSignal);
-    connect(dayAct, &QAction::changed, this, &Label::emitViewModeSignal);
+    connect(hourAct, &QAction::triggered, this, &Label::emitViewModeSignal); //note the triggered signal, not changed signal
+    connect(dayAct, &QAction::triggered, this, &Label::emitViewModeSignal); //using changed, emitViewModeSignal will be called twice
+    connect(monthAct, &QAction::triggered, this, &Label::emitViewModeSignal);
+    connect(yearAct, &QAction::triggered, this, &Label::emitViewModeSignal);
 }
 
 void Label::emitViewModeSignal()
@@ -54,5 +56,11 @@ void Label::emitViewModeSignal()
     }
     if(dayAct->isChecked()) {
         emit viewNodeChanged(2);
+    }
+    if(monthAct->isChecked()) {
+        emit viewNodeChanged(3);
+    }
+    if(yearAct->isChecked()) {
+        emit viewNodeChanged(4);
     }
 }

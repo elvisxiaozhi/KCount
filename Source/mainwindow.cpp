@@ -222,4 +222,5 @@ void MainWindow::changeViewMode(int viewMode) //when changing the view mode, re-
     setDataBase.updateDatabase();
     setDataBase.readDatabase(viewMode);
     updateLabels();
+    setDataBase.currentHourPressedKeyMap.clear(); //must update and read first, and then clear this map
 }

@@ -19,6 +19,7 @@ public:
     unsigned long long int keyPressedTimes;
     QMap<QString, unsigned long long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
+    QMap<QString, unsigned long long int> currentHourPressedKeyMap;
     static QString dataPath;
     static void deleteDataFile(QString);
     static QSettings appPathSetting;
@@ -32,7 +33,6 @@ private:
     void setTimer();
     void sortMap();
     void insertNewData(QString, unsigned long long int);
-    QMap<QString, unsigned long long int> currentHourPressedKeyMap;
 
 signals:
     void keyPressedDone();
