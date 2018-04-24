@@ -231,7 +231,6 @@ void Settings::resetSettings()
     startOnBootSetting.remove("Keylogger");
     DataBase::appPathSetting.remove("AppPath");
     emit uncheckStartOnBootAct();
-    qDebug() << "Settings have been reset";
 }
 
 void Settings::resetAll()
@@ -239,8 +238,6 @@ void Settings::resetAll()
     resetSettings();
     clearDatabase();
     DataBase::deleteDataFile(DataBase::dataPath);
-
-    qDebug() << "Everything has been reset to default";
 }
 
 QString Settings::writeBatFile()
