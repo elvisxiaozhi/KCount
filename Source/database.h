@@ -31,7 +31,8 @@ private:
     void makeDataFile();
     void setTimer();
     void sortMap();
-    void insertNewData(int, int);
+    void insertNewData(QString, unsigned long long int);
+    QMap<QString, unsigned long long int> currentHourPressedKeyMap;
 
 signals:
     void keyPressedDone();

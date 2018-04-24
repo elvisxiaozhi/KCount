@@ -83,7 +83,7 @@ void DataBase::sortMap()
     });
 }
 
-void DataBase::insertNewData(int vectorIndex, int keyPressedTimesEarlierToday)
+void DataBase::insertNewData(QString pressedKey, unsigned long long int pressedTimes)
 {
     QSqlQuery insertQuery;
     insertQuery.prepare("INSERT INTO Data (CreatedDate, CreatedHour, PressedKey, PressedTimes)"
@@ -91,9 +91,9 @@ void DataBase::insertNewData(int vectorIndex, int keyPressedTimesEarlierToday)
     insertQuery.bindValue(":CreatedDate", QDate::currentDate().toString("MM/dd/yy"));
     QString CreatedHour = QTime::currentTime().toString("h");
     insertQuery.bindValue(":CreatedHour", CreatedHour.toInt());
-    insertQuery.bindValue(":PressedKey", mapVector[vectorIndex].first);
-    int pressedTimes = mapVector[vectorIndex].second; //can not bind this value directly to the next line, do not know why
-    insertQuery.bindValue(":PressedTimes", pressedTimes - keyPressedTimesEarlierToday);
+    insertQuery.bindValue(":PressedKey", pressedKey);
+    int currentHourPressedTimes = pressedTimes; //can not bind this value directly to the next line, do not know why
+    insertQuery.bindValue(":PressedTimes", currentHourPressedTimes);
     insertQuery.exec();
 }
 
@@ -102,9 +102,13 @@ void DataBase::keyPressed(QString pressedKey)
     if(pressedKeyMap.contains(pressedKey)) {
         unsigned long long int newValue = pressedKeyMap.value(pressedKey) + 1;
         pressedKeyMap.insert(pressedKey, newValue);
+
+        currentHourPressedKeyMap.insert(pressedKey, newValue);
     }
     else {
         pressedKeyMap.insert(pressedKey, 1);
+
+        currentHourPressedKeyMap.insert(pressedKey, 1);
     }
 
     keyPressedTimes++;
@@ -121,42 +125,37 @@ void DataBase::updateDatabase()
 
     if(dataBase.open()) {
         qDebug() << "Database opened";
-        for(int i = 0; i < mapVector.size(); i++) {
-            QSqlQuery hasPressedKeyAtCurrentHourQuery;
-            QString hasPressedKeyAtCurrentHourStr = QString("SELECT * FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2 AND PressedKey = '%3'").arg(currentDate).arg(currentHour).arg(mapVector[i].first);
-            hasPressedKeyAtCurrentHourQuery.exec(hasPressedKeyAtCurrentHourStr);
 
-            if(isQueryFound(hasPressedKeyAtCurrentHourQuery) == true) {
-                QSqlQuery hasPressedKeyEarlierTodayQuery;
-                QString hasPressedKeyEarlierTodayStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour < %2 AND PressedKey = '%3'").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QTime::currentTime().toString("h").toInt()).arg(hasPressedKeyAtCurrentHourQuery.value(3).toString());
-                hasPressedKeyEarlierTodayQuery.exec(hasPressedKeyEarlierTodayStr);
-                while(hasPressedKeyEarlierTodayQuery.next()) {
-                    int keyPressedTimesEarlierToday = hasPressedKeyEarlierTodayQuery.value(0).toInt();
-                    QSqlQuery updatePessedKeyAtCurrentHourQuery;
-                    QString updatePessedKeyAtCurrentHourStr = QString("UPDATE Data SET PressedTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND PressedKey = '%4'").arg(QString::number(mapVector[i].second - keyPressedTimesEarlierToday)).arg(currentDate).arg(currentHour).arg(mapVector[i].first);
-                    updatePessedKeyAtCurrentHourQuery.exec(updatePessedKeyAtCurrentHourStr);
-                }
+        for(auto it : currentHourPressedKeyMap.toStdMap()) {
+            QSqlQuery pressedTimesEarlierTodayQuery;
+            QString pressedTimesEarlierTodayStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour < %2 AND PressedKey = '%3'").arg(currentDate).arg(currentHour).arg(it.first);
+            pressedTimesEarlierTodayQuery.exec(pressedTimesEarlierTodayStr);
+            int pressedTimesEarlierToday = 0;
+            while(pressedTimesEarlierTodayQuery.next()) {
+                pressedTimesEarlierToday = pressedTimesEarlierTodayQuery.value(0).toInt();
+            }
+
+            QSqlQuery hasPressedKeyAtCurrentHourQuery;
+            QString hasPressedKeyAtCurrentHourQueryStr = QString("SELECT * FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2 AND PressedKey = '%3'").arg(currentDate).arg(currentHour).arg(it.first);
+            hasPressedKeyAtCurrentHourQuery.exec(hasPressedKeyAtCurrentHourQueryStr);
+            if(!isQueryFound(hasPressedKeyAtCurrentHourQuery)) {
+                insertNewData(it.first, it.second - pressedTimesEarlierToday);
             }
             else {
-                QSqlQuery hasPressedKeyEarlierTodayQuery;
-                QString hasPressedKeyEarlierTodayStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour < %2 AND PressedKey = '%3'").arg(currentDate).arg(currentHour).arg(mapVector[i].first);
-                hasPressedKeyEarlierTodayQuery.exec(hasPressedKeyEarlierTodayStr);
-                if(isQueryFound(hasPressedKeyEarlierTodayQuery) == true) {
-                    int keyPressedTimesEarlierToday = hasPressedKeyEarlierTodayQuery.value(0).toInt();
-                    insertNewData(i, keyPressedTimesEarlierToday);
-                }
-                else {
-                    insertNewData(i, 0);
-                }
+                QSqlQuery updatePessedKeyAtCurrentHourQuery;
+                QString updatePessedKeyAtCurrentHourStr = QString("UPDATE Data SET PressedTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND PressedKey = '%4'").arg(QString::number(it.second - pressedTimesEarlierToday)).arg(currentDate).arg(currentHour).arg(it.first);
+                updatePessedKeyAtCurrentHourQuery.exec(updatePessedKeyAtCurrentHourStr);
             }
         }
 
         dataBase.close();
-        qDebug() << "Database updated and closed";
+        qDebug() << "Database closed and updated";
     }
     else {
         qDebug() << dataBase.lastError().text();
     }
+
+    currentHourPressedKeyMap.clear();
 }
 
 void DataBase::readDatabase(int readMode)

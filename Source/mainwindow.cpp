@@ -216,6 +216,7 @@ void MainWindow::startOnBootActionChanged()
 
 void MainWindow::changeViewMode(int viewMode) //when changing the view mode, re-read the database base on the view mode and then update lbls
 {
+    setDataBase.updateDatabase();
     setDataBase.readDatabase(viewMode);
     updateLabels();
 }
