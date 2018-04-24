@@ -36,6 +36,7 @@ private:
     void setLayout();
     void setTrayIcon();
     void setLblText();
+    void setLblColor();
     void closeEvent(QCloseEvent *);
 
 signals:

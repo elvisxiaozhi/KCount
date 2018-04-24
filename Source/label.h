@@ -9,6 +9,7 @@ class Label : public QLabel
     Q_OBJECT
 public:
     Label();
+    void setLblColor(int);
 
 private:
     void setContextMenu();

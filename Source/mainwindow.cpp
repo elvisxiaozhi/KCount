@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
     setLayout();
     setTrayIcon();
 
+    //initiate the label color, so to let it show the right color when the program starts
+    setLblColor();
+
     connect(&setSettingsPage, &Settings::uncheckStartOnBootAct, [this](){ startOnBootAction->setChecked(false); }); //set startOnBootAction unchecked when reset the settings
     connect(&setSettingsPage, &Settings::databaseCleared, [this](){ //when database is cleared, clear map and vector and total pressed times, so the lbls can set to 0
         setDataBase.pressedKeyMap.clear();
@@ -71,6 +74,7 @@ void MainWindow::setLayout()
     nextPageBtn->setIcon(QIcon(":/Icons/Icons/next.png"));
     nextPageBtn->setText("Next");
     nextPageBtn->setLayoutDirection(Qt::RightToLeft);
+    nextPageBtn->setStyleSheet("QToolButton { background-color: #FF5A5F; font-size: 20px; }"); //Rausch color for button background
 
     previousPageBtn = new QToolButton(mainWidget);
     btnHLayout->addWidget(previousPageBtn);
@@ -78,6 +82,7 @@ void MainWindow::setLayout()
     previousPageBtn->setIcon(QIcon(":/Icons/Icons/back.png"));
     previousPageBtn->setText("Back");
     previousPageBtn->hide();
+    previousPageBtn->setStyleSheet("QToolButton { background-color: #FF5A5F; font-size: 20px; }");
 
     QSpacerItem *rightBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
     btnHLayout->addSpacerItem(rightBtnSpacer);
@@ -150,6 +155,21 @@ void MainWindow::setLblText()
     }
 }
 
+void MainWindow::setLblColor()
+{
+    totalPressedTimesLabel->setLblColor(setDataBase.keyPressedTimes);
+    if(setDataBase.mapVector.size() > 5) {
+        for(int i = 0; i < 5; i++) {
+            frequentlyPressedKeys[i]->setLblColor(setDataBase.mapVector[i].second);
+        }
+    }
+    else {
+        for(int i = 0; i < setDataBase.mapVector.size(); i++) {
+            frequentlyPressedKeys[i]->setLblColor(setDataBase.mapVector[i].second);
+        }
+    }
+}
+
 void MainWindow::updateLabels()
 {
     if(this->isHidden() == false) {
@@ -162,6 +182,8 @@ void MainWindow::updateLabels()
             QSound::play(":/Sounds/Sounds/ding.wav");
         }
     }
+
+    setLblColor();
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
