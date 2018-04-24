@@ -47,24 +47,6 @@ void Settings::setBasicLayout()
     this->setLayout(mainVLayout);
     mainVLayout->setSpacing(0);
 
-    QHBoxLayout *btnHLayout = new QHBoxLayout;
-    btnHLayout->setSpacing(0);
-    mainVLayout->addLayout(btnHLayout);
-
-    settingsBtns.resize(3);
-    for(int i = 0; i < settingsBtns.size(); i++) {
-        settingsBtns[i] = new QPushButton(this);
-        settingsBtns[i]->setObjectName(QString::number(i));
-
-        btnHLayout->addWidget(settingsBtns[i]);
-
-        connect(settingsBtns[i], &QPushButton::clicked, this, &Settings::setFlatBtn);
-    }
-    settingsBtns[0]->setText("General");
-    settingsBtns[0]->setFlat(true);
-    settingsBtns[1]->setText("Statistics");
-    settingsBtns[2]->setText("Database");
-
     mainGBox = new QGroupBox(this);
     mainVLayout->addWidget(mainGBox);
 
@@ -94,11 +76,8 @@ void Settings::setGeneralPage()
     //must initiate first, or the general settings will not show correctly
     isSoundAlertCheckBoxChecked = true;
     reachingNum = QString::number(1000);
-    autoSaveIntervalNum = 1;
-    isAutoSaveCheckBoxChecked = true;
 
     setSoundAlertLayout();
-    setAutoSaveLayout();
     setResetLayout();
 
     //call resetChanges function when the program run to initiate variables
@@ -152,38 +131,6 @@ void Settings::setSoundAlertLayout()
     connect(reachingNumEdit, &QLineEdit::textChanged, [this](QString text){ reachingNum = text; });
 }
 
-void Settings::setAutoSaveLayout()
-{
-    QGroupBox *autoSaveGBox = new QGroupBox("Auto Save", this);
-    settingsContentVLayout->addWidget(autoSaveGBox);
-
-    autoSaveCheckBox = new QCheckBox(autoSaveGBox);
-
-    QLabel *autoSaveLabel = new QLabel(autoSaveGBox);
-    autoSaveLabel->setText("Automatically save to database in every: ");
-
-    autoSaveInterval = new QSpinBox(autoSaveGBox);
-
-    autoSaveInterval->setMaximum(24);
-    autoSaveInterval->setMinimum(1);
-
-    QLabel *autoSaveUnitLabel = new QLabel(autoSaveGBox);
-    autoSaveUnitLabel->setText("Hour");
-
-    QHBoxLayout *autoSaveHLayout = new QHBoxLayout;
-    autoSaveHLayout->addWidget(autoSaveCheckBox);
-    autoSaveHLayout->addWidget(autoSaveLabel);
-    autoSaveHLayout->addWidget(autoSaveInterval);
-    autoSaveHLayout->addWidget(autoSaveUnitLabel);
-    autoSaveHLayout->addStretch();
-
-    autoSaveGBox->setLayout(autoSaveHLayout);
-
-    connect(autoSaveCheckBox, &QCheckBox::clicked, [=](){ isAutoSaveCheckBoxChecked = autoSaveCheckBox->isChecked(); });
-    connect(autoSaveInterval, QOverload<int>::of(&QSpinBox::valueChanged),
-            [=](int i){ autoSaveIntervalNum = i; });
-}
-
 void Settings::setResetLayout()
 {
     QGroupBox *resetGBox = new QGroupBox("Reset", this);
@@ -229,26 +176,10 @@ void Settings::setResetLayout()
     connect(deleteAppBtn, &QPushButton::clicked, this, &Settings::showDeleteAppMsBox);
 }
 
-void Settings::setFlatBtn()
-{
-    QPushButton *btnSender = qobject_cast<QPushButton *>(sender());
-    int btnIndex = btnSender->objectName().toInt();
-    for(int i = 0; i < settingsBtns.size(); i++) {
-        if(i != btnIndex) {
-            settingsBtns[i]->setFlat(false);
-        }
-        else {
-            settingsBtns[i]->setFlat(true);
-        }
-    }
-}
-
 void Settings::saveChanges()
 {
     settings->setValue("SettingsPage/soundAlertCheckBox", isSoundAlertCheckBoxChecked);
     settings->setValue("SettingsPage/reachingNumEdit", reachingNum);
-    settings->setValue("SettingsPage/autoSaveCheckBox", isAutoSaveCheckBoxChecked);
-    settings->setValue("SettingsPage/autoSaveInterval", autoSaveIntervalNum);
     this->hide();
 }
 
@@ -347,24 +278,5 @@ void Settings::resetChanges()
     }
     else {
         reachingNumEdit->setText(QString::number(1000));
-    }
-
-    if(settings->value("SettingsPage/autoSaveCheckBox").isValid()) {
-        if(settings->value("SettingsPage/autoSaveCheckBox") == true) {
-            autoSaveCheckBox->setChecked(true);
-        }
-        else {
-            autoSaveCheckBox->setChecked(false);
-        }
-    }
-    else {
-        autoSaveCheckBox->setChecked(true);
-    }
-
-    if(settings->value("SettingsPage/autoSaveInterval").isValid()) {
-        autoSaveInterval->setValue(settings->value("SettingsPage/autoSaveInterval").toInt());
-    }
-    else {
-        autoSaveInterval->setValue(1);
     }
 }

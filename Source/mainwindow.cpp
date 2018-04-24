@@ -110,6 +110,9 @@ void MainWindow::setTrayIcon()
     QAction *settingsAction = new QAction("Settings", trayIconMenu);
     trayIconMenu->addAction(settingsAction);
 
+    QAction *statisticsAction = new QAction("Statistics", trayIconMenu);
+    trayIconMenu->addAction(statisticsAction);
+
     QMenu *helpMenu = new QMenu("Help");
     trayIconMenu->addMenu(helpMenu);
     QAction *feedbackAction = new QAction("Feedback", helpMenu);

@@ -18,25 +18,21 @@ class Settings : public QWidget
     Q_OBJECT
 public:
     explicit Settings(QWidget *parent = nullptr);
-    QCheckBox *soundAlertCheckBox, *autoSaveCheckBox;
+    QCheckBox *soundAlertCheckBox;
     QLineEdit *reachingNumEdit;
-    QSpinBox *autoSaveInterval;
     static QSettings startOnBootSetting;
 
 private:
     void closeEvent(QCloseEvent *);
     QVBoxLayout *mainVLayout, *settingsContentVLayout, *generalVLayout;
     QGroupBox *mainGBox;
-    QVector<QPushButton *> settingsBtns;
     QSettings *settings;
-    bool isSoundAlertCheckBoxChecked, isAutoSaveCheckBoxChecked;
+    bool isSoundAlertCheckBoxChecked;
     QString reachingNum;
-    int autoSaveIntervalNum;
     MessageBoxes setMsBox;
     void setBasicLayout();
     void setGeneralPage();
     void setSoundAlertLayout();
-    void setAutoSaveLayout();
     void setResetLayout();
     void resetSettings();
     void resetAll();
@@ -50,7 +46,6 @@ public slots:
     void resetChanges();
 
 private slots:
-    void setFlatBtn();
     void saveChanges();
     void showResetSettingsMsBox();
     void showClearDatabaseMsbox();
