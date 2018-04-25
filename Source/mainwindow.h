@@ -12,6 +12,7 @@
 #include "database.h"
 #include "about.h"
 #include "settings.h"
+#include "statistics.h"
 
 class MainWindow : public QMainWindow
 {
@@ -33,6 +34,7 @@ private:
     DataBase setDataBase;
     Settings setSettingsPage;
     About setAboutPage;
+    Statistics setStatistics;
     void setLayout();
     void setTrayIcon();
     void setLblText();

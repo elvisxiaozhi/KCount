@@ -35,6 +35,25 @@ void DataBase::deleteDataFile(QString deleteDataPath)
     deleteFilePath.removeRecursively();
 }
 
+int DataBase::readTotalPressedTimesInADay(QString date)
+{
+    int pressedTimes = 0;
+    if(dataBase.open()) {
+        QSqlQuery readQuery;
+        QString readQueryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(date);
+        readQuery.exec(readQueryStr);
+        while(readQuery.next()) {
+            pressedTimes = readQuery.value(0).toInt();
+        }
+        qDebug() << pressedTimes;
+        dataBase.close();
+    }
+    else {
+        qDebug() << dataBase.lastError().text();
+    }
+    return pressedTimes;
+}
+
 bool DataBase::isQueryFound(QSqlQuery hasPressedKeyAtCurrentHourQuery) const
 {
     while(hasPressedKeyAtCurrentHourQuery.next()) {
@@ -174,7 +193,7 @@ void DataBase::readDatabase(int readMode)
         case 4: //read database within a month
             readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
-        case 5:
+        case 5: //read database within a year
             readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:

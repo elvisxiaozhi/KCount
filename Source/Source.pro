@@ -7,6 +7,7 @@
 QT       += core gui
 QT += sql
 QT += multimedia
+QT += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -34,7 +35,8 @@ SOURCES += \
     database.cpp \
     about.cpp \
     settings.cpp \
-    messageboxes.cpp
+    messageboxes.cpp \
+    statistics.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +47,8 @@ HEADERS += \
     database.h \
     about.h \
     settings.h \
-    messageboxes.h
+    messageboxes.h \
+    statistics.h
 
 RESOURCES += \
     ../Resources/resources.qrc
