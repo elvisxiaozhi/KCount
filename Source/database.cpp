@@ -45,7 +45,6 @@ int DataBase::readTotalPressedTimesInADay(QString date)
         while(readQuery.next()) {
             pressedTimes = readQuery.value(0).toInt();
         }
-        qDebug() << pressedTimes;
         dataBase.close();
     }
     else {

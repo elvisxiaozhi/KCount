@@ -12,8 +12,7 @@ QT_CHARTS_USE_NAMESPACE
 
 Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 {
-    setWindowTitle("Statistics");
-
+    setLayout();
     setBarChart();
 }
 
@@ -37,6 +36,7 @@ void Statistics::setBarChart()
 
     QBarCategoryAxis *axis = new QBarCategoryAxis();
     axis->append(barCategories);
+
     barChart->createDefaultAxes();
     barChart->setAxisX(axis, barSeries);
 
@@ -46,8 +46,28 @@ void Statistics::setBarChart()
     QChartView *chartView = new QChartView(barChart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
+    QWidget *chartWidget = new QWidget;
+    QVBoxLayout *chartVLayout = new QVBoxLayout(chartWidget);
+    chartWidget->setLayout(chartVLayout);
+    chartVLayout->addWidget(chartView);
+
+    tabWidget->addTab(chartWidget, "Week");
+
     this->resize(420, 300);
-    this->setCentralWidget(chartView);
+}
+
+void Statistics::setLayout()
+{
+    setWindowTitle("Statistics");
+
+    mainWidget = new QWidget(this);
+    this->setCentralWidget(mainWidget);
+
+    mainVLayout = new QVBoxLayout(mainWidget);
+    mainWidget->setLayout(mainVLayout);
+
+    tabWidget = new QTabWidget(mainWidget);
+    mainVLayout->addWidget(tabWidget);
 }
 
 void Statistics::closeEvent(QCloseEvent *event)
