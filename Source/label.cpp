@@ -13,6 +13,9 @@ Label::Label()
 
 void Label::setLblColor(int pressedTimes)
 {
+    if(pressedTimes < 100) {
+        setStyleSheet("QLabel { background-color: #FAD7A0; color: #FDFEFE; font-size: 50px; }"); //default style sheet
+    }
     if(pressedTimes >= 100 && pressedTimes < 500) {
         setStyleSheet("QLabel { background-color: #82E0AA; color: #FDFEFE; font-size: 50px; }"); //green bg color
     }

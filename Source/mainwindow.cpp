@@ -144,6 +144,11 @@ void MainWindow::setTrayIcon()
 void MainWindow::setLblText()
 {
     totalPressedTimesLabel->setText(QString::number(setDataBase.keyPressedTimes));
+    if(setDataBase.mapVector.isEmpty()) {
+        for(int i = 0; i < 5; i++) {
+            frequentlyPressedKeys[i]->setText("");
+        }
+    }
     if(setDataBase.mapVector.size() > 5) {
         for(int i = 0; i < 5; i++) {
             frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
@@ -159,6 +164,11 @@ void MainWindow::setLblText()
 void MainWindow::setLblColor()
 {
     totalPressedTimesLabel->setLblColor(setDataBase.keyPressedTimes);
+    if(setDataBase.mapVector.isEmpty()) {
+        for(int i = 0; i < 5; i++) {
+            frequentlyPressedKeys[i]->setLblColor(0);
+        }
+    }
     if(setDataBase.mapVector.size() > 5) {
         for(int i = 0; i < 5; i++) {
             frequentlyPressedKeys[i]->setLblColor(setDataBase.mapVector[i].second);
