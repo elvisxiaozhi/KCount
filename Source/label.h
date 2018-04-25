@@ -15,6 +15,7 @@ private:
     void setContextMenu();
     QAction *hourAct;
     QAction *dayAct;
+    QAction *weekAct;
     QAction *monthAct;
     QAction *yearAct;
 

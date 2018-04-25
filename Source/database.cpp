@@ -161,9 +161,6 @@ void DataBase::readDatabase(int readMode)
         QString currentDate = QDate::currentDate().toString("MM/dd/yy");
         int currentHour = QTime::currentTime().toString("h").toInt();
 
-        QString lastMonth = currentDate;
-        QString lastYear = currentDate; //lastMonth and lastYear must be define here, or it will jump the case in switch
-
         switch (readMode) {
         case 1: //read database within an hour
             readQueryStr = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
@@ -171,22 +168,14 @@ void DataBase::readDatabase(int readMode)
         case 2: //read database within a day
             readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
             break;
-        case 3:
-            if(QString(currentDate[1]).toInt() > 1) {
-                lastMonth.replace(QString(lastMonth[1]), QString::number(QString(lastMonth[1]).toInt() - 1)); //current month minus one minus to get last month
-            }
-            else { //if it is January, then
-                lastMonth.replace(QString(lastMonth[0]), QString::number(1));
-                lastMonth.replace(QString(lastMonth[1]), QString::number(2)); //set the month to December
-                lastMonth.replace(QString(lastMonth[7]), QString::number(QString(lastMonth[7]).toInt() - 1)); //and current year minus one year to get last year
-            }
-
-            readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(lastMonth);
+        case 3: //read database within a week
+            readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
-        case 4:
-            lastYear.replace(QString(lastYear[7]), QString::number(QString(lastYear[7]).toInt() - 1)); //current year minus one year to get last year
-
-            readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(lastYear);
+        case 4: //read database within a month
+            readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            break;
+        case 5:
+            readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
