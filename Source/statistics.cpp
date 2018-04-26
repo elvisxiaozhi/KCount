@@ -8,21 +8,29 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include "database.h"
+#include <QHBoxLayout>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
 
 QT_CHARTS_USE_NAMESPACE
 
 Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 {
     setLayout();
+
     setDailyBarChart();
     setWeeklyBarChart();
     setMonthlyBarChart();
     setYearlyBarChart();
 
-    tabWidget->addTab(dailyBarChartWidget, "Day");
-    tabWidget->addTab(weeklyBarChartWidget, "Week");
-    tabWidget->addTab(monthlyBarChartWidget, "Month");
-    tabWidget->addTab(yearlyBarChartWidget, "Year");
+    setDailyPieChart();
+
+    barTabWidget->addTab(dailyBarChartWidget, "Day");
+    barTabWidget->addTab(weeklyBarChartWidget, "Week");
+    barTabWidget->addTab(monthlyBarChartWidget, "Month");
+    barTabWidget->addTab(yearlyBarChartWidget, "Year");
+
+    pieTabWidget->addTab(dailyPieChartWidget, "Day");
 }
 
 void Statistics::setLayout()
@@ -35,10 +43,30 @@ void Statistics::setLayout()
     mainVLayout = new QVBoxLayout(mainWidget);
     mainWidget->setLayout(mainVLayout);
 
-    tabWidget = new QTabWidget(mainWidget);
-    mainVLayout->addWidget(tabWidget);
+    barTabWidget = new QTabWidget(mainWidget);
+    mainVLayout->addWidget(barTabWidget);
 
-    connect(tabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeWindow);
+    pieTabWidget = new QTabWidget(mainWidget);
+    pieTabWidget->hide();
+    mainVLayout->addWidget(pieTabWidget);
+
+    barChartBtn = new QPushButton("Bar Chart");
+//    barChartBtn->setFlat(true);
+    pieChartBtn = new QPushButton("Pie Chart");
+
+    QHBoxLayout *btnHLayout = new QHBoxLayout;
+    btnHLayout->setSpacing(0);
+
+    btnHLayout->addStretch();
+    btnHLayout->addWidget(barChartBtn);
+    btnHLayout->addWidget(pieChartBtn);
+    btnHLayout->addStretch();
+
+    mainVLayout->addLayout(btnHLayout);
+
+    connect(barTabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeWindow);
+    connect(barChartBtn, &QPushButton::clicked, this, &Statistics::showBarChart);
+    connect(pieChartBtn, &QPushButton::clicked, this, &Statistics::showPieChart);
 }
 
 void Statistics::closeEvent(QCloseEvent *event)
@@ -197,6 +225,38 @@ void Statistics::setYearlyBarChart()
     chartVLayout->addWidget(chartView);
 }
 
+void Statistics::setDailyPieChart()
+{
+    QPieSeries *series = new QPieSeries();
+    series->append("Jane", 1);
+    series->append("Joe", 2);
+    series->append("Andy", 3);
+    series->append("Barbara", 4);
+    series->append("Axel", 5);
+
+    QPieSlice *slice = series->slices().at(1);
+    slice->setExploded();
+    slice->setLabelVisible();
+    slice->setPen(QPen(Qt::darkGreen, 2));
+    slice->setBrush(Qt::green);
+
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Simple piechart example");
+    chart->legend()->hide();
+
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    dailyPieChartWidget = new QWidget;
+    dailyPieChartWidget->hide();
+    QVBoxLayout *pieVLayout = new QVBoxLayout(dailyPieChartWidget);
+    dailyPieChartWidget->setLayout(pieVLayout);
+    pieVLayout->addWidget(chartView);
+
+    this->resize(400, 300);
+}
+
 void Statistics::resizeWindow(int index)
 {
     if(index == 0) {
@@ -211,4 +271,20 @@ void Statistics::resizeWindow(int index)
     if(index == 3) {
         this->resize(800, 400);
     }
+}
+
+void Statistics::showBarChart()
+{
+    dailyBarChartWidget->show();
+    dailyPieChartWidget->hide();
+    barTabWidget->show();
+    pieTabWidget->hide();
+}
+
+void Statistics::showPieChart()
+{
+    dailyBarChartWidget->hide();
+    dailyPieChartWidget->show();
+    barTabWidget->hide();
+    pieTabWidget->show();
 }

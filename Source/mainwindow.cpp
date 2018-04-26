@@ -157,11 +157,11 @@ void MainWindow::setLblText()
             frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
         }
     }
-    else {
+    else { //when the most frequent is not more than 5
         for(int i = 0; i < setDataBase.mapVector.size(); i++) {
             frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
         }
-        for(int i = 0; i < 5 - setDataBase.mapVector.size(); i++) {
+        for(int i = 0; i < 5 - setDataBase.mapVector.size(); i++) { //set the rest of them to 0, or the lbl colors will stay as last time
             frequentlyPressedKeys[4 - i]->setText("");
         }
     }
