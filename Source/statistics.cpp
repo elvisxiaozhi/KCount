@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QDebug>
 #include <QCloseEvent>
+#include "database.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -23,7 +24,7 @@ void Statistics::setBarChart()
     QStringList barCategories;
     for(int i = 6; i >= 0; i--) {
         barCategories.push_back(QDate::currentDate().addDays(-i).toString("dd"));
-        totalPressedTimesSet->append(setDatabase.readTotalPressedTimesInADay(QDate::currentDate().addDays(-i).toString("MM/dd/yy"))); //must appened data first
+        totalPressedTimesSet->append(DataBase::readTotalPressedTimesInADay(QDate::currentDate().addDays(-i).toString("MM/dd/yy"))); //must appened data first
     }
 
     QBarSeries *barSeries = new QBarSeries();

@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QVBoxLayout>
-#include "database.h"
 #include <QTabWidget>
 
 class Statistics : public QMainWindow
@@ -17,7 +16,6 @@ private:
     QWidget *mainWidget;
     QVBoxLayout *mainVLayout;
     QTabWidget *tabWidget;
-    DataBase setDatabase;
     void setLayout();
     void closeEvent(QCloseEvent *);
 

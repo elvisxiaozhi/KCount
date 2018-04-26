@@ -23,7 +23,7 @@ public:
     static QString dataPath;
     static void deleteDataFile(QString);
     static QSettings appPathSetting;
-    int readTotalPressedTimesInADay(QString);
+    static int readTotalPressedTimesInADay(QString);
 
 private:
     QString filePath;
