@@ -218,7 +218,7 @@ void Settings::deleteApp()
     QString batFilePath = writeBatFile();
     resetAll();
     setMsBox.successMsBox.setText("KCount has been successfully removed from this computer");
-    setMsBox.successMsBox.setInformativeText("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/Keyboard-Tracker/releases'>website</a>.");
+    setMsBox.successMsBox.setInformativeText("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/KCount/releases'>website</a>.");
     setMsBox.showSuccessMsBox();
 
     QProcess::startDetached("cmd.exe", QStringList() << "/c" << batFilePath);

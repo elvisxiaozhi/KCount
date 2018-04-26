@@ -17,7 +17,7 @@ About::About(QWidget *parent) : QWidget(parent)
     infoLabel->setStyleSheet("QLabel { font-size: 20px; }");
 
     moreInfoLabel = new QLabel(this);
-    moreInfoLabel->setText("For more info, visit the <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/Keyboard-Tracker'>website</a>.");
+    moreInfoLabel->setText("For more info, visit the <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/KCount'>website</a>.");
     moreInfoLabel->setOpenExternalLinks(true); //set to open link on QLabel
     moreInfoLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     moreInfoLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
