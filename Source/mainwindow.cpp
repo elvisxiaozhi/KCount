@@ -39,7 +39,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setLayout()
 {
-    this->setWindowTitle("Keylogger");
+    this->setWindowTitle("KCount");
 
     mainWidget = new QWidget(this);
     setCentralWidget(mainWidget);
@@ -99,7 +99,7 @@ void MainWindow::setTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(QIcon(":/Icons/Icons/keyboard_tray_icon.png"), this);
     trayIcon->show();
-    trayIcon->setToolTip("Keylogger Alpha Verion");
+    trayIcon->setToolTip("KCount Alpha Verion");
 
     QMenu *trayIconMenu = new QMenu;
     trayIcon->setContextMenu(trayIconMenu);
@@ -108,7 +108,7 @@ void MainWindow::setTrayIcon()
     trayIconMenu->addAction(startOnBootAction);
     startOnBootAction->setCheckable(true);
 
-    if(Settings::startOnBootSetting.value("Keylogger").isValid()) {
+    if(Settings::startOnBootSetting.value("KCount").isValid()) {
         startOnBootAction->setChecked(true);
     }
 
@@ -243,10 +243,10 @@ void MainWindow::showPreviousPage()
 void MainWindow::startOnBootActionChanged()
 {
     if(startOnBootAction->isChecked()) {
-        Settings::startOnBootSetting.setValue("Keylogger", QCoreApplication::applicationFilePath().replace('/', '\\'));
+        Settings::startOnBootSetting.setValue("KCount", QCoreApplication::applicationFilePath().replace('/', '\\'));
     }
     else {
-        Settings::startOnBootSetting.remove("Keylogger");
+        Settings::startOnBootSetting.remove("KCount");
     }
 }
 

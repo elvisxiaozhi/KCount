@@ -10,7 +10,7 @@
 
 QSqlDatabase dataBase;
 QString DataBase::dataPath;
-QSettings DataBase::appPathSetting("My Computer", "Keylogger");
+QSettings DataBase::appPathSetting("My Computer", "KCount");
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -64,7 +64,7 @@ bool DataBase::isQueryFound(QSqlQuery hasPressedKeyAtCurrentHourQuery) const
 void DataBase::makeDataFile()
 {
     const static QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
-    dataPath = homePath.first() + "/AppData/Local/Keylogger";
+    dataPath = homePath.first() + "/AppData/Local/KCount";
     if(!QDir().exists(dataPath)) {
         QDir().mkdir(dataPath);
     }

@@ -17,8 +17,6 @@ LRESULT CALLBACK MyLowLevelKeyBoardProc(int nCode, WPARAM wParam, LPARAM lParam)
     //LPARAM is the key information
 
     if (wParam == WM_KEYUP) { //Note: KEYUP not KEYDOWN
-        qDebug() << "Key Pressed!";
-
         //Get the key information
         KBDLLHOOKSTRUCT cKey = *((KBDLLHOOKSTRUCT*)lParam);
 
@@ -49,7 +47,7 @@ LRESULT CALLBACK MyLowLevelKeyBoardProc(int nCode, WPARAM wParam, LPARAM lParam)
         buffer[4] = L'\0';
 
         //Print the output
-        qDebug() << "Key: " << cKey.vkCode << " " << QString::fromUtf16((ushort*)buffer) << " " << QString::fromUtf16((ushort*)lpszName);
+//        qDebug() << "Key: " << cKey.vkCode << " " << QString::fromUtf16((ushort*)buffer) << " " << QString::fromUtf16((ushort*)lpszName);
 
         Emitter::Instance()->keyPressed(QString::fromUtf16((ushort*)lpszName));
     }

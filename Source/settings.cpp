@@ -96,7 +96,7 @@ void Settings::setSoundAlertLayout()
 
     soundAlertCheckBox = new QCheckBox(soundAlertGBox);
 
-    settings = new QSettings("My Company", "Keylogger");
+    settings = new QSettings("My Company", "KCount");
 
     QHBoxLayout *soundAlertHLayout = new QHBoxLayout;
     soundAlertHLayout->addWidget(soundAlertCheckBox);
@@ -217,7 +217,7 @@ void Settings::deleteApp()
 {
     QString batFilePath = writeBatFile();
     resetAll();
-    setMsBox.successMsBox.setText("Keylogger has been successfully removed from this computer");
+    setMsBox.successMsBox.setText("KCount has been successfully removed from this computer");
     setMsBox.successMsBox.setInformativeText("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/Keyboard-Tracker/releases'>website</a>.");
     setMsBox.showSuccessMsBox();
 
@@ -228,7 +228,7 @@ void Settings::deleteApp()
 void Settings::resetSettings()
 {
     settings->remove("SettingsPage");
-    startOnBootSetting.remove("Keylogger");
+    startOnBootSetting.remove("KCount");
     DataBase::appPathSetting.remove("AppPath");
     emit uncheckStartOnBootAct();
 }
@@ -242,7 +242,7 @@ void Settings::resetAll()
 
 QString Settings::writeBatFile()
 {
-    QString batFilePath = QString(DataBase::appPathSetting.value("AppPath").toString() + "/%1.bat").arg("Delete Keylogger");
+    QString batFilePath = QString(DataBase::appPathSetting.value("AppPath").toString() + "/%1.bat").arg("Delete KCount");
     QFile batFile(batFilePath);
     if(batFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
         QTextStream textStream(&batFile);
