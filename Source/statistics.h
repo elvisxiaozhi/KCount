@@ -12,13 +12,15 @@ public:
     explicit Statistics(QWidget *parent = nullptr);
 
 private:
-    QWidget *mainWidget, *dailyBarChartWidget, *weeklyBarChartWidget;
+    QWidget *mainWidget, *dailyBarChartWidget, *weeklyBarChartWidget, *monthlyBarChartWidget, *yearlyBarChartWidget;
     QVBoxLayout *mainVLayout;
     QTabWidget *tabWidget;
     void setLayout();
     void closeEvent(QCloseEvent *);
     void setDailyBarChart();
     void setWeeklyBarChart();
+    void setMonthlyBarChart();
+    void setYearlyBarChart();
 
 signals:
 
