@@ -161,6 +161,9 @@ void MainWindow::setLblText()
         for(int i = 0; i < setDataBase.mapVector.size(); i++) {
             frequentlyPressedKeys[i]->setText(setDataBase.mapVector[i].first + ": " + QString::number(setDataBase.mapVector[i].second));
         }
+        for(int i = 0; i < 5 - setDataBase.mapVector.size(); i++) {
+            frequentlyPressedKeys[4 - i]->setText("");
+        }
     }
 }
 
@@ -180,6 +183,9 @@ void MainWindow::setLblColor()
     else {
         for(int i = 0; i < setDataBase.mapVector.size(); i++) {
             frequentlyPressedKeys[i]->setLblColor(setDataBase.mapVector[i].second);
+        }
+        for(int i = 0; i < 5 - setDataBase.mapVector.size(); i++) {
+            frequentlyPressedKeys[4 - i]->setLblColor(0);
         }
     }
 }
