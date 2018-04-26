@@ -59,7 +59,10 @@ void MainWindow::setLayout()
         lblsVLayout->addWidget(frequentlyPressedKeys[i]);
         frequentlyPressedKeys[i]->hide();
 
-        connect(frequentlyPressedKeys[i], &Label::viewNodeChanged, this, &MainWindow::changeViewMode);
+        //the two signals below are to change two objects checked action when one of them's action is changed
+        connect(totalPressedTimesLabel, &Label::viewModeChanged, frequentlyPressedKeys[i], &Label::setActionChecked);
+        connect(frequentlyPressedKeys[i], &Label::viewModeChanged, totalPressedTimesLabel, &Label::setActionChecked);
+        connect(frequentlyPressedKeys[i], &Label::viewModeChanged, this, &MainWindow::changeViewMode);
     }
 
     btnHLayout = new QHBoxLayout;
@@ -89,7 +92,7 @@ void MainWindow::setLayout()
 
     statusBar()->showMessage("Total Pressed");
 
-    connect(totalPressedTimesLabel, &Label::viewNodeChanged, this, &MainWindow::changeViewMode);
+    connect(totalPressedTimesLabel, &Label::viewModeChanged, this, &MainWindow::changeViewMode);
     connect(nextPageBtn, &QToolButton::clicked, this, &MainWindow::showNextPage);
     connect(previousPageBtn, &QToolButton::clicked, this, &MainWindow::showPreviousPage);
     connect(&setDataBase, &DataBase::keyPressedDone, this, &MainWindow::updateLabels);

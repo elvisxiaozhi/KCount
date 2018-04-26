@@ -80,18 +80,37 @@ void Label::setContextMenu()
 void Label::emitViewModeSignal()
 {
     if(hourAct->isChecked()) {
-        emit viewNodeChanged(1);
+        emit viewModeChanged(1);
     }
     if(dayAct->isChecked()) {
-        emit viewNodeChanged(2);
+        emit viewModeChanged(2);
     }
     if(weekAct->isChecked()) {
-        emit viewNodeChanged(3);
+        emit viewModeChanged(3);
     }
     if(monthAct->isChecked()) {
-        emit viewNodeChanged(4);
+        emit viewModeChanged(4);
     }
     if(yearAct->isChecked()) {
-        emit viewNodeChanged(5);
+        emit viewModeChanged(5);
+    }
+}
+
+void Label::setActionChecked(int checkedAction)
+{
+    if(checkedAction == 1) {
+        hourAct->setChecked(true);
+    }
+    if(checkedAction == 2) {
+        dayAct->setChecked(true);
+    }
+    if(checkedAction == 3) {
+        weekAct->setChecked(true);
+    }
+    if(checkedAction == 4) {
+        monthAct->setChecked(true);
+    }
+    if(checkedAction == 5) {
+        yearAct->setChecked(true);
     }
 }

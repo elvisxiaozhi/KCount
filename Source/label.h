@@ -20,7 +20,10 @@ private:
     QAction *yearAct;
 
 signals:
-    void viewNodeChanged(int);
+    void viewModeChanged(int);
+
+public slots:
+    void setActionChecked(int);
 
 private slots:
     void emitViewModeSignal();
