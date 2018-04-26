@@ -35,12 +35,12 @@ void DataBase::deleteDataFile(QString deleteDataPath)
     deleteFilePath.removeRecursively();
 }
 
-int DataBase::readTotalPressedTimesInADay(QString date)
+int DataBase::readTotalPressedTimesInADay(QString queryStr)
 {
     int pressedTimes = 0;
     if(dataBase.open()) {
         QSqlQuery readQuery;
-        QString readQueryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(date);
+        QString readQueryStr = queryStr;
         readQuery.exec(readQueryStr);
         while(readQuery.next()) {
             pressedTimes = readQuery.value(0).toInt();
