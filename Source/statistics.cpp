@@ -1,13 +1,6 @@
 #include "statistics.h"
-#include <QtCharts/QChartView>
-#include <QtCharts/QBarSeries>
-#include <QtCharts/QBarSet>
-#include <QtCharts/QLegend>
-#include <QtCharts/QBarCategoryAxis>
-#include <QDate>
 #include <QDebug>
 #include <QCloseEvent>
-#include "database.h"
 #include <QHBoxLayout>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
@@ -18,16 +11,7 @@ Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 {
     setLayout();
 
-    CustomBarChart *dailyBarChart = new CustomBarChart(QString("Daily Totaly Pressed Times"), 0);
-    CustomBarChart *weeklyBarChart = new CustomBarChart(QString("Weekly Totaly Pressed Times"), 1);
-    CustomBarChart *monthlyBarChart = new CustomBarChart(QString("Monthly Totaly Pressed Times"), 2);
-    CustomBarChart *yearlyBarChart = new CustomBarChart(QString("Yearly Totaly Pressed Times"), 3);
-
-    barTabWidget->addTab(dailyBarChart->barChartWidget, "Day");
-    barTabWidget->addTab(weeklyBarChart->barChartWidget, "Week");
-    barTabWidget->addTab(monthlyBarChart->barChartWidget, "Month");
-    barTabWidget->addTab(yearlyBarChart->barChartWidget, "Year");
-
+    setBarChart();
 //    setDailyPieChart();
 //    pieTabWidget->addTab(dailyPieChartWidget, "Day");
 }
@@ -72,6 +56,19 @@ void Statistics::closeEvent(QCloseEvent *event)
 {
     event->ignore();
     this->hide();
+}
+
+void Statistics::setBarChart() const
+{
+    CustomBarChart *dailyBarChart = new CustomBarChart(QString("Daily Totaly Pressed Times"), 0);
+    CustomBarChart *weeklyBarChart = new CustomBarChart(QString("Weekly Totaly Pressed Times"), 1);
+    CustomBarChart *monthlyBarChart = new CustomBarChart(QString("Monthly Totaly Pressed Times"), 2);
+    CustomBarChart *yearlyBarChart = new CustomBarChart(QString("Yearly Totaly Pressed Times"), 3);
+
+    barTabWidget->addTab(dailyBarChart->barChartWidget, "Day");
+    barTabWidget->addTab(weeklyBarChart->barChartWidget, "Week");
+    barTabWidget->addTab(monthlyBarChart->barChartWidget, "Month");
+    barTabWidget->addTab(yearlyBarChart->barChartWidget, "Year");
 }
 
 void Statistics::setDailyPieChart()

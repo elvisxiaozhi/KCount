@@ -23,6 +23,7 @@ private:
     QPushButton *barChartBtn, *pieChartBtn;
     void setLayout();
     void closeEvent(QCloseEvent *);
+    void setBarChart() const;
     void setDailyPieChart();
 
 signals:
