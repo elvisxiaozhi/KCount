@@ -36,7 +36,8 @@ SOURCES += \
     about.cpp \
     settings.cpp \
     messageboxes.cpp \
-    statistics.cpp
+    statistics.cpp \
+    custombarchart.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,7 +49,8 @@ HEADERS += \
     about.h \
     settings.h \
     messageboxes.h \
-    statistics.h
+    statistics.h \
+    custombarchart.h
 
 RESOURCES += \
     ../Resources/resources.qrc

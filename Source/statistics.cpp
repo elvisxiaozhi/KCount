@@ -18,19 +18,18 @@ Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 {
     setLayout();
 
-    setDailyBarChart();
-    setWeeklyBarChart();
-    setMonthlyBarChart();
-    setYearlyBarChart();
+    CustomBarChart *dailyBarChart = new CustomBarChart(QString("Daily Totaly Pressed Times"), 0);
+    CustomBarChart *weeklyBarChart = new CustomBarChart(QString("Weekly Totaly Pressed Times"), 1);
+    CustomBarChart *monthlyBarChart = new CustomBarChart(QString("Monthly Totaly Pressed Times"), 2);
+    CustomBarChart *yearlyBarChart = new CustomBarChart(QString("Yearly Totaly Pressed Times"), 3);
 
-    setDailyPieChart();
+    barTabWidget->addTab(dailyBarChart->barChartWidget, "Day");
+    barTabWidget->addTab(weeklyBarChart->barChartWidget, "Week");
+    barTabWidget->addTab(monthlyBarChart->barChartWidget, "Month");
+    barTabWidget->addTab(yearlyBarChart->barChartWidget, "Year");
 
-    barTabWidget->addTab(dailyBarChartWidget, "Day");
-    barTabWidget->addTab(weeklyBarChartWidget, "Week");
-    barTabWidget->addTab(monthlyBarChartWidget, "Month");
-    barTabWidget->addTab(yearlyBarChartWidget, "Year");
-
-    pieTabWidget->addTab(dailyPieChartWidget, "Day");
+//    setDailyPieChart();
+//    pieTabWidget->addTab(dailyPieChartWidget, "Day");
 }
 
 void Statistics::setLayout()
@@ -73,156 +72,6 @@ void Statistics::closeEvent(QCloseEvent *event)
 {
     event->ignore();
     this->hide();
-}
-
-void Statistics::setDailyBarChart()
-{
-    QBarSet *barSet = new QBarSet("Total Pressed Times");
-
-    QStringList barCategories;
-    for(int i = 0; i < 24; i++) {
-        barCategories.push_back(QString::number(i));
-        QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(i);
-        barSet->append(DataBase::readTotalPressedTimesInADay(queryStr)); //must appened data first
-    }
-
-    QBarSeries *barSeries = new QBarSeries();
-    barSeries->append(barSet); //then barset and its data to bar seriers
-
-    QChart *barChart = new QChart();
-    barChart->addSeries(barSeries); //then add bar seriers to bar chart
-    barChart->setTitle("Daily Totaly Pressed Times");
-    barChart->setAnimationOptions(QChart::SeriesAnimations);
-
-    QBarCategoryAxis *axis = new QBarCategoryAxis();
-    axis->append(barCategories);
-
-    barChart->createDefaultAxes();
-    barChart->setAxisX(axis, barSeries);
-
-    barChart->legend()->setVisible(false); //hide the barset
-    barChart->legend()->setAlignment(Qt::AlignBottom);
-
-    QChartView *chartView = new QChartView(barChart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-
-    dailyBarChartWidget = new QWidget;
-    QVBoxLayout *chartVLayout = new QVBoxLayout(dailyBarChartWidget);
-    dailyBarChartWidget->setLayout(chartVLayout);
-    chartVLayout->addWidget(chartView);
-}
-
-void Statistics::setWeeklyBarChart()
-{
-    QBarSet *barSet = new QBarSet("Total Pressed Times");
-
-    QStringList barCategories;
-    for(int i = 6; i >= 0; i--) {
-        barCategories.push_back(QDate::currentDate().addDays(-i).toString("dd"));
-        QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(-i).toString("MM/dd/yy"));
-        barSet->append(DataBase::readTotalPressedTimesInADay(queryStr)); //must appened data first
-    }
-
-    QBarSeries *barSeries = new QBarSeries();
-    barSeries->append(barSet); //then barset and its data to bar seriers
-
-    QChart *barChart = new QChart();
-    barChart->addSeries(barSeries); //then add bar seriers to bar chart
-    barChart->setTitle("Weekly Pressed Times");
-    barChart->setAnimationOptions(QChart::SeriesAnimations);
-
-    QBarCategoryAxis *axis = new QBarCategoryAxis();
-    axis->append(barCategories);
-
-    barChart->createDefaultAxes();
-    barChart->setAxisX(axis, barSeries);
-
-    barChart->legend()->setVisible(false); //hide the barset
-    barChart->legend()->setAlignment(Qt::AlignBottom);
-
-    QChartView *chartView = new QChartView(barChart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-
-    weeklyBarChartWidget = new QWidget;
-    QVBoxLayout *chartVLayout = new QVBoxLayout(weeklyBarChartWidget);
-    weeklyBarChartWidget->setLayout(chartVLayout);
-    chartVLayout->addWidget(chartView);
-}
-
-void Statistics::setMonthlyBarChart()
-{
-    QBarSet *barSet = new QBarSet("Total Pressed Times");
-
-    int daysInMonth = QDate::currentDate().daysInMonth();
-
-    QStringList barCategories;
-    for(int i = 0; i < daysInMonth; i++) {
-        barCategories.push_front(QString::number(QDate::currentDate().addDays(-i).toString("dd").toInt()));
-        QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(i - daysInMonth + 1).toString("MM/dd/yy"));
-        barSet->append(DataBase::readTotalPressedTimesInADay(queryStr)); //must appened data first
-    }
-
-    QBarSeries *barSeries = new QBarSeries();
-    barSeries->append(barSet); //then barset and its data to bar seriers
-
-    QChart *barChart = new QChart();
-    barChart->addSeries(barSeries); //then add bar seriers to bar chart
-    barChart->setTitle("Monthly Pressed Times");
-    barChart->setAnimationOptions(QChart::SeriesAnimations);
-
-    QBarCategoryAxis *axis = new QBarCategoryAxis();
-    axis->append(barCategories);
-
-    barChart->createDefaultAxes();
-    barChart->setAxisX(axis, barSeries);
-
-    barChart->legend()->setVisible(false); //hide the barset
-    barChart->legend()->setAlignment(Qt::AlignBottom);
-
-    QChartView *chartView = new QChartView(barChart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-
-    monthlyBarChartWidget = new QWidget;
-    QVBoxLayout *chartVLayout = new QVBoxLayout(monthlyBarChartWidget);
-    monthlyBarChartWidget->setLayout(chartVLayout);
-    chartVLayout->addWidget(chartView);
-}
-
-void Statistics::setYearlyBarChart()
-{
-    QBarSet *barSet = new QBarSet("Total Pressed Times");
-
-    QStringList barCategories;
-    for(int i = 0; i < 12; i++) {
-        barCategories.push_front(QString::number(QDate::currentDate().addMonths(-i).toString("MM").toInt()));
-        QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(QDate::currentDate().addMonths(i - 11).toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(i - 11 - 1).toString("MM/dd/yy"));
-        barSet->append(DataBase::readTotalPressedTimesInADay(queryStr)); //must appened data first
-    }
-
-    QBarSeries *barSeries = new QBarSeries();
-    barSeries->append(barSet); //then barset and its data to bar seriers
-
-    QChart *barChart = new QChart();
-    barChart->addSeries(barSeries); //then add bar seriers to bar chart
-    barChart->setTitle("Yearly Pressed Times");
-    barChart->setAnimationOptions(QChart::SeriesAnimations);
-
-    QBarCategoryAxis *axis = new QBarCategoryAxis();
-    axis->append(barCategories);
-
-    barChart->createDefaultAxes();
-    barChart->setAxisX(axis, barSeries);
-
-    barChart->legend()->setVisible(false); //hide the barset
-    barChart->legend()->setAlignment(Qt::AlignBottom);
-
-    QChartView *chartView = new QChartView(barChart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-
-    yearlyBarChartWidget = new QWidget;
-    QVBoxLayout *chartVLayout = new QVBoxLayout(yearlyBarChartWidget);
-    yearlyBarChartWidget->setLayout(chartVLayout);
-    chartVLayout->addWidget(chartView);
 }
 
 void Statistics::setDailyPieChart()
@@ -275,7 +124,7 @@ void Statistics::resizeWindow(int index)
 
 void Statistics::showBarChart()
 {
-    dailyBarChartWidget->show();
+    dailyBarChart->barChartWidget->show();
     dailyPieChartWidget->hide();
     barTabWidget->show();
     pieTabWidget->hide();
@@ -283,7 +132,7 @@ void Statistics::showBarChart()
 
 void Statistics::showPieChart()
 {
-    dailyBarChartWidget->hide();
+    dailyBarChart->barChartWidget->hide();
     dailyPieChartWidget->show();
     barTabWidget->hide();
     pieTabWidget->show();
