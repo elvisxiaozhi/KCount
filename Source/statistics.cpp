@@ -70,9 +70,15 @@ void Statistics::setBarChart() const
 
 void Statistics::setPieChart() const
 {
-    CustomPieChart *dailyPieChart = new CustomPieChart();
+    CustomPieChart *dailyPieChart = new CustomPieChart(0);
+    CustomPieChart *weeklyPieChart = new CustomPieChart(1);
+    CustomPieChart *monthlyPieChart = new CustomPieChart(2);
+    CustomPieChart *yearlyPieChart = new CustomPieChart(3);
 
     pieTabWidget->addTab(dailyPieChart->pieChartWidget, "Day");
+    pieTabWidget->addTab(weeklyPieChart->pieChartWidget, "Week");
+    pieTabWidget->addTab(monthlyPieChart->pieChartWidget, "Month");
+    pieTabWidget->addTab(yearlyPieChart->pieChartWidget, "Year");
 }
 
 void Statistics::resizeWindow(int index)
