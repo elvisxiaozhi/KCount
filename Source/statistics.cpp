@@ -2,18 +2,15 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include <QHBoxLayout>
-#include <QtCharts/QPieSeries>
-#include <QtCharts/QPieSlice>
-#include "database.h"
-#include <QDate>
+#include "custombarchart.h"
+#include "custompiechart.h"
 
 Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 {
     setLayout();
 
     setBarChart();
-    setDailyPieChart();
-    pieTabWidget->addTab(dailyPieChartWidget, "Day");
+    setPieChart();
 }
 
 void Statistics::setLayout()
@@ -71,39 +68,11 @@ void Statistics::setBarChart() const
     barTabWidget->addTab(yearlyBarChart->barChartWidget, "Year");
 }
 
-void Statistics::setDailyPieChart()
-{   
-    QString currentDate = QDate::currentDate().toString("MM/dd/yy");
-    QString readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(currentDate);
-    QMap<QString, int> frequentlyPressedKeyMap = DataBase::returnFrequentlyPressedKeyMap(readQueryStr);
-    qDebug() << frequentlyPressedKeyMap;
+void Statistics::setPieChart() const
+{
+    CustomPieChart *dailyPieChart = new CustomPieChart();
 
-    QPieSeries *series = new QPieSeries();
-
-    QMap<QString, int>::iterator it;
-    for(it = frequentlyPressedKeyMap.begin(); it != frequentlyPressedKeyMap.end(); it++) {
-        series->append(it.key(), it.value());
-    }
-
-    QVector<QPieSlice *> slices;
-    slices.resize(5);
-    for(int i = 0; i < slices.size(); i++) {
-        slices[i] = series->slices().at(i);
-        slices[i]->setLabelVisible();
-        slices[i]->setLabelPosition(QPieSlice::LabelInsideHorizontal);
-    }
-
-    QChart *chart = new QChart();
-    chart->addSeries(series);
-    chart->setTitle("Pie Chart");
-
-    QChartView *chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-
-    dailyPieChartWidget = new QWidget;
-    QVBoxLayout *pieVLayout = new QVBoxLayout(dailyPieChartWidget);
-    dailyPieChartWidget->setLayout(pieVLayout);
-    pieVLayout->addWidget(chartView);
+    pieTabWidget->addTab(dailyPieChart->pieChartWidget, "Day");
 }
 
 void Statistics::resizeWindow(int index)

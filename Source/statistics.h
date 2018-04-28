@@ -5,7 +5,6 @@
 #include <QVBoxLayout>
 #include <QTabWidget>
 #include <QPushButton>
-#include "custombarchart.h"
 
 class Statistics : public QMainWindow
 {
@@ -16,15 +15,13 @@ public:
 private:
     QWidget *mainWidget;
     QWidget *dailyBarChartWidget;
-    CustomBarChart *dailyBarChart, *weeklyBarChart, *monthlyBarChart, *yearlyBarChart;
-    QWidget *dailyPieChartWidget;
     QVBoxLayout *mainVLayout;
     QTabWidget *barTabWidget, *pieTabWidget;
     QPushButton *barChartBtn, *pieChartBtn;
     void setLayout();
     void closeEvent(QCloseEvent *);
     void setBarChart() const;
-    void setDailyPieChart();
+    void setPieChart() const;
 
 signals:
 
