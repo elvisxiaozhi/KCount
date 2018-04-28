@@ -44,9 +44,9 @@ void Statistics::setLayout()
 
     mainVLayout->addLayout(btnHLayout);
 
-    connect(barTabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeWindow);
-    connect(barChartBtn, &QPushButton::clicked, this, &Statistics::showBarChart);
-    connect(pieChartBtn, &QPushButton::clicked, this, &Statistics::showPieChart);
+    connect(barTabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeBarChartWindow);
+    connect(barChartBtn, &QPushButton::clicked, [this](){ barTabWidget->show(); pieTabWidget->hide(); });
+    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); });
 }
 
 void Statistics::closeEvent(QCloseEvent *event)
@@ -81,7 +81,7 @@ void Statistics::setPieChart() const
     pieTabWidget->addTab(yearlyPieChart->pieChartWidget, "Year");
 }
 
-void Statistics::resizeWindow(int index)
+void Statistics::resizeBarChartWindow(int index)
 {
     if(index == 0) {
         this->resize(800, 400);
@@ -95,16 +95,4 @@ void Statistics::resizeWindow(int index)
     if(index == 3) {
         this->resize(800, 400);
     }
-}
-
-void Statistics::showBarChart()
-{
-    barTabWidget->show();
-    pieTabWidget->hide();
-}
-
-void Statistics::showPieChart()
-{
-    barTabWidget->hide();
-    pieTabWidget->show();
 }

@@ -28,9 +28,7 @@ signals:
 public slots:
 
 private slots:
-    void resizeWindow(int);
-    void showBarChart();
-    void showPieChart();
+    void resizeBarChartWindow(int);
 };
 
 #endif // STATISTICS_H

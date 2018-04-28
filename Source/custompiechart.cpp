@@ -28,9 +28,6 @@ CustomPieChart::CustomPieChart(int choice)
 
     QMap<QString, int> frequentlyPressedKeyMap = DataBase::returnFrequentlyPressedKeyMap(readQueryStr);
 
-    qDebug() << frequentlyPressedKeyMap;
-    qDebug() << readQueryStr;
-
     QPieSeries *series = new QPieSeries();
 
     QMap<QString, int>::iterator it;
