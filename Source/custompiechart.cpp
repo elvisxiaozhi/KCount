@@ -35,12 +35,12 @@ CustomPieChart::CustomPieChart(int choice)
         series->append(it.key(), it.value());
     }
 
-    QVector<QPieSlice *> slices;
-    slices.resize(5);
-    for(int i = 0; i < slices.size(); i++) {
-        slices[i] = series->slices().at(i);
-        slices[i]->setLabelVisible();
-        slices[i]->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+    QVector<QPieSlice *> sliceVec;
+    for(int i = 0; i < frequentlyPressedKeyMap.size(); i++) { //note the i < frequentlyPressedKeyMap.size(); is used to prevent program out of index crashes //because the slice can not be more than frequentlyPressedKeyMap.size()
+        QPieSlice *slice = series->slices().at(i);
+        slice->setLabelVisible();
+        slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+        sliceVec.push_back(slice);
     }
 
     QChart *chart = new QChart();
