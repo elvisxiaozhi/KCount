@@ -8,6 +8,8 @@
 #include <QTimer>
 #include <QSettings>
 
+#include <map>
+
 extern void clearDatabase();
 extern QSqlDatabase dataBase;
 
@@ -23,7 +25,8 @@ public:
     static QString dataPath;
     static void deleteDataFile(QString);
     static QSettings appPathSetting;
-    static int readTotalPressedTimesInADay(QString);
+    static int returnTotalPressedTimes(QString);
+    static QMap<QString, int> returnFrequentlyPressedKeyMap(QString);
 
 private:
     QString filePath;

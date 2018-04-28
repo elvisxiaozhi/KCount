@@ -4,16 +4,16 @@
 #include <QHBoxLayout>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
-
-QT_CHARTS_USE_NAMESPACE
+#include "database.h"
+#include <QDate>
 
 Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 {
     setLayout();
 
     setBarChart();
-//    setDailyPieChart();
-//    pieTabWidget->addTab(dailyPieChartWidget, "Day");
+    setDailyPieChart();
+    pieTabWidget->addTab(dailyPieChartWidget, "Day");
 }
 
 void Statistics::setLayout()
@@ -72,35 +72,34 @@ void Statistics::setBarChart() const
 }
 
 void Statistics::setDailyPieChart()
-{
+{   
+    QString currentDate = QDate::currentDate().toString("MM/dd/yy");
+    QString readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(currentDate);
+    QMap<QString, int> frequentlyPressedKeyMap = DataBase::returnFrequentlyPressedKeyMap(readQueryStr);
+    qDebug() << frequentlyPressedKeyMap;
+
     QPieSeries *series = new QPieSeries();
-    series->append("Jane", 1);
-    series->append("Joe", 2);
-    series->append("Andy", 3);
-    series->append("Barbara", 4);
-    series->append("Axel", 5);
+
+    QMap<QString, int>::iterator it;
+    for(it = frequentlyPressedKeyMap.begin(); it != frequentlyPressedKeyMap.end(); it++) {
+        series->append(it.key(), std::distance(frequentlyPressedKeyMap.begin(), it) + 1);
+    }
 
     QPieSlice *slice = series->slices().at(1);
-    slice->setExploded();
     slice->setLabelVisible();
-    slice->setPen(QPen(Qt::darkGreen, 2));
-    slice->setBrush(Qt::green);
+//    slice->setValue(s);
 
     QChart *chart = new QChart();
     chart->addSeries(series);
-    chart->setTitle("Simple piechart example");
-    chart->legend()->hide();
+    chart->setTitle("Pie Chart");
 
     QChartView *chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
     dailyPieChartWidget = new QWidget;
-    dailyPieChartWidget->hide();
     QVBoxLayout *pieVLayout = new QVBoxLayout(dailyPieChartWidget);
     dailyPieChartWidget->setLayout(pieVLayout);
     pieVLayout->addWidget(chartView);
-
-    this->resize(400, 300);
 }
 
 void Statistics::resizeWindow(int index)
@@ -121,16 +120,12 @@ void Statistics::resizeWindow(int index)
 
 void Statistics::showBarChart()
 {
-    dailyBarChart->barChartWidget->show();
-    dailyPieChartWidget->hide();
     barTabWidget->show();
     pieTabWidget->hide();
 }
 
 void Statistics::showPieChart()
 {
-    dailyBarChart->barChartWidget->hide();
-    dailyPieChartWidget->show();
     barTabWidget->hide();
     pieTabWidget->show();
 }

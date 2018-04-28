@@ -35,15 +35,14 @@ void DataBase::deleteDataFile(QString deleteDataPath)
     deleteFilePath.removeRecursively();
 }
 
-int DataBase::readTotalPressedTimesInADay(QString queryStr)
+int DataBase::returnTotalPressedTimes(QString queryStr)
 {
     int pressedTimes = 0;
     if(dataBase.open()) {
-        QSqlQuery readQuery;
-        QString readQueryStr = queryStr;
-        readQuery.exec(readQueryStr);
-        while(readQuery.next()) {
-            pressedTimes = readQuery.value(0).toInt();
+        QSqlQuery query;
+        query.exec(queryStr);
+        while(query.next()) {
+            pressedTimes = query.value(0).toInt();
         }
         dataBase.close();
     }
@@ -51,6 +50,30 @@ int DataBase::readTotalPressedTimesInADay(QString queryStr)
         qDebug() << dataBase.lastError().text();
     }
     return pressedTimes;
+}
+
+QMap<QString, int> DataBase::returnFrequentlyPressedKeyMap(QString queryStr)
+{
+    QMap<QString, int> frequentlyPressedKeyMap;
+    if(dataBase.open()) {
+        QSqlQuery query;
+        query.exec(queryStr);
+
+        int iterateTimes = 0;
+        while(query.next()) {
+            frequentlyPressedKeyMap.insert(query.value(0).toString(), query.value(1).toInt());
+            iterateTimes++;
+            if(iterateTimes == 5) {
+                break;
+            }
+        }
+
+        dataBase.close();
+    }
+    else {
+        qDebug() << dataBase.lastError().text();
+    }
+    return frequentlyPressedKeyMap;
 }
 
 bool DataBase::isQueryFound(QSqlQuery hasPressedKeyAtCurrentHourQuery) const
