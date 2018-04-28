@@ -82,12 +82,16 @@ void Statistics::setDailyPieChart()
 
     QMap<QString, int>::iterator it;
     for(it = frequentlyPressedKeyMap.begin(); it != frequentlyPressedKeyMap.end(); it++) {
-        series->append(it.key(), std::distance(frequentlyPressedKeyMap.begin(), it) + 1);
+        series->append(it.key(), it.value());
     }
 
-    QPieSlice *slice = series->slices().at(1);
-    slice->setLabelVisible();
-//    slice->setValue(s);
+    QVector<QPieSlice *> slices;
+    slices.resize(5);
+    for(int i = 0; i < slices.size(); i++) {
+        slices[i] = series->slices().at(i);
+        slices[i]->setLabelVisible();
+        slices[i]->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+    }
 
     QChart *chart = new QChart();
     chart->addSeries(series);
