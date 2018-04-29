@@ -8,7 +8,7 @@
 #include <QTime>
 #include "signalemitter.h"
 
-QSqlDatabase dataBase;
+QSqlDatabase sqlDatabase;
 QString Database::dataPath;
 QSettings Database::appPathSetting("My Computer", "KCount");
 
@@ -19,8 +19,8 @@ Database::Database(QObject *parent) : QObject(parent)
     keyPressedTimes = 0;
 
     QString accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePath);
-    dataBase = QSqlDatabase::addDatabase("QODBC");
-    dataBase.setDatabaseName(accessString);
+    sqlDatabase = QSqlDatabase::addDatabase("QODBC");
+    sqlDatabase.setDatabaseName(accessString);
 
     readDatabase(2);
 
@@ -38,16 +38,16 @@ void Database::deleteDataFile(QString deleteDataPath)
 int Database::returnTotalPressedTimes(QString queryStr)
 {
     int pressedTimes = 0;
-    if(dataBase.open()) {
+    if(sqlDatabase.open()) {
         QSqlQuery query;
         query.exec(queryStr);
         while(query.next()) {
             pressedTimes = query.value(0).toInt();
         }
-        dataBase.close();
+        sqlDatabase.close();
     }
     else {
-        qDebug() << dataBase.lastError().text();
+        qDebug() << sqlDatabase.lastError().text();
     }
     return pressedTimes;
 }
@@ -55,7 +55,7 @@ int Database::returnTotalPressedTimes(QString queryStr)
 QMap<QString, int> Database::returnFrequentlyPressedKeyMap(QString queryStr)
 {
     QMap<QString, int> frequentlyPressedKeyMap;
-    if(dataBase.open()) {
+    if(sqlDatabase.open()) {
         QSqlQuery query;
         query.exec(queryStr);
 
@@ -68,10 +68,10 @@ QMap<QString, int> Database::returnFrequentlyPressedKeyMap(QString queryStr)
             }
         }
 
-        dataBase.close();
+        sqlDatabase.close();
     }
     else {
-        qDebug() << dataBase.lastError().text();
+        qDebug() << sqlDatabase.lastError().text();
     }
     return frequentlyPressedKeyMap;
 }
@@ -165,7 +165,7 @@ void Database::updateDatabase()
     QString currentDate = QDate::currentDate().toString("MM/dd/yy");
     int currentHour = QTime::currentTime().toString("h").toInt();
 
-    if(dataBase.open()) {
+    if(sqlDatabase.open()) {
         for(auto it : currentHourPressedKeyMap.toStdMap()) { //iterate the an hour temp map
             //try to find if database has already stored pressed key at current hour
             QSqlQuery hasPressedKeyAtCurrentHourQuery;
@@ -184,16 +184,16 @@ void Database::updateDatabase()
             }
         }
 
-        dataBase.close();
+        sqlDatabase.close();
     }
     else {
-        qDebug() << dataBase.lastError().text();
+        qDebug() << sqlDatabase.lastError().text();
     }
 }
 
 void Database::readDatabase(int readMode)
 {
-    if(dataBase.open()) {
+    if(sqlDatabase.open()) {
         pressedKeyMap.clear(); //clear the old data and re-read new data
 
         QSqlQuery readQuery;
@@ -227,10 +227,10 @@ void Database::readDatabase(int readMode)
             pressedKeyMap.insert(readQuery.value(0).toString(), readQuery.value(1).toInt());
         }
 
-        dataBase.close();
+        sqlDatabase.close();
     }
     else {
-        qDebug() << dataBase.lastError().text();
+        qDebug() << sqlDatabase.lastError().text();
     }
 
     sortMap();
@@ -252,12 +252,12 @@ void Database::updateTimer()
 
 void clearDatabase()
 {
-    if(dataBase.open()) {
+    if(sqlDatabase.open()) {
         QSqlQuery deleteQuery;
         deleteQuery.exec("DELETE FROM Data");
-        dataBase.close();
+        sqlDatabase.close();
     }
     else {
-        qDebug() << dataBase.lastError().text();
+        qDebug() << sqlDatabase.lastError().text();
     }
 }
