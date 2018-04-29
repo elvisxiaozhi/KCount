@@ -115,16 +115,16 @@ void DataBase::setTimer()
 void DataBase::sortMap()
 {
     mapVector.clear(); //when sort map, the vector needs to clear the old data and reload new data from map to sort
-    QMap<QString, unsigned long long int>::iterator it;
+    QMap<QString, unsigned long int>::iterator it;
     for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
         mapVector.push_back(std::make_pair(it.key(), it.value()));
     }
-    std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long long int>& a, std::pair<QString, unsigned long long int>& b){
+    std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long int>& a, std::pair<QString, unsigned long int>& b){
         return a.second > b.second;
     });
 }
 
-void DataBase::insertNewData(QString pressedKey, unsigned long long int pressedTimes)
+void DataBase::insertNewData(QString pressedKey, unsigned long int pressedTimes)
 {
     QSqlQuery insertQuery;
     insertQuery.prepare("INSERT INTO Data (CreatedDate, CreatedHour, PressedKey, PressedTimes)"
@@ -141,10 +141,10 @@ void DataBase::insertNewData(QString pressedKey, unsigned long long int pressedT
 void DataBase::keyPressed(QString pressedKey)
 {
     if(pressedKeyMap.contains(pressedKey)) {
-        unsigned long long int newValue = pressedKeyMap.value(pressedKey) + 1;
+        unsigned long int newValue = pressedKeyMap.value(pressedKey) + 1;
         pressedKeyMap.insert(pressedKey, newValue);
 
-        unsigned long long int newValueAtCurrentHour = currentHourPressedKeyMap.value(pressedKey) + 1;
+        unsigned long int newValueAtCurrentHour = currentHourPressedKeyMap.value(pressedKey) + 1;
         currentHourPressedKeyMap.insert(pressedKey, newValueAtCurrentHour);
     }
     else {

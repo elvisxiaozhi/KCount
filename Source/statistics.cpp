@@ -31,7 +31,6 @@ void Statistics::setLayout()
     mainVLayout->addWidget(pieTabWidget);
 
     barChartBtn = new QPushButton("Bar Chart");
-//    barChartBtn->setFlat(true);
     pieChartBtn = new QPushButton("Pie Chart");
 
     QHBoxLayout *btnHLayout = new QHBoxLayout;

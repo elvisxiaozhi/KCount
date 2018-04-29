@@ -8,8 +8,6 @@
 #include <QTimer>
 #include <QSettings>
 
-#include <map>
-
 extern void clearDatabase();
 extern QSqlDatabase dataBase;
 
@@ -18,10 +16,10 @@ class DataBase : public QObject
     Q_OBJECT
 public:
     explicit DataBase(QObject *parent = nullptr);
-    unsigned long long int keyPressedTimes;
-    QMap<QString, unsigned long long int> pressedKeyMap;
-    QVector<std::pair<QString, unsigned long long int>> mapVector; //store map, in order to sort map value
-    QMap<QString, unsigned long long int> currentHourPressedKeyMap;
+    unsigned long int keyPressedTimes;
+    QMap<QString, unsigned long int> pressedKeyMap;
+    QVector<std::pair<QString, unsigned long int>> mapVector; //store map, in order to sort map value
+    QMap<QString, unsigned long int> currentHourPressedKeyMap;
     static QString dataPath;
     static void deleteDataFile(QString);
     static QSettings appPathSetting;
@@ -36,7 +34,7 @@ private:
     void makeDataFile();
     void setTimer();
     void sortMap();
-    void insertNewData(QString, unsigned long long int);
+    void insertNewData(QString, unsigned long int);
 
 signals:
     void keyPressedDone();
