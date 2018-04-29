@@ -31,7 +31,7 @@ private:
     QVector<Label *> frequentlyPressedKeys;
     QToolButton *nextPageBtn, *previousPageBtn;
     QAction *startOnBootAction;
-    DataBase setDataBase;
+    Database setDatabase;
     Settings setSettingsPage;
     About setAboutPage;
     Statistics setStatistics;

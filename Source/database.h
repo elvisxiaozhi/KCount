@@ -11,11 +11,11 @@
 extern void clearDatabase();
 extern QSqlDatabase dataBase;
 
-class DataBase : public QObject
+class Database : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataBase(QObject *parent = nullptr);
+    explicit Database(QObject *parent = nullptr);
     unsigned long int keyPressedTimes;
     QMap<QString, unsigned long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long int>> mapVector; //store map, in order to sort map value

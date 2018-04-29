@@ -9,10 +9,10 @@
 #include "signalemitter.h"
 
 QSqlDatabase dataBase;
-QString DataBase::dataPath;
-QSettings DataBase::appPathSetting("My Computer", "KCount");
+QString Database::dataPath;
+QSettings Database::appPathSetting("My Computer", "KCount");
 
-DataBase::DataBase(QObject *parent) : QObject(parent)
+Database::Database(QObject *parent) : QObject(parent)
 {
     makeDataFile();
 
@@ -26,16 +26,16 @@ DataBase::DataBase(QObject *parent) : QObject(parent)
 
     setTimer();
 
-    connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &DataBase::keyPressed);
+    connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &Database::keyPressed);
 }
 
-void DataBase::deleteDataFile(QString deleteDataPath)
+void Database::deleteDataFile(QString deleteDataPath)
 {
     static QDir deleteFilePath(deleteDataPath);
     deleteFilePath.removeRecursively();
 }
 
-int DataBase::returnTotalPressedTimes(QString queryStr)
+int Database::returnTotalPressedTimes(QString queryStr)
 {
     int pressedTimes = 0;
     if(dataBase.open()) {
@@ -52,7 +52,7 @@ int DataBase::returnTotalPressedTimes(QString queryStr)
     return pressedTimes;
 }
 
-QMap<QString, int> DataBase::returnFrequentlyPressedKeyMap(QString queryStr)
+QMap<QString, int> Database::returnFrequentlyPressedKeyMap(QString queryStr)
 {
     QMap<QString, int> frequentlyPressedKeyMap;
     if(dataBase.open()) {
@@ -76,7 +76,7 @@ QMap<QString, int> DataBase::returnFrequentlyPressedKeyMap(QString queryStr)
     return frequentlyPressedKeyMap;
 }
 
-bool DataBase::isQueryFound(QSqlQuery hasPressedKeyAtCurrentHourQuery) const
+bool Database::isQueryFound(QSqlQuery hasPressedKeyAtCurrentHourQuery) const
 {
     while(hasPressedKeyAtCurrentHourQuery.next()) {
         return true;
@@ -84,7 +84,7 @@ bool DataBase::isQueryFound(QSqlQuery hasPressedKeyAtCurrentHourQuery) const
     return false;
 }
 
-void DataBase::makeDataFile()
+void Database::makeDataFile()
 {
     const static QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
     dataPath = homePath.first() + "/AppData/Local/KCount";
@@ -104,15 +104,15 @@ void DataBase::makeDataFile()
     }
 }
 
-void DataBase::setTimer()
+void Database::setTimer()
 {
     currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
     timer = new QTimer(this);
     timer->start(1000 * 60 * 60 - 1000 * 60 * QString(currentTimeStringList[1]).toInt() - 1000 * QString(currentTimeStringList[2]).toInt()); //1 sec * 60 (= 1 minute) * 60 (= 1 hour)
-    connect(timer, &QTimer::timeout, this, &DataBase::updateTimer);
+    connect(timer, &QTimer::timeout, this, &Database::updateTimer);
 }
 
-void DataBase::sortMap()
+void Database::sortMap()
 {
     mapVector.clear(); //when sort map, the vector needs to clear the old data and reload new data from map to sort
     QMap<QString, unsigned long int>::iterator it;
@@ -124,7 +124,7 @@ void DataBase::sortMap()
     });
 }
 
-void DataBase::insertNewData(QString pressedKey, unsigned long int pressedTimes)
+void Database::insertNewData(QString pressedKey, unsigned long int pressedTimes)
 {
     QSqlQuery insertQuery;
     insertQuery.prepare("INSERT INTO Data (CreatedDate, CreatedHour, PressedKey, PressedTimes)"
@@ -138,7 +138,7 @@ void DataBase::insertNewData(QString pressedKey, unsigned long int pressedTimes)
     insertQuery.exec();
 }
 
-void DataBase::keyPressed(QString pressedKey)
+void Database::keyPressed(QString pressedKey)
 {
     if(pressedKeyMap.contains(pressedKey)) {
         unsigned long int newValue = pressedKeyMap.value(pressedKey) + 1;
@@ -160,7 +160,7 @@ void DataBase::keyPressed(QString pressedKey)
     emit keyPressedDone();
 }
 
-void DataBase::updateDatabase()
+void Database::updateDatabase()
 {
     QString currentDate = QDate::currentDate().toString("MM/dd/yy");
     int currentHour = QTime::currentTime().toString("h").toInt();
@@ -191,7 +191,7 @@ void DataBase::updateDatabase()
     }
 }
 
-void DataBase::readDatabase(int readMode)
+void Database::readDatabase(int readMode)
 {
     if(dataBase.open()) {
         pressedKeyMap.clear(); //clear the old data and re-read new data
@@ -241,7 +241,7 @@ void DataBase::readDatabase(int readMode)
     }
 }
 
-void DataBase::updateTimer()
+void Database::updateTimer()
 {
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
     currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
