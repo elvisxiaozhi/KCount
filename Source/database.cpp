@@ -299,4 +299,8 @@ void Database::updateTimer()
     updateDatabase();
 
     readDatabase(2); //because in a peroid of time, the data will store to database, and map and vector will be cleared, so when updating database, it needs to re-read data to map and vector
+
+    for(int i = 0; i < 4; i++) {
+        loadBarChartData(i);
+    }
 }

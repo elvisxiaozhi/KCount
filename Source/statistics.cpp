@@ -79,14 +79,11 @@ void Statistics::setPieChart() const
 
 void Statistics::updateBarChart(int index, QVector<int> barChartVec)
 {
-    qDebug() << barChartVec << index;
-    barChartArr[index]->removeOldBarSet();
     barChartArr[index]->updateBarChartData(index, barChartVec);
 }
 
 void Statistics::resizeBarChartWindow(int index)
 {
-    emit loadBarChartData(index);
     if(index == 0) {
         this->resize(800, 400);
     }

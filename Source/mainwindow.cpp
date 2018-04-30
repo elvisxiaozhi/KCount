@@ -21,6 +21,10 @@ MainWindow::MainWindow(QWidget *parent)
     setTrayIcon();
     setDatabaseThread();
 
+    for(int i = 0; i < 4; i++) {
+        statistics.loadBarChartData(i);
+    }
+
     connect(&setSettingsPage, &Settings::uncheckStartOnBootAct, [this](){ startOnBootAction->setChecked(false); }); //set startOnBootAction unchecked when reset the settings
     connect(&setSettingsPage, &Settings::databaseCleared, [this](){ //when database is cleared, clear map and vector and total pressed times, so the lbls can set to 0
         database->readDatabase(2);
@@ -211,10 +215,12 @@ void MainWindow::setDatabaseThread()
 {
     database = new Database;
     database->moveToThread(&databaseThread);
+
     connect(&databaseThread, &QThread::finished, database, &QObject::deleteLater);
     connect(database, &Database::keyPressedDone, this, &MainWindow::updateLabels);
     connect(&statistics, &Statistics::loadBarChartData, database, &Database::loadBarChartData);
     connect(database, &Database::barChartDataLoaded, &statistics, &Statistics::updateBarChart, Qt::QueuedConnection);
+
     databaseThread.start();
 }
 

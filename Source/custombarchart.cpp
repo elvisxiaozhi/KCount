@@ -27,17 +27,14 @@ CustomBarChart::CustomBarChart()
     chartVLayout->addWidget(chartView);
 }
 
-void CustomBarChart::removeOldBarSet()
+void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
 {
     this->removeSeries(barSeries);
     this->removeAxis(axis);
     barSeries->clear();
     axis->clear();
     barSet = new QBarSet("Bar Set");
-}
 
-void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
-{
     switch (choice) {
     case 0: //daily
         for(int i = 0; i < 24; i++) {
@@ -73,6 +70,4 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
     this->addSeries(barSeries);
     this->createDefaultAxes();
     this->setAxisX(axis, barSeries);
-
-    qDebug() << "Updated";
 }

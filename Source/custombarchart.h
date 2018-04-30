@@ -18,8 +18,6 @@ public:
     QBarCategoryAxis *axis;
     QStringList barCategories;
     QWidget *barChartWidget;
-
-    void removeOldBarSet();
     void updateBarChartData(int, QVector<int>);
 };
 
