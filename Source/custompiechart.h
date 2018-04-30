@@ -10,7 +10,7 @@ QT_CHARTS_USE_NAMESPACE
 class CustomPieChart
 {
 public:
-    CustomPieChart(int);
+    explicit CustomPieChart(int);
     QWidget *pieChartWidget;
 };
 

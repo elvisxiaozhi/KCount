@@ -8,8 +8,6 @@
 #include <QTimer>
 #include <QSettings>
 
-//static void clearDatabase();
-
 class Database : public QObject
 {
     Q_OBJECT

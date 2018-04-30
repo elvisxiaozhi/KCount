@@ -135,6 +135,8 @@ void Database::sortMap()
     std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long int>& a, std::pair<QString, unsigned long int>& b){
         return a.second > b.second;
     });
+
+    qDebug() << mapVector;
 }
 
 void Database::insertNewData(QString pressedKey, unsigned long int pressedTimes)
@@ -200,6 +202,7 @@ void Database::updateDatabase()
         }
 
         sqlDatabase.close();
+        currentHourPressedKeyMap.clear(); //after updating datebase, clear the vector, so it can store new data for the next hour
     }
     else {
         qDebug() << sqlDatabase.lastError().text();

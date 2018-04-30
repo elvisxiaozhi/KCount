@@ -257,5 +257,4 @@ void MainWindow::changeViewMode(int viewMode) //when changing the view mode, re-
     database->updateDatabase();
     database->readDatabase(viewMode);
     updateLabels(); //why call updateLabels() instead of setLblTextAndColor(), because this function has sound alert detection, when changing mode, the new nums may reach the sepcific nums
-    database->currentHourPressedKeyMap.clear(); //must update and read first, and then clear this map
 }
