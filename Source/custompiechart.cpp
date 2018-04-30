@@ -5,30 +5,26 @@
 #include <QDate>
 #include <QDebug>
 
-CustomPieChart::CustomPieChart(int choice)
+CustomPieChart::CustomPieChart()
 {
-    QString readQueryStr;
+    series = new QPieSeries();
 
-    switch (choice) {
-    case 0:
-        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy"));
-        break;
-    case 1:
-        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
-        break;
-    case 2:
-        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
-        break;
-    case 3:
-        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
-        break;
-    default:
-        break;
-    }
+    QChart *chart = new QChart();
+    chart->setTitle("Frequently Pressed Keys");
+    chart->addSeries(series);
 
-    QMap<QString, int> frequentlyPressedKeyMap = Database::returnFrequentlyPressedKeyMap(readQueryStr);
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
 
-    QPieSeries *series = new QPieSeries();
+    pieChartWidget = new QWidget;
+    QVBoxLayout *pieVLayout = new QVBoxLayout;
+    pieChartWidget->setLayout(pieVLayout);
+    pieVLayout->addWidget(chartView);
+}
+
+void CustomPieChart::updateBarChartData(QMap<QString, int> frequentlyPressedKeyMap)
+{
+    series->clear();
 
     QMap<QString, int>::iterator it;
     for(it = frequentlyPressedKeyMap.begin(); it != frequentlyPressedKeyMap.end(); it++) {
@@ -42,15 +38,4 @@ CustomPieChart::CustomPieChart(int choice)
         slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
         sliceVec.push_back(slice);
     }
-
-    QChart *chart = new QChart();
-    chart->addSeries(series);
-
-    QChartView *chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-
-    pieChartWidget = new QWidget;
-    QVBoxLayout *pieVLayout = new QVBoxLayout;
-    pieChartWidget->setLayout(pieVLayout);
-    pieVLayout->addWidget(chartView);
 }

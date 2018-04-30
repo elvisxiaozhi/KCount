@@ -12,7 +12,7 @@ QT_CHARTS_USE_NAMESPACE
 class CustomBarChart : public QChart
 {
 public:
-    explicit CustomBarChart();
+    CustomBarChart();
     QBarSet *barSet;
     QBarSeries *barSeries;
     QBarCategoryAxis *axis;

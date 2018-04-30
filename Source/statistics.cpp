@@ -2,13 +2,13 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include <QHBoxLayout>
-#include "custompiechart.h"
 
 Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 {
     setLayout();
 
     setBarChart();
+    setPieChart();
 }
 
 void Statistics::setLayout()
@@ -43,7 +43,7 @@ void Statistics::setLayout()
 
     connect(barTabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeBarChartWindow);
     connect(barChartBtn, &QPushButton::clicked, [this](){ barTabWidget->show(); pieTabWidget->hide(); this->resize(800, 400); });
-//    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(500, 500); });
+    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(500, 500); });
 }
 
 void Statistics::closeEvent(QCloseEvent *event)
@@ -64,22 +64,26 @@ void Statistics::setBarChart()
     barTabWidget->addTab(barChartArr[3]->barChartWidget, "Year");
 }
 
-void Statistics::setPieChart() const
+void Statistics::setPieChart()
 {
-    CustomPieChart *dailyPieChart = new CustomPieChart(0);
-    CustomPieChart *weeklyPieChart = new CustomPieChart(1);
-    CustomPieChart *monthlyPieChart = new CustomPieChart(2);
-    CustomPieChart *yearlyPieChart = new CustomPieChart(3);
+    for(int i = 0; i < 4; i++) {
+        pieChartArr[i] = new CustomPieChart;
+    }
 
-    pieTabWidget->addTab(dailyPieChart->pieChartWidget, "Day");
-    pieTabWidget->addTab(weeklyPieChart->pieChartWidget, "Week");
-    pieTabWidget->addTab(monthlyPieChart->pieChartWidget, "Month");
-    pieTabWidget->addTab(yearlyPieChart->pieChartWidget, "Year");
+    pieTabWidget->addTab(pieChartArr[0]->pieChartWidget, "Day");
+    pieTabWidget->addTab(pieChartArr[1]->pieChartWidget, "Week");
+    pieTabWidget->addTab(pieChartArr[2]->pieChartWidget, "Month");
+    pieTabWidget->addTab(pieChartArr[3]->pieChartWidget, "Year");
 }
 
 void Statistics::updateBarChart(int index, QVector<int> barChartVec)
 {
     barChartArr[index]->updateBarChartData(index, barChartVec);
+}
+
+void Statistics::updatePieChart(int index, QMap<QString, int> pieChartMap)
+{
+    pieChartArr[index]->updateBarChartData(pieChartMap);
 }
 
 void Statistics::resizeBarChartWindow(int index)

@@ -22,7 +22,6 @@ public:
     static void deleteDataFile(QString);
     static void clearDatabase();
     static QSettings appPathSetting;
-    static QMap<QString, int> returnFrequentlyPressedKeyMap(QString);
 
 private:
     QString filePath;
@@ -34,16 +33,19 @@ private:
     void sortMap();
     void insertNewData(QString, unsigned long int);
     int returnTotalPressedTimes(QString);
+    QMap<QString, int> returnFrequentlyPressedKeyMap(QString);
 
 signals:
     void keyPressedDone();
     void databaseOpened();
     void barChartDataLoaded(int, QVector<int>);
+    void pieChartDataLoaded(int, QMap<QString, int>);
 
 public slots:
     void updateDatabase();
     void readDatabase(int);
     void loadBarChartData(int);
+    void loadPieChartData(int);
 
 private slots:
     void keyPressed(QString);

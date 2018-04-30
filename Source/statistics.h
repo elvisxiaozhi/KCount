@@ -6,6 +6,7 @@
 #include <QTabWidget>
 #include <QPushButton>
 #include "custombarchart.h"
+#include "custompiechart.h"
 
 class Statistics : public QMainWindow
 {
@@ -19,17 +20,20 @@ private:
     QVBoxLayout *mainVLayout;
     QTabWidget *barTabWidget, *pieTabWidget;
     CustomBarChart *barChartArr[4];
+    CustomPieChart *pieChartArr[4];
     QPushButton *barChartBtn, *pieChartBtn;
     void setLayout();
     void closeEvent(QCloseEvent *);
     void setBarChart();
-    void setPieChart() const;
+    void setPieChart();
 
 signals:
     void loadBarChartData(int);
+    void loadPieChartData(int);
 
 public slots:
     void updateBarChart(int, QVector<int>);
+    void updatePieChart(int, QMap<QString, int>);
 
 private slots:
     void resizeBarChartWindow(int);

@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     for(int i = 0; i < 4; i++) {
         statistics.loadBarChartData(i);
+        statistics.loadPieChartData(i);
     }
 
     connect(&setSettingsPage, &Settings::uncheckStartOnBootAct, [this](){ startOnBootAction->setChecked(false); }); //set startOnBootAction unchecked when reset the settings
@@ -219,7 +220,9 @@ void MainWindow::setDatabaseThread()
     connect(&databaseThread, &QThread::finished, database, &QObject::deleteLater);
     connect(database, &Database::keyPressedDone, this, &MainWindow::updateLabels);
     connect(&statistics, &Statistics::loadBarChartData, database, &Database::loadBarChartData);
+    connect(&statistics, &Statistics::loadPieChartData, database, &Database::loadPieChartData);
     connect(database, &Database::barChartDataLoaded, &statistics, &Statistics::updateBarChart, Qt::QueuedConnection);
+    connect(database, &Database::pieChartDataLoaded, &statistics, &Statistics::updatePieChart, Qt::QueuedConnection);
 
     databaseThread.start();
 }

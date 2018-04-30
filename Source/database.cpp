@@ -124,6 +124,32 @@ void Database::loadBarChartData(int index)
     emit barChartDataLoaded(index, barChartVec);
 }
 
+void Database::loadPieChartData(int index)
+{
+    QString readQueryStr;
+
+    switch (index) {
+    case 0:
+        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy"));
+        break;
+    case 1:
+        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+        break;
+    case 2:
+        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+        break;
+    case 3:
+        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+        break;
+    default:
+        break;
+    }
+
+    QMap<QString, int> pieChartMap = returnFrequentlyPressedKeyMap(readQueryStr);
+
+    emit pieChartDataLoaded(index, pieChartMap);
+}
+
 bool Database::isQueryFound(QSqlQuery hasPressedKeyAtCurrentHourQuery) const
 {
     while(hasPressedKeyAtCurrentHourQuery.next()) {
@@ -302,5 +328,6 @@ void Database::updateTimer()
 
     for(int i = 0; i < 4; i++) {
         loadBarChartData(i);
+        loadPieChartData(i);
     }
 }

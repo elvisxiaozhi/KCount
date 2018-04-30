@@ -10,8 +10,10 @@ QT_CHARTS_USE_NAMESPACE
 class CustomPieChart
 {
 public:
-    explicit CustomPieChart(int);
+    explicit CustomPieChart();
     QWidget *pieChartWidget;
+    QPieSeries *series;
+    void updateBarChartData(QMap<QString, int>);
 };
 
 #endif // CUSTOMPIECHART_H
