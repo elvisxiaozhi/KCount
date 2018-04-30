@@ -19,22 +19,20 @@ MainWindow::MainWindow(QWidget *parent)
     Hook setHook;
     setLayout();
     setTrayIcon();
-
-    //initiate the label color, so to let it show the right color when the program starts
-    setLblColor();
+    setDatabaseThread();
 
     connect(&setSettingsPage, &Settings::uncheckStartOnBootAct, [this](){ startOnBootAction->setChecked(false); }); //set startOnBootAction unchecked when reset the settings
     connect(&setSettingsPage, &Settings::databaseCleared, [this](){ //when database is cleared, clear map and vector and total pressed times, so the lbls can set to 0
-        setDatabase.pressedKeyMap.clear();
-        setDatabase.mapVector.clear();
-        setDatabase.keyPressedTimes = 0;
-        setLblText(); //this line is used for refreshing lbls when the main window is activated
+        database->readDatabase(2);
+        database->currentHourPressedKeyMap.clear();
+        setLblTextAndColor(); //this line is used for refreshing lbls when the main window is activated
     });
 }
 
 MainWindow::~MainWindow()
 {
-
+    databaseThread.quit();
+    databaseThread.wait();
 }
 
 void MainWindow::setLayout()
@@ -95,7 +93,6 @@ void MainWindow::setLayout()
     connect(totalPressedTimesLabel, &Label::viewModeChanged, this, &MainWindow::changeViewMode);
     connect(nextPageBtn, &QToolButton::clicked, this, &MainWindow::showNextPage);
     connect(previousPageBtn, &QToolButton::clicked, this, &MainWindow::showPreviousPage);
-    connect(&setDatabase, &Database::keyPressedDone, this, &MainWindow::updateLabels);
 }
 
 void MainWindow::setTrayIcon()
@@ -138,80 +135,67 @@ void MainWindow::setTrayIcon()
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(settingsAction, &QAction::triggered, [this](){ setSettingsPage.resetChanges(); setSettingsPage.show(); });
-    connect(statisticsAction, &QAction::triggered, [this](){ setStatistics.show(); });
+//    connect(statisticsAction, &QAction::triggered, [this](){ setStatistics.show(); });
     connect(updateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/Keyboard-Tracker/releases")); });
     connect(aboutAction, &QAction::triggered, [this](){ setAboutPage.show(); });
-    connect(quitAction, &QAction::triggered, [this](){ setDatabase.updateDatabase(); trayIcon->setVisible(false); this->close(); }); //note the program can be only closed by clicking "Quit" action
+    //note the program can be only closed by clicking "Quit" action when the trayIcon is not visible
+    connect(quitAction, &QAction::triggered, [this](){ database->updateDatabase(); trayIcon->setVisible(false); this->close(); }); //update and save data to database before closing the program, and set the trayIcon not visible so the program can be closed successfully
 }
 
-void MainWindow::setLblText()
+void MainWindow::setLblTextAndColor()
 {
-    totalPressedTimesLabel->setText(QString::number(setDatabase.keyPressedTimes));
-    if(setDatabase.mapVector.isEmpty()) {
-        for(int i = 0; i < 5; i++) {
-            frequentlyPressedKeys[i]->setText("");
-        }
-    }
-    if(setDatabase.mapVector.size() > 5) {
-        for(int i = 0; i < 5; i++) {
-            frequentlyPressedKeys[i]->setText(setDatabase.mapVector[i].first + ": " + QString::number(setDatabase.mapVector[i].second));
-        }
-    }
-    else { //when the most frequent is not more than 5
-        for(int i = 0; i < setDatabase.mapVector.size(); i++) {
-            frequentlyPressedKeys[i]->setText(setDatabase.mapVector[i].first + ": " + QString::number(setDatabase.mapVector[i].second));
-        }
-        for(int i = 0; i < 5 - setDatabase.mapVector.size(); i++) { //set the rest of them to 0, or the lbl colors will stay as last time
-            frequentlyPressedKeys[4 - i]->setText("");
-        }
-    }
-}
+    totalPressedTimesLabel->setText(QString::number(database->totalPressedTimes)); //set total pressed times lbl
+    totalPressedTimesLabel->setLblColor(database->totalPressedTimes); //set color for total pressed times lbl
 
-void MainWindow::setLblColor()
-{
-    totalPressedTimesLabel->setLblColor(setDatabase.keyPressedTimes);
-    if(setDatabase.mapVector.isEmpty()) {
+    //set most frequently pressed times lbls
+    //if mapVector is empty, which means there is no most frequently pressed key
+    if(database->mapVector.isEmpty()) {
         for(int i = 0; i < 5; i++) {
-            frequentlyPressedKeys[i]->setLblColor(0);
+            frequentlyPressedKeys[i]->setText(""); //then set the top five most frequently lbls text to blank
+            frequentlyPressedKeys[i]->setLblColor(0); //then set the frequently pressed keys colors to the default color
         }
     }
-    if(setDatabase.mapVector.size() > 5) {
-        for(int i = 0; i < 5; i++) {
-            frequentlyPressedKeys[i]->setLblColor(setDatabase.mapVector[i].second);
+    //if mapVector is more than 5 elements
+    if(database->mapVector.size() > 5) {
+        for(int i = 0; i < 5; i++) { //then set the top five most frequently pressed times keys to lbls
+            frequentlyPressedKeys[i]->setText(database->mapVector[i].first + ": " + QString::number(database->mapVector[i].second));
+            frequentlyPressedKeys[i]->setLblColor(database->mapVector[i].second);
         }
     }
+    //if mapVector is less than or equal 5 elements
     else {
-        for(int i = 0; i < setDatabase.mapVector.size(); i++) {
-            frequentlyPressedKeys[i]->setLblColor(setDatabase.mapVector[i].second);
+        //first set the top frequently pressed keys that the mapVector has
+        for(int i = 0; i < database->mapVector.size(); i++) {
+            frequentlyPressedKeys[i]->setText(database->mapVector[i].first + ": " + QString::number(database->mapVector[i].second));
+            frequentlyPressedKeys[i]->setLblColor(database->mapVector[i].second); //set the top frequently pressed keys lbl with the colors that they should have
         }
-        for(int i = 0; i < 5 - setDatabase.mapVector.size(); i++) {
-            frequentlyPressedKeys[4 - i]->setLblColor(0);
+        //then set the rest of the lbls texts to blank
+        for(int i = 0; i < 5 - database->mapVector.size(); i++) {
+            frequentlyPressedKeys[4 - i]->setText(""); //note the frequentlyPressedKeys[4 - i], the max index of frequentlyPressedKeys is 4
+            frequentlyPressedKeys[4 - i]->setLblColor(0); //for the rest of the empty lbls, set the colors to default
         }
     }
 }
 
 void MainWindow::updateLabels()
 {
-    if(this->isHidden() == false) {
-        setLblText();
+    if(this->isVisible()) { //update texts and text colors to lbls only when the main window is visible, so it increase the preformance
+        setLblTextAndColor();
     }
 
-    //keyPressedDone will emit each time when a key pressed, and the will call this function
-    if(setSettingsPage.soundAlertCheckBox->isChecked()) {
-        if(setDatabase.keyPressedTimes % setSettingsPage.reachingNumEdit->text().toInt() == 0) {
+    //keyPressedDone will emit each time when a key pressed, and then will check if a sound alert should be made
+    if(setSettingsPage.soundAlertCheckBox->isChecked()) { //if soundAlertCheckBox is checked
+        if(database->totalPressedTimes % setSettingsPage.reachingNumEdit->text().toInt() == 0) { //then make a sound when the totalPressedTimes reaches some sepcific nums
             QSound::play(":/Sounds/Sounds/ding.wav");
         }
     }
-
-    setLblColor();
 }
 
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == 2 || reason == 3) { //tray icon was double clicked or clicked
         this->showNormal(); //to show a normal size of the main window
-
-        setLblText();
+        setLblTextAndColor();
     }
 }
 
@@ -221,6 +205,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore(); //then do not quit the program
         this->hide(); //instead of closing the program, just hide the main window
     }
+}
+
+void MainWindow::setDatabaseThread()
+{
+    database = new Database;
+    database->moveToThread(&databaseThread);
+    connect(&databaseThread, &QThread::finished, database, &QObject::deleteLater);
+    connect(database, &Database::keyPressedDone, this, &MainWindow::updateLabels);
+    databaseThread.start();
 }
 
 void MainWindow::showNextPage()
@@ -261,8 +254,8 @@ void MainWindow::startOnBootActionChanged()
 
 void MainWindow::changeViewMode(int viewMode) //when changing the view mode, re-read the database base on the view mode and then update lbls
 {
-    setDatabase.updateDatabase();
-    setDatabase.readDatabase(viewMode);
-    updateLabels();
-    setDatabase.currentHourPressedKeyMap.clear(); //must update and read first, and then clear this map
+    database->updateDatabase();
+    database->readDatabase(viewMode);
+    updateLabels(); //why call updateLabels() instead of setLblTextAndColor(), because this function has sound alert detection, when changing mode, the new nums may reach the sepcific nums
+    database->currentHourPressedKeyMap.clear(); //must update and read first, and then clear this map
 }

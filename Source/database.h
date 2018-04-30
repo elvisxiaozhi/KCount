@@ -16,7 +16,7 @@ class Database : public QObject
     Q_OBJECT
 public:
     explicit Database(QObject *parent = nullptr);
-    unsigned long int keyPressedTimes;
+    unsigned long int totalPressedTimes;
     QMap<QString, unsigned long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long int>> mapVector; //store map, in order to sort map value
     QMap<QString, unsigned long int> currentHourPressedKeyMap;

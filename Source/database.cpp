@@ -14,19 +14,20 @@ QSettings Database::appPathSetting("My Computer", "KCount");
 
 Database::Database(QObject *parent) : QObject(parent)
 {
-    makeDataFile();
+    makeDataFile(); //make database file
 
-    keyPressedTimes = 0;
+    totalPressedTimes = 0; //initiate the total key pressed times
 
+    //set database
     QString accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePath);
     sqlDatabase = QSqlDatabase::addDatabase("QODBC");
     sqlDatabase.setDatabaseName(accessString);
 
-    readDatabase(2);
+    readDatabase(2); //read data from database, the read mode is read the data within a day
 
-    setTimer();
+    setTimer(); //set the time, so the database will save automatically in each hour
 
-    connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &Database::keyPressed);
+    connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &Database::keyPressed); //when a key is pressed, then it will call the kepPressed slot
 }
 
 void Database::deleteDataFile(QString deleteDataPath)
@@ -140,24 +141,26 @@ void Database::insertNewData(QString pressedKey, unsigned long int pressedTimes)
 
 void Database::keyPressed(QString pressedKey)
 {
+    //if the map has already stored the pressed key
     if(pressedKeyMap.contains(pressedKey)) {
-        unsigned long int newValue = pressedKeyMap.value(pressedKey) + 1;
-        pressedKeyMap.insert(pressedKey, newValue);
+        unsigned long int newValue = pressedKeyMap.value(pressedKey) + 1; //then the map key value + 1 pressed time
+        pressedKeyMap.insert(pressedKey, newValue); //and insert new data to the map
 
         unsigned long int newValueAtCurrentHour = currentHourPressedKeyMap.value(pressedKey) + 1;
         currentHourPressedKeyMap.insert(pressedKey, newValueAtCurrentHour);
     }
+    //if not
     else {
-        pressedKeyMap.insert(pressedKey, 1);
+        pressedKeyMap.insert(pressedKey, 1); //then the insert the pressed key with a 1 time pressed value to the map
 
         currentHourPressedKeyMap.insert(pressedKey, 1);
     }
 
-    keyPressedTimes++;
+    totalPressedTimes++; //and also the total pressed times + 1 pressed time
 
-    sortMap();
+    sortMap(); //then store the data to the mapVector and sort it in the descending order
 
-    emit keyPressedDone();
+    emit keyPressedDone(); //finally emit keyPressedDone() signal, and it will call a slot in MainWindow to update the lbl text
 }
 
 void Database::updateDatabase()
@@ -235,9 +238,9 @@ void Database::readDatabase(int readMode)
 
     sortMap();
 
-    keyPressedTimes = 0; //clear the old pressed times and re-count
+    totalPressedTimes = 0; //clear the old pressed times and re-count
     for(int i = 0; i < mapVector.size(); i++) {
-        keyPressedTimes += mapVector[i].second;
+        totalPressedTimes += mapVector[i].second;
     }
 }
 

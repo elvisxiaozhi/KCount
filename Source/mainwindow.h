@@ -13,6 +13,7 @@
 #include "about.h"
 #include "settings.h"
 #include "statistics.h"
+#include <QThread>
 
 class MainWindow : public QMainWindow
 {
@@ -31,15 +32,16 @@ private:
     QVector<Label *> frequentlyPressedKeys;
     QToolButton *nextPageBtn, *previousPageBtn;
     QAction *startOnBootAction;
-    Database setDatabase;
+    Database *database;
+    QThread databaseThread;
     Settings setSettingsPage;
     About setAboutPage;
-    Statistics setStatistics;
+//    Statistics setStatistics;
     void setLayout();
     void setTrayIcon();
-    void setLblText();
-    void setLblColor();
+    void setLblTextAndColor();
     void closeEvent(QCloseEvent *);
+    void setDatabaseThread();
 
 signals:
 
