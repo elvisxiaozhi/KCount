@@ -89,6 +89,41 @@ QMap<QString, int> Database::returnFrequentlyPressedKeyMap(QString queryStr)
     return frequentlyPressedKeyMap;
 }
 
+void Database::loadBarChartData(int index)
+{
+    QVector<int> barChartVec;
+    switch (index) {
+    case 0:
+        for(int i = 0; i < 24; i++) {
+            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(i);
+            barChartVec.push_back(returnTotalPressedTimes(queryStr));
+        }
+        break;
+    case 1:
+        for(int i = 6; i >= 0; i--) {
+            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(-i).toString("MM/dd/yy"));
+            barChartVec.push_back(returnTotalPressedTimes(queryStr));
+        }
+        break;
+    case 2:
+        for(int i = 0; i < QDate::currentDate().daysInMonth(); i++) {
+            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(i - QDate::currentDate().daysInMonth() + 1).toString("MM/dd/yy"));
+            barChartVec.push_back(returnTotalPressedTimes(queryStr));
+        }
+        break;
+    case 3:
+        for(int i = 0; i < 12; i++) {
+            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(QDate::currentDate().addMonths(i - 11).toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(i - 11 - 1).toString("MM/dd/yy"));
+            barChartVec.push_back(returnTotalPressedTimes(queryStr));
+        }
+        break;
+    default:
+        break;
+    }
+
+    emit barChartDataLoaded(index, barChartVec);
+}
+
 bool Database::isQueryFound(QSqlQuery hasPressedKeyAtCurrentHourQuery) const
 {
     while(hasPressedKeyAtCurrentHourQuery.next()) {
@@ -135,8 +170,6 @@ void Database::sortMap()
     std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long int>& a, std::pair<QString, unsigned long int>& b){
         return a.second > b.second;
     });
-
-    qDebug() << mapVector;
 }
 
 void Database::insertNewData(QString pressedKey, unsigned long int pressedTimes)

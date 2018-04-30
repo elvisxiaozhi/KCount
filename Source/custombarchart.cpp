@@ -1,60 +1,20 @@
 #include "custombarchart.h"
 #include <QtCharts/QLegend>
-#include <QtCharts/QBarCategoryAxis>
-#include <QtCharts/QBarSeries>
 #include <QVBoxLayout>
 #include <QDate>
-#include "database.h"
+#include <QDebug>
 
-CustomBarChart::CustomBarChart(QString title, int choice)
+CustomBarChart::CustomBarChart()
 {
     barSet = new QBarSet("Bar Set");
 
-    switch (choice) {
-    case 0: //daily
-        for(int i = 0; i < 24; i++) {
-            barCategories.push_back(QString::number(i));
-            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(i);
-            barSet->append(Database::returnTotalPressedTimes(queryStr)); //must appened data first
-        }
-        break;
-    case 1: //weekly
-        for(int i = 6; i >= 0; i--) {
-            barCategories.push_back(QDate::currentDate().addDays(-i).toString("dd"));
-            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(-i).toString("MM/dd/yy"));
-            barSet->append(Database::returnTotalPressedTimes(queryStr)); //must appened data first
-        }
-        break;
-    case 2: //monthly
-        for(int i = 0; i < QDate::currentDate().daysInMonth(); i++) {
-            barCategories.push_front(QString::number(QDate::currentDate().addDays(-i).toString("dd").toInt()));
-            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(i - QDate::currentDate().daysInMonth() + 1).toString("MM/dd/yy"));
-            barSet->append(Database::returnTotalPressedTimes(queryStr)); //must appened data first
-        }
-        break;
-    case 3: //yearly
-        for(int i = 0; i < 12; i++) {
-            barCategories.push_front(QString::number(QDate::currentDate().addMonths(-i).toString("MM").toInt()));
-            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(QDate::currentDate().addMonths(i - 11).toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(i - 11 - 1).toString("MM/dd/yy"));
-            barSet->append(Database::returnTotalPressedTimes(queryStr)); //must appened data first
-        }
-        break;
-    default:
-        break;
-    }
+    barSeries = new QBarSeries();
 
-    QBarSeries *barSeries = new QBarSeries();
-    barSeries->append(barSet); //then barset and its data to bar seriers
-
-    this->addSeries(barSeries);
-    this->setTitle(title);
+    this->setTitle("Total Pressed Times");
     this->setAnimationOptions(QChart::SeriesAnimations);
 
-    QBarCategoryAxis *axis = new QBarCategoryAxis();
-    axis->append(barCategories);
+    axis = new QBarCategoryAxis();
 
-    this->createDefaultAxes();
-    this->setAxisX(axis, barSeries);
     this->legend()->setVisible(false); //hide the barset
     this->legend()->setAlignment(Qt::AlignBottom);
 
@@ -65,4 +25,54 @@ CustomBarChart::CustomBarChart(QString title, int choice)
     QVBoxLayout *chartVLayout = new QVBoxLayout(barChartWidget);
     barChartWidget->setLayout(chartVLayout);
     chartVLayout->addWidget(chartView);
+}
+
+void CustomBarChart::removeOldBarSet()
+{
+    this->removeSeries(barSeries);
+    this->removeAxis(axis);
+    barSeries->clear();
+    axis->clear();
+    barSet = new QBarSet("Bar Set");
+}
+
+void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
+{
+    switch (choice) {
+    case 0: //daily
+        for(int i = 0; i < 24; i++) {
+            barCategories.push_back(QString::number(i));
+            barSet->append(barChartVec[i]);
+        }
+        break;
+    case 1: //weekly
+        for(int i = 6; i >= 0; i--) {
+            barCategories.push_back(QDate::currentDate().addDays(-i).toString("dd"));
+            barSet->append(barChartVec[i]);
+        }
+        break;
+    case 2: //monthly
+        for(int i = 0; i < QDate::currentDate().daysInMonth(); i++) {
+            barCategories.push_front(QString::number(QDate::currentDate().addDays(-i).toString("dd").toInt()));
+            barSet->append(barChartVec[i]);
+        }
+        break;
+    case 3: //yearly
+        for(int i = 0; i < 12; i++) {
+            barCategories.push_front(QString::number(QDate::currentDate().addMonths(-i).toString("MM").toInt()));
+            barSet->append(barChartVec[i]);
+        }
+        break;
+    default:
+        break;
+    }
+
+    barSeries->append(barSet); //then barset and its data to bar seriers
+    axis->append(barCategories);
+
+    this->addSeries(barSeries);
+    this->createDefaultAxes();
+    this->setAxisX(axis, barSeries);
+
+    qDebug() << "Updated";
 }

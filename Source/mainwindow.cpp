@@ -135,7 +135,7 @@ void MainWindow::setTrayIcon()
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(settingsAction, &QAction::triggered, [this](){ setSettingsPage.resetChanges(); setSettingsPage.show(); });
-//    connect(statisticsAction, &QAction::triggered, [this](){ setStatistics.show(); });
+    connect(statisticsAction, &QAction::triggered, [this](){ statistics.show();  statistics.loadBarChartData(0); });
     connect(updateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/Keyboard-Tracker/releases")); });
     connect(aboutAction, &QAction::triggered, [this](){ setAboutPage.show(); });
     //note the program can be only closed by clicking "Quit" action when the trayIcon is not visible
@@ -213,6 +213,8 @@ void MainWindow::setDatabaseThread()
     database->moveToThread(&databaseThread);
     connect(&databaseThread, &QThread::finished, database, &QObject::deleteLater);
     connect(database, &Database::keyPressedDone, this, &MainWindow::updateLabels);
+    connect(&statistics, &Statistics::loadBarChartData, database, &Database::loadBarChartData);
+    connect(database, &Database::barChartDataLoaded, &statistics, &Statistics::updateBarChart, Qt::QueuedConnection);
     databaseThread.start();
 }
 

@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include <QHBoxLayout>
-#include "custombarchart.h"
 #include "custompiechart.h"
 
 Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
@@ -10,7 +9,6 @@ Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
     setLayout();
 
     setBarChart();
-    setPieChart();
 }
 
 void Statistics::setLayout()
@@ -45,7 +43,7 @@ void Statistics::setLayout()
 
     connect(barTabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeBarChartWindow);
     connect(barChartBtn, &QPushButton::clicked, [this](){ barTabWidget->show(); pieTabWidget->hide(); this->resize(800, 400); });
-    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(500, 500); });
+//    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(500, 500); });
 }
 
 void Statistics::closeEvent(QCloseEvent *event)
@@ -54,17 +52,16 @@ void Statistics::closeEvent(QCloseEvent *event)
     this->hide();
 }
 
-void Statistics::setBarChart() const
-{
-    CustomBarChart *dailyBarChart = new CustomBarChart(QString("Daily Totaly Pressed Times"), 0);
-    CustomBarChart *weeklyBarChart = new CustomBarChart(QString("Weekly Totaly Pressed Times"), 1);
-    CustomBarChart *monthlyBarChart = new CustomBarChart(QString("Monthly Totaly Pressed Times"), 2);
-    CustomBarChart *yearlyBarChart = new CustomBarChart(QString("Yearly Totaly Pressed Times"), 3);
+void Statistics::setBarChart()
+{   
+    for(int i = 0; i < 4; i++) {
+        barChartArr[i] = new CustomBarChart;
+    }
 
-    barTabWidget->addTab(dailyBarChart->barChartWidget, "Day");
-    barTabWidget->addTab(weeklyBarChart->barChartWidget, "Week");
-    barTabWidget->addTab(monthlyBarChart->barChartWidget, "Month");
-    barTabWidget->addTab(yearlyBarChart->barChartWidget, "Year");
+    barTabWidget->addTab(barChartArr[0]->barChartWidget, "Day");
+    barTabWidget->addTab(barChartArr[1]->barChartWidget, "Week");
+    barTabWidget->addTab(barChartArr[2]->barChartWidget, "Month");
+    barTabWidget->addTab(barChartArr[3]->barChartWidget, "Year");
 }
 
 void Statistics::setPieChart() const
@@ -80,8 +77,16 @@ void Statistics::setPieChart() const
     pieTabWidget->addTab(yearlyPieChart->pieChartWidget, "Year");
 }
 
+void Statistics::updateBarChart(int index, QVector<int> barChartVec)
+{
+    qDebug() << barChartVec << index;
+    barChartArr[index]->removeOldBarSet();
+    barChartArr[index]->updateBarChartData(index, barChartVec);
+}
+
 void Statistics::resizeBarChartWindow(int index)
 {
+    emit loadBarChartData(index);
     if(index == 0) {
         this->resize(800, 400);
     }

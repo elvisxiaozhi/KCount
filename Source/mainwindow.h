@@ -36,7 +36,7 @@ private:
     QThread databaseThread;
     Settings setSettingsPage;
     About setAboutPage;
-//    Statistics setStatistics;
+    Statistics statistics;
     void setLayout();
     void setTrayIcon();
     void setLblTextAndColor();
