@@ -9,7 +9,7 @@
 #include <QSettings>
 
 extern void clearDatabase();
-extern QSqlDatabase dataBase;
+extern QSqlDatabase sqlDatabase;
 
 class Database : public QObject
 {
