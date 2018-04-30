@@ -8,8 +8,7 @@
 #include <QTimer>
 #include <QSettings>
 
-extern void clearDatabase();
-extern QSqlDatabase sqlDatabase;
+//static void clearDatabase();
 
 class Database : public QObject
 {
@@ -20,8 +19,10 @@ public:
     QMap<QString, unsigned long int> pressedKeyMap;
     QVector<std::pair<QString, unsigned long int>> mapVector; //store map, in order to sort map value
     QMap<QString, unsigned long int> currentHourPressedKeyMap;
+    static QSqlDatabase sqlDatabase;
     static QString dataPath;
     static void deleteDataFile(QString);
+    static void clearDatabase();
     static QSettings appPathSetting;
     static int returnTotalPressedTimes(QString);
     static QMap<QString, int> returnFrequentlyPressedKeyMap(QString);

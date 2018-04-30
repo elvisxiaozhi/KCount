@@ -8,7 +8,7 @@
 #include <QTime>
 #include "signalemitter.h"
 
-QSqlDatabase sqlDatabase;
+QSqlDatabase Database::sqlDatabase;
 QString Database::dataPath;
 QSettings Database::appPathSetting("My Computer", "KCount");
 
@@ -34,6 +34,18 @@ void Database::deleteDataFile(QString deleteDataPath)
 {
     static QDir deleteFilePath(deleteDataPath);
     deleteFilePath.removeRecursively();
+}
+
+void Database::clearDatabase()
+{
+    if(sqlDatabase.open()) {
+        QSqlQuery deleteQuery;
+        deleteQuery.exec("DELETE FROM Data");
+        sqlDatabase.close();
+    }
+    else {
+        qDebug() << sqlDatabase.lastError().text();
+    }
 }
 
 int Database::returnTotalPressedTimes(QString queryStr)
@@ -251,16 +263,4 @@ void Database::updateTimer()
     updateDatabase();
 
     readDatabase(2); //because in a peroid of time, the data will store to database, and map and vector will be cleared, so when updating database, it needs to re-read data to map and vector
-}
-
-void clearDatabase()
-{
-    if(sqlDatabase.open()) {
-        QSqlQuery deleteQuery;
-        deleteQuery.exec("DELETE FROM Data");
-        sqlDatabase.close();
-    }
-    else {
-        qDebug() << sqlDatabase.lastError().text();
-    }
 }

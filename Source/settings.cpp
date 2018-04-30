@@ -22,7 +22,7 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
         setMsBox.showSuccessMsBox();
     });
     connect(&setMsBox, &MessageBoxes::clearDatabaseConfirmed, [this](){
-        clearDatabase();
+        Database::clearDatabase();
         setMsBox.successMsBox.setText("Database has been cleared.");
         setMsBox.showSuccessMsBox();
         emit databaseCleared();
@@ -236,7 +236,6 @@ void Settings::resetSettings()
 void Settings::resetAll()
 {
     resetSettings();
-    clearDatabase();
     Database::deleteDataFile(Database::dataPath);
 }
 
