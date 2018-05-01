@@ -121,23 +121,30 @@ void MainWindow::setTrayIcon()
 
     QAction *settingsAction = new QAction("Settings", trayIconMenu);
     trayIconMenu->addAction(settingsAction);
+    settingsAction->setIcon(QIcon(":/Icons/Icons/settings.png"));
 
     QAction *statisticsAction = new QAction("Statistics", trayIconMenu);
     trayIconMenu->addAction(statisticsAction);
+    statisticsAction->setIcon(QIcon(":/Icons/Icons/stastistics.png"));
 
     QMenu *helpMenu = new QMenu("Help");
     trayIconMenu->addMenu(helpMenu);
     QAction *feedbackAction = new QAction("Feedback", helpMenu);
     helpMenu->addAction(feedbackAction);
+    feedbackAction->setIcon(QIcon(":/Icons/Icons/feedback.png"));
     QAction *updateAction = new QAction("Update", helpMenu);
     helpMenu->addAction(updateAction);
+    updateAction->setIcon(QIcon(":/Icons/Icons/update.png"));
     QAction *aboutAction = new QAction("About", helpMenu);
     helpMenu->addAction(aboutAction);
+    aboutAction->setIcon(QIcon(":/Icons/Icons/about.png"));
     QAction *donateAction = new QAction("Donate", helpMenu);
     helpMenu->addAction(donateAction);
+    donateAction->setIcon(QIcon(":/Icons/Icons/donation.png"));
 
     QAction *quitAction = new QAction("Quit", trayIconMenu);
     trayIconMenu->addAction(quitAction);
+    quitAction->setIcon(QIcon(":/Icons/Icons/quit.png"));
 
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);

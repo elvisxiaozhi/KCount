@@ -7,6 +7,13 @@
         <file>Icons/pie_chart.png</file>
         <file>Icons/letter_k.png</file>
         <file>Icons/loading.gif</file>
+        <file>Icons/stastistics.png</file>
+        <file>Icons/settings.png</file>
+        <file>Icons/quit.png</file>
+        <file>Icons/feedback.png</file>
+        <file>Icons/update.png</file>
+        <file>Icons/donation.png</file>
+        <file>Icons/about.png</file>
     </qresource>
     <qresource prefix="/Sounds">
         <file>Sounds/click.wav</file>
