@@ -67,14 +67,15 @@ void Statistics::setBarChart()
 
 void Statistics::setPieChart()
 {
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 5; i++) {
         pieChartArr[i] = new CustomPieChart;
     }
 
-    pieTabWidget->addTab(pieChartArr[0]->pieChartWidget, "Day");
-    pieTabWidget->addTab(pieChartArr[1]->pieChartWidget, "Week");
-    pieTabWidget->addTab(pieChartArr[2]->pieChartWidget, "Month");
-    pieTabWidget->addTab(pieChartArr[3]->pieChartWidget, "Year");
+    pieTabWidget->addTab(pieChartArr[0]->pieChartWidget, "Hour");
+    pieTabWidget->addTab(pieChartArr[1]->pieChartWidget, "Day");
+    pieTabWidget->addTab(pieChartArr[2]->pieChartWidget, "Week");
+    pieTabWidget->addTab(pieChartArr[3]->pieChartWidget, "Month");
+    pieTabWidget->addTab(pieChartArr[4]->pieChartWidget, "Year");
 }
 
 void Statistics::updateBarChart(int index, QVector<int> barChartVec)

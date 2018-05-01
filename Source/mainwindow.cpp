@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     for(int i = 0; i < 4; i++) {
         statistics.loadBarChartData(i);
+    }
+    for(int i = 0; i < 5; i++) {
         statistics.loadPieChartData(i);
     }
 

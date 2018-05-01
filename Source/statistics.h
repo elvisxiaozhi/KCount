@@ -20,7 +20,7 @@ private:
     QVBoxLayout *mainVLayout;
     QTabWidget *barTabWidget, *pieTabWidget;
     CustomBarChart *barChartArr[4];
-    CustomPieChart *pieChartArr[4];
+    CustomPieChart *pieChartArr[5];
     QPushButton *barChartBtn, *pieChartBtn;
     void setLayout();
     void closeEvent(QCloseEvent *);

@@ -93,28 +93,31 @@ void Database::loadBarChartData(int index)
 {
     QVector<int> barChartVec;
     switch (index) {
-    case 0:
+    case 0: //daily
         for(int i = 0; i < 24; i++) {
             QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(i);
             barChartVec.push_back(returnTotalPressedTimes(queryStr));
         }
         break;
-    case 1:
+    case 1: //weekly
         for(int i = 6; i >= 0; i--) {
             QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(-i).toString("MM/dd/yy"));
             barChartVec.push_back(returnTotalPressedTimes(queryStr));
         }
         break;
-    case 2:
+    case 2: //monthly
         for(int i = 0; i < QDate::currentDate().daysInMonth(); i++) {
             QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(i - QDate::currentDate().daysInMonth() + 1).toString("MM/dd/yy"));
             barChartVec.push_back(returnTotalPressedTimes(queryStr));
         }
         break;
-    case 3:
+    case 3: //yearly
         for(int i = 0; i < 12; i++) {
-            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(QDate::currentDate().addMonths(i - 11).toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(i - 11 - 1).toString("MM/dd/yy"));
-            barChartVec.push_back(returnTotalPressedTimes(queryStr));
+            QDate currentDate = QDate::currentDate().addMonths(-i);
+            QString firstDateOfMonth = QString("%1/01/%2").arg(QString::number(currentDate.month())).arg(QString::number(currentDate.year()));
+            QString lastDateOfMonth = QString("%1/%2/%3").arg(QString::number(currentDate.month())).arg(QString::number(currentDate.daysInMonth())).arg(QString::number(currentDate.year()));
+            QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(firstDateOfMonth).arg(lastDateOfMonth);
+            barChartVec.push_front(returnTotalPressedTimes(queryStr));
         }
         break;
     default:
@@ -130,15 +133,18 @@ void Database::loadPieChartData(int index)
 
     switch (index) {
     case 0:
-        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy"));
+        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedHour = %1 GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QTime::currentTime().toString("h").toInt());
         break;
     case 1:
-        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy"));
         break;
     case 2:
-        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
         break;
     case 3:
+        readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+        break;
+    case 4:
         readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey ORDER BY SUM(PressedTimes) DESC").arg(QDate::currentDate().toString("MM/dd/yy")).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
         break;
     default:
@@ -328,6 +334,8 @@ void Database::updateTimer()
 
     for(int i = 0; i < 4; i++) {
         loadBarChartData(i);
+    }
+    for(int i = 0; i < 5; i++) {
         loadPieChartData(i);
     }
 }
