@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
         database->currentHourPressedKeyMap.clear();
         setLblTextAndColor(); //this line is used for refreshing lbls when the main window is activated
     });
+
+    statistics.show();
 }
 
 MainWindow::~MainWindow()
@@ -221,6 +223,8 @@ void MainWindow::setDatabaseThread()
 
     connect(&databaseThread, &QThread::finished, database, &QObject::deleteLater);
     connect(database, &Database::keyPressedDone, this, &MainWindow::updateLabels);
+    connect(database, &Database::showBarChartLoadingPage, &statistics, &Statistics::showBarChartLoadingPage);
+    connect(database, &Database::showPieChartLoadingPage, &statistics, &Statistics::showPieChartLoadingPage);
     connect(&statistics, &Statistics::loadBarChartData, database, &Database::loadBarChartData);
     connect(&statistics, &Statistics::loadPieChartData, database, &Database::loadPieChartData);
     connect(database, &Database::barChartDataLoaded, &statistics, &Statistics::updateBarChart, Qt::QueuedConnection);

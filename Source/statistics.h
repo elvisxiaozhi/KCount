@@ -34,6 +34,8 @@ signals:
 public slots:
     void updateBarChart(int, QVector<int>);
     void updatePieChart(int, QMap<QString, int>);
+    void showBarChartLoadingPage(int);
+    void showPieChartLoadingPage(int);
 
 private slots:
     void resizeBarChartWindow(int);

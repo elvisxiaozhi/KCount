@@ -91,6 +91,8 @@ QMap<QString, int> Database::returnFrequentlyPressedKeyMap(QString queryStr)
 
 void Database::loadBarChartData(int index)
 {
+    emit showBarChartLoadingPage(index);
+
     QVector<int> barChartVec;
     switch (index) {
     case 0: //daily
@@ -129,6 +131,8 @@ void Database::loadBarChartData(int index)
 
 void Database::loadPieChartData(int index)
 {
+    emit showPieChartLoadingPage(index);
+
     QString readQueryStr;
 
     switch (index) {

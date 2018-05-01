@@ -91,6 +91,16 @@ void Statistics::updatePieChart(int index, QMap<QString, int> pieChartMap)
     pieChartArr[index]->updateBarChartData(pieChartMap);
 }
 
+void Statistics::showBarChartLoadingPage(int index)
+{
+    barChartArr[index]->showLoadingPage();
+}
+
+void Statistics::showPieChartLoadingPage(int index)
+{
+    pieChartArr[index]->showLoadingPage();
+}
+
 void Statistics::resizeBarChartWindow(int index)
 {
 //    this->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, this->size(), qApp->desktop()->availableGeometry())); //this line is to align window to center

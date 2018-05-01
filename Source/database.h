@@ -38,6 +38,8 @@ private:
 signals:
     void keyPressedDone();
     void databaseOpened();
+    void showBarChartLoadingPage(int);
+    void showPieChartLoadingPage(int);
     void barChartDataLoaded(int, QVector<int>);
     void pieChartDataLoaded(int, QMap<QString, int>);
 

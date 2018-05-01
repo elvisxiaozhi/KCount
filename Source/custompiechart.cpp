@@ -23,16 +23,16 @@ CustomPieChart::CustomPieChart()
     chartView->hide();
 
     loadingLbl = new QLabel;
+    loadingLbl->setAlignment(Qt::AlignCenter);
     pieVLayout->addWidget(loadingLbl);
     loadingMovie = new QMovie(":/Icons/Icons/loading.gif");
-
-    showLoadingPage();
 }
 
 void CustomPieChart::showLoadingPage()
 {
     loadingLbl->setMovie(loadingMovie);
     loadingMovie->start();
+    loadingLbl->show();
 }
 
 void CustomPieChart::updateBarChartData(QMap<QString, int> frequentlyPressedKeyMap)

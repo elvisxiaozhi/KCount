@@ -21,9 +21,9 @@ public:
     QStringList barCategories;
     QWidget *barChartWidget;
     QChartView *chartView;
-    void updateBarChartData(int, QVector<int>);
     QLabel *loadingLbl;
     QMovie *loadingMovie;
+    void updateBarChartData(int, QVector<int>);
     void showLoadingPage();
 };
 

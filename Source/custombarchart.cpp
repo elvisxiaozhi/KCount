@@ -28,10 +28,16 @@ CustomBarChart::CustomBarChart()
     chartView->hide();
 
     loadingLbl = new QLabel;
+    loadingLbl->setAlignment(Qt::AlignCenter);
     chartVLayout->addWidget(loadingLbl);
     loadingMovie = new QMovie(":/Icons/Icons/loading.gif");
+}
 
-    showLoadingPage();
+void CustomBarChart::showLoadingPage()
+{
+    loadingLbl->setMovie(loadingMovie);
+    loadingMovie->start();
+    loadingLbl->show();
 }
 
 void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
@@ -82,10 +88,4 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
 
     chartView->show();
     loadingLbl->hide();
-}
-
-void CustomBarChart::showLoadingPage()
-{
-    loadingLbl->setMovie(loadingMovie);
-    loadingMovie->start();
 }
