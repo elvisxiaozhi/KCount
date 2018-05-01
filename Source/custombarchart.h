@@ -6,6 +6,8 @@
 #include <QtCharts/QBarSet>
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QBarSeries>
+#include <QLabel>
+#include <QMovie>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -18,7 +20,11 @@ public:
     QBarCategoryAxis *axis;
     QStringList barCategories;
     QWidget *barChartWidget;
+    QChartView *chartView;
     void updateBarChartData(int, QVector<int>);
+    QLabel *loadingLbl;
+    QMovie *loadingMovie;
+    void showLoadingPage();
 };
 
 #endif // CUSTOMBARCHART_H

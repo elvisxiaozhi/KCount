@@ -1,9 +1,9 @@
 #include "custompiechart.h"
-#include <QtCharts/QChartView>
-#include <QVBoxLayout>
 #include "database.h"
 #include <QDate>
+#include <QVBoxLayout>
 #include <QDebug>
+#include <QMovie>
 
 CustomPieChart::CustomPieChart()
 {
@@ -13,13 +13,26 @@ CustomPieChart::CustomPieChart()
     chart->setTitle("Frequently Pressed Keys");
     chart->addSeries(series);
 
-    QChartView *chartView = new QChartView(chart);
+    chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
     pieChartWidget = new QWidget;
     QVBoxLayout *pieVLayout = new QVBoxLayout;
     pieChartWidget->setLayout(pieVLayout);
     pieVLayout->addWidget(chartView);
+    chartView->hide();
+
+    loadingLbl = new QLabel;
+    pieVLayout->addWidget(loadingLbl);
+    loadingMovie = new QMovie(":/Icons/Icons/loading.gif");
+
+    showLoadingPage();
+}
+
+void CustomPieChart::showLoadingPage()
+{
+    loadingLbl->setMovie(loadingMovie);
+    loadingMovie->start();
 }
 
 void CustomPieChart::updateBarChartData(QMap<QString, int> frequentlyPressedKeyMap)
@@ -38,4 +51,7 @@ void CustomPieChart::updateBarChartData(QMap<QString, int> frequentlyPressedKeyM
         slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
         sliceVec.push_back(slice);
     }
+
+    chartView->show();
+    loadingLbl->hide();
 }

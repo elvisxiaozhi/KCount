@@ -18,13 +18,20 @@ CustomBarChart::CustomBarChart()
     this->legend()->setVisible(false); //hide the barset
     this->legend()->setAlignment(Qt::AlignBottom);
 
-    QChartView *chartView = new QChartView(this);
+    chartView = new QChartView(this);
     chartView->setRenderHint(QPainter::Antialiasing);
 
     barChartWidget = new QWidget;
     QVBoxLayout *chartVLayout = new QVBoxLayout(barChartWidget);
     barChartWidget->setLayout(chartVLayout);
     chartVLayout->addWidget(chartView);
+    chartView->hide();
+
+    loadingLbl = new QLabel;
+    chartVLayout->addWidget(loadingLbl);
+    loadingMovie = new QMovie(":/Icons/Icons/loading.gif");
+
+    showLoadingPage();
 }
 
 void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
@@ -51,7 +58,7 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
     case 2: { //monthly
         int daysInMonth = QDate::currentDate().daysInMonth();
         for(int i = 0; i < daysInMonth; i++) {
-            barCategories.append(QDate::currentDate().addDays(i - daysInMonth + 1).toString("MMM d"));
+            barCategories.push_back(QDate::currentDate().addDays(i - daysInMonth + 1).toString("MMM d"));
             barSet->append(barChartVec[i]);
         }
     }
@@ -72,4 +79,13 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
     this->addSeries(barSeries);
     this->createDefaultAxes();
     this->setAxisX(axis, barSeries);
+
+    chartView->show();
+    loadingLbl->hide();
+}
+
+void CustomBarChart::showLoadingPage()
+{
+    loadingLbl->setMovie(loadingMovie);
+    loadingMovie->start();
 }

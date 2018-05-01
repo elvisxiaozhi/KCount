@@ -6,6 +6,7 @@
         <file>Icons/bar_chart.png</file>
         <file>Icons/pie_chart.png</file>
         <file>Icons/letter_k.png</file>
+        <file>Icons/loading.gif</file>
     </qresource>
     <qresource prefix="/Sounds">
         <file>Sounds/click.wav</file>

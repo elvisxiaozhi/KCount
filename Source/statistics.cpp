@@ -2,6 +2,9 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include <QHBoxLayout>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QStyle>
 
 Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 {
@@ -90,6 +93,8 @@ void Statistics::updatePieChart(int index, QMap<QString, int> pieChartMap)
 
 void Statistics::resizeBarChartWindow(int index)
 {
+//    this->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, this->size(), qApp->desktop()->availableGeometry())); //this line is to align window to center
+
     if(index == 0) {
         this->resize(800, 400);
     }
@@ -97,7 +102,7 @@ void Statistics::resizeBarChartWindow(int index)
         this->resize(500, 300);
     }
     if(index == 2) {
-        this->resize(1000, 500);
+        this->showMaximized();
     }
     if(index == 3) {
         this->resize(800, 400);
