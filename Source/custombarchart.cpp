@@ -44,15 +44,17 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
         break;
     case 1: //weekly
         for(int i = 6; i >= 0; i--) {
-            barCategories.push_back(QDate::currentDate().addDays(-i).toString("dd"));
+            barCategories.push_back(QDate::currentDate().addDays(-i).toString("d"));
             barSet->append(barChartVec[i]);
         }
         break;
-    case 2: //monthly
-        for(int i = 0; i < QDate::currentDate().daysInMonth(); i++) {
-            barCategories.push_front(QString::number(QDate::currentDate().addDays(-i).toString("dd").toInt()));
+    case 2: { //monthly
+        int daysInMonth = QDate::currentDate().daysInMonth();
+        for(int i = 0; i < daysInMonth; i++) {
+            barCategories.append(QDate::currentDate().addDays(i - daysInMonth + 1).toString("MMM d"));
             barSet->append(barChartVec[i]);
         }
+    }
         break;
     case 3: //yearly
         for(int i = 0; i < 12; i++) {
