@@ -34,8 +34,6 @@ MainWindow::MainWindow(QWidget *parent)
         database->currentHourPressedKeyMap.clear();
         setLblTextAndColor(); //this line is used for refreshing lbls when the main window is activated
     });
-
-    statistics.show();
 }
 
 MainWindow::~MainWindow()
