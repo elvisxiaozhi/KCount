@@ -14,6 +14,7 @@ Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 void Statistics::setLayout()
 {
     setWindowTitle("Statistics");
+    setWindowIcon(QIcon(":/Icons/Icons/bar_chart.png"));
 
     mainWidget = new QWidget(this);
     this->setCentralWidget(mainWidget);
@@ -42,8 +43,8 @@ void Statistics::setLayout()
     mainVLayout->addLayout(btnHLayout);
 
     connect(barTabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeBarChartWindow);
-    connect(barChartBtn, &QPushButton::clicked, [this](){ barTabWidget->show(); pieTabWidget->hide(); this->resize(800, 400); });
-    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(500, 500); });
+    connect(barChartBtn, &QPushButton::clicked, [this](){ barTabWidget->show(); pieTabWidget->hide(); this->resize(800, 400); setWindowIcon(QIcon(":/Icons/Icons/bar_chart.png")); });
+    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(500, 500); setWindowIcon(QIcon(":/Icons/Icons/pie_chart.png")); });
 }
 
 void Statistics::closeEvent(QCloseEvent *event)

@@ -3,6 +3,9 @@
         <file>Icons/back.png</file>
         <file>Icons/keyboard_tray_icon.png</file>
         <file>Icons/next.png</file>
+        <file>Icons/bar_chart.png</file>
+        <file>Icons/pie_chart.png</file>
+        <file>Icons/letter_k.png</file>
     </qresource>
     <qresource prefix="/Sounds">
         <file>Sounds/click.wav</file>

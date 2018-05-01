@@ -102,9 +102,9 @@ void MainWindow::setLayout()
 
 void MainWindow::setTrayIcon()
 {
-    trayIcon = new QSystemTrayIcon(QIcon(":/Icons/Icons/keyboard_tray_icon.png"), this);
+    trayIcon = new QSystemTrayIcon(QIcon(":/Icons/Icons/letter_k.png"), this);
     trayIcon->show();
-    trayIcon->setToolTip("KCount 1.2 Beta");
+    trayIcon->setToolTip("KCount 1.2.1 Beta");
 
     QMenu *trayIconMenu = new QMenu;
     trayIcon->setContextMenu(trayIconMenu);
