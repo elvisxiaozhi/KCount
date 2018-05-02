@@ -47,7 +47,7 @@ void Statistics::setLayout()
 
     connect(barTabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeBarChartWindow);
     connect(barChartBtn, &QPushButton::clicked, [this](){ barTabWidget->show(); pieTabWidget->hide(); this->resize(800, 400); setWindowIcon(QIcon(":/Icons/Icons/bar_chart.png")); });
-    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(500, 500); setWindowIcon(QIcon(":/Icons/Icons/pie_chart.png")); });
+    connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(600, 600); setWindowIcon(QIcon(":/Icons/Icons/pie_chart.png")); });
 }
 
 void Statistics::closeEvent(QCloseEvent *event)
@@ -60,7 +60,7 @@ void Statistics::setWindowStyleSheet()
 {
     setStyleSheet(
                 "QMainWindow { background-color: #FAE5D3; font-family: Comic Sans MS; }"
-                "QTabBar::tab { background-color: #efefef; margin-right: 5px; min-width: 50px; padding: 10px 20px; font-family: Comic Sans MS; }"
+                "QTabBar::tab { background-color: #E8F8F5; margin-right: 5px; min-width: 50px; padding: 10px 20px; font-family: Comic Sans MS; }"
                 "QTabBar::tab:selected { background: #007ACC; color: #fff; border-top: 2px solid #F1C40F; border-left: 2px solid #F1C40F; border-right: 2px solid #F1C40F; }"
                 "QTabBar::tab:hover { font: bold; background-color: #BB8FCE; }"
                 "QTabBar::tab:pressed { background-color: #EC7063 }"
