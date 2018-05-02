@@ -82,7 +82,11 @@ void MainWindow::setLayout()
     nextPageBtn->setIcon(QIcon(":/Icons/Icons/next.png"));
     nextPageBtn->setText("Next");
     nextPageBtn->setLayoutDirection(Qt::RightToLeft);
-    nextPageBtn->setStyleSheet("QToolButton { background-color: #FF5A5F; font-size: 20px; }"); //Rausch color for button background
+    nextPageBtn->setStyleSheet(
+                ".QToolButton { background-color: #3498DB; font-size: 18px; color: white; border-radius: 15px; border: 2px solid #FF5A5F; padding: 5px 10px; margin: 5px 2px; }"
+                ".QToolButton:hover { background-color: #BB8FCE; font-size: 20px; }"
+                ".QToolButton:pressed { background-color: #EC7063 }"
+                );
 
     previousPageBtn = new QToolButton(mainWidget);
     btnHLayout->addWidget(previousPageBtn);
@@ -90,7 +94,11 @@ void MainWindow::setLayout()
     previousPageBtn->setIcon(QIcon(":/Icons/Icons/back.png"));
     previousPageBtn->setText("Back");
     previousPageBtn->hide();
-    previousPageBtn->setStyleSheet("QToolButton { background-color: #FF5A5F; font-size: 20px; }");
+    previousPageBtn->setStyleSheet(
+                ".QToolButton { background-color: #3498DB; font-size: 18px; color: white; border-radius: 15px; border: 2px solid #FF5A5F; padding: 5px 10px; margin: 5px 2px; }"
+                ".QToolButton:hover { background-color: #BB8FCE; font-size: 20px; }"
+                ".QToolButton:pressed { background-color: #EC7063 }"
+                );
 
     QSpacerItem *rightBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
     btnHLayout->addSpacerItem(rightBtnSpacer);
