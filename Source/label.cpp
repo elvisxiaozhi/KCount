@@ -6,7 +6,7 @@ Label::Label()
 {
     setAlignment(Qt::AlignCenter);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    setStyleSheet("QLabel { background-color: #FAD7A0; color: #FDFEFE; font-size: 50px; }");
+    setStyleSheet("QLabel { background-color: #FAD7A0; color: #FDFEFE; font-size: 50px; border-radius: 15px; border: 2px solid #F1C40F; }");
     setContextMenuPolicy(Qt::CustomContextMenu);
     setContextMenu();
 }
@@ -14,22 +14,22 @@ Label::Label()
 void Label::setLblColor(int pressedTimes)
 {
     if(pressedTimes < 100) {
-        setStyleSheet("QLabel { background-color: #FAD7A0; color: #FDFEFE; font-size: 50px; }"); //default style sheet
+        setStyleSheet("QLabel { background-color: #FAD7A0; color: #FDFEFE; font-size: 50px; border-radius: 15px; border: 2px solid #F1C40F; }"); //default style sheet
     }
     if(pressedTimes >= 100 && pressedTimes < 500) {
-        setStyleSheet("QLabel { background-color: #82E0AA; color: #FDFEFE; font-size: 50px; }"); //green bg color
+        setStyleSheet("QLabel { background-color: #82E0AA; color: #FDFEFE; font-size: 50px; border-radius: 15px; border: 2px solid #F1C40F; }"); //green bg color
     }
     if(pressedTimes >= 500 && pressedTimes < 1000) {
-        setStyleSheet("QLabel { background-color: #5DADE2; color: #FDFEFE; font-size: 50px; }"); //blue bg color
+        setStyleSheet("QLabel { background-color: #5DADE2; color: #FDFEFE; font-size: 50px; border-radius: 15px; border: 2px solid #F1C40F; }"); //blue bg color
     }
     if(pressedTimes >= 1000 && pressedTimes < 5000) {
-        setStyleSheet("QLabel { background-color: #7D3C98; color: #FDFEFE; font-size: 50px; }"); //purple bg color
+        setStyleSheet("QLabel { background-color: #7D3C98; color: #FDFEFE; font-size: 50px; border-radius: 15px; border: 2px solid #F1C40F; }"); //purple bg color
     }
     if(pressedTimes >= 5000) {
-        setStyleSheet("QLabel { background-color: #E74C3C; color: #FDFEFE; font-size: 50px; }"); //red bg color
+        setStyleSheet("QLabel { background-color: #E74C3C; color: #FDFEFE; font-size: 50px; border-radius: 15px; border: 2px solid #F1C40F; }"); //red bg color
     }
     if(pressedTimes >= 10000) {
-        setStyleSheet("QLabel { background-color: #A93226; color: #FDFEFE; font-size: 50px; }"); //deep red bg color
+        setStyleSheet("QLabel { background-color: #A93226; color: #FDFEFE; font-size: 50px; border-radius: 15px; border: 2px solid #F1C40F; }"); //deep red bg color
     }
 }
 
