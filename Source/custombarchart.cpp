@@ -35,6 +35,8 @@ CustomBarChart::CustomBarChart()
 
 void CustomBarChart::showLoadingPage()
 {
+    chartView->hide(); //hide chartview to show loading page fulling
+
     loadingLbl->setMovie(loadingMovie);
     loadingMovie->start();
     loadingLbl->show();

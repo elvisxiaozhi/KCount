@@ -159,7 +159,7 @@ void MainWindow::setTrayIcon()
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::trayIconActivated);
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(settingsAction, &QAction::triggered, [this](){ setSettingsPage.resetChanges(); setSettingsPage.show(); });
-    connect(statisticsAction, &QAction::triggered, [this](){ statistics.show();  statistics.loadBarChartData(0); });
+    connect(statisticsAction, &QAction::triggered, [this](){ statistics.show(); });
     connect(updateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/Keyboard-Tracker/releases")); });
     connect(aboutAction, &QAction::triggered, [this](){ setAboutPage.show(); });
     //note the program can be only closed by clicking "Quit" action when the trayIcon is not visible
