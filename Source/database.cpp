@@ -17,13 +17,14 @@ Database::Database(QObject *parent) : QObject(parent)
     makeDataFile(); //make database file
 
     totalPressedTimes = 0; //initiate the total key pressed times
+    readMode = 1; //initiate read database mode by daily
 
     //set database
     QString accessString = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(filePath);
     sqlDatabase = QSqlDatabase::addDatabase("QODBC");
     sqlDatabase.setDatabaseName(accessString);
 
-    readDatabase(2); //read data from database, the read mode is read the data within a day
+    readDatabase(readMode); //read data from database, the read mode is read the data within a day
 
     setTimer(); //set the time, so the database will save automatically in each hour
 
@@ -290,19 +291,19 @@ void Database::readDatabase(int readMode)
         int currentHour = QTime::currentTime().toString("h").toInt();
 
         switch (readMode) {
-        case 1: //read database within an hour
+        case 0: //read database within an hour
             readQueryStr = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
             break;
-        case 2: //read database within a day
+        case 1: //read database within a day
             readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
             break;
-        case 3: //read database within a week
+        case 2: //read database within a week
             readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
-        case 4: //read database within a month
+        case 3: //read database within a month
             readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
-        case 5: //read database within a year
+        case 4: //read database within a year
             readQueryStr = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
@@ -334,7 +335,7 @@ void Database::updateTimer()
     currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
     updateDatabase();
 
-    readDatabase(2); //because in a peroid of time, the data will store to database, and map and vector will be cleared, so when updating database, it needs to re-read data to map and vector
+    readDatabase(readMode); //because in a peroid of time, the data will store to database, and map and vector will be cleared, so when updating database, it needs to re-read data to map and vector
 
     for(int i = 0; i < 4; i++) {
         loadBarChartData(i);

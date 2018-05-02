@@ -19,6 +19,7 @@ public:
     QVector<std::pair<QString, unsigned long int>> mapVector; //store map, in order to sort map value
     QMap<QString, unsigned long int> currentHourPressedKeyMap;
     static QString dataPath;
+    int readMode;
     static void deleteDataFile(QString);
     static void clearDatabase();
     static QSettings appPathSetting;

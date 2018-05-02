@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&setSettingsPage, &Settings::uncheckStartOnBootAct, [this](){ startOnBootAction->setChecked(false); }); //set startOnBootAction unchecked when reset the settings
     connect(&setSettingsPage, &Settings::databaseCleared, [this](){ //when database is cleared, clear map and vector and total pressed times, so the lbls can set to 0
-        database->readDatabase(2);
+        database->readDatabase(database->readMode);
         database->currentHourPressedKeyMap.clear();
         setLblTextAndColor(); //this line is used for refreshing lbls when the main window is activated
     });
@@ -278,5 +278,6 @@ void MainWindow::changeViewMode(int viewMode) //when changing the view mode, re-
 {
     database->updateDatabase();
     database->readDatabase(viewMode);
+    database->readMode = viewMode;
     updateLabels(); //why call updateLabels() instead of setLblTextAndColor(), because this function has sound alert detection, when changing mode, the new nums may reach the sepcific nums
 }
