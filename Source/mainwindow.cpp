@@ -104,9 +104,9 @@ void MainWindow::setLayout()
 void MainWindow::setWindowStyleSheet()
 {
     setStyleSheet(
-                "QMainWindow { background-color: #FAE5D3; }"
-                "QStatusBar { background-color: #EAEDED; font-family: Comic Sans MS; color: #784212; }"
-                ".QToolButton { background-color: #3498DB; font-size: 18px; color: white; border-radius: 15px; border: 2px solid #FF5A5F; padding: 5px 10px; margin: 5px 2px; }"
+                "QMainWindow { background-color: #FAE5D3; font-family: Comic Sans MS; }"
+                "QStatusBar { background-color: #EAEDED; color: #784212; }"
+                ".QToolButton { background-color: #3498DB; font-size: 18px; font-family: Comic Sans MS; color: white; border-radius: 15px; border: 2px solid #FF5A5F; padding: 5px 10px; margin: 5px 2px; }"
                 ".QToolButton:hover { background-color: #BB8FCE; font-size: 20px; }"
                 ".QToolButton:pressed { background-color: #EC7063 }"
                 );
