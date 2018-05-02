@@ -38,6 +38,7 @@ private:
     About setAboutPage;
     Statistics statistics;
     void setLayout();
+    void setWindowStyleSheet();
     void setTrayIcon();
     void setLblTextAndColor();
     void closeEvent(QCloseEvent *);
