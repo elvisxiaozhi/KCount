@@ -15,6 +15,7 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     setWindowTitle("Settings");
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint); //hide message box icon
     setBasicLayout();
+    setWindowStyleSheet();
 
     connect(&setMsBox, &MessageBoxes::resetSettingsConfirmed, [this](){
         resetSettings();
@@ -69,6 +70,20 @@ void Settings::setBasicLayout()
 
     connect(okButton, &QPushButton::clicked, this, &Settings::saveChanges);
     connect(cancelButton, &QPushButton::clicked, [this](){ this->hide(); });
+}
+
+void Settings::setWindowStyleSheet()
+{
+    setStyleSheet(
+                "QWidget { background-color: #FAE5D3; font-family: Comic Sans MS; }"
+                ".QPushButton { background-color: #3498DB; font-size: 15px; color: white; border-radius: 15px; border: 2px solid #FF5A5F; padding: 5px 10px; margin: 5px 2px; }"
+                ".QPushButton:hover { background-color: #BB8FCE; font-size: 18px; padding: 3px 5px; }"
+                ".QPushButton:pressed { background-color: #EC7063 }"
+                "QPushButton#dangerBtn { background-color: #F4F6F6; color: #C0392B; border-radius: 5px;}"
+                "QPushButton#dangerBtn:hover { background-color: #CB4335; color: white; font-size: 16px; }"
+                "QPushButton#dangerBtn:pressed { background-color: #641E16 }"
+                "QGroupBox#dangerGBox { color: #C0392B; font-size: 15px; }"
+                );
 }
 
 void Settings::setGeneralPage()
@@ -133,8 +148,9 @@ void Settings::setSoundAlertLayout()
 
 void Settings::setResetLayout()
 {
-    QGroupBox *resetGBox = new QGroupBox("Reset", this);
+    QGroupBox *resetGBox = new QGroupBox("Danger Zone", this);
     settingsContentVLayout->addWidget(resetGBox);
+    resetGBox->setObjectName("dangerGBox");
 
     QLabel *resetLabel = new QLabel(resetGBox);
     resetLabel->setText("<b>Be Careful!!! None of these actions changes can be undone!!!</b>");
@@ -146,15 +162,19 @@ void Settings::setResetLayout()
 
     QPushButton *resetSettingsBtn = new QPushButton(resetGBox);
     resetSettingsBtn->setText("Reset Settings");
+    resetSettingsBtn->setObjectName("dangerBtn");
 
     QPushButton *clearDatabaseBtn = new QPushButton(resetGBox);
     clearDatabaseBtn->setText("Clear Database");
+    clearDatabaseBtn->setObjectName("dangerBtn");
 
     QPushButton *resetAllBtn = new QPushButton(resetGBox);
     resetAllBtn->setText("Reset All");
+    resetAllBtn->setObjectName("dangerBtn");
 
     QPushButton *deleteAppBtn = new QPushButton(resetGBox);
     deleteAppBtn->setText("Delete App");
+    deleteAppBtn->setObjectName("dangerBtn");
 
     QHBoxLayout *resetBtnHLayout = new QHBoxLayout;
 

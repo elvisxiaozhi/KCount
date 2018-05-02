@@ -6,6 +6,7 @@ About::About(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("About");
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint); //hide message box icon
+    setStyleSheet("QWidget { background-color: #FAE5D3; font-family: Comic Sans MS; }");
 
     mainVLayout = new QVBoxLayout(this);
     this->setLayout(mainVLayout);

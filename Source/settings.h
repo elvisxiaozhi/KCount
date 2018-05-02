@@ -31,6 +31,7 @@ private:
     QString reachingNum;
     MessageBoxes setMsBox;
     void setBasicLayout();
+    void setWindowStyleSheet();
     void setGeneralPage();
     void setSoundAlertLayout();
     void setResetLayout();
