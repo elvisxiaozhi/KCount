@@ -12,6 +12,7 @@ CustomPieChart::CustomPieChart()
     QChart *chart = new QChart();
     chart->setTitle("Frequently Pressed Keys");
     chart->addSeries(series);
+    chart->setAnimationOptions(QChart::AllAnimations);
 
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);

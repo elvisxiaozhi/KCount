@@ -23,10 +23,11 @@ public:
     QWidget *barChartWidget;
     QChartView *chartView;
     QValueAxis *axisY;
-    QLabel *loadingLbl;
+    QLabel *dataLbl, *loadingLbl;
     QMovie *loadingMovie;
     void updateBarChartData(int, QVector<int>);
     void showLoadingPage();
+    void setWindowStyleSheet();
 };
 
 #endif // CUSTOMBARCHART_H

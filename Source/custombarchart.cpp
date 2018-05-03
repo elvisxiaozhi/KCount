@@ -10,9 +10,6 @@ CustomBarChart::CustomBarChart()
 
     barSeries = new QBarSeries();
 
-    this->setTitle("Total Pressed Times");
-    this->setAnimationOptions(QChart::SeriesAnimations);
-
     axis = new QBarCategoryAxis();
     axis->setGridLinePen(Qt::NoPen);
 
@@ -20,8 +17,11 @@ CustomBarChart::CustomBarChart()
     axisY->setLabelFormat("%d"); //format to no decimal
     axisY->setGridLinePen(Qt::NoPen);
 
+    this->setTitle("Total Pressed Times");
+    this->setAnimationOptions(QChart::AllAnimations);
     this->legend()->setVisible(false); //hide the barset
     this->legend()->setAlignment(Qt::AlignBottom);
+    this->setTheme(QChart::ChartThemeBlueIcy);
 
     chartView = new QChartView(this);
     chartView->setRenderHint(QPainter::Antialiasing);
@@ -29,6 +29,9 @@ CustomBarChart::CustomBarChart()
     barChartWidget = new QWidget;
     QVBoxLayout *chartVLayout = new QVBoxLayout(barChartWidget);
     barChartWidget->setLayout(chartVLayout);
+
+    dataLbl = new QLabel;
+    chartVLayout->addWidget(dataLbl);
     chartVLayout->addWidget(chartView);
     chartView->hide();
 
@@ -45,6 +48,11 @@ void CustomBarChart::showLoadingPage()
     loadingLbl->setMovie(loadingMovie);
     loadingMovie->start();
     loadingLbl->show();
+}
+
+void CustomBarChart::setWindowStyleSheet()
+{
+    chartView->setStyleSheet("QChartView {background-color: #FAD7A0;}");
 }
 
 void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
