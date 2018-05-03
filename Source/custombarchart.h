@@ -28,6 +28,9 @@ public:
     void updateBarChartData(int, QVector<int>);
     void showLoadingPage();
     void setWindowStyleSheet();
+
+private:
+    bool IsFirstRun;
 };
 
 #endif // CUSTOMBARCHART_H

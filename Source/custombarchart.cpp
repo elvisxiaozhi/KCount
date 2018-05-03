@@ -14,10 +14,6 @@ CustomBarChart::CustomBarChart()
     axis = new QBarCategoryAxis();
     axis->setGridLinePen(Qt::NoPen);
 
-    axisY = new QValueAxis();
-    axisY->setLabelFormat("%d"); //format to no decimal
-    axisY->setGridLinePen(Qt::NoPen);
-
     this->setTitle("Total Pressed Times");
     this->setAnimationOptions(QChart::AllAnimations);
     this->legend()->setVisible(false); //hide the barset
@@ -48,6 +44,8 @@ CustomBarChart::CustomBarChart()
     loadingLbl->setAlignment(Qt::AlignCenter);
     chartVLayout->addWidget(loadingLbl);
     loadingMovie = new QMovie(":/Icons/Icons/loading.gif");
+
+    IsFirstRun = true;
 }
 
 void CustomBarChart::showLoadingPage()
@@ -66,11 +64,14 @@ void CustomBarChart::setWindowStyleSheet()
 
 void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
 {
-    this->removeSeries(barSeries);
-    this->removeAxis(axis);
-    barSeries->clear();
-    axis->clear();
-    barSet = new QBarSet("Bar Set");
+    if(!IsFirstRun) {
+        this->removeSeries(barSeries);
+        this->removeAxis(axis);
+        barSeries->clear();
+        axis->clear();
+        barSet = new QBarSet("Bar Set");
+        delete axisY;
+    }
 
     switch (choice) {
     case 0: //daily
@@ -113,10 +114,15 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
     this->addSeries(barSeries);
     this->createDefaultAxes();
     this->setAxisX(axis, barSeries);
-    this->setAxisY(axisY, barSeries);
 
+    axisY = new QValueAxis(); //set a new y axis each time when refreashing, or the y axis will not show
+    axisY->setGridLinePen(Qt::NoPen);
+    axisY->setLabelFormat("%d"); //format to no decimal
+    this->setAxisY(axisY, barSeries);
     axisY->applyNiceNumbers(); //it must be after setAcisY()
 
     chartView->show();
     loadingLbl->hide();
+
+    IsFirstRun = false;
 }
