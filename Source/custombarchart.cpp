@@ -1,6 +1,7 @@
 #include "custombarchart.h"
 #include <QtCharts/QLegend>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QDate>
 #include <QDebug>
 
@@ -30,8 +31,16 @@ CustomBarChart::CustomBarChart()
     QVBoxLayout *chartVLayout = new QVBoxLayout(barChartWidget);
     barChartWidget->setLayout(chartVLayout);
 
-    dataLbl = new QLabel;
-    chartVLayout->addWidget(dataLbl);
+    totalLbl = new QLabel;
+    averageLbl = new QLabel;
+    totalLbl->setStyleSheet("QLabel { font-size: 15px; color: #784212; font-family: Comic Sans MS; }");
+    averageLbl->setStyleSheet("QLabel { font-size: 15px; color: #784212; font-family: Comic Sans MS; }");
+    QHBoxLayout *lblHLayout = new QHBoxLayout;
+    lblHLayout->addWidget(totalLbl);
+    lblHLayout->addStretch();
+    lblHLayout->addWidget(averageLbl);
+
+    chartVLayout->addLayout(lblHLayout);
     chartVLayout->addWidget(chartView);
     chartView->hide();
 
@@ -93,6 +102,10 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
     default:
         break;
     }
+
+    int sumUp = std::accumulate(barChartVec.begin(), barChartVec.end(), 0);
+    totalLbl->setText("Total: " + QString::number(sumUp));
+    averageLbl->setText("Average: " + QString::number(sumUp / barChartVec.size()));
 
     barSeries->append(barSet); //then barset and its data to bar seriers
     axis->append(barCategories);

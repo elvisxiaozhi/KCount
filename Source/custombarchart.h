@@ -23,7 +23,7 @@ public:
     QWidget *barChartWidget;
     QChartView *chartView;
     QValueAxis *axisY;
-    QLabel *dataLbl, *loadingLbl;
+    QLabel *totalLbl, *averageLbl, *loadingLbl;
     QMovie *loadingMovie;
     void updateBarChartData(int, QVector<int>);
     void showLoadingPage();
