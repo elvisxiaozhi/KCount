@@ -6,6 +6,7 @@
 #include <QtCharts/QBarSet>
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QBarSeries>
+#include <QtCharts/QValueAxis>
 #include <QLabel>
 #include <QMovie>
 
@@ -21,6 +22,7 @@ public:
     QStringList barCategories;
     QWidget *barChartWidget;
     QChartView *chartView;
+    QValueAxis *axisY;
     QLabel *loadingLbl;
     QMovie *loadingMovie;
     void updateBarChartData(int, QVector<int>);
