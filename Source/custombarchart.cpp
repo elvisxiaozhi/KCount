@@ -86,21 +86,15 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
         break;
     }
 
-//    int maxNumOfVec = *std::max_element(barChartVec.begin(), barChartVec.end());
-//    int digits  = log10(maxNumOfVec);
-//    qDebug() << maxNumOfVec << static_cast<int>(pow(10, digits - 1)) << 852 % static_cast<int>(pow(10, digits - 1));
-
     barSeries->append(barSet); //then barset and its data to bar seriers
     axis->append(barCategories);
 
     this->addSeries(barSeries);
     this->createDefaultAxes();
     this->setAxisX(axis, barSeries);
-
-//    axisY()->setGridLinePen(Qt::NoPen);
-
-//    axisY()->setRange(0, 30000);
     this->setAxisY(axisY, barSeries);
+
+    axisY->applyNiceNumbers(); //it must be after setAcisY()
 
     chartView->show();
     loadingLbl->hide();
