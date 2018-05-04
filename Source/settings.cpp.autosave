@@ -90,7 +90,6 @@ void Settings::setWindowStyleSheet()
 void Settings::setGeneralPage()
 {
     //must initiate first, or the general settings will not show correctly
-//    isSoundAlertCheckBoxChecked = true;
     reachingNum = QString::number(1000);
 
     setSoundAlertLayout();
@@ -144,7 +143,6 @@ void Settings::setSoundAlertLayout()
 
     soundAlertGBox->setLayout(soundAlertVLayout);
 
-//    connect(soundAlertCheckBox, &QCheckBox::clicked, [this](){ isSoundAlertCheckBoxChecked = soundAlertCheckBox->isChecked(); });
     connect(reachingNumEdit, &QLineEdit::textChanged, [this](QString text){ reachingNum = text; });
 }
 
@@ -220,7 +218,6 @@ void Settings::setResetLayout()
 
 void Settings::saveChanges()
 {
-//    settings->setValue("SettingsPage/soundAlertCheckBox", isSoundAlertCheckBoxChecked);
     settings->setValue("SettingsPage/soundAlertCheckBox", soundAlertCheckBox->isChecked());
     settings->setValue("SettingsPage/reachingNumEdit", reachingNum);
     this->hide();
