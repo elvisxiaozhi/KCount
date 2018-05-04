@@ -83,7 +83,7 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
     case 1: //weekly
         for(int i = 6; i >= 0; i--) {
             barCategories.push_back(QDate::currentDate().addDays(-i).toString("d"));
-            barSet->append(barChartVec[i]);
+            barSet->append(barChartVec[6 - i]);
         }
         break;
     case 2: { //monthly
