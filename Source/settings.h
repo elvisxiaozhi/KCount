@@ -19,7 +19,7 @@ class Settings : public QWidget
 public:
     explicit Settings(QWidget *parent = nullptr);
     QCheckBox *soundAlertCheckBox; //MainWindow class need this to check if to make sound alert
-    QLineEdit *reachingNumEdit;
+    QLineEdit *reachingNumEdit; //MainWindow class need this to check the specific num
     static QSettings startOnBootSetting;
 
 private:
@@ -27,8 +27,6 @@ private:
     QVBoxLayout *mainVLayout, *settingsContentVLayout, *generalVLayout;
     QGroupBox *mainGBox;
     QSettings *settings;
-//    bool isSoundAlertCheckBoxChecked;
-    QString reachingNum;
     MessageBoxes setMsBox;
     void setBasicLayout();
     void setWindowStyleSheet();

@@ -89,13 +89,13 @@ void Settings::setWindowStyleSheet()
 
 void Settings::setGeneralPage()
 {
-    //must initiate first, or the general settings will not show correctly
-//    isSoundAlertCheckBoxChecked = true;
-    reachingNum = QString::number(1000);
-
     setSoundAlertLayout();
     setLanguageLayout();
     setResetLayout();
+
+    //must initiate first, or the general settings will not show correctly and it must be below setSoundAlertLayout() function
+    soundAlertCheckBox->setChecked(true);
+    reachingNumEdit->setText(QString::number(1000));
 
     //call resetChanges function when the program run to initiate variables
     //see updateLabels() in MainWinodw to see why
@@ -143,9 +143,6 @@ void Settings::setSoundAlertLayout()
     soundAlertVLayout->addStretch();
 
     soundAlertGBox->setLayout(soundAlertVLayout);
-
-//    connect(soundAlertCheckBox, &QCheckBox::clicked, [this](){ isSoundAlertCheckBoxChecked = soundAlertCheckBox->isChecked(); });
-    connect(reachingNumEdit, &QLineEdit::textChanged, [this](QString text){ reachingNum = text; });
 }
 
 void Settings::setLanguageLayout()
@@ -220,9 +217,8 @@ void Settings::setResetLayout()
 
 void Settings::saveChanges()
 {
-//    settings->setValue("SettingsPage/soundAlertCheckBox", isSoundAlertCheckBoxChecked);
     settings->setValue("SettingsPage/soundAlertCheckBox", soundAlertCheckBox->isChecked());
-    settings->setValue("SettingsPage/reachingNumEdit", reachingNum);
+    settings->setValue("SettingsPage/reachingNumEdit", reachingNumEdit->text());
     this->hide();
 }
 
