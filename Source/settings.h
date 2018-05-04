@@ -13,6 +13,7 @@
 #include <QSpinBox>
 #include "messageboxes.h"
 #include <QComboBox>
+#include <QTranslator>
 
 class Settings : public QWidget
 {
@@ -30,6 +31,8 @@ private:
     QSettings *settings;
     QComboBox *languageBox;
     MessageBoxes setMsBox;
+    QTranslator translator;
+    QString appLanguage;
     void setBasicLayout();
     void setWindowStyleSheet();
     void setGeneralPage();

@@ -68,6 +68,8 @@ void Settings::setBasicLayout()
 
     setGeneralPage();
 
+    appLanguage = QLocale::languageToString(QLocale::system().language());
+
     connect(okButton, &QPushButton::clicked, this, &Settings::saveChanges);
     connect(cancelButton, &QPushButton::clicked, [this](){ this->hide(); });
 }
@@ -213,6 +215,14 @@ void Settings::saveChanges()
     settings->setValue("SettingsPage/reachingNumEdit", reachingNumEdit->text());
     settings->setValue("SettingsPage/languageBox", languageBox->currentText());
     this->hide();
+
+    if(appLanguage != languageBox->currentText()) {
+        appLanguage = languageBox->currentText();
+//        translator.load("../Source/Language-Pack_zh-CN.qm");
+//        qApp->installTranslator(&translator);
+//        qApp->processEvents();
+        qDebug() << appLanguage;
+    }
 }
 
 void Settings::showResetSettingsMsBox()
