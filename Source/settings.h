@@ -12,6 +12,7 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include "messageboxes.h"
+#include <QComboBox>
 
 class Settings : public QWidget
 {
@@ -27,6 +28,7 @@ private:
     QVBoxLayout *mainVLayout, *settingsContentVLayout, *generalVLayout;
     QGroupBox *mainGBox;
     QSettings *settings;
+    QComboBox *languageBox;
     MessageBoxes setMsBox;
     void setBasicLayout();
     void setWindowStyleSheet();

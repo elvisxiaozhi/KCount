@@ -7,7 +7,6 @@
 #include "database.h"
 #include <QProcess>
 #include <QApplication>
-#include <QComboBox>
 
 QSettings Settings::startOnBootSetting("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 
@@ -93,14 +92,7 @@ void Settings::setGeneralPage()
     setLanguageLayout();
     setResetLayout();
 
-    //must initiate first, or the general settings will not show correctly and it must be below setSoundAlertLayout() function
-    soundAlertCheckBox->setChecked(true);
-    reachingNumEdit->setText(QString::number(1000));
-
-    //call resetChanges function when the program run to initiate variables
-    //see updateLabels() in MainWinodw to see why
-    //because if this function does not call, setSettingsPage.reachingNumEdit->text().toInt() will be 0 when the program run and the program will crash when reset the value to reachingNumEdit
-    resetChanges();
+    resetChanges(); //this function is used to initiate settings page
 }
 
 void Settings::setSoundAlertLayout()
@@ -153,7 +145,7 @@ void Settings::setLanguageLayout()
     QLabel *languageLbl = new QLabel(languageGBox);
     languageLbl->setText(tr("Change app language to "));
 
-    QComboBox *languageBox = new QComboBox(languageGBox);
+    languageBox = new QComboBox(languageGBox);
     languageBox->addItem(tr("English"));
     languageBox->addItem(tr("Chinese"));
 
@@ -219,6 +211,7 @@ void Settings::saveChanges()
 {
     settings->setValue("SettingsPage/soundAlertCheckBox", soundAlertCheckBox->isChecked());
     settings->setValue("SettingsPage/reachingNumEdit", reachingNumEdit->text());
+    settings->setValue("SettingsPage/languageBox", languageBox->currentText());
     this->hide();
 }
 
@@ -266,9 +259,13 @@ void Settings::deleteApp()
 
 void Settings::resetSettings()
 {
-    settings->remove("SettingsPage");
+    settings->clear();
     startOnBootSetting.remove("KCount");
     Database::appPathSetting.remove("AppPath");
+    //must initate the three lines below when resetting settings page
+    soundAlertCheckBox->setChecked(true);
+    reachingNumEdit->setText(QString::number(1000));
+    languageBox->setCurrentText("English");
     emit uncheckStartOnBootAct();
 }
 
@@ -285,7 +282,6 @@ QString Settings::writeBatFile()
     if(batFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
         QTextStream textStream(&batFile);
         textStream << QString("@RD /S /Q \"%1\"").arg(Database::appPathSetting.value("AppPath").toString());
-        qDebug() << "Done";
     }
     else {
         qDebug() << batFile.errorString();
@@ -313,5 +309,12 @@ void Settings::resetChanges()
     }
     else {
         reachingNumEdit->setText(QString::number(1000));
+    }
+
+    if(settings->value("SettingsPage/languageBox").isValid()) {
+        languageBox->setCurrentText(settings->value("SettingsPage/languageBox").toString());
+    }
+    else {
+        languageBox->setCurrentText("English");
     }
 }
