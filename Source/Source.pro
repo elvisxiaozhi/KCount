@@ -57,3 +57,5 @@ HEADERS += \
 
 RESOURCES += \
     ../Resources/resources.qrc
+
+TRANSLATIONS += Language-Pack_zh-CN.ts

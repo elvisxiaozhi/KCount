@@ -81,20 +81,20 @@ void MainWindow::setLayout()
     btnHLayout->addWidget(nextPageBtn);
     nextPageBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     nextPageBtn->setIcon(QIcon(":/Icons/Icons/next.png"));
-    nextPageBtn->setText("Next");
+    nextPageBtn->setText(tr("Next"));
     nextPageBtn->setLayoutDirection(Qt::RightToLeft);
 
     previousPageBtn = new QToolButton(mainWidget);
     btnHLayout->addWidget(previousPageBtn);
     previousPageBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     previousPageBtn->setIcon(QIcon(":/Icons/Icons/back.png"));
-    previousPageBtn->setText("Back");
+    previousPageBtn->setText(tr("Back"));
     previousPageBtn->hide();
 
     QSpacerItem *rightBtnSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
     btnHLayout->addSpacerItem(rightBtnSpacer);
 
-    statusBar()->showMessage("Total Pressed");
+    statusBar()->showMessage(tr("Total Pressed"));
 
     connect(totalPressedTimesLabel, &Label::viewModeChanged, this, &MainWindow::changeViewMode);
     connect(nextPageBtn, &QToolButton::clicked, this, &MainWindow::showNextPage);
@@ -257,7 +257,7 @@ void MainWindow::showNextPage()
         frequentlyPressedKeys[i]->show();
     }
 
-    statusBar()->showMessage("Frequently Pressed");
+    statusBar()->showMessage(tr("Frequently Pressed"));
     QSound::play(":/Sounds/Sounds/click.wav"); //sound after everything
 }
 
@@ -270,7 +270,7 @@ void MainWindow::showPreviousPage()
         frequentlyPressedKeys[i]->hide();
     }
 
-    statusBar()->showMessage("Total Pressed");
+    statusBar()->showMessage(tr("Total Pressed"));
     QSound::play(":/Sounds/Sounds/click.wav");
 }
 

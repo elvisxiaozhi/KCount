@@ -10,7 +10,7 @@ CustomPieChart::CustomPieChart()
     series = new QPieSeries();
 
     QChart *chart = new QChart();
-    chart->setTitle("Frequently Pressed Keys");
+    chart->setTitle(QObject::tr("Frequently Pressed Keys"));
     chart->addSeries(series);
     chart->setAnimationOptions(QChart::AllAnimations);
 

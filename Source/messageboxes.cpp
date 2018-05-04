@@ -44,7 +44,7 @@ void MessageBoxes::showQuestionMsBox(int msBoxType)
 
 void MessageBoxes::showSuccessMsBox()
 {
-    successMsBox.setWindowTitle("Action Succeeded");
+    successMsBox.setWindowTitle(tr("Action Succeeded"));
     successMsBox.setIcon(QMessageBox::Information);
     successMsBox.setStandardButtons(QMessageBox::Ok);
     successMsBox.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

@@ -16,7 +16,7 @@ Statistics::Statistics(QWidget *parent) : QMainWindow(parent)
 
 void Statistics::setLayout()
 {
-    setWindowTitle("Statistics");
+    setWindowTitle(tr("Statistics"));
     setWindowIcon(QIcon(":/Icons/Icons/bar_chart.png"));
 
     mainWidget = new QWidget(this);
@@ -77,10 +77,10 @@ void Statistics::setBarChart()
         barChartArr[i] = new CustomBarChart;
     }
 
-    barTabWidget->addTab(barChartArr[0]->barChartWidget, "Day");
-    barTabWidget->addTab(barChartArr[1]->barChartWidget, "Week");
-    barTabWidget->addTab(barChartArr[2]->barChartWidget, "Month");
-    barTabWidget->addTab(barChartArr[3]->barChartWidget, "Year");
+    barTabWidget->addTab(barChartArr[0]->barChartWidget, tr("Day"));
+    barTabWidget->addTab(barChartArr[1]->barChartWidget, tr("Week"));
+    barTabWidget->addTab(barChartArr[2]->barChartWidget, tr("Month"));
+    barTabWidget->addTab(barChartArr[3]->barChartWidget, tr("Year"));
 }
 
 void Statistics::setPieChart()
@@ -89,11 +89,11 @@ void Statistics::setPieChart()
         pieChartArr[i] = new CustomPieChart;
     }
 
-    pieTabWidget->addTab(pieChartArr[0]->pieChartWidget, "Hour");
-    pieTabWidget->addTab(pieChartArr[1]->pieChartWidget, "Day");
-    pieTabWidget->addTab(pieChartArr[2]->pieChartWidget, "Week");
-    pieTabWidget->addTab(pieChartArr[3]->pieChartWidget, "Month");
-    pieTabWidget->addTab(pieChartArr[4]->pieChartWidget, "Year");
+    pieTabWidget->addTab(pieChartArr[0]->pieChartWidget, tr("Hour"));
+    pieTabWidget->addTab(pieChartArr[1]->pieChartWidget, tr("Day"));
+    pieTabWidget->addTab(pieChartArr[2]->pieChartWidget, tr("Week"));
+    pieTabWidget->addTab(pieChartArr[3]->pieChartWidget, tr("Month"));
+    pieTabWidget->addTab(pieChartArr[4]->pieChartWidget, tr("Year"));
 }
 
 void Statistics::updateBarChart(int index, QVector<int> barChartVec)

@@ -12,25 +12,25 @@ QSettings Settings::startOnBootSetting("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\
 
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
-    setWindowTitle("Settings");
+    setWindowTitle(tr("Settings"));
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint); //hide message box icon
     setBasicLayout();
     setWindowStyleSheet();
 
     connect(&setMsBox, &MessageBoxes::resetSettingsConfirmed, [this](){
         resetSettings();
-        setMsBox.successMsBox.setText("Settings have been reset.");
+        setMsBox.successMsBox.setText(tr("Settings have been reset."));
         setMsBox.showSuccessMsBox();
     });
     connect(&setMsBox, &MessageBoxes::clearDatabaseConfirmed, [this](){
         Database::clearDatabase();
-        setMsBox.successMsBox.setText("Database has been cleared.");
+        setMsBox.successMsBox.setText(tr("Database has been cleared."));
         setMsBox.showSuccessMsBox();
         emit databaseCleared();
     });
     connect(&setMsBox, &MessageBoxes::resetAllConfirmed, [this](){
         resetAll(); //because resetAll() function needs to call resetSettings() and clearDatabase() and does not want showSuccessMsBox()
-        setMsBox.successMsBox.setText("Everything has been reset to default.");
+        setMsBox.successMsBox.setText(tr("Everything has been reset to default."));
         setMsBox.showSuccessMsBox();
     });
     connect(&setMsBox, &MessageBoxes::deleteAppConfirmed, this, &Settings::deleteApp);
@@ -55,9 +55,9 @@ void Settings::setBasicLayout()
     mainGBox->setLayout(settingsContentVLayout);
 
     QPushButton *okButton = new QPushButton(this);
-    okButton->setText("Ok");
+    okButton->setText(tr("Ok"));
     QPushButton *cancelButton = new QPushButton(this);
-    cancelButton->setText("Cancel");
+    cancelButton->setText(tr("Cancel"));
 
     QHBoxLayout *bottomBtnHLayout = new QHBoxLayout;
     bottomBtnHLayout->addStretch(1);
@@ -107,7 +107,7 @@ void Settings::setSoundAlertLayout()
     settingsContentVLayout->addWidget(soundAlertGBox);
 
     QLabel *soundAlertLabel = new QLabel(soundAlertGBox);
-    soundAlertLabel->setText("Sound alert when reaching specific numbers");
+    soundAlertLabel->setText(tr("Sound alert when reaching specific numbers"));
 
     soundAlertCheckBox = new QCheckBox(soundAlertGBox);
 
@@ -119,14 +119,14 @@ void Settings::setSoundAlertLayout()
     soundAlertHLayout->addStretch();
 
     QLabel *reachingNumLbl = new QLabel(soundAlertCheckBox);
-    reachingNumLbl->setText("Make a sound when reaching each: ");
+    reachingNumLbl->setText(tr("Make a sound when reaching each: "));
 
     reachingNumEdit = new QLineEdit(soundAlertCheckBox);
     reachingNumEdit->setFixedWidth(50);
     reachingNumEdit->setValidator(new QIntValidator(1, 10000, reachingNumEdit));
 
     QLabel *reachingNumUnit = new QLabel(soundAlertCheckBox);
-    reachingNumUnit->setText("Presses");
+    reachingNumUnit->setText(tr("Presses"));
 
     QHBoxLayout *reachingNumHLayout = new QHBoxLayout;
     reachingNumHLayout->addWidget(reachingNumLbl);
@@ -148,12 +148,12 @@ void Settings::setSoundAlertLayout()
 
 void Settings::setResetLayout()
 {
-    QGroupBox *resetGBox = new QGroupBox("Danger Zone", this);
+    QGroupBox *resetGBox = new QGroupBox(tr("Danger Zone"), this);
     settingsContentVLayout->addWidget(resetGBox);
     resetGBox->setObjectName("dangerGBox");
 
     QLabel *resetLabel = new QLabel(resetGBox);
-    resetLabel->setText("<b>Be Careful!!! None of these actions changes can be undone!!!</b>");
+    resetLabel->setText(tr("<b>Be Careful!!! None of these actions changes can be undone!!!</b>"));
 
     QHBoxLayout *resetLblHLayout = new QHBoxLayout;
     resetLblHLayout->addStretch();
@@ -161,19 +161,19 @@ void Settings::setResetLayout()
     resetLblHLayout->addStretch();
 
     QPushButton *resetSettingsBtn = new QPushButton(resetGBox);
-    resetSettingsBtn->setText("Reset Settings");
+    resetSettingsBtn->setText(tr("Reset Settings"));
     resetSettingsBtn->setObjectName("dangerBtn");
 
     QPushButton *clearDatabaseBtn = new QPushButton(resetGBox);
-    clearDatabaseBtn->setText("Clear Database");
+    clearDatabaseBtn->setText(tr("Clear Database"));
     clearDatabaseBtn->setObjectName("dangerBtn");
 
     QPushButton *resetAllBtn = new QPushButton(resetGBox);
-    resetAllBtn->setText("Reset All");
+    resetAllBtn->setText(tr("Reset All"));
     resetAllBtn->setObjectName("dangerBtn");
 
     QPushButton *deleteAppBtn = new QPushButton(resetGBox);
-    deleteAppBtn->setText("Delete App");
+    deleteAppBtn->setText(tr("Delete App"));
     deleteAppBtn->setObjectName("dangerBtn");
 
     QHBoxLayout *resetBtnHLayout = new QHBoxLayout;
@@ -205,31 +205,31 @@ void Settings::saveChanges()
 
 void Settings::showResetSettingsMsBox()
 {
-    setMsBox.questionMsBox.setWindowTitle("Reset Settings");
-    setMsBox.questionMsBox.setText("Are you sure you want to reset all the settings?");
+    setMsBox.questionMsBox.setWindowTitle(tr("Reset Settings"));
+    setMsBox.questionMsBox.setText(tr("Are you sure you want to reset all the settings?"));
     setMsBox.showQuestionMsBox(1);
 }
 
 void Settings::showClearDatabaseMsbox()
 {
-    setMsBox.questionMsBox.setWindowTitle("Clear DataBase");
-    setMsBox.questionMsBox.setText("Are you sure you want to clear the database?");
+    setMsBox.questionMsBox.setWindowTitle(tr("Clear DataBase"));
+    setMsBox.questionMsBox.setText(tr("Are you sure you want to clear the database?"));
     setMsBox.showQuestionMsBox(2);
 }
 
 void Settings::showResetAllMsBox()
 {
-    setMsBox.questionMsBox.setWindowTitle("Reset All");
-    setMsBox.questionMsBox.setText("Are you sure you want to reset everything?");
-    setMsBox.questionMsBox.setDetailedText("This will reset all your settings, clear the datebase and delete all the user data.");
+    setMsBox.questionMsBox.setWindowTitle(tr("Reset All"));
+    setMsBox.questionMsBox.setText(tr("Are you sure you want to reset everything?"));
+    setMsBox.questionMsBox.setDetailedText(tr("This will reset all your settings, clear the datebase and delete all the user data."));
     setMsBox.showQuestionMsBox(3);
 }
 
 void Settings::showDeleteAppMsBox()
 {
-    setMsBox.questionMsBox.setWindowTitle("Delete App");
-    setMsBox.questionMsBox.setText("Are you sure you want to delete this app?");
-    setMsBox.questionMsBox.setDetailedText("This will delete this app and everything relevant to this app completely.");
+    setMsBox.questionMsBox.setWindowTitle(tr("Delete App"));
+    setMsBox.questionMsBox.setText(tr("Are you sure you want to delete this app?"));
+    setMsBox.questionMsBox.setDetailedText(tr("This will delete this app and everything relevant to this app completely."));
     setMsBox.showQuestionMsBox(4);
 }
 
@@ -237,7 +237,7 @@ void Settings::deleteApp()
 {
     QString batFilePath = writeBatFile();
     resetAll();
-    setMsBox.successMsBox.setText("KCount has been successfully removed from this computer");
+    setMsBox.successMsBox.setText(tr("KCount has been successfully removed from this computer"));
     setMsBox.successMsBox.setInformativeText("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/KCount/releases'>website</a>.");
     setMsBox.showSuccessMsBox();
 

@@ -37,22 +37,22 @@ void Label::setContextMenu()
 {
     QMenu *contextMenu = new QMenu(this);
 
-    QMenu *viewMenu = new QMenu("View", contextMenu);
+    QMenu *viewMenu = new QMenu(tr("View"), contextMenu);
     contextMenu->addMenu(viewMenu);
 
-    hourAct = new QAction("Hour", viewMenu);
+    hourAct = new QAction(tr("Hour"), viewMenu);
     hourAct->setCheckable(true);
 
-    dayAct = new QAction("Day", viewMenu);
+    dayAct = new QAction(tr("Day"), viewMenu);
     dayAct->setCheckable(true);
 
-    weekAct = new QAction("Week", viewMenu);
+    weekAct = new QAction(tr("Week"), viewMenu);
     weekAct->setCheckable(true);
 
-    monthAct = new QAction("Month", viewMenu);
+    monthAct = new QAction(tr("Month"), viewMenu);
     monthAct->setCheckable(true);
 
-    yearAct = new QAction("Year", viewMenu);
+    yearAct = new QAction(tr("Year"), viewMenu);
     yearAct->setCheckable(true);
 
     QActionGroup *viewChoiceGroup = new QActionGroup(viewMenu);

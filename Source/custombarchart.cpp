@@ -14,7 +14,7 @@ CustomBarChart::CustomBarChart()
     axis = new QBarCategoryAxis();
     axis->setGridLinePen(Qt::NoPen);
 
-    this->setTitle("Total Pressed Times");
+    this->setTitle(tr("Total Pressed Times"));
     this->setAnimationOptions(QChart::AllAnimations);
     this->legend()->setVisible(false); //hide the barset
     this->legend()->setAlignment(Qt::AlignBottom);
