@@ -10,7 +10,7 @@
 
 QSqlDatabase Database::sqlDatabase;
 QString Database::dataPath;
-QSettings Database::appPathSetting("My Computer", "KCount");
+QSettings Database::appPathSetting("My Company", "KCount");
 
 Database::Database(QObject *parent) : QObject(parent)
 {

@@ -7,8 +7,10 @@
 #include "database.h"
 #include <QProcess>
 #include <QApplication>
+#include <initialisation.h>
 
 QSettings Settings::startOnBootSetting("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+QSettings Settings::languageSettings("My Company", "KCount");
 
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
@@ -67,8 +69,6 @@ void Settings::setBasicLayout()
     mainVLayout->addLayout(bottomBtnHLayout);
 
     setGeneralPage();
-
-    appLanguage = QLocale::languageToString(QLocale::system().language());
 
     connect(okButton, &QPushButton::clicked, this, &Settings::saveChanges);
     connect(cancelButton, &QPushButton::clicked, [this](){ this->hide(); });
@@ -213,16 +213,8 @@ void Settings::saveChanges()
 {
     settings->setValue("SettingsPage/soundAlertCheckBox", soundAlertCheckBox->isChecked());
     settings->setValue("SettingsPage/reachingNumEdit", reachingNumEdit->text());
-    settings->setValue("SettingsPage/languageBox", languageBox->currentText());
     this->hide();
-
-    if(appLanguage != languageBox->currentText()) {
-        appLanguage = languageBox->currentText();
-//        translator.load("../Source/Language-Pack_zh-CN.qm");
-//        qApp->installTranslator(&translator);
-//        qApp->processEvents();
-        qDebug() << appLanguage;
-    }
+    Initialisation::settings.setValue("InitSettings/Language", languageBox->currentText());
 }
 
 void Settings::showResetSettingsMsBox()
@@ -259,7 +251,7 @@ void Settings::deleteApp()
 {
     QString batFilePath = writeBatFile();
     resetAll();
-    setMsBox.successMsBox.setText(tr("KCount has been successfully removed from this computer"));
+    setMsBox.successMsBox.setText(tr("KCount has been successfully removed from this Company"));
     setMsBox.successMsBox.setInformativeText("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/KCount/releases'>website</a>.");
     setMsBox.showSuccessMsBox();
 
@@ -272,6 +264,7 @@ void Settings::resetSettings()
     settings->clear();
     startOnBootSetting.remove("KCount");
     Database::appPathSetting.remove("AppPath");
+    Initialisation::settings.clear();
     //must initate the three lines below when resetting settings page
     soundAlertCheckBox->setChecked(true);
     reachingNumEdit->setText(QString::number(1000));
@@ -321,8 +314,8 @@ void Settings::resetChanges()
         reachingNumEdit->setText(QString::number(1000));
     }
 
-    if(settings->value("SettingsPage/languageBox").isValid()) {
-        languageBox->setCurrentText(settings->value("SettingsPage/languageBox").toString());
+    if(Initialisation::settings.value("InitSettings/Language").isValid()) {
+        languageBox->setCurrentText(Initialisation::settings.value("InitSettings/Language").toString());
     }
     else {
         languageBox->setCurrentText("English");

@@ -37,6 +37,7 @@ private:
     Settings setSettingsPage;
     About setAboutPage;
     Statistics statistics;
+    void setLanguage();
     void setLayout();
     void setWindowStyleSheet();
     void setTrayIcon();

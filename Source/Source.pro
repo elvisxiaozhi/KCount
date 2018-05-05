@@ -8,6 +8,7 @@ QT       += core gui
 QT += sql
 QT += multimedia
 QT += charts
+
 RC_ICONS = letter_k.ico
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -39,7 +40,8 @@ SOURCES += \
     messageboxes.cpp \
     statistics.cpp \
     custombarchart.cpp \
-    custompiechart.cpp
+    custompiechart.cpp \
+    initialisation.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -53,7 +55,8 @@ HEADERS += \
     messageboxes.h \
     statistics.h \
     custombarchart.h \
-    custompiechart.h
+    custompiechart.h \
+    initialisation.h
 
 RESOURCES += \
     ../Resources/resources.qrc

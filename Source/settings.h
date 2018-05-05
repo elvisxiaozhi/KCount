@@ -13,7 +13,6 @@
 #include <QSpinBox>
 #include "messageboxes.h"
 #include <QComboBox>
-#include <QTranslator>
 
 class Settings : public QWidget
 {
@@ -23,6 +22,7 @@ public:
     QCheckBox *soundAlertCheckBox; //MainWindow class need this to check if to make sound alert
     QLineEdit *reachingNumEdit; //MainWindow class need this to check the specific num
     static QSettings startOnBootSetting;
+    static QSettings languageSettings;
 
 private:
     void closeEvent(QCloseEvent *);
@@ -31,8 +31,6 @@ private:
     QSettings *settings;
     QComboBox *languageBox;
     MessageBoxes setMsBox;
-    QTranslator translator;
-    QString appLanguage;
     void setBasicLayout();
     void setWindowStyleSheet();
     void setGeneralPage();
