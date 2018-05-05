@@ -7,10 +7,10 @@
 #include <QDate>
 #include <QTime>
 #include "signalemitter.h"
+#include "initialisation.h"
 
 QSqlDatabase Database::sqlDatabase;
 QString Database::dataPath;
-QSettings Database::appPathSetting("My Company", "KCount");
 
 Database::Database(QObject *parent) : QObject(parent)
 {
@@ -179,13 +179,13 @@ void Database::makeDataFile()
 
     filePath = dataPath + "/UserData.mdb";
     if(!QFile().exists(filePath)) {
-        if(appPathSetting.value("DataPath").isValid()) {
-            QFile::copy(appPathSetting.value("AppPath").toString() + "/UserData.mdb", filePath);
+        if(Initialisation::settings.value("InitSettings/AppPath").isValid()) {
+            QFile::copy(Initialisation::settings.value("InitSettings/AppPath").toString() + "/UserData.mdb", filePath);
         }
         else {
             QFile::copy(QDir::currentPath() + "/UserData.mdb", filePath);
         }
-        appPathSetting.setValue("AppPath", QDir::currentPath());
+        Initialisation::settings.setValue("InitSettings/AppPath", QDir::currentPath());
     }
 }
 

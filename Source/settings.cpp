@@ -263,7 +263,6 @@ void Settings::resetSettings()
 {
     settings->clear();
     startOnBootSetting.remove("KCount");
-    Database::appPathSetting.remove("AppPath");
     Initialisation::settings.clear();
     //must initate the three lines below when resetting settings page
     soundAlertCheckBox->setChecked(true);
@@ -280,11 +279,11 @@ void Settings::resetAll()
 
 QString Settings::writeBatFile()
 {
-    QString batFilePath = QString(Database::appPathSetting.value("AppPath").toString() + "/%1.bat").arg("Delete KCount");
+    QString batFilePath = QString(Initialisation::settings.value("InitSettings/AppPath").toString() + "/%1.bat").arg("Delete KCount");
     QFile batFile(batFilePath);
     if(batFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
         QTextStream textStream(&batFile);
-        textStream << QString("@RD /S /Q \"%1\"").arg(Database::appPathSetting.value("AppPath").toString());
+        textStream << QString("@RD /S /Q \"%1\"").arg(Initialisation::settings.value("InitSettings/AppPath").toString());
     }
     else {
         qDebug() << batFile.errorString();

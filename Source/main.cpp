@@ -9,9 +9,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QTranslator CHTranslator;
-    CHTranslator.load("../Source/Language-Pack_zh-CN.qm");
+    CHTranslator.load(Initialisation::settings.value("InitSettings/AppPath").toString() + "/Language-Pack_zh-CN.qm");
 
-    qDebug() << Initialisation::settings.value("InitSettings/Language").toString();
     if(Initialisation::settings.value("InitSettings/Language").isValid()) {
         if(Initialisation::settings.value("InitSettings/Language").toString() == "Chinese") {
             a.installTranslator(&CHTranslator);

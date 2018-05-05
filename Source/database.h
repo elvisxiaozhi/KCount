@@ -22,7 +22,6 @@ public:
     int readMode;
     static void deleteDataFile(QString);
     static void clearDatabase();
-    static QSettings appPathSetting;
 
 private:
     QString filePath;
