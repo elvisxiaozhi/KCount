@@ -213,8 +213,12 @@ void Settings::saveChanges()
 {
     settings->setValue("SettingsPage/soundAlertCheckBox", soundAlertCheckBox->isChecked());
     settings->setValue("SettingsPage/reachingNumEdit", reachingNumEdit->text());
-    this->hide();
-    Initialisation::settings.setValue("InitSettings/Language", languageBox->currentText());
+    if(Initialisation::settings.value("InitSettings/Language").toString() != languageBox->currentText()) {
+        Initialisation::settings.setValue("InitSettings/Language", languageBox->currentText());
+        setMsBox.successMsBox.setText(tr("Changed Language will be apply next time you run this app."));
+        setMsBox.showSuccessMsBox();
+    }
+    this->hide(); //this must be after setMsBox.showSuccessMsBox() is called
 }
 
 void Settings::showResetSettingsMsBox()

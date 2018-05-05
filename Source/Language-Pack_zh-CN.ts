@@ -229,7 +229,7 @@
     </message>
     <message>
         <location filename="settings.cpp" line="177"/>
-        <location filename="settings.cpp" line="222"/>
+        <location filename="settings.cpp" line="226"/>
         <source>Reset Settings</source>
         <translation>重置设置</translation>
     </message>
@@ -240,53 +240,58 @@
     </message>
     <message>
         <location filename="settings.cpp" line="185"/>
-        <location filename="settings.cpp" line="236"/>
+        <location filename="settings.cpp" line="240"/>
         <source>Reset All</source>
         <translation>重置所有</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="189"/>
-        <location filename="settings.cpp" line="244"/>
+        <location filename="settings.cpp" line="248"/>
         <source>Delete App</source>
         <translation>删除软件</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="223"/>
+        <location filename="settings.cpp" line="219"/>
+        <source>Changed Language will apply next when you run this app.</source>
+        <translation>语言会在下次启动软件时更改。</translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="227"/>
         <source>Are you sure you want to reset all the settings?</source>
         <translation>你确定你要重置所有设置吗？</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="229"/>
+        <location filename="settings.cpp" line="233"/>
         <source>Clear DataBase</source>
         <translation>清空数据库</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="230"/>
+        <location filename="settings.cpp" line="234"/>
         <source>Are you sure you want to clear the database?</source>
         <translation>你确定你要清空数据库吗？</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="237"/>
+        <location filename="settings.cpp" line="241"/>
         <source>Are you sure you want to reset everything?</source>
         <translation>你确定你要重置所有吗？</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="238"/>
+        <location filename="settings.cpp" line="242"/>
         <source>This will reset all your settings, clear the datebase and delete all the user data.</source>
         <translation>此项操作会重置所有设置，清空数据库并删除所有用户数据。</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="245"/>
+        <location filename="settings.cpp" line="249"/>
         <source>Are you sure you want to delete this app?</source>
         <translation>你确定要删除此软件吗？</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="246"/>
+        <location filename="settings.cpp" line="250"/>
         <source>This will delete this app and everything relevant to this app completely.</source>
         <translation>这项操作会删除软件和所有与软件相关的文件。</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="254"/>
+        <location filename="settings.cpp" line="258"/>
         <source>KCount has been successfully removed from this Company</source>
         <translation>KCount成功地从此电脑移除了</translation>
     </message>
