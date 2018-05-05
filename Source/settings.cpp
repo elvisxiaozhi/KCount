@@ -99,7 +99,7 @@ void Settings::setGeneralPage()
 
 void Settings::setSoundAlertLayout()
 {
-    QGroupBox *soundAlertGBox = new QGroupBox("Sound Alert", this);
+    QGroupBox *soundAlertGBox = new QGroupBox(tr("Sound Alert"), this);
     settingsContentVLayout->addWidget(soundAlertGBox);
 
     QLabel *soundAlertLabel = new QLabel(soundAlertGBox);

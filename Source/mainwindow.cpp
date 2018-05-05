@@ -121,7 +121,7 @@ void MainWindow::setTrayIcon()
     QMenu *trayIconMenu = new QMenu;
     trayIcon->setContextMenu(trayIconMenu);
 
-    startOnBootAction = new QAction("Start on Boot", trayIcon);
+    startOnBootAction = new QAction(tr("Start on Boot"), trayIcon);
     trayIconMenu->addAction(startOnBootAction);
     startOnBootAction->setCheckable(true);
 
@@ -129,30 +129,30 @@ void MainWindow::setTrayIcon()
         startOnBootAction->setChecked(true);
     }
 
-    QAction *settingsAction = new QAction("Settings", trayIconMenu);
+    QAction *settingsAction = new QAction(tr("Settings"), trayIconMenu);
     trayIconMenu->addAction(settingsAction);
     settingsAction->setIcon(QIcon(":/Icons/Icons/settings.png"));
 
-    QAction *statisticsAction = new QAction("Statistics", trayIconMenu);
+    QAction *statisticsAction = new QAction(tr("Statistics"), trayIconMenu);
     trayIconMenu->addAction(statisticsAction);
     statisticsAction->setIcon(QIcon(":/Icons/Icons/stastistics.png"));
 
-    QMenu *helpMenu = new QMenu("Help");
+    QMenu *helpMenu = new QMenu(tr("Help"));
     trayIconMenu->addMenu(helpMenu);
-    QAction *feedbackAction = new QAction("Feedback", helpMenu);
+    QAction *feedbackAction = new QAction(tr("Feedback"), helpMenu);
     helpMenu->addAction(feedbackAction);
     feedbackAction->setIcon(QIcon(":/Icons/Icons/feedback.png"));
-    QAction *updateAction = new QAction("Update", helpMenu);
+    QAction *updateAction = new QAction(tr("Update"), helpMenu);
     helpMenu->addAction(updateAction);
     updateAction->setIcon(QIcon(":/Icons/Icons/update.png"));
-    QAction *aboutAction = new QAction("About", helpMenu);
+    QAction *aboutAction = new QAction(tr("About"), helpMenu);
     helpMenu->addAction(aboutAction);
     aboutAction->setIcon(QIcon(":/Icons/Icons/about.png"));
-    QAction *donateAction = new QAction("Donate", helpMenu);
+    QAction *donateAction = new QAction(tr("Donate"), helpMenu);
     helpMenu->addAction(donateAction);
     donateAction->setIcon(QIcon(":/Icons/Icons/donation.png"));
 
-    QAction *quitAction = new QAction("Quit", trayIconMenu);
+    QAction *quitAction = new QAction(tr("Quit"), trayIconMenu);
     trayIconMenu->addAction(quitAction);
     quitAction->setIcon(QIcon(":/Icons/Icons/quit.png"));
 
