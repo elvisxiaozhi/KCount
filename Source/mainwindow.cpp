@@ -22,10 +22,10 @@ MainWindow::MainWindow(QWidget *parent)
     setTrayIcon();
     setDatabaseThread();
 
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; ++i) {
         statistics.loadBarChartData(i);
     }
-    for(int i = 0; i < 5; i++) {
+    for(int i = 0; i < 5; ++i) {
         statistics.loadPieChartData(i);
     }
 
@@ -60,7 +60,7 @@ void MainWindow::setLayout()
     lblsVLayout->addWidget(totalPressedTimesLabel);
 
     frequentlyPressedKeys.resize(5);
-    for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
+    for(int i = 0; i < frequentlyPressedKeys.size(); ++i) {
         frequentlyPressedKeys[i] = new Label;
         lblsVLayout->addWidget(frequentlyPressedKeys[i]);
         frequentlyPressedKeys[i]->hide();
@@ -174,14 +174,14 @@ void MainWindow::setLblTextAndColor()
     //set most frequently pressed times lbls
     //if mapVector is empty, which means there is no most frequently pressed key
     if(database->mapVector.isEmpty()) {
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 5; ++i) {
             frequentlyPressedKeys[i]->setText(""); //then set the top five most frequently lbls text to blank
             frequentlyPressedKeys[i]->setLblColor(0); //then set the frequently pressed keys colors to the default color
         }
     }
     //if mapVector is more than 5 elements
     if(database->mapVector.size() > 5) {
-        for(int i = 0; i < 5; i++) { //then set the top five most frequently pressed times keys to lbls
+        for(int i = 0; i < 5; ++i) { //then set the top five most frequently pressed times keys to lbls
             frequentlyPressedKeys[i]->setText(database->mapVector[i].first + ": " + QString::number(database->mapVector[i].second));
             frequentlyPressedKeys[i]->setLblColor(database->mapVector[i].second);
         }
@@ -189,12 +189,12 @@ void MainWindow::setLblTextAndColor()
     //if mapVector is less than or equal 5 elements
     else {
         //first set the top frequently pressed keys that the mapVector has
-        for(int i = 0; i < database->mapVector.size(); i++) {
+        for(int i = 0; i < database->mapVector.size(); ++i) {
             frequentlyPressedKeys[i]->setText(database->mapVector[i].first + ": " + QString::number(database->mapVector[i].second));
             frequentlyPressedKeys[i]->setLblColor(database->mapVector[i].second); //set the top frequently pressed keys lbl with the colors that they should have
         }
         //then set the rest of the lbls texts to blank
-        for(int i = 0; i < 5 - database->mapVector.size(); i++) {
+        for(int i = 0; i < 5 - database->mapVector.size(); ++i) {
             frequentlyPressedKeys[4 - i]->setText(""); //note the frequentlyPressedKeys[4 - i], the max index of frequentlyPressedKeys is 4
             frequentlyPressedKeys[4 - i]->setLblColor(0); //for the rest of the empty lbls, set the colors to default
         }
@@ -253,7 +253,7 @@ void MainWindow::showNextPage()
     totalPressedTimesLabel->hide();
     nextPageBtn->hide();
     previousPageBtn->show();
-    for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
+    for(int i = 0; i < frequentlyPressedKeys.size(); ++i) {
         frequentlyPressedKeys[i]->show();
     }
 
@@ -266,7 +266,7 @@ void MainWindow::showPreviousPage()
     totalPressedTimesLabel->show();
     nextPageBtn->show();
     previousPageBtn->hide();
-    for(int i = 0; i < frequentlyPressedKeys.size(); i++) {
+    for(int i = 0; i < frequentlyPressedKeys.size(); ++i) {
         frequentlyPressedKeys[i]->hide();
     }
 

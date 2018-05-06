@@ -75,7 +75,7 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
 
     switch (choice) {
     case 0: //daily
-        for(int i = 0; i < 24; i++) {
+        for(int i = 0; i < 24; ++i) {
             barCategories.push_back(QString::number(i));
             barSet->append(barChartVec[i]);
         }
@@ -88,14 +88,14 @@ void CustomBarChart::updateBarChartData(int choice, QVector<int> barChartVec)
         break;
     case 2: { //monthly
         int daysInMonth = QDate::currentDate().daysInMonth();
-        for(int i = 0; i < daysInMonth; i++) {
+        for(int i = 0; i < daysInMonth; ++i) {
             barCategories.push_back(QDate::currentDate().addDays(i - daysInMonth + 1).toString("MMM d"));
             barSet->append(barChartVec[i]);
         }
     }
         break;
     case 3: //yearly
-        for(int i = 0; i < 12; i++) {
+        for(int i = 0; i < 12; ++i) {
             barCategories.push_front(QString::number(QDate::currentDate().addMonths(-i).toString("MM").toInt()));
             barSet->append(barChartVec[i]);
         }

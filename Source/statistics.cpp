@@ -73,7 +73,7 @@ void Statistics::setWindowStyleSheet()
 
 void Statistics::setBarChart()
 {   
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; ++i) {
         barChartArr[i] = new CustomBarChart;
     }
 
@@ -85,7 +85,7 @@ void Statistics::setBarChart()
 
 void Statistics::setPieChart()
 {
-    for(int i = 0; i < 5; i++) {
+    for(int i = 0; i < 5; ++i) {
         pieChartArr[i] = new CustomPieChart;
     }
 

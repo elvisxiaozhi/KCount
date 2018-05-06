@@ -76,7 +76,7 @@ QMap<QString, int> Database::returnFrequentlyPressedKeyMap(QString queryStr)
         int iterateTimes = 0;
         while(query.next()) {
             frequentlyPressedKeyMap.insert(query.value(0).toString(), query.value(1).toInt());
-            iterateTimes++;
+            ++iterateTimes;
             if(iterateTimes == 5) {
                 break;
             }
@@ -97,7 +97,7 @@ void Database::loadBarChartData(int index)
     QVector<int> barChartVec;
     switch (index) {
     case 0: //daily
-        for(int i = 0; i < 24; i++) {
+        for(int i = 0; i < 24; ++i) {
             QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(QDate::currentDate().toString("MM/dd/yy")).arg(i);
             barChartVec.push_back(returnTotalPressedTimes(queryStr));
         }
@@ -109,13 +109,13 @@ void Database::loadBarChartData(int index)
         }
         break;
     case 2: //monthly
-        for(int i = 0; i < QDate::currentDate().daysInMonth(); i++) {
+        for(int i = 0; i < QDate::currentDate().daysInMonth(); ++i) {
             QString queryStr = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(i - QDate::currentDate().daysInMonth() + 1).toString("MM/dd/yy"));
             barChartVec.push_back(returnTotalPressedTimes(queryStr));
         }
         break;
     case 3: //yearly
-        for(int i = 0; i < 12; i++) {
+        for(int i = 0; i < 12; ++i) {
             QDate currentDate = QDate::currentDate().addMonths(-i);
             QString firstDateOfMonth = QString("%1/01/%2").arg(QString::number(currentDate.month())).arg(QString::number(currentDate.year()));
             QString lastDateOfMonth = QString("%1/%2/%3").arg(QString::number(currentDate.month())).arg(QString::number(currentDate.daysInMonth())).arg(QString::number(currentDate.year()));
@@ -201,7 +201,7 @@ void Database::sortMap()
 {
     mapVector.clear(); //when sort map, the vector needs to clear the old data and reload new data from map to sort
     QMap<QString, unsigned long int>::iterator it;
-    for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); it++) {
+    for(it = pressedKeyMap.begin(); it != pressedKeyMap.end(); ++it) {
         mapVector.push_back(std::make_pair(it.key(), it.value()));
     }
     std::sort(mapVector.begin(), mapVector.end(), [=](std::pair<QString, unsigned long int>& a, std::pair<QString, unsigned long int>& b){
@@ -240,7 +240,7 @@ void Database::keyPressed(QString pressedKey)
         currentHourPressedKeyMap.insert(pressedKey, 1);
     }
 
-    totalPressedTimes++; //and also the total pressed times + 1 pressed time
+    ++totalPressedTimes; //and also the total pressed times + 1 pressed time
 
     sortMap(); //then store the data to the mapVector and sort it in the descending order
 
@@ -324,7 +324,7 @@ void Database::readDatabase(int readMode)
     sortMap();
 
     totalPressedTimes = 0; //clear the old pressed times and re-count
-    for(int i = 0; i < mapVector.size(); i++) {
+    for(int i = 0; i < mapVector.size(); ++i) {
         totalPressedTimes += mapVector[i].second;
     }
 }
@@ -337,10 +337,10 @@ void Database::updateTimer()
 
     readDatabase(readMode); //because in a peroid of time, the data will store to database, and map and vector will be cleared, so when updating database, it needs to re-read data to map and vector
 
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; ++i) {
         loadBarChartData(i);
     }
-    for(int i = 0; i < 5; i++) {
+    for(int i = 0; i < 5; ++i) {
         loadPieChartData(i);
     }
 }
