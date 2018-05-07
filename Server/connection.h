@@ -2,6 +2,7 @@
 #define CONNECTION_H
 
 #include <QTcpServer>
+#include <QTcpSocket>
 #include <QObject>
 
 class Connection : public QObject
@@ -12,10 +13,12 @@ public:
 
 private:
     QTcpServer *tcpServer;
+    QVector<QTcpSocket *> connectedClients;
     void setServer();
 
 private slots:
     void newConnection();
+    void clientDisconnected();
 };
 
 #endif // CONNECTION_H
