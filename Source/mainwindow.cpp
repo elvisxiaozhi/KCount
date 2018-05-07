@@ -12,7 +12,6 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QSound>
-
 #include "connection.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -37,9 +36,6 @@ MainWindow::MainWindow(QWidget *parent)
         database->currentHourPressedKeyMap.clear();
         setLblTextAndColor(); //this line is used for refreshing lbls when the main window is activated
     });
-
-    Connection connection;
-    connection.connectToServer();
 }
 
 MainWindow::~MainWindow()
@@ -165,8 +161,9 @@ void MainWindow::setTrayIcon()
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(settingsAction, &QAction::triggered, [this](){ setSettingsPage.resetChanges(); setSettingsPage.show(); });
     connect(statisticsAction, &QAction::triggered, [this](){ statistics.show(); });
-    connect(updateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/Keyboard-Tracker/releases")); });
+    connect(updateAction, &QAction::triggered, [this](){ Connection connection; connection.connectToServer(); connection.deleteLater(); });
     connect(aboutAction, &QAction::triggered, [this](){ setAboutPage.show(); });
+    connect(donateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/KCount")); });
     //note the program can be only closed by clicking "Quit" action when the trayIcon is not visible
     connect(quitAction, &QAction::triggered, [this](){ database->updateDatabase(); trayIcon->setVisible(false); this->close(); }); //update and save data to database before closing the program, and set the trayIcon not visible so the program can be closed successfully
 }

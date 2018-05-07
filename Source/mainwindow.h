@@ -14,6 +14,7 @@
 #include "settings.h"
 #include "statistics.h"
 #include <QThread>
+//#include "update.h"
 
 class MainWindow : public QMainWindow
 {
@@ -37,6 +38,7 @@ private:
     Settings setSettingsPage;
     About setAboutPage;
     Statistics statistics;
+//    Update update;
     void setLanguage();
     void setLayout();
     void setWindowStyleSheet();

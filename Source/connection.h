@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QTcpSocket>
 
-class Connection : QObject
+class Connection : public QObject
 {
     Q_OBJECT
 public:
@@ -13,6 +13,9 @@ public:
 
 private:
     QTcpSocket *tcpSocket;
+
+private slots:
+    void disconnected();
 };
 
 #endif // CONNECTION_H
