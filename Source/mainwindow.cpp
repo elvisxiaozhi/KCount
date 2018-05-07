@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <QSound>
 
+#include "connection.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -35,6 +37,9 @@ MainWindow::MainWindow(QWidget *parent)
         database->currentHourPressedKeyMap.clear();
         setLblTextAndColor(); //this line is used for refreshing lbls when the main window is activated
     });
+
+    Connection connection;
+    connection.connectToServer();
 }
 
 MainWindow::~MainWindow()

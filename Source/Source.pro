@@ -8,6 +8,7 @@ QT       += core gui
 QT += sql
 QT += multimedia
 QT += charts
+QT += network
 
 RC_ICONS = letter_k.ico
 
@@ -41,7 +42,8 @@ SOURCES += \
     statistics.cpp \
     custombarchart.cpp \
     custompiechart.cpp \
-    initialisation.cpp
+    initialisation.cpp \
+    connection.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -56,7 +58,8 @@ HEADERS += \
     statistics.h \
     custombarchart.h \
     custompiechart.h \
-    initialisation.h
+    initialisation.h \
+    connection.h
 
 RESOURCES += \
     ../Resources/resources.qrc
