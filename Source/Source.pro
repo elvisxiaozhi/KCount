@@ -44,7 +44,6 @@ SOURCES += \
     custompiechart.cpp \
     initialisation.cpp \
     connection.cpp \
-    update.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -61,7 +60,6 @@ HEADERS += \
     custompiechart.h \
     initialisation.h \
     connection.h \
-    update.h
 
 RESOURCES += \
     ../Resources/resources.qrc
