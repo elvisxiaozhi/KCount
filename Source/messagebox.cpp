@@ -14,6 +14,7 @@ MessageBox::MessageBox(QWidget *parent) : QMessageBox(parent)
 void MessageBox::showSuccessMsBox()
 {
     setWindowTitle(tr("Action Succeeded"));
+    setDetailedText("");
     exec();
 }
 
