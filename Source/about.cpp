@@ -1,6 +1,5 @@
 #include "about.h"
 #include <QDebug>
-#include <QCloseEvent>
 
 About::About(QWidget *parent) : QWidget(parent)
 {
@@ -27,10 +26,4 @@ About::About(QWidget *parent) : QWidget(parent)
 
     mainVLayout->addWidget(infoLabel);
     mainVLayout->addWidget(moreInfoLabel);
-}
-
-void About::closeEvent(QCloseEvent *event)
-{
-    event->ignore();
-    this->hide();
 }

@@ -14,7 +14,6 @@ public:
 private:
     QVBoxLayout *mainVLayout;
     QLabel *infoLabel, *moreInfoLabel;
-    void closeEvent(QCloseEvent *);
 
 signals:
 

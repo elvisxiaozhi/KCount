@@ -1,6 +1,6 @@
 #include "settings.h"
-#include <QCloseEvent>
 #include <QGroupBox>
+#include <QFile>
 #include <QLabel>
 #include <QIntValidator>
 #include <QDebug>
@@ -38,12 +38,6 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     connect(&msBox, &MessageBox::deleteAppConfirmed, this, &Settings::deleteApp);
 }
 
-void Settings::closeEvent(QCloseEvent *event)
-{
-    event->ignore();
-    this->hide();
-}
-
 void Settings::setBasicLayout()
 {
     mainVLayout = new QVBoxLayout(this);
@@ -71,7 +65,7 @@ void Settings::setBasicLayout()
     setGeneralPage();
 
     connect(okButton, &QPushButton::clicked, this, &Settings::saveChanges);
-    connect(cancelButton, &QPushButton::clicked, [this](){ this->hide(); });
+    connect(cancelButton, &QPushButton::clicked, [this](){ this->close(); });
 }
 
 void Settings::setWindowStyleSheet()
@@ -218,7 +212,7 @@ void Settings::saveChanges()
         msBox.setText(tr("Changed Language will be apply next time you run this app."));
         msBox.showSuccessMsBox();
     }
-    this->hide(); //this must be after msBox.showSuccessMsBox() is called
+    this->close(); //this must be after msBox.showSuccessMsBox() is called
 }
 
 void Settings::showResetSettingsMsBox()

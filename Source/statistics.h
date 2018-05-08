@@ -23,7 +23,6 @@ private:
     CustomPieChart *pieChartArr[5];
     QPushButton *barChartBtn, *pieChartBtn;
     void setLayout();
-    void closeEvent(QCloseEvent *);
     void setWindowStyleSheet();
     void setBarChart();
     void setPieChart();

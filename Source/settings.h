@@ -25,7 +25,6 @@ public:
     static QSettings languageSettings;
 
 private:
-    void closeEvent(QCloseEvent *);
     QVBoxLayout *mainVLayout, *settingsContentVLayout, *generalVLayout;
     QGroupBox *mainGBox;
     QSettings *settings;

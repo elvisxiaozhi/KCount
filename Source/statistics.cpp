@@ -1,6 +1,5 @@
 #include "statistics.h"
 #include <QDebug>
-#include <QCloseEvent>
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -48,12 +47,6 @@ void Statistics::setLayout()
     connect(barTabWidget, &QTabWidget::currentChanged, this, &Statistics::resizeBarChartWindow);
     connect(barChartBtn, &QPushButton::clicked, [this](){ barTabWidget->show(); pieTabWidget->hide(); this->resize(800, 400); setWindowIcon(QIcon(":/Icons/Icons/bar_chart.png")); });
     connect(pieChartBtn, &QPushButton::clicked, [this](){ barTabWidget->hide(); pieTabWidget->show(); this->resize(600, 600); setWindowIcon(QIcon(":/Icons/Icons/pie_chart.png")); });
-}
-
-void Statistics::closeEvent(QCloseEvent *event)
-{
-    event->ignore();
-    this->hide();
 }
 
 void Statistics::setWindowStyleSheet()
