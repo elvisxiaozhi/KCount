@@ -19,23 +19,23 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     setBasicLayout();
     setWindowStyleSheet();
 
-    connect(&setMsBox, &MessageBoxes::resetSettingsConfirmed, [this](){
+    connect(&msBox, &MessageBox::resetSettingsConfirmed, [this](){
         resetSettings();
-        setMsBox.successMsBox.setText(tr("Settings have been reset."));
-        setMsBox.showSuccessMsBox();
+        msBox.setText(tr("Settings have been reset."));
+        msBox.showSuccessMsBox();
     });
-    connect(&setMsBox, &MessageBoxes::clearDatabaseConfirmed, [this](){
+    connect(&msBox, &MessageBox::clearDatabaseConfirmed, [this](){
         Database::clearDatabase();
-        setMsBox.successMsBox.setText(tr("Database has been cleared."));
-        setMsBox.showSuccessMsBox();
+        msBox.setText(tr("Database has been cleared."));
+        msBox.showSuccessMsBox();
         emit databaseCleared();
     });
-    connect(&setMsBox, &MessageBoxes::resetAllConfirmed, [this](){
+    connect(&msBox, &MessageBox::resetAllConfirmed, [this](){
         resetAll(); //because resetAll() function needs to call resetSettings() and clearDatabase() and does not want showSuccessMsBox()
-        setMsBox.successMsBox.setText(tr("Everything has been reset to default."));
-        setMsBox.showSuccessMsBox();
+        msBox.setText(tr("Everything has been reset to default."));
+        msBox.showSuccessMsBox();
     });
-    connect(&setMsBox, &MessageBoxes::deleteAppConfirmed, this, &Settings::deleteApp);
+    connect(&msBox, &MessageBox::deleteAppConfirmed, this, &Settings::deleteApp);
 }
 
 void Settings::closeEvent(QCloseEvent *event)
@@ -215,49 +215,49 @@ void Settings::saveChanges()
     settings->setValue("SettingsPage/reachingNumEdit", reachingNumEdit->text());
     if(Initialisation::settings.value("InitSettings/Language").toString() != languageBox->currentText()) {
         Initialisation::settings.setValue("InitSettings/Language", languageBox->currentText());
-        setMsBox.successMsBox.setText(tr("Changed Language will be apply next time you run this app."));
-        setMsBox.showSuccessMsBox();
+        msBox.setText(tr("Changed Language will be apply next time you run this app."));
+        msBox.showSuccessMsBox();
     }
-    this->hide(); //this must be after setMsBox.showSuccessMsBox() is called
+    this->hide(); //this must be after msBox.showSuccessMsBox() is called
 }
 
 void Settings::showResetSettingsMsBox()
 {
-    setMsBox.questionMsBox.setWindowTitle(tr("Reset Settings"));
-    setMsBox.questionMsBox.setText(tr("Are you sure you want to reset all the settings?"));
-    setMsBox.showQuestionMsBox(1);
+    msBox.setWindowTitle(tr("Reset Settings"));
+    msBox.setText(tr("Are you sure you want to reset all the settings?"));
+    msBox.showQuestionMsBox(1);
 }
 
 void Settings::showClearDatabaseMsbox()
 {
-    setMsBox.questionMsBox.setWindowTitle(tr("Clear DataBase"));
-    setMsBox.questionMsBox.setText(tr("Are you sure you want to clear the database?"));
-    setMsBox.showQuestionMsBox(2);
+    msBox.setWindowTitle(tr("Clear DataBase"));
+    msBox.setText(tr("Are you sure you want to clear the database?"));
+    msBox.showQuestionMsBox(2);
 }
 
 void Settings::showResetAllMsBox()
 {
-    setMsBox.questionMsBox.setWindowTitle(tr("Reset All"));
-    setMsBox.questionMsBox.setText(tr("Are you sure you want to reset everything?"));
-    setMsBox.questionMsBox.setDetailedText(tr("This will reset all your settings, clear the datebase and delete all the user data."));
-    setMsBox.showQuestionMsBox(3);
+    msBox.setWindowTitle(tr("Reset All"));
+    msBox.setText(tr("Are you sure you want to reset everything?"));
+    msBox.setDetailedText(tr("This will reset all your settings, clear the datebase and delete all the user data."));
+    msBox.showQuestionMsBox(3);
 }
 
 void Settings::showDeleteAppMsBox()
 {
-    setMsBox.questionMsBox.setWindowTitle(tr("Delete App"));
-    setMsBox.questionMsBox.setText(tr("Are you sure you want to delete this app?"));
-    setMsBox.questionMsBox.setDetailedText(tr("This will delete this app and everything relevant to this app completely."));
-    setMsBox.showQuestionMsBox(4);
+    msBox.setWindowTitle(tr("Delete App"));
+    msBox.setText(tr("Are you sure you want to delete this app?"));
+    msBox.setDetailedText(tr("This will delete this app and everything relevant to this app completely."));
+    msBox.showQuestionMsBox(4);
 }
 
 void Settings::deleteApp()
 {
     QString batFilePath = writeBatFile();
     resetAll();
-    setMsBox.successMsBox.setText(tr("KCount has been successfully removed from this Company"));
-    setMsBox.successMsBox.setInformativeText("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/KCount/releases'>website</a>.");
-    setMsBox.showSuccessMsBox();
+    msBox.setText(tr("KCount has been successfully removed from this Company"));
+    msBox.setInformativeText(tr("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/KCount/releases'>website</a>."));
+    msBox.showSuccessMsBox();
 
     QProcess::startDetached("cmd.exe", QStringList() << "/c" << batFilePath);
     qApp->quit();

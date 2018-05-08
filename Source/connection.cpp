@@ -1,6 +1,7 @@
 #include "connection.h"
 #include <QDebug>
 #include <QHostAddress>
+#include "messagebox.h"
 
 Connection::Connection()
 {
@@ -9,6 +10,7 @@ Connection::Connection()
 
 void Connection::connectToServer()
 {
+    MessageBox updatesMsBox;
     tcpSocket->connectToHost(QHostAddress("127.0.0.1"), 6666);
     if(tcpSocket->waitForConnected()) {
         qDebug() << "Connected to server";
@@ -17,7 +19,10 @@ void Connection::connectToServer()
     }
     else {
         qDebug() << "Failed to connect to server";
+        updatesMsBox.setWindowTitle(tr("Update Failed"));
+        updatesMsBox.setText(tr("Oops, there is something wrong.<br>Maybe try again later?"));
     }
+    updatesMsBox.exec();
 }
 
 void Connection::disconnected()

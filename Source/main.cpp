@@ -31,5 +31,6 @@ int main(int argc, char *argv[])
 
     MainWindow w;
 
+    a.setQuitOnLastWindowClosed(false);
     return a.exec();
 }

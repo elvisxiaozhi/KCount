@@ -38,12 +38,12 @@ SOURCES += \
     database.cpp \
     about.cpp \
     settings.cpp \
-    messageboxes.cpp \
     statistics.cpp \
     custombarchart.cpp \
     custompiechart.cpp \
     initialisation.cpp \
     connection.cpp \
+    messagebox.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,12 +54,12 @@ HEADERS += \
     database.h \
     about.h \
     settings.h \
-    messageboxes.h \
     statistics.h \
     custombarchart.h \
     custompiechart.h \
     initialisation.h \
     connection.h \
+    messagebox.h
 
 RESOURCES += \
     ../Resources/resources.qrc

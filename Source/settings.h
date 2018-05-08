@@ -11,7 +11,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QSpinBox>
-#include "messageboxes.h"
+#include "messagebox.h"
 #include <QComboBox>
 
 class Settings : public QWidget
@@ -30,7 +30,7 @@ private:
     QGroupBox *mainGBox;
     QSettings *settings;
     QComboBox *languageBox;
-    MessageBoxes setMsBox;
+    MessageBox msBox;
     void setBasicLayout();
     void setWindowStyleSheet();
     void setGeneralPage();
