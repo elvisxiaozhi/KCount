@@ -233,7 +233,6 @@ void Settings::showResetAllMsBox()
 {
     msBox.setWindowTitle(tr("Reset All"));
     msBox.setText(tr("Are you sure you want to reset everything?"));
-    msBox.setDetailedText(tr("This will reset all your settings, clear the datebase and delete all the user data."));
     msBox.showQuestionMsBox(2);
 }
 
@@ -241,7 +240,6 @@ void Settings::showDeleteAppMsBox()
 {
     msBox.setWindowTitle(tr("Delete App"));
     msBox.setText(tr("Are you sure you want to delete this app?"));
-    msBox.setDetailedText(tr("This will delete this app and everything relevant to this app completely."));
     msBox.showQuestionMsBox(3);
 }
 

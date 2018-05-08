@@ -23,6 +23,12 @@ void MessageBox::showQuestionMsBox(int msBoxType)
     setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     setDefaultButton(QMessageBox::No);
     setDetailedText("");
+    if(msBoxType == 2) {
+        setDetailedText(tr("This will reset all your settings, clear the datebase and delete all the user data."));
+    }
+    if(msBoxType == 3) {
+        setDetailedText(tr("This will delete this app and everything relevant to this app completely."));
+    }
     int ret = exec();
 
     switch (ret) {
