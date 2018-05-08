@@ -4,7 +4,6 @@
 #include <windows.h>
 #include <QDebug>
 #include "hook.h"
-#include <QCloseEvent>
 #include <QStatusBar>
 #include <QSpacerItem>
 #include <QSettings>
@@ -164,8 +163,7 @@ void MainWindow::setTrayIcon()
     connect(updateAction, &QAction::triggered, [this](){ Connection connection; connection.connectToServer(); connection.deleteLater(); });
     connect(aboutAction, &QAction::triggered, [this](){ setAboutPage.show(); });
     connect(donateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/KCount")); });
-    //note the program can be only closed by clicking "Quit" action when the trayIcon is not visible
-    connect(quitAction, &QAction::triggered, [this](){ database->updateDatabase(); trayIcon->setVisible(false); this->close(); }); //update and save data to database before closing the program, and set the trayIcon not visible so the program can be closed successfully
+    connect(quitAction, &QAction::triggered, [this](){ database->updateDatabase(); qApp->quit(); }); //update and save data to database and then quit the program
 }
 
 void MainWindow::setLblTextAndColor()
@@ -222,14 +220,6 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
     if(reason == 2 || reason == 3) { //tray icon was double clicked or clicked
         this->showNormal(); //to show a normal size of the main window
         setLblTextAndColor();
-    }
-}
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    if(trayIcon->isVisible()) { //if tray icon can be seen in the task bar
-        event->ignore(); //then do not quit the program
-        this->hide(); //instead of closing the program, just hide the main window
     }
 }
 

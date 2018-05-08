@@ -42,7 +42,6 @@ private:
     void setWindowStyleSheet();
     void setTrayIcon();
     void setLblTextAndColor();
-    void closeEvent(QCloseEvent *);
     void setDatabaseThread();
 
 signals:
