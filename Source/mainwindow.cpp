@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
         statistics.loadPieChartData(i);
     }
 
-    connect(&setSettingsPage, &Settings::uncheckStartOnBootAct, [this](){ startOnBootAction->setChecked(false); }); //set startOnBootAction unchecked when reset the settings
+    connect(&setSettingsPage, &Settings::checkStartOnBootAct, [this](){ startOnBootAction->setChecked(true); }); //set startOnBootAction checked when settings are reset
     connect(&setSettingsPage, &Settings::databaseCleared, [this](){ //when database is cleared, clear map and vector and total pressed times, so the lbls can set to 0
         database->readDatabase(database->readMode);
         database->currentHourPressedKeyMap.clear();
@@ -125,6 +125,7 @@ void MainWindow::setTrayIcon()
     trayIconMenu->addAction(startOnBootAction);
     startOnBootAction->setCheckable(true);
 
+    Settings::startOnBootSetting.setValue("KCount", QCoreApplication::applicationFilePath().replace('/', '\\'));
     if(Settings::startOnBootSetting.value("KCount").isValid()) {
         startOnBootAction->setChecked(true);
     }

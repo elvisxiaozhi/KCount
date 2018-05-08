@@ -10,7 +10,6 @@
 #include <initialisation.h>
 
 QSettings Settings::startOnBootSetting("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-QSettings Settings::languageSettings("My Company", "KCount");
 
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
@@ -247,6 +246,7 @@ void Settings::deleteApp()
 {
     QString batFilePath = writeBatFile();
     resetAll();
+    startOnBootSetting.clear(); //only clear this settings when app is deleted
     msBox.setText(tr("KCount has been successfully removed from this Company"));
     msBox.setInformativeText(tr("You can re-download it on our <a style='text-decoration:none;' href='https://github.com/elvisxiaozhi/KCount/releases'>website</a>."));
     msBox.showSuccessMsBox();
@@ -258,13 +258,12 @@ void Settings::deleteApp()
 void Settings::resetSettings()
 {
     settings->clear();
-    startOnBootSetting.remove("KCount");
     Initialisation::settings.clear();
     //must initate the three lines below when resetting settings page
     soundAlertCheckBox->setChecked(true);
     reachingNumEdit->setText(QString::number(1000));
     languageBox->setCurrentText("English");
-    emit uncheckStartOnBootAct();
+    emit checkStartOnBootAct();
 }
 
 void Settings::resetAll()

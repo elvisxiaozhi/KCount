@@ -42,7 +42,7 @@ private:
 
 signals:
     void databaseCleared();
-    void uncheckStartOnBootAct();
+    void checkStartOnBootAct();
 
 public slots:
     void resetChanges();
