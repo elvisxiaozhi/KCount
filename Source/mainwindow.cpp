@@ -143,9 +143,9 @@ void MainWindow::setTrayIcon()
     QAction *feedbackAction = new QAction(tr("Feedback"), helpMenu);
     helpMenu->addAction(feedbackAction);
     feedbackAction->setIcon(QIcon(":/Icons/Icons/feedback.png"));
-    QAction *updateAction = new QAction(tr("Update"), helpMenu);
-    helpMenu->addAction(updateAction);
-    updateAction->setIcon(QIcon(":/Icons/Icons/update.png"));
+    QAction *updatesAction = new QAction(tr("Updates"), helpMenu);
+    helpMenu->addAction(updatesAction);
+    updatesAction->setIcon(QIcon(":/Icons/Icons/update.png"));
     QAction *aboutAction = new QAction(tr("About"), helpMenu);
     helpMenu->addAction(aboutAction);
     aboutAction->setIcon(QIcon(":/Icons/Icons/about.png"));
@@ -161,7 +161,8 @@ void MainWindow::setTrayIcon()
     connect(startOnBootAction, &QAction::changed, this, &MainWindow::startOnBootActionChanged);
     connect(settingsAction, &QAction::triggered, [this](){ setSettingsPage.resetChanges(); setSettingsPage.show(); });
     connect(statisticsAction, &QAction::triggered, [this](){ statistics.show(); });
-    connect(updateAction, &QAction::triggered, [this](){ Connection connection; connection.connectToServer(); connection.deleteLater(); });
+    connect(feedbackAction, &QAction::triggered, [this](){ feedback.show(); });
+    connect(updatesAction, &QAction::triggered, [this](){ Connection connection; connection.connectToServer(); connection.deleteLater(); });
     connect(aboutAction, &QAction::triggered, [this](){ setAboutPage.show(); });
     connect(donateAction, &QAction::triggered, [this](){ QDesktopServices::openUrl(QUrl("https://github.com/elvisxiaozhi/KCount")); });
     connect(quitAction, &QAction::triggered, [this](){ database->updateDatabase(); qApp->quit(); }); //update and save data to database and then quit the program

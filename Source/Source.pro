@@ -43,7 +43,8 @@ SOURCES += \
     custompiechart.cpp \
     initialisation.cpp \
     connection.cpp \
-    messagebox.cpp
+    messagebox.cpp \
+    feedback.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -59,7 +60,8 @@ HEADERS += \
     custompiechart.h \
     initialisation.h \
     connection.h \
-    messagebox.h
+    messagebox.h \
+    feedback.h
 
 RESOURCES += \
     ../Resources/resources.qrc

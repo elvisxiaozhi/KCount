@@ -27,8 +27,6 @@ void Connection::connectToServer()
 
 void Connection::disconnected()
 {
-//    QTcpSocket *socket = static_cast<QTcpSocket *>(sender());
-//    socket->deleteLater();
     qDebug() << "Disconned from server";
 }
 
