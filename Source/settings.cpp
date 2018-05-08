@@ -219,14 +219,14 @@ void Settings::showResetSettingsMsBox()
 {
     msBox.setWindowTitle(tr("Reset Settings"));
     msBox.setText(tr("Are you sure you want to reset all the settings?"));
-    msBox.showQuestionMsBox(1);
+    msBox.showQuestionMsBox(0);
 }
 
 void Settings::showClearDatabaseMsbox()
 {
     msBox.setWindowTitle(tr("Clear DataBase"));
     msBox.setText(tr("Are you sure you want to clear the database?"));
-    msBox.showQuestionMsBox(2);
+    msBox.showQuestionMsBox(1);
 }
 
 void Settings::showResetAllMsBox()
@@ -234,7 +234,7 @@ void Settings::showResetAllMsBox()
     msBox.setWindowTitle(tr("Reset All"));
     msBox.setText(tr("Are you sure you want to reset everything?"));
     msBox.setDetailedText(tr("This will reset all your settings, clear the datebase and delete all the user data."));
-    msBox.showQuestionMsBox(3);
+    msBox.showQuestionMsBox(2);
 }
 
 void Settings::showDeleteAppMsBox()
@@ -242,7 +242,7 @@ void Settings::showDeleteAppMsBox()
     msBox.setWindowTitle(tr("Delete App"));
     msBox.setText(tr("Are you sure you want to delete this app?"));
     msBox.setDetailedText(tr("This will delete this app and everything relevant to this app completely."));
-    msBox.showQuestionMsBox(4);
+    msBox.showQuestionMsBox(3);
 }
 
 void Settings::deleteApp()

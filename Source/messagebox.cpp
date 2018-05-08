@@ -8,6 +8,7 @@ MessageBox::MessageBox(QWidget *parent) : QMessageBox(parent)
 {
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     setIcon(QMessageBox::Information);
+    setMinimumSize(400, 300);
 }
 
 void MessageBox::showSuccessMsBox()
@@ -21,21 +22,22 @@ void MessageBox::showQuestionMsBox(int msBoxType)
     setIcon(QMessageBox::Warning);
     setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     setDefaultButton(QMessageBox::No);
+    setDetailedText("");
     int ret = exec();
 
     switch (ret) {
     case QMessageBox::Yes:
         switch (msBoxType) {
-        case 1:
+        case 0:
             emit resetSettingsConfirmed();
             break;
-        case 2:
+        case 1:
             emit clearDatabaseConfirmed();
             break;
-        case 3:
+        case 2:
             emit resetAllConfirmed();
             break;
-        case 4:
+        case 3:
             emit deleteAppConfirmed();
             break;
         default:
