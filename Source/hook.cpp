@@ -2,7 +2,6 @@
 #include <windows.h>
 #include <QDebug>
 #include "signalemitter.h"
-//#pragma comment(lib, "user32.lib")
 
 HHOOK hHook = NULL;
 
@@ -55,9 +54,21 @@ LRESULT CALLBACK MyLowLevelKeyBoardProc(int nCode, WPARAM wParam, LPARAM lParam)
     return CallNextHookEx(hHook, nCode, wParam, lParam);
 }
 
+LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    if(wParam == WM_LBUTTONUP) {
+        qDebug() << "Left is up";
+    }
+    if(wParam == WM_RBUTTONUP) {
+        qDebug() << "Right is up";
+    }
+    return CallNextHookEx(hHook, nCode, wParam, lParam);
+}
+
 Hook::Hook()
 {
     hHook = SetWindowsHookEx(WH_KEYBOARD_LL, MyLowLevelKeyBoardProc, NULL, 0);
+    hHook = SetWindowsHookEx(WH_MOUSE_LL, LowLevelMouseProc, NULL, 0);
     if (hHook == NULL) {
         qDebug() << "Hook Failed" << endl;
     }
