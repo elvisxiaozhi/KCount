@@ -5,7 +5,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDockWidget>
-#include <QPushButton>
+#include <QToolButton>
 
 class MainWindow : public QMainWindow
 {
@@ -19,7 +19,7 @@ private:
     QHBoxLayout *mainHLayout;
     QVBoxLayout *dockVLayout;
     QDockWidget *sidebarDock;
-    QPushButton *overviewBtn;
+    QToolButton *overviewBtn;
 
     void createDockWindow();
     void createContentWindow();

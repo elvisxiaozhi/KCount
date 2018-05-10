@@ -28,8 +28,12 @@ void MainWindow::createDockWindow()
     dockWidget = new QWidget(sidebarDock);
     dockWidget->setObjectName("DockWidget");
     dockVLayout = new QVBoxLayout(dockWidget);
-    overviewBtn = new QPushButton(dockWidget);
+    dockVLayout->setMargin(0);
+    overviewBtn = new QToolButton(dockWidget);
+    overviewBtn->setAutoRaise(true);
+    overviewBtn->setIcon(QIcon(":/Icons/overview.png"));
     overviewBtn->setText("Overview");
+    overviewBtn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     dockVLayout->addWidget(overviewBtn);
     dockWidget->setLayout(dockVLayout);
     sidebarDock->setWidget(dockWidget);
@@ -39,7 +43,7 @@ void MainWindow::createContentWindow()
 {
     mainWidget = new QWidget(this);
     mainHLayout = new QHBoxLayout(mainWidget);
-    mainHLayout->setContentsMargins(0, 0, 0, 0);
+    mainHLayout->setMargin(0);
     setCentralWidget(mainWidget);
     mainWidget->setLayout(mainHLayout);
 
@@ -52,7 +56,9 @@ void MainWindow::createContentWindow()
 void MainWindow::setWindowStyleSheet()
 {
     setStyleSheet(
-                "QMainWindow { background-color: #34495E; }"
-                "#DockWidget { background-color: #212F3D; }"
+                "QMainWindow { background-color: #333333; }"
+                "#DockWidget { background-color: #17202A; }"
+                "QLabel { color: white; }"
+                "QToolButton { color: white; }"
                 );
 }
