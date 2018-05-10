@@ -25,12 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-    sidebar.cpp
+        mainwindow.cpp
 
 HEADERS += \
-        mainwindow.h \
-    sidebar.h
+        mainwindow.h
 
 RESOURCES += \
     ../Resources/Icons/icons.qrc

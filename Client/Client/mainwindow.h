@@ -19,7 +19,7 @@ private:
     QHBoxLayout *mainHLayout;
     QVBoxLayout *dockVLayout;
     QDockWidget *sidebarDock;
-    QToolButton *overviewBtn;
+    QToolButton *overviewBtn, *dashboardBtn, *usersBtn, *settingsBtn;
 
     void createDockWindow();
     void createContentWindow();

@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/Icons">
-        <file>overview.png</file>
+        <file>dashboard.png</file>
+        <file>home.png</file>
+        <file>settings.png</file>
+        <file>users.png</file>
     </qresource>
 </RCC>
