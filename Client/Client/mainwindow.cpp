@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     sidebar = new Sidebar();
     addDockWidget(Qt::LeftDockWidgetArea, sidebar);
     createContentWindow();
+    setMinimumSize(400, 300);
 }
 
 MainWindow::~MainWindow()

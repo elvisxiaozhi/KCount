@@ -4,5 +4,9 @@
         <file>Icons/home.png</file>
         <file>Icons/home_24px.png</file>
         <file>Icons/users.png</file>
+        <file>Icons/dashboard_24px.png</file>
+        <file>Icons/settings_24px.png</file>
+        <file>Icons/users_24px.png</file>
+        <file>Icons/settings.png</file>
     </qresource>
 </RCC>
