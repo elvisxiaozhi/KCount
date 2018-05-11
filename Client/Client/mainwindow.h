@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QDockWidget>
 #include <QToolButton>
+#include "sidebar.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,12 +16,14 @@ public:
     ~MainWindow();
 
 private:
-    QWidget *mainWidget, *dockWidget;
-    QHBoxLayout *mainHLayout;
-    QVBoxLayout *dockVLayout;
+    QWidget *mainWidget, *dockWidget, *contentWidget;
+    QHBoxLayout *sidebarHLayout;
+    QHBoxLayout *mainHLayout, *contentHLayout;
+    Sidebar *sidebar;
     QDockWidget *sidebarDock;
     QToolButton *overviewBtn, *dashboardBtn, *usersBtn, *settingsBtn;
 
+    void createMainWindow();
     void createDockWindow();
     void createContentWindow();
     void setWindowStyleSheet();
