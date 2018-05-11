@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QIcon>
 
-Sidebar::Sidebar() : checkedAct(NULL)
+Sidebar::Sidebar() : checkedAct(NULL), hoveredAct(NULL)
 {
     //hide dock widget title bar
     QWidget *titleBarWidget = new QWidget(this);
@@ -35,12 +35,10 @@ QAction *Sidebar::actionAt(const QPoint &point)
     for(auto action : actList) {
         QRect actRect(0, posY, rect().width(), 30);
         if(actRect.contains(point)) {
-            qDebug() << "True";
             return action;
         }
         posY += 50;
     }
-    qDebug() << "False;";
     return NULL;
 }
 
@@ -60,26 +58,33 @@ void Sidebar::paintEvent(QPaintEvent *event)
             QFont checkedFont("Times", 10, QFont::Bold);
             painter.setFont(checkedFont);
             painter.setPen(QColor(102,102,102));
-
-            QRect textRect(50, posY + 10, event->rect().width(), event->rect().height());
-            painter.drawText(textRect, action->text());
         }
         else {
-            QFont uncheckedFont("Times", 10);
-            painter.setFont(uncheckedFont);
+            if(action == hoveredAct) {
+                QFont uncheckedFont("Times", 10, QFont::Bold);
+                painter.setFont(uncheckedFont);
 
-            QPen uncheckedPen;
-            uncheckedPen.setBrush(QColor(204,204,204));
-            painter.setPen(uncheckedPen);
+                QPen hoveredPen;
+                hoveredPen.setWidth(5);
+                hoveredPen.setBrush(QColor(255, 192, 203));
+                painter.setPen(hoveredPen);
+                painter.drawLine(0, posY, 0, posY + 30);
+            }
+            else {
+                QFont uncheckedFont("Times", 10);
+                painter.setFont(uncheckedFont);
 
-            QRect textRect(50, posY + 10, event->rect().width(), event->rect().height());
-            painter.drawText(textRect, action->text());
-
+                QPen uncheckedPen;
+                uncheckedPen.setBrush(QColor(204,204,204));
+                painter.setPen(uncheckedPen);
+            }
         }
 
         QIcon icon(action->icon());
         QRect iconRect(10, posY, 30, 30);
         icon.paint(&painter, iconRect);
+        QRect textRect(50, posY + 10, event->rect().width(), event->rect().height());
+        painter.drawText(textRect, action->text());
 
         posY += 50;
     }
@@ -89,5 +94,12 @@ void Sidebar::mousePressEvent(QMouseEvent *event)
 {
     QAction *action = actionAt(event->pos());
     checkedAct = action;
+    update();
+}
+
+void Sidebar::mouseMoveEvent(QMouseEvent *event)
+{
+    QAction *action = actionAt(event->pos());
+    hoveredAct = action;
     update();
 }
