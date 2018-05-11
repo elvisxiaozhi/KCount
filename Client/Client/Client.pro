@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-05-09T18:41:44
+# Project created by QtCreator 2018-05-11T19:25:13
 #
 #-------------------------------------------------
 
@@ -33,4 +33,4 @@ HEADERS += \
     sidebar.h
 
 RESOURCES += \
-    ../Resources/Icons/icons.qrc
+    ../Resources/resources.qrc

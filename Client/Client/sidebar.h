@@ -1,25 +1,20 @@
 #ifndef SIDEBAR_H
 #define SIDEBAR_H
 
-#include <QWidget>
+#include <QDockWidget>
 #include <QAction>
 
-class Sidebar : public QWidget
+class Sidebar : public QDockWidget
 {
-    Q_OBJECT
 public:
-    explicit Sidebar(QWidget *parent = nullptr);
-    QAction *addAction(const QString &, const QIcon &);
-    QSize minimumSizeHint() const;
+    Sidebar();
 
 private:
     QList<QAction *> actList;
 
+    QAction *addAction(const QString &, const QIcon &);
+protected:
     void paintEvent(QPaintEvent *);
-
-signals:
-
-public slots:
 };
 
 #endif // SIDEBAR_H

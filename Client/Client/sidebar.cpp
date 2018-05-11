@@ -2,17 +2,20 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QDebug>
+#include <QIcon>
 
-const int actionHeight = 90;
-
-Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
+Sidebar::Sidebar()
 {
+    //hide dock widget title bar
+    QWidget *titleBarWidget = new QWidget(this);
+    setTitleBarWidget(titleBarWidget);
+    this->titleBarWidget()->hide();
+    setMinimumSize(150, 100);
 
-}
-
-QSize Sidebar::minimumSizeHint() const
-{
-    return actionHeight * QSize(1, actList.size());
+    this->addAction(tr("Overview"), QIcon(":/Resources/Icons/home_24px.png"));
+    this->addAction(tr("Dashboard"), QIcon(":/Resources/Icons/home_24px.png"));
+    this->addAction(tr("Users"), QIcon(":/Resources/Icons/home_24px.png"));
+    this->addAction(tr("Settings"), QIcon(":/Resources/Icons/home_24px.png"));
 }
 
 QAction *Sidebar::addAction(const QString &text, const QIcon &icon)
@@ -20,32 +23,20 @@ QAction *Sidebar::addAction(const QString &text, const QIcon &icon)
     QAction *action = new QAction(icon, text, this);
     action->setCheckable(true);
     actList.push_back(action);
-    update();
     return action;
 }
 
 void Sidebar::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-
-    qDebug() << event->rect().width();
-
-    int yPos = 0;
-
     painter.fillRect(rect(), QColor(240, 248, 255));
-    for(auto action: actList)
-    {
-        QRect actionRect(0, yPos, 90, 90); //icon size
-
-        painter.setPen(QColor(51, 51, 51)); //set text color
-        QSize size = painter.fontMetrics().size(Qt::TextSingleLine, action->text()); //text size
-        QRect actionTextRect(QPoint(actionRect.width()/2 - size.width()/2, actionRect.bottom()-size.height()-5), size); //text position
-        painter.drawText(actionTextRect, action->text()); //add text
-
-        QRect actionIconRect(0, yPos + 10, actionRect.width(), actionRect.height()-2*actionTextRect.height()-10);
-        QIcon actionIcon(action->icon());
-        actionIcon.paint(&painter, actionIconRect); //add icon
-
-        yPos += actionRect.height();
+    int posY = 10;
+    for(auto action : actList) {
+        QIcon icon(action->icon());
+        QRect iconRect(10, posY, 30, 30);
+        icon.paint(&painter, iconRect);
+        QRect textRect(50, posY + 10, event->rect().width(), event->rect().height());
+        painter.drawText(textRect, action->text());
+        posY += 30;
     }
 }
