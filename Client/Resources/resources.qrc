@@ -9,5 +9,7 @@
         <file>Icons/users_24px.png</file>
         <file>Icons/settings.png</file>
         <file>Icons/notification.png</file>
+        <file>Icons/down-arrow.png</file>
+        <file>Icons/up-arrow.png</file>
     </qresource>
 </RCC>

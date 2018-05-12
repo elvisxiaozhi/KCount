@@ -41,14 +41,27 @@ void Overview::paintEvent(QPaintEvent *event)
 void Overview::setWindowStyleSheet()
 {
     setStyleSheet(
-                "QWidget { background-color: #d3ffce; }"
+                "QWidget { background-color: #eeeeee; }"
+                "QComboBox { border: 1px solid gray; border-radius: 8px; padding: 8px 8px 8px 8px; min-width: 3em; background: #faebd7; }"
+                "QComboBox:editable { background: #ffe4e1; }" //set arrow background color
+                "QComboBox:on { background: #fa8072; }" //change the combo box bgcolor when opened
+                "QComboBox::drop-down {"
+                "border-left-width: 1px; border-left-color: darkgray; border-left-style: solid;/* just a single line */"
+                "border-top-right-radius: 3px; border-bottom-right-radius: 3px; /* same radius as the QComboBox */ "
+                "}" //change the shape of drop down menu
+                "QComboBox QAbstractItemView { border: 2px solid darkgray; selection-background-color: #FFC0CB; }" //change the selection bgcolor
+                "QComboBox::down-arrow { image: url(:/Resources/Icons/down-arrow.png); }"
+                "QComboBox::down-arrow:on { image: url(:/Resources/Icons/up-arrow.png); }"
+                "QLabel#SpanTextLbl { background: #D3FFCE; padding: 8px 8px 8px 8px; border: 1px solid gray; border-radius: 8px; }"
                 );
+
 }
 
 void Overview::setTimeSpanBox()
 {
     QLabel *spanTextLbl = new QLabel(this);
     spanTextLbl->setText("Time Span: ");
+    spanTextLbl->setObjectName("SpanTextLbl");
 
     timeSpanBox = new QComboBox(this);
     timeSpanBox->addItem(tr("Day"));
