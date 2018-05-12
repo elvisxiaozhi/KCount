@@ -4,10 +4,9 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    sidebar = new Sidebar();
-    addDockWidget(Qt::LeftDockWidgetArea, sidebar);
+    createSidebar();
     createContentWindow();
-    setMinimumSize(400, 300);
+    setMinimumSize(800, 400);
 }
 
 MainWindow::~MainWindow()
@@ -15,17 +14,14 @@ MainWindow::~MainWindow()
 
 }
 
+void MainWindow::createSidebar()
+{
+    sidebar = new Sidebar();
+    addDockWidget(Qt::LeftDockWidgetArea, sidebar);
+}
+
 void MainWindow::createContentWindow()
 {
-    contWidget = new QWidget(this);
-    contHLayout = new QHBoxLayout(contWidget);
-    contHLayout->setMargin(0);
-
-    QLabel *lbl = new QLabel;
-    lbl->setText("Content");
-    lbl->setAlignment(Qt::AlignCenter);
-    contHLayout->addWidget(lbl);
-
-    setCentralWidget(contWidget);
-    contWidget->setLayout(contHLayout);
+    overview = new Overview();
+    setCentralWidget(overview);
 }

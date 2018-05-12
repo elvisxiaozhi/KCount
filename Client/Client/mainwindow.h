@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include "sidebar.h"
+#include "overview.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,9 +16,11 @@ public:
 
 private:
     Sidebar *sidebar;
-    QWidget *contWidget;
-    QHBoxLayout *contHLayout;
+    Overview *overview;
+//    QWidget *contWidget;
+//    QHBoxLayout *contHLayout;
 
+    void createSidebar();
     void createContentWindow();
 };
 

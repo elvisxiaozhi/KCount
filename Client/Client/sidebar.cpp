@@ -75,7 +75,7 @@ void Sidebar::paintEvent(QPaintEvent *event)
                 painter.setFont(uncheckedFont);
 
                 QPen uncheckedPen;
-                uncheckedPen.setBrush(QColor(204,204,204));
+                uncheckedPen.setBrush(QColor(128,128,128));
                 painter.setPen(uncheckedPen);
             }
         }
