@@ -2,20 +2,24 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QStyleOption>
+#include <QDebug>
 
 Overview::Overview(QWidget *parent) : QWidget(parent)
 {
     setWindowLayout();
     setWindowStyleSheet();
     setTimeSpanBox();
+    setLbls();
 }
 
 void Overview::setWindowLayout()
 {
     mainVLayout = new QVBoxLayout(this);
-    timeSpanHLayout = new QHBoxLayout(); //do not set parent
+    timeSpanHLayout = new QHBoxLayout; //do not set parent
+    lblGLayout = new QGridLayout;
 
     mainVLayout->addLayout(timeSpanHLayout);
+    mainVLayout->addLayout(lblGLayout);
     this->setLayout(mainVLayout);
 }
 
@@ -64,10 +68,21 @@ void Overview::setTimeSpanBox()
     spanTextLbl->setObjectName("SpanTextLbl");
 
     timeSpanBox = new QComboBox(this);
+    timeSpanBox->addItem(tr("Hour"));
     timeSpanBox->addItem(tr("Day"));
     timeSpanBox->addItem(tr("Week"));
+    timeSpanBox->addItem(tr("Month"));
+    timeSpanBox->addItem(tr("Year"));
 
     timeSpanHLayout->addStretch();
     timeSpanHLayout->addWidget(spanTextLbl);
     timeSpanHLayout->addWidget(timeSpanBox);
+}
+
+void Overview::setLbls()
+{
+    totalPressed = new TotalPressed(this);
+    totalPressed->setMaximumSize(300, 300);
+
+    lblGLayout->addWidget(totalPressed, 0, 0);
 }

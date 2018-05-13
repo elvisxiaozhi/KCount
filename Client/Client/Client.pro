@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     sidebar.cpp \
-    overview.cpp
+    overview.cpp \
+    totalpressed.cpp
 
 HEADERS += \
         mainwindow.h \
     sidebar.h \
-    overview.h
+    overview.h \
+    totalpressed.h
 
 RESOURCES += \
     ../Resources/resources.qrc

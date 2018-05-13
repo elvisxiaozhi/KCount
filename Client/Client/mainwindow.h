@@ -17,8 +17,6 @@ public:
 private:
     Sidebar *sidebar;
     Overview *overview;
-//    QWidget *contWidget;
-//    QHBoxLayout *contHLayout;
 
     void createSidebar();
     void createContentWindow();

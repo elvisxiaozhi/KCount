@@ -4,8 +4,10 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QComboBox>
 #include <QLabel>
+#include "totalpressed.h"
 
 class Overview : public QWidget
 {
@@ -16,11 +18,14 @@ public:
 private:
     QHBoxLayout *timeSpanHLayout;
     QVBoxLayout *mainVLayout;
+    QGridLayout *lblGLayout;
     QComboBox *timeSpanBox;
+    TotalPressed *totalPressed;
 
     void setWindowLayout();
     void setWindowStyleSheet();
     void setTimeSpanBox();
+    void setLbls();
 
 protected:
     void paintEvent(QPaintEvent *);

@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     createSidebar();
     createContentWindow();
-    setMinimumSize(1300, 800);
+    setMinimumSize(1100, 800);
 }
 
 MainWindow::~MainWindow()
