@@ -1,9 +1,11 @@
 #include "mainwindow.h"
 #include <QLabel>
+#include "hook.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    Hook hook;
     createSidebar();
     createContentWindow();
     setMinimumSize(1100, 800);

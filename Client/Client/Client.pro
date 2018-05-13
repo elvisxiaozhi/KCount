@@ -28,13 +28,18 @@ SOURCES += \
         mainwindow.cpp \
     sidebar.cpp \
     overview.cpp \
-    totalpressed.cpp
+    totalpressed.cpp \
+    hook.cpp \
+    signalemitter.cpp
 
 HEADERS += \
         mainwindow.h \
     sidebar.h \
     overview.h \
-    totalpressed.h
+    totalpressed.h \
+    hook.h \
+    signalemitter.h \
+    singleton.h
 
 RESOURCES += \
     ../Resources/resources.qrc

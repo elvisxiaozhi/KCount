@@ -2,6 +2,8 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QPaintEvent>
+#include "signalemitter.h"
+#include <QDebug>
 
 TotalPressed::TotalPressed(QWidget *parent) : QWidget(parent)
 {
@@ -23,6 +25,8 @@ TotalPressed::TotalPressed(QWidget *parent) : QWidget(parent)
     mainVLayout->addWidget(content);
 
     setWindowStyleSheet();
+
+    connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &TotalPressed::keyPressed);
 }
 
 void TotalPressed::setWindowStyleSheet()
@@ -40,4 +44,9 @@ void TotalPressed::paintEvent(QPaintEvent *)
     opt.init(this);
     QPainter painter(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
+}
+
+void TotalPressed::keyPressed(QString pressedKey)
+{
+    qDebug() << pressedKey;
 }

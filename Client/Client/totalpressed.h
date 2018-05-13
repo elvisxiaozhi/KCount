@@ -23,6 +23,9 @@ protected:
 signals:
 
 public slots:
+
+private slots:
+    void keyPressed(QString);
 };
 
 #endif // TOTALPRESSED_H
