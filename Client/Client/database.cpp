@@ -5,6 +5,8 @@
 #include <QDate>
 
 QSqlDatabase Database::database;
+QString Database::currentDate = QDate::currentDate().toString("MM/dd/yy");
+int Database::currentHour = QTime::currentTime().toString("h").toInt();
 
 Database::Database()
 {
@@ -12,18 +14,17 @@ Database::Database()
     QString dbName = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= C:/Users/Theodore/Desktop/UserData.mdb");
     database = QSqlDatabase::addDatabase("QODBC");
     database.setDatabaseName(dbName);
+
+    setTimer(); //set the time, so the database will save automatically in each hour
 }
 
-int Database::returnTotalPressedTimes()
+unsigned long int Database::returnTotalPressedTimes()
 {
-    int totalPressedTimes = 0;
+    unsigned long int totalPressedTimes = 0;
 
     if(database.open()) {
         QSqlQuery sqlQuery;
         QString query;
-
-        QString currentDate = QDate::currentDate().toString("MM/dd/yy");
-        int currentHour = QTime::currentTime().toString("h").toInt();
 
         query = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
         sqlQuery.exec(query);
@@ -41,11 +42,8 @@ int Database::returnTotalPressedTimes()
     return totalPressedTimes;
 }
 
-void Database::updateDatabase(QString pressedKey)
+void Database::updateTotalPressedTimes(QString pressedKey)
 {
-    QString currentDate = QDate::currentDate().toString("MM/dd/yy");
-    int currentHour = QTime::currentTime().toString("h").toInt();
-
     if(database.open()) {
         //try to find if database has already stored pressed key at current hour
         QSqlQuery sqlQuery;
@@ -55,7 +53,7 @@ void Database::updateDatabase(QString pressedKey)
         if(isQueryFound(sqlQuery)) {
             QSqlQuery updateSqlQuery; //then update stored value
             QString updateQuery = QString("UPDATE Data SET PressedTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND PressedKey = '%4'").arg(QString::number(sqlQuery.value(0).toInt() + 1)).arg(currentDate).arg(currentHour).arg(pressedKey);
-            updateSqlQuery.exec(updateQuery); //then update
+            updateSqlQuery.exec(updateQuery);
         }
         else {
             QSqlQuery insertQuery;
@@ -80,4 +78,18 @@ bool Database::isQueryFound(QSqlQuery query)
         return true;
     }
     return false;
+}
+
+void Database::setTimer()
+{
+    QStringList currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
+    timer = new QTimer(this);
+    timer->start(1000 * 60 * 60 - 1000 * 60 * QString(currentTimeStringList[1]).toInt() - 1000 * QString(currentTimeStringList[2]).toInt()); //1 sec * 60 (= 1 minute) * 60 (= 1 hour)
+    connect(timer, &QTimer::timeout, this, &Database::updateTimer);
+}
+
+void Database::updateTimer()
+{
+    timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
+    emit updateDatabase();
 }

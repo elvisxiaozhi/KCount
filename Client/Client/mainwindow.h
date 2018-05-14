@@ -6,6 +6,7 @@
 #include "sidebar.h"
 #include "overview.h"
 #include "database.h"
+#include <QThread>
 
 class MainWindow : public QMainWindow
 {
@@ -17,9 +18,11 @@ public:
 
 private:
     Database database;
+    QThread dbThread;
     Sidebar *sidebar;
     Overview *overview;
 
+    void setDatabaseThread();
     void createSidebar();
     void createContentWindow();
 };

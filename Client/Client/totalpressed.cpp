@@ -6,7 +6,8 @@
 #include <QDebug>
 #include "database.h"
 
-TotalPressed::TotalPressed(QWidget *parent) : QWidget(parent)
+TotalPressed::TotalPressed(QWidget *parent)
+    : QWidget(parent), totalPressedTimes(Database::returnTotalPressedTimes())
 {
     mainVLayout = new QVBoxLayout(this);
     setLayout(mainVLayout);
@@ -17,7 +18,7 @@ TotalPressed::TotalPressed(QWidget *parent) : QWidget(parent)
     title->setAlignment(Qt::AlignCenter);
 
     content = new QLabel(this);
-    content->setText(QString::number(Database::returnTotalPressedTimes()));
+    content->setText(QString::number(totalPressedTimes));
     content->setObjectName("Content");
     content->setAlignment(Qt::AlignCenter);
     content->setFixedHeight(200);
@@ -49,6 +50,7 @@ void TotalPressed::paintEvent(QPaintEvent *)
 
 void TotalPressed::keyPressed(QString pressedKey)
 {
-    Database::updateDatabase(pressedKey);
-    content->setText(QString::number(Database::returnTotalPressedTimes()));
+    totalPressedTimes++;
+    content->setText(QString::number(totalPressedTimes));
+    qDebug() << pressedKey;
 }

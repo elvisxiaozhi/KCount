@@ -14,6 +14,7 @@ public:
 private:
     QVBoxLayout *mainVLayout;
     QLabel *title, *content;
+    unsigned long int totalPressedTimes;
 
     void setWindowStyleSheet();
 
