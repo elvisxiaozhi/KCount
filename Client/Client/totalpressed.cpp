@@ -4,6 +4,7 @@
 #include <QPaintEvent>
 #include "signalemitter.h"
 #include <QDebug>
+#include "database.h"
 
 TotalPressed::TotalPressed(QWidget *parent) : QWidget(parent)
 {
@@ -16,7 +17,7 @@ TotalPressed::TotalPressed(QWidget *parent) : QWidget(parent)
     title->setAlignment(Qt::AlignCenter);
 
     content = new QLabel(this);
-    content->setText(QString::number(0));
+    content->setText(QString::number(Database::returnTotalPressedTimes()));
     content->setObjectName("Content");
     content->setAlignment(Qt::AlignCenter);
     content->setFixedHeight(200);
@@ -48,5 +49,6 @@ void TotalPressed::paintEvent(QPaintEvent *)
 
 void TotalPressed::keyPressed(QString pressedKey)
 {
-    qDebug() << pressedKey;
+    Database::updateDatabase(pressedKey);
+    content->setText(QString::number(Database::returnTotalPressedTimes()));
 }

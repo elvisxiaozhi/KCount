@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,7 +31,8 @@ SOURCES += \
     overview.cpp \
     totalpressed.cpp \
     hook.cpp \
-    signalemitter.cpp
+    signalemitter.cpp \
+    database.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +41,8 @@ HEADERS += \
     totalpressed.h \
     hook.h \
     signalemitter.h \
-    singleton.h
+    singleton.h \
+    database.h
 
 RESOURCES += \
     ../Resources/resources.qrc

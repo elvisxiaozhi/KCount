@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include "sidebar.h"
 #include "overview.h"
+#include "database.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,6 +16,7 @@ public:
     ~MainWindow();
 
 private:
+    Database database;
     Sidebar *sidebar;
     Overview *overview;
 
