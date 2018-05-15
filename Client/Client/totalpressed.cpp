@@ -7,8 +7,10 @@
 #include "database.h"
 
 TotalPressed::TotalPressed(QWidget *parent)
-    : QWidget(parent), totalPressedTimes(Database::returnTotalPressedTimes(1))
+    : QWidget(parent)
 {
+    totalPressedTimes = Database::returnTotalPressedTimes(1);
+
     mainVLayout = new QVBoxLayout(this);
     setLayout(mainVLayout);
 

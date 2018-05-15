@@ -6,9 +6,10 @@
 #include "database.h"
 #include "signalemitter.h"
 
-MostPressed::MostPressed(QWidget *parent)
-    : QWidget(parent), mostPressed(Database::returnKeyVec(1))
+MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
 {
+    mostPressed = Database::returnKeyVec(1);
+
     setWindowStyleSheet();
 
     mainVLayout = new QVBoxLayout(this);

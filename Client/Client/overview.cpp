@@ -14,9 +14,13 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
 
     setTimer(); //set the time, so the database will save automatically in each hour
 
-    connect(this, &Overview::updateDatabase, mostPressed, &MostPressed::updateDatabase);
     connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
-        [=](int index){ totalPressed->reloadData(index); mostPressed->reloadData(index); });
+            [=](int index){ totalPressed->reloadData(index); mostPressed->reloadData(index); });
+}
+
+void Overview::updateDatabase()
+{
+    mostPressed->updateDatabase();
 }
 
 void Overview::setWindowLayout()
@@ -49,10 +53,10 @@ void Overview::paintEvent(QPaintEvent *event)
     icon.paint(&painter, iconRect);
 }
 
-void Overview::updateTimer() const
+void Overview::timeout() const
 {
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
-    emit updateDatabase();
+    mostPressed->updateDatabase();
 }
 
 void Overview::setWindowStyleSheet()
@@ -114,5 +118,5 @@ void Overview::setTimer()
     QStringList currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
     timer = new QTimer(this);
     timer->start(1000 * 60 * 60 - 1000 * 60 * QString(currentTimeStringList[1]).toInt() - 1000 * QString(currentTimeStringList[2]).toInt()); //1 sec * 60 (= 1 minute) * 60 (= 1 hour)
-    connect(timer, &QTimer::timeout, this, &Overview::updateTimer);
+    connect(timer, &QTimer::timeout, this, &Overview::timeout);
 }

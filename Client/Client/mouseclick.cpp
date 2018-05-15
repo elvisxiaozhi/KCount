@@ -5,9 +5,13 @@
 #include "signalemitter.h"
 #include "database.h"
 
-MouseClick::MouseClick(QWidget *parent)
-    : QWidget(parent), leftClickedTimes(Database::returnLeftClickTimes(1)), rightClickedTimes(Database::returnRightClickTimes(1)), tempLeftClickedTimes(0), tempRightClickedTimes(0)
+MouseClick::MouseClick(QWidget *parent) : QWidget(parent)
 {
+    leftClickedTimes = Database::returnLeftClickTimes(1);
+    rightClickedTimes = Database::returnRightClickTimes(1);
+    tempLeftClickedTimes = 0;
+    tempRightClickedTimes = 0;
+
     setWindowStyleSheet();
 
     mainVLayout = new QVBoxLayout(this);
@@ -68,6 +72,6 @@ void MouseClick::leftClicked()
 void MouseClick::rightClicked()
 {
     rightClickedTimes++;
-    tempRightClickedTimes;
+    tempRightClickedTimes++;
     rightClickCont->setText(QString("right:<br><br> %1").arg(rightClickedTimes));
 }

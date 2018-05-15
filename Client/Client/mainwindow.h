@@ -6,7 +6,7 @@
 #include "sidebar.h"
 #include "overview.h"
 #include "database.h"
-#include <QThread>
+#include <QSystemTrayIcon>
 
 class MainWindow : public QMainWindow
 {
@@ -18,13 +18,16 @@ public:
 
 private:
     Database database;
-    QThread dbThread;
     Sidebar *sidebar;
     Overview *overview;
+    QSystemTrayIcon *sysTrayIcon;
 
-    void setDatabaseThread();
     void createSidebar();
     void createContentWindow();
+    void createSystemTrayIcon();
+
+private slots:
+    void sysTrayIconActivated(QSystemTrayIcon::ActivationReason);
 };
 
 #endif // MAINWINDOW_H

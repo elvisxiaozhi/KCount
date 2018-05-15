@@ -17,6 +17,7 @@ class Overview : public QWidget
     Q_OBJECT
 public:
     explicit Overview(QWidget *parent = nullptr);
+    void updateDatabase();
 
 private:
     QHBoxLayout *timeSpanHLayout;
@@ -38,12 +39,11 @@ protected:
     void paintEvent(QPaintEvent *);
 
 signals:
-    void updateDatabase() const;
 
 public slots:
 
 private slots:
-    void updateTimer() const;
+    void timeout() const;
 };
 
 #endif // OVERVIEW_H
