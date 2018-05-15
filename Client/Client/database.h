@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QSqlDatabase>
-#include <QTimer>
 
 class Database : public QObject
 {
@@ -12,21 +11,15 @@ public:
     Database();
     static unsigned long int returnTotalPressedTimes();
     static void updateTotalPressedTimes(QString);
+    static QVector<std::pair<QString, unsigned long int>> returnKeyVec();
+    static void updatePressedKeyToDB(const QMap<QString, unsigned long int> &);
 
 private:
     static QSqlDatabase database;
     static QString currentDate;
     static int currentHour;
-    QTimer *timer;
 
-    static bool isQueryFound(QSqlQuery);
-    void setTimer();
-
-signals:
-    void updateDatabase();
-
-private slots:
-    void updateTimer();
+    static bool isQueryFound(QSqlQuery); 
 };
 
 #endif // DATABASE_H

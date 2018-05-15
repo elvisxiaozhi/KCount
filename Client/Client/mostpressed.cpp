@@ -6,7 +6,8 @@
 #include "database.h"
 #include "signalemitter.h"
 
-MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
+MostPressed::MostPressed(QWidget *parent)
+    : QWidget(parent), mostPressed(Database::returnKeyVec())
 {
     setWindowStyleSheet();
 
@@ -47,7 +48,6 @@ void MostPressed::setWindowStyleSheet()
 
 void MostPressed::setContents()
 {
-    qDebug() << mostPressed;
     if(mostPressed.isEmpty()) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText("");
@@ -76,8 +76,22 @@ void MostPressed::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 }
 
+void MostPressed::updateDatabase()
+{
+    Database::updatePressedKeyToDB(tempKeyMap);
+    tempKeyMap.clear(); //after updating datebase, clear the map, so it can store new data for the next hour
+}
+
 void MostPressed::keyPressed(QString pressedKey)
 {
+    if(tempKeyMap.contains(pressedKey)) { //if the map has already stored the pressed key
+        unsigned long int newValue = tempKeyMap.value(pressedKey) + 1; //then the map key value + 1 pressed time
+        tempKeyMap.insert(pressedKey, newValue); //and insert new data to the map
+    }
+    else {
+        tempKeyMap.insert(pressedKey, 1); //then the insert the pressed key with a 1 time pressed value to the map
+    }
+
     auto it = std::find_if(mostPressed.begin(), mostPressed.end(),
         [pressedKey](const std::pair<QString, unsigned long int> &element){ return element.first == pressedKey; });
     if(it != mostPressed.end()) {

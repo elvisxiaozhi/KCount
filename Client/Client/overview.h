@@ -7,6 +7,7 @@
 #include <QGridLayout>
 #include <QComboBox>
 #include <QLabel>
+#include <QTimer>
 #include "totalpressed.h"
 #include "mostpressed.h"
 
@@ -23,18 +24,24 @@ private:
     QComboBox *timeSpanBox;
     TotalPressed *totalPressed;
     MostPressed *mostPressed;
+    QTimer *timer;
 
     void setWindowLayout();
     void setWindowStyleSheet();
     void setTimeSpanBox();
     void setLbls();
+    void setTimer();
 
 protected:
     void paintEvent(QPaintEvent *);
 
 signals:
+    void updateDatabase() const;
 
 public slots:
+
+private slots:
+    void updateTimer() const;
 };
 
 #endif // OVERVIEW_H

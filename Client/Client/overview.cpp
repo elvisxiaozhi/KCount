@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QDebug>
+#include <QTime>
 
 Overview::Overview(QWidget *parent) : QWidget(parent)
 {
@@ -10,6 +11,10 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
     setWindowStyleSheet();
     setTimeSpanBox();
     setLbls();
+
+    setTimer(); //set the time, so the database will save automatically in each hour
+
+    connect(this, &Overview::updateDatabase, mostPressed, &MostPressed::updateDatabase);
 }
 
 void Overview::setWindowLayout()
@@ -40,6 +45,12 @@ void Overview::paintEvent(QPaintEvent *event)
     QIcon icon(":/Resources/Icons/notification.png");
     QRect iconRect(800, 55, 30, 30);
     icon.paint(&painter, iconRect);
+}
+
+void Overview::updateTimer() const
+{
+    timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
+    emit updateDatabase();
 }
 
 void Overview::setWindowStyleSheet()
@@ -89,4 +100,12 @@ void Overview::setLbls()
 
     lblGLayout->addWidget(totalPressed, 0, 0);
     lblGLayout->addWidget(mostPressed, 0, 1);
+}
+
+void Overview::setTimer()
+{
+    QStringList currentTimeStringList = QTime::currentTime().toString("hh:mm:ss").split(":");
+    timer = new QTimer(this);
+    timer->start(1000 * 60 * 60 - 1000 * 60 * QString(currentTimeStringList[1]).toInt() - 1000 * QString(currentTimeStringList[2]).toInt()); //1 sec * 60 (= 1 minute) * 60 (= 1 hour)
+    connect(timer, &QTimer::timeout, this, &Overview::updateTimer);
 }

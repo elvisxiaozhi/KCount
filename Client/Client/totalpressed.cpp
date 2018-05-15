@@ -48,9 +48,8 @@ void TotalPressed::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 }
 
-void TotalPressed::keyPressed(QString pressedKey)
+void TotalPressed::keyPressed(QString)
 {
     totalPressedTimes++;
     content->setText(QString::number(totalPressedTimes));
-    qDebug() << pressedKey;
 }

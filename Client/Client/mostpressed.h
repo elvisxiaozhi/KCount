@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QMap>
 #include <QVBoxLayout>
 
 class MostPressed : public QWidget
@@ -16,6 +17,7 @@ private:
     QLabel *title;
     QVector<QLabel *> contents;
     QVector<std::pair<QString, unsigned long int>> mostPressed;
+    QMap<QString, unsigned long int> tempKeyMap;
 
     void setWindowStyleSheet();
     void setContents();
@@ -26,6 +28,7 @@ protected:
 signals:
 
 public slots:
+    void updateDatabase();
 
 private slots:
     void keyPressed(QString);
