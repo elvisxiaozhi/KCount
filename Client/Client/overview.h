@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include "totalpressed.h"
+#include "mostpressed.h"
 
 class Overview : public QWidget
 {
@@ -21,6 +22,7 @@ private:
     QGridLayout *lblGLayout;
     QComboBox *timeSpanBox;
     TotalPressed *totalPressed;
+    MostPressed *mostPressed;
 
     void setWindowLayout();
     void setWindowStyleSheet();

@@ -84,5 +84,9 @@ void Overview::setLbls()
     totalPressed = new TotalPressed(this);
     totalPressed->setMaximumSize(300, 300);
 
+    mostPressed = new MostPressed(this);
+    mostPressed->setMaximumSize(300, 300);
+
     lblGLayout->addWidget(totalPressed, 0, 0);
+    lblGLayout->addWidget(mostPressed, 0, 1);
 }

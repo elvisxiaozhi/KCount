@@ -36,7 +36,7 @@ void TotalPressed::setWindowStyleSheet()
     setStyleSheet(
                 "QWidget { background-color: #b0e0e6; }"
                 "QLabel#Title { font: 20px; color: #666666; }"
-                "QLabel#Content { font: 70px; color: #FDFEFE; background-color: #FAD7A0; }"
+                "QLabel#Content { font: 70px; color: #FDFEFE; background: #FAD7A0; }"
                 );
 }
 
