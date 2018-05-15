@@ -9,9 +9,9 @@ class Database : public QObject
     Q_OBJECT
 public:
     Database();
-    static unsigned long int returnTotalPressedTimes();
+    static unsigned long int returnTotalPressedTimes(int);
     static void updateTotalPressedTimes(QString);
-    static QVector<std::pair<QString, unsigned long int>> returnKeyVec();
+    static QVector<std::pair<QString, unsigned long int>> returnKeyVec(int);
     static void updatePressedKeyToDB(const QMap<QString, unsigned long int> &);
 
 private:

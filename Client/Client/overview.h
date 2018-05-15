@@ -10,6 +10,7 @@
 #include <QTimer>
 #include "totalpressed.h"
 #include "mostpressed.h"
+#include "mouseclick.h"
 
 class Overview : public QWidget
 {
@@ -24,6 +25,7 @@ private:
     QComboBox *timeSpanBox;
     TotalPressed *totalPressed;
     MostPressed *mostPressed;
+    MouseClick *mouseClick;
     QTimer *timer;
 
     void setWindowLayout();

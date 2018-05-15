@@ -12,6 +12,8 @@ public:
 
 signals:
     void keyPressed(QString);
+    void leftClicked();
+    void rightClicked();
 
 public slots:
 };

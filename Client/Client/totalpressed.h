@@ -17,6 +17,7 @@ private:
     unsigned long int totalPressedTimes;
 
     void setWindowStyleSheet();
+    void setContColor(const unsigned long int &);
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -24,6 +25,7 @@ protected:
 signals:
 
 public slots:
+    void reloadData(int);
 
 private slots:
     void keyPressed(QString);

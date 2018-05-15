@@ -29,6 +29,7 @@ signals:
 
 public slots:
     void updateDatabase();
+    void reloadData(int);
 
 private slots:
     void keyPressed(QString);

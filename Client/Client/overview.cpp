@@ -15,6 +15,8 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
     setTimer(); //set the time, so the database will save automatically in each hour
 
     connect(this, &Overview::updateDatabase, mostPressed, &MostPressed::updateDatabase);
+    connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
+        [=](int index){ totalPressed->reloadData(index); mostPressed->reloadData(index); });
 }
 
 void Overview::setWindowLayout()
@@ -41,7 +43,7 @@ void Overview::paintEvent(QPaintEvent *event)
     painter.setFont(QFont("Futura", 20));
     painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Overview");
 
-//    //paint notification icon
+   //paint notification icon
     QIcon icon(":/Resources/Icons/notification.png");
     QRect iconRect(800, 55, 30, 30);
     icon.paint(&painter, iconRect);
@@ -84,6 +86,7 @@ void Overview::setTimeSpanBox()
     timeSpanBox->addItem(tr("Week"));
     timeSpanBox->addItem(tr("Month"));
     timeSpanBox->addItem(tr("Year"));
+    timeSpanBox->setCurrentText("Day");
 
     timeSpanHLayout->addStretch();
     timeSpanHLayout->addWidget(spanTextLbl);
@@ -98,8 +101,12 @@ void Overview::setLbls()
     mostPressed = new MostPressed(this);
     mostPressed->setMaximumSize(300, 300);
 
+    mouseClick = new MouseClick(this);
+    mouseClick->setMaximumSize(300, 300);
+
     lblGLayout->addWidget(totalPressed, 0, 0);
     lblGLayout->addWidget(mostPressed, 0, 1);
+    lblGLayout->addWidget(mouseClick, 0, 2);
 }
 
 void Overview::setTimer()

@@ -7,7 +7,7 @@
 #include "signalemitter.h"
 
 MostPressed::MostPressed(QWidget *parent)
-    : QWidget(parent), mostPressed(Database::returnKeyVec())
+    : QWidget(parent), mostPressed(Database::returnKeyVec(1))
 {
     setWindowStyleSheet();
 
@@ -80,6 +80,14 @@ void MostPressed::updateDatabase()
 {
     Database::updatePressedKeyToDB(tempKeyMap);
     tempKeyMap.clear(); //after updating datebase, clear the map, so it can store new data for the next hour
+}
+
+void MostPressed::reloadData(int index)
+{
+    updateDatabase();
+    mostPressed.clear();
+    mostPressed = Database::returnKeyVec(index);
+    setContents();
 }
 
 void MostPressed::keyPressed(QString pressedKey)

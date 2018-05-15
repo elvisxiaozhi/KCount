@@ -57,10 +57,10 @@ LRESULT CALLBACK MyLowLevelKeyBoardProc(int nCode, WPARAM wParam, LPARAM lParam)
 LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     if(wParam == WM_LBUTTONUP) {
-        qDebug() << "Left is up";
+        Emitter::Instance()->leftClicked();
     }
     if(wParam == WM_RBUTTONUP) {
-        qDebug() << "Right is up";
+        Emitter::Instance()->rightClicked();
     }
     return CallNextHookEx(hHook, nCode, wParam, lParam);
 }

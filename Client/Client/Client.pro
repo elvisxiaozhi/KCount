@@ -33,7 +33,8 @@ SOURCES += \
     hook.cpp \
     signalemitter.cpp \
     database.cpp \
-    mostpressed.cpp
+    mostpressed.cpp \
+    mouseclick.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS += \
     signalemitter.h \
     singleton.h \
     database.h \
-    mostpressed.h
+    mostpressed.h \
+    mouseclick.h
 
 RESOURCES += \
     ../Resources/resources.qrc
