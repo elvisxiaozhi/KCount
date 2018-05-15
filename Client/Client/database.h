@@ -13,6 +13,8 @@ public:
     static void updateTotalPressedTimes(QString);
     static QVector<std::pair<QString, unsigned long int>> returnKeyVec(int);
     static void updatePressedKeyToDB(const QMap<QString, unsigned long int> &);
+    static unsigned long int returnLeftClickTimes(int);
+    static unsigned long int returnRightClickTimes(int);
 
 private:
     static QSqlDatabase database;

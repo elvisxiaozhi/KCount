@@ -3,9 +3,10 @@
 #include <QStyleOption>
 #include <QPainter>
 #include "signalemitter.h"
+#include "database.h"
 
 MouseClick::MouseClick(QWidget *parent)
-    : QWidget(parent), leftClickedTimes(0), rightClickedTimes(0)
+    : QWidget(parent), leftClickedTimes(Database::returnLeftClickTimes(1)), rightClickedTimes(Database::returnRightClickTimes(1)), tempLeftClickedTimes(0), tempRightClickedTimes(0)
 {
     setWindowStyleSheet();
 
@@ -19,20 +20,20 @@ MouseClick::MouseClick(QWidget *parent)
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 
-    leftClickedCont = new QLabel(this);
-    leftClickedCont->setObjectName("Content");
-    leftClickedCont->setAlignment(Qt::AlignCenter);
-    leftClickedCont->setFixedSize(140, 200);
-    leftClickedCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
+    leftClickCont = new QLabel(this);
+    leftClickCont->setObjectName("Content");
+    leftClickCont->setAlignment(Qt::AlignCenter);
+    leftClickCont->setFixedSize(140, 200);
+    leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
 
-    rightClickedCont = new QLabel(this);
-    rightClickedCont->setObjectName("Content");
-    rightClickedCont->setAlignment(Qt::AlignCenter);
-    rightClickedCont->setFixedSize(140, 200);
-    rightClickedCont->setText(QString("right:<br><br> %1").arg(rightClickedTimes));
+    rightClickCont = new QLabel(this);
+    rightClickCont->setObjectName("Content");
+    rightClickCont->setAlignment(Qt::AlignCenter);
+    rightClickCont->setFixedSize(140, 200);
+    rightClickCont->setText(QString("right:<br><br> %1").arg(rightClickedTimes));
 
-    contHLayout->addWidget(leftClickedCont);
-    contHLayout->addWidget(rightClickedCont);
+    contHLayout->addWidget(leftClickCont);
+    contHLayout->addWidget(rightClickCont);
     mainVLayout->addWidget(title);
     mainVLayout->addLayout(contHLayout);
 
@@ -60,11 +61,13 @@ void MouseClick::paintEvent(QPaintEvent *)
 void MouseClick::leftClicked()
 {
     leftClickedTimes++;
-    leftClickedCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
+    tempLeftClickedTimes++;
+    leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
 }
 
 void MouseClick::rightClicked()
 {
     rightClickedTimes++;
-    rightClickedCont->setText(QString("right:<br><br> %1").arg(rightClickedTimes));
+    tempRightClickedTimes;
+    rightClickCont->setText(QString("right:<br><br> %1").arg(rightClickedTimes));
 }

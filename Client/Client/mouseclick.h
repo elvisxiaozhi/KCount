@@ -15,8 +15,8 @@ public:
 private:
     QVBoxLayout *mainVLayout;
     QHBoxLayout *contHLayout;
-    QLabel *title, *rightClickedCont, *leftClickedCont;
-    int leftClickedTimes, rightClickedTimes;
+    QLabel *title, *rightClickCont, *leftClickCont;
+    unsigned long int leftClickedTimes, rightClickedTimes, tempLeftClickedTimes, tempRightClickedTimes;
 
     void setWindowStyleSheet();
 
