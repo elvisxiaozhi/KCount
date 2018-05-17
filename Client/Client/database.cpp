@@ -149,19 +149,19 @@ unsigned long int Database::returnLeftClickTimes(int readMode)
 
         switch (readMode) {
         case 0: //hour
-            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+            query = QString("SELECT SUM(LeftClick) FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
             break;
         case 1: //day
-            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
+            query = QString("SELECT SUM(LeftClick) FROM MouseClick WHERE CreatedDate = #%1#").arg(currentDate);
             break;
         case 2: //week
-            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(LeftClick) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
         case 3: //month
-            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(LeftClick) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
         case 4: //year
-            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(LeftClick) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
@@ -191,19 +191,19 @@ unsigned long int Database::returnRightClickTimes(int readMode)
 
         switch (readMode) {
         case 0: //hour
-            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+            query = QString("SELECT SUM(RightClick) FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
             break;
         case 1: //day
-            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
+            query = QString("SELECT SUM(RightClick) FROM MouseClick WHERE CreatedDate = #%1#").arg(currentDate);
             break;
         case 2: //week
-            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(RightClick) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
         case 3: //month
-            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(RightClick) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
         case 4: //year
-            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(RightClick) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
@@ -227,7 +227,7 @@ void Database::updateLeftClickToDB(const unsigned long int &clickedTimes)
 {
     if(database.open()) {
         QSqlQuery sqlQuery;
-        QString query = QString("SELECT LeftClickTimes FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+        QString query = QString("SELECT LeftClick FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
 
         sqlQuery.exec(query);
         if(!isQueryFound(sqlQuery)) {
@@ -243,7 +243,7 @@ void Database::updateLeftClickToDB(const unsigned long int &clickedTimes)
         }
         else {
             QSqlQuery updateSqlQuery;
-            QString updateQuery = QString("UPDATE MouseClick SET LeftClickTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(QString::number(clickedTimes + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour);
+            QString updateQuery = QString("UPDATE MouseClick SET LeftClick = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(QString::number(clickedTimes + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour);
             updateSqlQuery.exec(updateQuery); //then update
         }
 
