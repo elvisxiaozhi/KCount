@@ -26,7 +26,7 @@ unsigned long int Database::returnTotalPressedTimes(int readMode)
 
         switch (readMode) {
         case 0:
-            query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedHour = %1").arg(currentHour);
+            query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
             break;
         case 1:
             query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1#").arg(currentDate);
@@ -68,7 +68,7 @@ QVector<std::pair<QString, unsigned long int>> Database::returnKeyVec(int readMo
 
         switch (readMode) {
         case 0: //hour
-            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1# AND CreatedHour = %2 GROUP BY PressedKey").arg(currentDate).arg(currentHour);
             break;
         case 1: //day
             query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
