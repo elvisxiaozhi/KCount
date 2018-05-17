@@ -26,19 +26,19 @@ unsigned long int Database::returnTotalPressedTimes(int readMode)
 
         switch (readMode) {
         case 0:
-            query = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedHour = %1").arg(currentHour);
+            query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedHour = %1").arg(currentHour);
             break;
         case 1:
-            query = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1#").arg(currentDate);
+            query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1#").arg(currentDate);
             break;
         case 2:
-            query = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
         case 3:
-            query = QString("SELECT SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
         case 4:
-            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
@@ -58,36 +58,6 @@ unsigned long int Database::returnTotalPressedTimes(int readMode)
     return totalPressedTimes;
 }
 
-void Database::updateTotalPressedTimes(QString pressedKey)
-{
-    if(database.open()) {
-        //try to find if database has already stored pressed key at current hour
-        QSqlQuery sqlQuery;
-        QString query = QString("SELECT PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2 AND PressedKey = '%3'").arg(currentDate).arg(currentHour).arg(pressedKey);
-        sqlQuery.exec(query);
-
-        if(isQueryFound(sqlQuery)) {
-            QSqlQuery updateSqlQuery; //then update stored value
-            QString updateQuery = QString("UPDATE Data SET PressedTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND PressedKey = '%4'").arg(QString::number(sqlQuery.value(0).toInt() + 1)).arg(currentDate).arg(currentHour).arg(pressedKey);
-            updateSqlQuery.exec(updateQuery);
-        }
-        else {
-            QSqlQuery insertQuery;
-            insertQuery.prepare("INSERT INTO Data (CreatedDate, CreatedHour, PressedKey, PressedTimes)"
-                                "VALUES(:CreatedDate, :CreatedHour, :PressedKey, :PressedTimes);");
-            insertQuery.bindValue(":CreatedDate", currentDate);
-            insertQuery.bindValue(":CreatedHour", currentHour);
-            insertQuery.bindValue(":PressedKey", pressedKey);
-            insertQuery.bindValue(":PressedTimes", 1);
-            insertQuery.exec();
-        }
-        database.close();
-    }
-    else {
-        qDebug() << database.lastError().text();
-    }
-}
-
 QVector<std::pair<QString, unsigned long int>> Database::returnKeyVec(int readMode)
 {
     QVector<std::pair<QString, unsigned long int>> vec;
@@ -98,19 +68,19 @@ QVector<std::pair<QString, unsigned long int>> Database::returnKeyVec(int readMo
 
         switch (readMode) {
         case 0: //hour
-            query = QString("SELECT PressedKey, PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+            query = QString("SELECT PressedKey, PressedTimes FROM KeyPress WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
             break;
         case 1: //day
-            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
+            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
             break;
         case 2: //week
-            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
         case 3: //month
-            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
         case 4: //year
-            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
@@ -139,12 +109,12 @@ void Database::updatePressedKeyToDB(const QMap<QString, unsigned long int> &map)
         for(auto it : map.toStdMap()) { //iterate the an hour temp map
             //try to find if database has already stored pressed key at current hour
             QSqlQuery sqlQuery;
-            QString query = QString("SELECT PressedTimes FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2 AND PressedKey = '%3'").arg(currentDate).arg(currentHour).arg(it.first);
+            QString query = QString("SELECT PressedTimes FROM KeyPress WHERE CreatedDate = #%1# AND CreatedHour = %2 AND PressedKey = '%3'").arg(currentDate).arg(currentHour).arg(it.first);
             sqlQuery.exec(query);
             //if database hasn't stored current hour's pressed keys
             if(!isQueryFound(sqlQuery)) {
                 QSqlQuery insertQuery;
-                insertQuery.prepare("INSERT INTO Data (CreatedDate, CreatedHour, PressedKey, PressedTimes)"
+                insertQuery.prepare("INSERT INTO KeyPress (CreatedDate, CreatedHour, PressedKey, PressedTimes)"
                                     "VALUES(:CreatedDate, :CreatedHour, :PressedKey, :PressedTimes);");
                 insertQuery.bindValue(":CreatedDate", currentDate);
                 insertQuery.bindValue(":CreatedHour", currentHour);
@@ -157,7 +127,7 @@ void Database::updatePressedKeyToDB(const QMap<QString, unsigned long int> &map)
                 QSqlQuery updateSqlQuery; //then update stored value
                 //note the it.second + sqlQuery.value(0).toInt()
                 //means new pressed times + the database has already stored pressed times = this hour totally pressed times
-                QString updateQuery = QString("UPDATE Data SET PressedTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND PressedKey = '%4'").arg(QString::number(it.second + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour).arg(it.first);
+                QString updateQuery = QString("UPDATE KeyPress SET PressedTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND PressedKey = '%4'").arg(QString::number(it.second + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour).arg(it.first);
                 updateSqlQuery.exec(updateQuery); //then update
             }
         }
@@ -179,19 +149,19 @@ unsigned long int Database::returnLeftClickTimes(int readMode)
 
         switch (readMode) {
         case 0: //hour
-            query = QString("SELECT SUM(LeftClickTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
             break;
         case 1: //day
-            query = QString("SELECT SUM(LeftClickTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
+            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
             break;
         case 2: //week
-            query = QString("SELECT SUM(LeftClickTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
         case 3: //month
-            query = QString("SELECT SUM(LeftClickTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
         case 4: //year
-            query = QString("SELECT SUM(LeftClickTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(LeftClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
@@ -221,19 +191,19 @@ unsigned long int Database::returnRightClickTimes(int readMode)
 
         switch (readMode) {
         case 0: //hour
-            query = QString("SELECT SUM(RightClickTimes) FROM Data WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
             break;
         case 1: //day
-            query = QString("SELECT SUM(RightClickTimes) FROM Data WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
+            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);
             break;
         case 2: //week
-            query = QString("SELECT SUM(RightClickTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
         case 3: //month
-            query = QString("SELECT SUM(RightClickTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
         case 4: //year
-            query = QString("SELECT SUM(RightClickTimes) FROM Data WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(RightClickTimes) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY PressedKey").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
@@ -251,6 +221,37 @@ unsigned long int Database::returnRightClickTimes(int readMode)
     }
 
     return clickedTimes;
+}
+
+void Database::updateLeftClickToDB(const unsigned long int &clickedTimes)
+{
+    if(database.open()) {
+        QSqlQuery sqlQuery;
+        QString query = QString("SELECT LeftClickTimes FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+
+        sqlQuery.exec(query);
+        if(!isQueryFound(sqlQuery)) {
+            QSqlQuery insertQuery;
+            insertQuery.prepare("INSERT INTO MouseClick (CreatedDate, CreatedHour, LeftClick, RightClick)"
+                                "VALUES(:CreatedDate, :CreatedHour, :LeftClick, :RightClick);");
+            insertQuery.bindValue(":CreatedDate", currentDate);
+            insertQuery.bindValue(":CreatedHour", currentHour);
+            int times = clickedTimes;
+            insertQuery.bindValue(":LeftClick", times);
+            insertQuery.bindValue(":RightClick", 0);
+            insertQuery.exec();
+        }
+        else {
+            QSqlQuery updateSqlQuery;
+            QString updateQuery = QString("UPDATE MouseClick SET LeftClickTimes = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(QString::number(clickedTimes + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour);
+            updateSqlQuery.exec(updateQuery); //then update
+        }
+
+        database.close();
+    }
+    else {
+        qDebug() << database.lastError().text();
+    }
 }
 
 bool Database::isQueryFound(QSqlQuery query)

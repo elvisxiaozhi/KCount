@@ -58,9 +58,11 @@ LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     if(wParam == WM_LBUTTONUP) {
         Emitter::Instance()->leftClicked();
+        qDebug() << "Left";
     }
     if(wParam == WM_RBUTTONUP) {
         Emitter::Instance()->rightClicked();
+        qDebug() << "Right";
     }
     return CallNextHookEx(hHook, nCode, wParam, lParam);
 }

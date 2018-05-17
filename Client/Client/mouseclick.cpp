@@ -62,6 +62,19 @@ void MouseClick::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 }
 
+void MouseClick::updateDatabase()
+{
+    Database::updateLeftClickToDB(tempLeftClickedTimes);
+    tempLeftClickedTimes = 0;
+}
+
+void MouseClick::reloadData(int index)
+{
+    updateDatabase();
+    leftClickedTimes = Database::returnLeftClickTimes(index);
+    leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
+}
+
 void MouseClick::leftClicked()
 {
     leftClickedTimes++;
