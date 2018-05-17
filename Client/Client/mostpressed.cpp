@@ -46,6 +46,7 @@ void MostPressed::setWindowStyleSheet()
 
 void MostPressed::setContents()
 {
+    qDebug() << mostPressed;
     if(mostPressed.isEmpty()) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText("");
