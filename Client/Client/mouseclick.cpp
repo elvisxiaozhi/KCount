@@ -4,6 +4,7 @@
 #include <QPainter>
 #include "signalemitter.h"
 #include "database.h"
+#include <QDebug>
 
 MouseClick::MouseClick(QWidget *parent) : QWidget(parent)
 {
@@ -80,6 +81,7 @@ void MouseClick::reloadData(int index)
 
 void MouseClick::leftClicked()
 {
+    qDebug() << "Left slot";
     leftClickedTimes++;
     tempLeftClickedTimes++;
     leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
@@ -87,6 +89,7 @@ void MouseClick::leftClicked()
 
 void MouseClick::rightClicked()
 {
+    qDebug() << "Right Slot";
     rightClickedTimes++;
     tempRightClickedTimes++;
     rightClickCont->setText(QString("right:<br><br> %1").arg(rightClickedTimes));

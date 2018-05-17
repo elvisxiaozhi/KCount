@@ -58,11 +58,9 @@ LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     if(wParam == WM_LBUTTONUP) {
         Emitter::Instance()->leftClicked();
-        qDebug() << "Left";
     }
     if(wParam == WM_RBUTTONUP) {
         Emitter::Instance()->rightClicked();
-        qDebug() << "Right";
     }
     return CallNextHookEx(hHook, nCode, wParam, lParam);
 }
@@ -70,7 +68,7 @@ LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 Hook::Hook()
 {
     hHook = SetWindowsHookEx(WH_KEYBOARD_LL, MyLowLevelKeyBoardProc, NULL, 0);
-    hHook = SetWindowsHookEx(WH_MOUSE_LL, LowLevelMouseProc, NULL, 0);
+    hHook = SetWindowsHookEx(WH_MOUSE_LL, (HOOKPROC)LowLevelMouseProc, GetModuleHandle(NULL), 0);
     if (hHook == NULL) {
         qDebug() << "Hook Failed" << endl;
     }
