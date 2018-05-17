@@ -64,8 +64,9 @@ void MouseClick::paintEvent(QPaintEvent *)
 
 void MouseClick::updateDatabase()
 {
-    Database::updateLeftClickToDB(tempLeftClickedTimes);
+    Database::updateLeftClickToDB(tempLeftClickedTimes, tempRightClickedTimes);
     tempLeftClickedTimes = 0;
+    tempRightClickedTimes = 0;
 }
 
 void MouseClick::reloadData(int index)
@@ -73,6 +74,8 @@ void MouseClick::reloadData(int index)
     updateDatabase();
     leftClickedTimes = Database::returnLeftClickTimes(index);
     leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
+    rightClickedTimes = Database::returnRightClickTimes(index);
+    rightClickCont->setText(QString("Left:<br><br> %1").arg(rightClickedTimes));
 }
 
 void MouseClick::leftClicked()

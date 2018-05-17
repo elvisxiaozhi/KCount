@@ -223,11 +223,11 @@ unsigned long int Database::returnRightClickTimes(int readMode)
     return clickedTimes;
 }
 
-void Database::updateLeftClickToDB(const unsigned long int &clickedTimes)
+void Database::updateLeftClickToDB(const int &leftClickedTimes, const int &rightClickedTimes)
 {
     if(database.open()) {
         QSqlQuery sqlQuery;
-        QString query = QString("SELECT LeftClick FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+        QString query = QString("SELECT LeftClick, RightClick FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
 
         sqlQuery.exec(query);
         if(!isQueryFound(sqlQuery)) {
@@ -236,15 +236,17 @@ void Database::updateLeftClickToDB(const unsigned long int &clickedTimes)
                                 "VALUES(:CreatedDate, :CreatedHour, :LeftClick, :RightClick);");
             insertQuery.bindValue(":CreatedDate", currentDate);
             insertQuery.bindValue(":CreatedHour", currentHour);
-            int times = clickedTimes;
-            insertQuery.bindValue(":LeftClick", times);
-            insertQuery.bindValue(":RightClick", 0);
+            insertQuery.bindValue(":LeftClick", leftClickedTimes);
+            insertQuery.bindValue(":RightClick", rightClickedTimes);
             insertQuery.exec();
         }
         else {
             QSqlQuery updateSqlQuery;
-            QString updateQuery = QString("UPDATE MouseClick SET LeftClick = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(QString::number(clickedTimes + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour);
-            updateSqlQuery.exec(updateQuery); //then update
+            QString updateQuery;
+            updateQuery = QString("UPDATE MouseClick SET LeftClick = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(QString::number(leftClickedTimes + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour);
+            updateSqlQuery.exec(updateQuery);
+            updateQuery = QString("UPDATE MouseClick SET RightClick = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(QString::number(rightClickedTimes + sqlQuery.value(1).toInt())).arg(currentDate).arg(currentHour);
+            updateSqlQuery.exec(updateQuery);
         }
 
         database.close();
