@@ -49,23 +49,23 @@ void MostPressed::setContents()
     if(mostPressed.isEmpty()) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText("");
-            contents[i]->setLabelColor(mostPressed[i].second);
+//            contents[i]->setLabelColor(mostPressed[i].second);
         }
     }
     if(mostPressed.size() > 5) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
-            contents[i]->setLabelColor(mostPressed[i].second);
+//            contents[i]->setLabelColor(mostPressed[i].second);
         }
     }
     else {
         for(int i = 0; i < mostPressed.size(); ++i) {
             contents[i]->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
-            contents[i]->setLabelColor(mostPressed[i].second);
+//            contents[i]->setLabelColor(mostPressed[i].second);
         }
         for(int i = 0; i < 5 - mostPressed.size(); ++i) {
             contents[4 - i]->setText(""); //note the 4 - i
-            contents[4 - i]->setLabelColor(0);
+//            contents[4 - i]->setLabelColor(0);
         }
     }
 }

@@ -8,8 +8,8 @@
 
 MouseClick::MouseClick(QWidget *parent) : QWidget(parent)
 {
-    leftClickedTimes = Database::returnLeftClickTimes(1);
-    rightClickedTimes = Database::returnRightClickTimes(1);
+    leftClickedTimes = Database::returnClickedTimes("LeftClick", 1);
+    rightClickedTimes = Database::returnClickedTimes("RightClick", 1);
     tempLeftClickedTimes = 0;
     tempRightClickedTimes = 0;
 
@@ -73,9 +73,9 @@ void MouseClick::updateDatabase()
 void MouseClick::reloadData(int index)
 {
     updateDatabase();
-    leftClickedTimes = Database::returnLeftClickTimes(index);
+    leftClickedTimes = Database::returnClickedTimes("LeftClick", index);
     leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
-    rightClickedTimes = Database::returnRightClickTimes(index);
+    rightClickedTimes = Database::returnClickedTimes("RightClick", index);
     rightClickCont->setText(QString("Left:<br><br> %1").arg(rightClickedTimes));
 }
 

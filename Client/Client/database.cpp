@@ -223,6 +223,48 @@ unsigned long int Database::returnRightClickTimes(int readMode)
     return clickedTimes;
 }
 
+unsigned long int Database::returnClickedTimes(QString clickType, int readMode)
+{
+    unsigned long int clickedTimes = 0;
+
+    if(database.open()) {
+        QSqlQuery sqlQuery;
+        QString query;
+
+        switch (readMode) {
+        case 0: //hour
+            query = QString("SELECT SUM(%1) FROM MouseClick WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(clickType).arg(currentDate).arg(currentHour);
+            break;
+        case 1: //day
+            query = QString("SELECT SUM(%1) FROM MouseClick WHERE CreatedDate = #%2#").arg(clickType).arg(currentDate);
+            break;
+        case 2: //week
+            query = QString("SELECT SUM(%1) FROM MouseClick WHERE CreatedDate BETWEEN #%2# AND #%3#").arg(clickType).arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+            break;
+        case 3: //month
+            query = QString("SELECT SUM(%1) FROM MouseClick WHERE CreatedDate BETWEEN #%2# AND #%3#").arg(clickType).arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            break;
+        case 4: //year
+            query = QString("SELECT SUM(%1) FROM MouseClick WHERE CreatedDate BETWEEN #%2# AND #%3#").arg(clickType).arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            break;
+        default:
+            break;
+        }
+
+        sqlQuery.exec(query);
+        while(sqlQuery.next()) {
+            clickedTimes = sqlQuery.value(0).toInt();
+        }
+
+        database.close();
+    }
+    else {
+        qDebug() << database.lastError().text();
+    }
+
+    return clickedTimes;
+}
+
 void Database::updateLeftClickToDB(const int &leftClickedTimes, const int &rightClickedTimes)
 {
     if(database.open()) {
