@@ -38,7 +38,7 @@ unsigned long int Database::returnTotalPressedTimes(int readMode)
             query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
         case 4:
-            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
@@ -68,7 +68,7 @@ QVector<std::pair<QString, unsigned long int>> Database::returnKeyVec(int readMo
 
         switch (readMode) {
         case 0: //hour
-            query = QString("SELECT PressedKey, PressedTimes FROM KeyPress WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
+            query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(currentHour);
             break;
         case 1: //day
             query = QString("SELECT PressedKey, SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1# GROUP BY PressedKey").arg(currentDate);

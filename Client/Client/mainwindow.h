@@ -7,6 +7,7 @@
 #include "overview.h"
 #include "database.h"
 #include <QSystemTrayIcon>
+#include <QThread>
 
 class MainWindow : public QMainWindow
 {
@@ -17,11 +18,13 @@ public:
     ~MainWindow();
 
 private:
-    Database database;
+    Database *database;
     Sidebar *sidebar;
     Overview *overview;
     QSystemTrayIcon *sysTrayIcon;
+    QThread dbThread;
 
+    void createDBThread();
     void createSidebar();
     void createContentWindow();
     void createSystemTrayIcon();
