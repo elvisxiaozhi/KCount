@@ -24,9 +24,7 @@ MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
 
     contents.resize(5);
     for(int i = 0; i < contents.size(); ++i) {
-        contents[i] = new QLabel(this);
-        contents[i]->setAlignment(Qt::AlignCenter);
-        contents[i]->setObjectName("Contents");
+        contents[i] = new Label(mostPressed[i].second, 20);
         contents[i]->setFixedHeight(40);
         contVLayout->addWidget(contents[i]);
     }
@@ -43,7 +41,6 @@ void MostPressed::setWindowStyleSheet()
     setStyleSheet(
                 "QWidget { background: #FFE4E1; }"
                 "QLabel#Title { font: 20px; color: #666666; }"
-                "QLabel#Contents { font: 20px; color: #FDFEFE; background: #FAD7A0; border: 1px solid #F1C40F; }"
                 );
 }
 
@@ -52,19 +49,23 @@ void MostPressed::setContents()
     if(mostPressed.isEmpty()) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText("");
+            contents[i]->setLabelColor(mostPressed[i].second);
         }
     }
     if(mostPressed.size() > 5) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
+            contents[i]->setLabelColor(mostPressed[i].second);
         }
     }
     else {
         for(int i = 0; i < mostPressed.size(); ++i) {
             contents[i]->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
+            contents[i]->setLabelColor(mostPressed[i].second);
         }
         for(int i = 0; i < 5 - mostPressed.size(); ++i) {
             contents[4 - i]->setText(""); //note the 4 - i
+            contents[4 - i]->setLabelColor(0);
         }
     }
 }

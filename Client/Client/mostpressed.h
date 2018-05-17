@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QMap>
 #include <QVBoxLayout>
+#include <label.h>
 
 class MostPressed : public QWidget
 {
@@ -15,7 +16,7 @@ public:
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
     QLabel *title;
-    QVector<QLabel *> contents;
+    QVector<Label *> contents;
     QVector<std::pair<QString, unsigned long int>> mostPressed;
     QMap<QString, unsigned long int> tempKeyMap;
 
