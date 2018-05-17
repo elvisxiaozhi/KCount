@@ -4,6 +4,7 @@
 #include <QStyleOption>
 #include <QDebug>
 #include <QTime>
+#include <QKeyEvent>
 
 Overview::Overview(QWidget *parent) : QWidget(parent)
 {
@@ -86,11 +87,8 @@ void Overview::setTimeSpanBox()
     spanTextLbl->setObjectName("SpanTextLbl");
 
     timeSpanBox = new QComboBox(this);
-    timeSpanBox->addItem(tr("Hour"));
-    timeSpanBox->addItem(tr("Day"));
-    timeSpanBox->addItem(tr("Week"));
-    timeSpanBox->addItem(tr("Month"));
-    timeSpanBox->addItem(tr("Year"));
+    timeSpanBox->installEventFilter(this);
+    timeSpanBox->addItems({tr("Hour"), tr("Day"), tr("Week"), tr("Month"), tr("Year")});
     timeSpanBox->setCurrentText("Day");
 
     timeSpanHLayout->addStretch();
@@ -120,4 +118,17 @@ void Overview::setTimer()
     timer = new QTimer(this);
     timer->start(1000 * 60 * 60 - 1000 * 60 * QString(currentTimeStringList[1]).toInt() - 1000 * QString(currentTimeStringList[2]).toInt()); //1 sec * 60 (= 1 minute) * 60 (= 1 hour)
     connect(timer, &QTimer::timeout, this, &Overview::timeout);
+}
+
+bool Overview::eventFilter(QObject *watched, QEvent *event)
+{
+    if(timeSpanBox){
+        if(timeSpanBox == watched && event->type() == QEvent::KeyPress){
+           QKeyEvent *key = static_cast<QKeyEvent *>(event);
+           if(!key->text().isEmpty()) {
+               return true;
+           }
+        }
+    }
+    return QObject::eventFilter(watched, event);
 }

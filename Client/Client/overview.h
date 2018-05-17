@@ -34,6 +34,7 @@ private:
     void setTimeSpanBox();
     void setLbls();
     void setTimer();
+    bool eventFilter(QObject *watched, QEvent *event);
 
 protected:
     void paintEvent(QPaintEvent *);
