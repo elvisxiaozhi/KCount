@@ -24,7 +24,7 @@ MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
 
     contents.resize(5);
     for(int i = 0; i < contents.size(); ++i) {
-        contents[i] = new Label(mostPressed[i].second, 20);
+        contents[i] = new Label(0, 20);
         contents[i]->setFixedHeight(40);
         contVLayout->addWidget(contents[i]);
     }

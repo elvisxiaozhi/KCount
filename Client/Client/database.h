@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include "singleton.h"
 
 class Database : public QObject
 {
@@ -21,6 +22,7 @@ private:
     static int currentHour;
 
     static bool isQueryFound(QSqlQuery); 
+
 };
 
 #endif // DATABASE_H
