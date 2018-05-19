@@ -3,9 +3,11 @@
 
 #include <QDockWidget>
 #include <QAction>
+#include <QObject>
 
 class Sidebar : public QDockWidget
 {
+    Q_OBJECT
 public:
     Sidebar();
 
@@ -16,6 +18,9 @@ private:
 
     QAction *addAction(const QString &, const QIcon &);
     QAction *actionAt(const QPoint &);
+
+signals:
+    void actionChanged(int);
 
 protected:
     void paintEvent(QPaintEvent *);

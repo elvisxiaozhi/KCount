@@ -35,7 +35,8 @@ SOURCES += \
     database.cpp \
     mostpressed.cpp \
     mouseclick.cpp \
-    label.cpp
+    label.cpp \
+    dashboard.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,7 +49,8 @@ HEADERS += \
     database.h \
     mostpressed.h \
     mouseclick.h \
-    label.h
+    label.h \
+    dashboard.h
 
 RESOURCES += \
     ../Resources/resources.qrc

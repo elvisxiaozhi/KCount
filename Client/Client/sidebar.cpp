@@ -94,6 +94,10 @@ void Sidebar::mousePressEvent(QMouseEvent *event)
 {
     QAction *action = actionAt(event->pos());
     checkedAct = action;
+    if(checkedAct != NULL) {
+        int index = std::find(actList.begin(), actList.end(), checkedAct) - actList.begin();
+        emit actionChanged(index);
+    }
     update();
 }
 

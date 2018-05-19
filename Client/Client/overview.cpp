@@ -89,7 +89,6 @@ void Overview::setWindowStyleSheet()
                 "QComboBox::down-arrow:on { image: url(:/Resources/Icons/up-arrow.png); }"
                 "QLabel#SpanTextLbl { background: #D3FFCE; padding: 8px 8px 8px 8px; border: 1px solid gray; border-radius: 8px; }"
                 );
-
 }
 
 void Overview::setTimeSpanBox()

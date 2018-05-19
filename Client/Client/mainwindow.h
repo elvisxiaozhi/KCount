@@ -8,6 +8,7 @@
 #include "database.h"
 #include <QSystemTrayIcon>
 #include <QThread>
+#include "dashboard.h"
 
 class MainWindow : public QMainWindow
 {
@@ -20,7 +21,11 @@ public:
 private:
     Database *database;
     Sidebar *sidebar;
+    QWidget *contentWidget;
+    QVBoxLayout *contVLayout;
+    QVector<QWidget *> contentVec;
     Overview *overview;
+    Dashboard *dashboard;
     QSystemTrayIcon *sysTrayIcon;
     QThread dbThread;
 
@@ -31,6 +36,7 @@ private:
 
 private slots:
     void sysTrayIconActivated(QSystemTrayIcon::ActivationReason);
+    void changeContent(int);
 };
 
 #endif // MAINWINDOW_H
