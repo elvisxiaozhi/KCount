@@ -11,6 +11,7 @@
 #include "totalpressed.h"
 #include "mostpressed.h"
 #include "mouseclick.h"
+#include "hook.h"
 
 class Overview : public QWidget
 {
@@ -28,6 +29,7 @@ private:
     MostPressed *mostPressed;
     MouseClick *mouseClick;
     QTimer *timer;
+    Hook *hook;
 
     void setWindowLayout();
     void setWindowStyleSheet();
@@ -44,7 +46,7 @@ signals:
 public slots:
 
 private slots:
-    void timeout() const;
+    void timeout();
 };
 
 #endif // OVERVIEW_H

@@ -1,13 +1,11 @@
 #include "mainwindow.h"
 #include <QLabel>
-#include "hook.h"
 #include <QMenu>
 #include <QCoreApplication>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    Hook hook;
     createDBThread();
     createSidebar();
     createContentWindow();
@@ -61,6 +59,5 @@ void MainWindow::sysTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == 2 || reason == 3) { //tray icon was double clicked or clicked
         this->showNormal(); //to show a normal size of the main window
-//        setLblTextAndColor();
     }
 }

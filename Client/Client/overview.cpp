@@ -20,7 +20,12 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
         mostPressed->reloadData(index);
         totalPressed->reloadData(index); /*note most first, then total*/
         mouseClick->reloadData(index);
+
+        delete hook;
+        hook = new Hook;
     });
+
+    hook = new Hook;
 }
 
 void Overview::updateDatabase()
@@ -59,10 +64,13 @@ void Overview::paintEvent(QPaintEvent *event)
     icon.paint(&painter, iconRect);
 }
 
-void Overview::timeout() const
+void Overview::timeout()
 {
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
     mostPressed->updateDatabase();
+
+    delete hook;
+    hook = new Hook;
 }
 
 void Overview::setWindowStyleSheet()
