@@ -7,7 +7,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    createDBThread();
     createSidebar();
     createContentWindow();
     createSystemTrayIcon();
@@ -18,21 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    dbThread.quit();
-    dbThread.wait();
-}
-
-void MainWindow::createDBThread()
-{
-    database = new Database;
-    database->moveToThread(&dbThread);
-    connect(&dbThread, &QThread::finished, database, &QObject::deleteLater);
-    dbThread.start();
 }
 
 void MainWindow::createSidebar()
 {
-    sidebar = new Sidebar();
+    sidebar = new Sidebar;
     addDockWidget(Qt::LeftDockWidgetArea, sidebar);
 }
 
@@ -43,22 +32,18 @@ void MainWindow::createContentWindow()
     contentWidget->setLayout(contVLayout);
     setCentralWidget(contentWidget);
 
-    overview = new Overview;
-    dashboard = new Dashboard;
-    users = new Users;
-    settings = new Settings;
-    contentVec.push_back(overview);
-    contentVec.push_back(dashboard);
-    contentVec.push_back(users);
-    contentVec.push_back(settings);
+    contentVec.push_back(&overview);
+    contentVec.push_back(&dashboard);
+    contentVec.push_back(&users);
+    contentVec.push_back(&settings);
     contentVec.resize(4);
-    dashboard->hide();
-    users->hide();
-    settings->hide();
-    contVLayout->addWidget(overview);
-    contVLayout->addWidget(dashboard);
-    contVLayout->addWidget(users);
-    contVLayout->addWidget(settings);
+    dashboard.hide();
+    users.hide();
+    settings.hide();
+    contVLayout->addWidget(&overview);
+    contVLayout->addWidget(&dashboard);
+    contVLayout->addWidget(&users);
+    contVLayout->addWidget(&settings);
 }
 
 void MainWindow::createSystemTrayIcon()
@@ -74,7 +59,7 @@ void MainWindow::createSystemTrayIcon()
     sysTrayIcon->setContextMenu(menu);
 
     connect(sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::sysTrayIconActivated);
-    connect(quitAct, &QAction::triggered, [this](){ overview->updateDatabase(); qApp->quit(); });
+    connect(quitAct, &QAction::triggered, [this](){ overview.updateDatabase(); qApp->quit(); });
 }
 
 void MainWindow::sysTrayIconActivated(QSystemTrayIcon::ActivationReason reason)

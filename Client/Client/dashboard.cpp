@@ -61,7 +61,7 @@ void Dashboard::createTimeSpanBox()
 void Dashboard::createCharts()
 {
     barChart = new BarChart;
-    barChart->setFixedSize(300, 300);
+    barChart->setFixedSize(600, 300);
     gLayout->addWidget(barChart, 0, 0);
 }
 

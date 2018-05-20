@@ -27,5 +27,5 @@ void Settings::paintEvent(QPaintEvent *event)
     //paint the title
     painter.setPen(QColor(255,115,115));
     painter.setFont(QFont("Futura", 20));
-    painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Dashboard");
+    painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Settings");
 }

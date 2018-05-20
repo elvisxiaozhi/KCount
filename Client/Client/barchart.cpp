@@ -1,6 +1,7 @@
 #include "barchart.h"
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QDebug>
 
 BarChart::BarChart(QWidget *parent) : QWidget(parent)
 {
@@ -9,22 +10,23 @@ BarChart::BarChart(QWidget *parent) : QWidget(parent)
     series = new QBarSeries();
 
     chart = new QChart();
-    chart->setTitle("Bar Chart");
+//    chart->setTitle("Bar Chart");
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->setTheme(QChart::ChartThemeBlueIcy);
 
-
     axis = new QBarCategoryAxis();
     axis->setGridLineVisible(false);
+
+    axisX = new QValueAxis();
+    axisX->setGridLineVisible(false);
 
     axisY = new QValueAxis();
     axisY->setGridLineVisible(false);
     axisY->setLabelFormat("%d");
 
     series->append(set);
-    axis->append(categories);
 
-    chart->legend()->setVisible(true);
+    chart->legend()->setVisible(false);
     chart->legend()->setAlignment(Qt::AlignBottom);
 
     QChartView *chartView = new QChartView(chart);
@@ -38,10 +40,12 @@ BarChart::BarChart(QWidget *parent) : QWidget(parent)
 }
 
 void BarChart::setChartData()
-{
-    *set << 1 << 2;
-    categories << "Jan" << "Feb";
+{    
+    for(int i = 0; i < 24; ++i) {
+        set->append(i);
+    }
 
+//    qDebug() << axis->type();
     chart->addSeries(series);
     chart->createDefaultAxes();
     chart->setAxisX(axis, series);

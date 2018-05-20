@@ -8,6 +8,7 @@
 #include <QtCharts/QBarSeries>
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QLegend>
+#include <QtCharts/QAbstractAxis>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -21,7 +22,7 @@ private:
     QBarSet *set;
     QBarSeries *series;
     QBarCategoryAxis *axis;
-    QValueAxis *axisY;
+    QValueAxis *axisX, *axisY;
     QStringList categories;
     QChart *chart;
     QChartView *view;

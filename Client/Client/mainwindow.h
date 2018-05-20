@@ -7,7 +7,6 @@
 #include "overview.h"
 #include "database.h"
 #include <QSystemTrayIcon>
-#include <QThread>
 #include "dashboard.h"
 #include "users.h"
 #include "settings.h"
@@ -21,19 +20,17 @@ public:
     ~MainWindow();
 
 private:
-    Database *database;
+    Database database;
     Sidebar *sidebar;
     QWidget *contentWidget;
     QVBoxLayout *contVLayout;
     QVector<QWidget *> contentVec;
-    Overview *overview;
-    Dashboard *dashboard;
-    Users *users;
-    Settings *settings;
+    Overview overview;
+    Dashboard dashboard;
+    Users users;
+    Settings settings;
     QSystemTrayIcon *sysTrayIcon;
-    QThread dbThread;
 
-    void createDBThread();
     void createSidebar();
     void createContentWindow();
     void createSystemTrayIcon();
