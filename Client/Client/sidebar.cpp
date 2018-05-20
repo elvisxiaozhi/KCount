@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QIcon>
 
-Sidebar::Sidebar() : checkedAct(NULL), hoveredAct(NULL)
+Sidebar::Sidebar()
 {
     //hide dock widget title bar
     QWidget *titleBarWidget = new QWidget(this);
@@ -19,6 +19,9 @@ Sidebar::Sidebar() : checkedAct(NULL), hoveredAct(NULL)
     this->addAction(tr("Dashboard"), QIcon(":/Resources/Icons/dashboard_24px.png"));
     this->addAction(tr("Users"), QIcon(":/Resources/Icons/users_24px.png"));
     this->addAction(tr("Settings"), QIcon(":/Resources/Icons/settings_24px.png"));
+
+    checkedAct = actList[0];
+    hoveredAct = NULL;
 }
 
 QAction *Sidebar::addAction(const QString &text, const QIcon &icon)

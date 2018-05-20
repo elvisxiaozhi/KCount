@@ -1,22 +1,22 @@
-#include "dashboard.h"
+#include "settings.h"
 #include <QPaintEvent>
 #include <QPainter>
 #include <QStyleOption>
 #include <QDebug>
 
-Dashboard::Dashboard(QWidget *parent) : QWidget(parent)
+Settings::Settings(QWidget *parent) : QWidget(parent)
 {
     setWindowStyleSheet();
 }
 
-void Dashboard::setWindowStyleSheet()
+void Settings::setWindowStyleSheet()
 {
     setStyleSheet(
                 "QWidget { background-color: #eeeeee; }"
                 );
 }
 
-void Dashboard::paintEvent(QPaintEvent *event)
+void Settings::paintEvent(QPaintEvent *event)
 {
     //to make the custom widget able to set style sheet
     QStyleOption opt;

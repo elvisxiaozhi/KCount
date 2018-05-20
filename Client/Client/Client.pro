@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT += sql
+QT += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -36,7 +37,10 @@ SOURCES += \
     mostpressed.cpp \
     mouseclick.cpp \
     label.cpp \
-    dashboard.cpp
+    dashboard.cpp \
+    users.cpp \
+    settings.cpp \
+    barchart.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,7 +54,10 @@ HEADERS += \
     mostpressed.h \
     mouseclick.h \
     label.h \
-    dashboard.h
+    dashboard.h \
+    users.h \
+    settings.h \
+    barchart.h
 
 RESOURCES += \
     ../Resources/resources.qrc

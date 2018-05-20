@@ -45,12 +45,20 @@ void MainWindow::createContentWindow()
 
     overview = new Overview;
     dashboard = new Dashboard;
+    users = new Users;
+    settings = new Settings;
     contentVec.push_back(overview);
     contentVec.push_back(dashboard);
+    contentVec.push_back(users);
+    contentVec.push_back(settings);
     contentVec.resize(4);
     dashboard->hide();
+    users->hide();
+    settings->hide();
     contVLayout->addWidget(overview);
     contVLayout->addWidget(dashboard);
+    contVLayout->addWidget(users);
+    contVLayout->addWidget(settings);
 }
 
 void MainWindow::createSystemTrayIcon()
@@ -78,12 +86,12 @@ void MainWindow::sysTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void MainWindow::changeContent(int index)
 {
-    if(index == 0) {
-        contentVec[0]->show();
-        contentVec[1]->hide();
-    }
-    if(index == 1) {
-        contentVec[0]->hide();
-        contentVec[1]->show();
+    for(auto content : contentVec) {
+        if(content == contentVec[index]) {
+            content->show();
+        }
+        else {
+            content->hide();
+        }
     }
 }

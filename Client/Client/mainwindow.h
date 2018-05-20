@@ -9,6 +9,8 @@
 #include <QSystemTrayIcon>
 #include <QThread>
 #include "dashboard.h"
+#include "users.h"
+#include "settings.h"
 
 class MainWindow : public QMainWindow
 {
@@ -26,6 +28,8 @@ private:
     QVector<QWidget *> contentVec;
     Overview *overview;
     Dashboard *dashboard;
+    Users *users;
+    Settings *settings;
     QSystemTrayIcon *sysTrayIcon;
     QThread dbThread;
 

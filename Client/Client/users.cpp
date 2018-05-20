@@ -1,22 +1,22 @@
-#include "dashboard.h"
+#include "users.h"
 #include <QPaintEvent>
 #include <QPainter>
 #include <QStyleOption>
 #include <QDebug>
 
-Dashboard::Dashboard(QWidget *parent) : QWidget(parent)
+Users::Users(QWidget *parent) : QWidget(parent)
 {
     setWindowStyleSheet();
 }
 
-void Dashboard::setWindowStyleSheet()
+void Users::setWindowStyleSheet()
 {
     setStyleSheet(
                 "QWidget { background-color: #eeeeee; }"
                 );
 }
 
-void Dashboard::paintEvent(QPaintEvent *event)
+void Users::paintEvent(QPaintEvent *event)
 {
     //to make the custom widget able to set style sheet
     QStyleOption opt;
@@ -27,5 +27,5 @@ void Dashboard::paintEvent(QPaintEvent *event)
     //paint the title
     painter.setPen(QColor(255,115,115));
     painter.setFont(QFont("Futura", 20));
-    painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Dashboard");
+    painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Users");
 }
