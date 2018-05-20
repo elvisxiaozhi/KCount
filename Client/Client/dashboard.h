@@ -2,6 +2,11 @@
 #define DASHBOARD_H
 
 #include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QComboBox>
+#include <QGridLayout>
+#include <barchart.h>
 
 class Dashboard : public QWidget
 {
@@ -10,7 +15,16 @@ public:
     explicit Dashboard(QWidget *parent = nullptr);
 
 private:
+    QVBoxLayout *mainVLayout;
+    QHBoxLayout *timeSpanHLayout;
+    QGridLayout *gLayout;
+    QComboBox *timeSpanBox;
+    BarChart *barChart;
+
     void setWindowStyleSheet();
+    void setWindowLayout();
+    void createTimeSpanBox();
+    void createCharts();
 
 protected:
     void paintEvent(QPaintEvent *);
