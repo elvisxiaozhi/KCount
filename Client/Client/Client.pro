@@ -41,7 +41,8 @@ SOURCES += \
     users.cpp \
     settings.cpp \
     barchart.cpp \
-    initialisation.cpp
+    initialisation.cpp \
+    messagebox.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -59,7 +60,8 @@ HEADERS += \
     users.h \
     settings.h \
     barchart.h \
-    initialisation.h
+    initialisation.h \
+    messagebox.h
 
 RESOURCES += \
     ../Resources/resources.qrc

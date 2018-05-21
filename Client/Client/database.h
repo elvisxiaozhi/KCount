@@ -25,6 +25,7 @@ private:
 
     static bool isQueryFound(QSqlQuery); 
     void createDataFile();
+    void showErrorMsBox();
 };
 
 #endif // DATABASE_H

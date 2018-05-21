@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include "initialisation.h"
+#include "messagebox.h"
 
 QSqlDatabase Database::database;
 QString Database::currentDate = QDate::currentDate().toString("MM/dd/yy");
@@ -19,6 +20,10 @@ Database::Database(QObject *parent) : QObject(parent)
     QString dbName = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(databaseLoc);
     database = QSqlDatabase::addDatabase("QODBC");
     database.setDatabaseName(dbName);
+
+    if(!database.open()) {
+        showErrorMsBox();
+    }
 }
 
 unsigned long int Database::returnTotalPressedTimes(int readMode)
@@ -245,4 +250,12 @@ void Database::createDataFile()
         }
         Initialisation::settings.setValue("InitSettings/AppPath", QDir::currentPath());
     }
+}
+
+void Database::showErrorMsBox()
+{
+    MessageBox msBox;
+    connect(&msBox, &MessageBox::fixDatabaseError, [=](){ createDataFile(); });
+    msBox.setDetailedText(database.lastError().text());
+    msBox.showDatabaseErrorMsBox();
 }
