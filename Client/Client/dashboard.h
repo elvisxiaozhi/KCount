@@ -19,7 +19,7 @@ private:
     QHBoxLayout *timeSpanHLayout;
     QGridLayout *gLayout;
     QComboBox *timeSpanBox;
-    BarChart *barChart;
+    BarChart *barChartArr[2];
 
     void setWindowStyleSheet();
     void setWindowLayout();

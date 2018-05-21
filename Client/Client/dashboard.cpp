@@ -60,9 +60,11 @@ void Dashboard::createTimeSpanBox()
 
 void Dashboard::createCharts()
 {
-    barChart = new BarChart;
-    barChart->setFixedSize(600, 300);
-    gLayout->addWidget(barChart, 0, 0);
+    for(int i = 1; i < 3; ++i) {
+        barChartArr[i] = new BarChart(this, i);
+        barChartArr[i]->setFixedSize(600, 300);
+        gLayout->addWidget(barChartArr[i], i, 0);
+    }
 }
 
 void Dashboard::paintEvent(QPaintEvent *event)

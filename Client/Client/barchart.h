@@ -16,7 +16,7 @@ class BarChart : public QWidget
 {
     Q_OBJECT
 public:
-    BarChart(QWidget *parent = nullptr);
+    BarChart(QWidget *parent = nullptr, int mode = 1);
 
 private:
     QBarSet *set;
@@ -28,7 +28,7 @@ private:
     QChart *chart;
     QChartView *view;
 
-    void setChartData();
+    void setChartData(int);
 };
 
 #endif // BARCHART_H

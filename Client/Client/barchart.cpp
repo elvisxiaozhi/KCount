@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QDateTime>
 
-BarChart::BarChart(QWidget *parent) : QWidget(parent)
+BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
 {
     chart = new QChart;
     chart->setAnimationOptions(QChart::AllAnimations);
@@ -34,15 +34,34 @@ BarChart::BarChart(QWidget *parent) : QWidget(parent)
     mainVLayout->addWidget(chartView);
     setLayout(mainVLayout);
 
-    setChartData();
+    setChartData(mode);
 }
 
-void BarChart::setChartData()
+void BarChart::setChartData(int mode)
 {    
-    int daysInMonth = QDate::currentDate().daysInMonth();
-    for(int i = 0; i < daysInMonth; ++i) {
-        lineSeries->append(QDateTime::currentDateTime().addDays(i - daysInMonth + 1).toMSecsSinceEpoch(), 0);
-        set->append(i);
+    switch (mode) {
+    case 1:
+        for(int i = 6; i >= 0; --i) {
+            lineSeries->append(QDateTime::currentDateTime().addDays(-i).toMSecsSinceEpoch(), 0);
+            set->append(i);
+        }
+        break;
+    case 2: {
+        int daysInMonth = QDate::currentDate().daysInMonth();
+        for(int i = 0; i < daysInMonth; ++i) {
+            lineSeries->append(QDateTime::currentDateTime().addDays(i - daysInMonth + 1).toMSecsSinceEpoch(), 0);
+            set->append(i);
+        }
+    }
+        break;
+    case 3:
+        for(int i = 0; i < 12; ++i) {
+            lineSeries->append(QDateTime::currentDateTime().addMonths(-12 + i).toMSecsSinceEpoch(), 0);
+            set->append(i);
+        }
+        break;
+    default:
+        break;
     }
 
     chart->addSeries(series);
