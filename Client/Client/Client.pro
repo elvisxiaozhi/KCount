@@ -40,7 +40,8 @@ SOURCES += \
     dashboard.cpp \
     users.cpp \
     settings.cpp \
-    barchart.cpp
+    barchart.cpp \
+    initialisation.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -57,7 +58,8 @@ HEADERS += \
     dashboard.h \
     users.h \
     settings.h \
-    barchart.h
+    barchart.h \
+    initialisation.h
 
 RESOURCES += \
     ../Resources/resources.qrc

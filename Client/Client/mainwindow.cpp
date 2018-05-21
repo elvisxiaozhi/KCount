@@ -7,6 +7,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    createDBThread();
     createSidebar();
     createContentWindow();
     createSystemTrayIcon();
@@ -17,6 +18,16 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    dbThread.quit();
+    dbThread.wait();
+}
+
+void MainWindow::createDBThread()
+{
+    database = new Database();
+    database->moveToThread(&dbThread);
+    connect(&dbThread, &QThread::finished, database, &QObject::deleteLater);
+    dbThread.start();
 }
 
 void MainWindow::createSidebar()

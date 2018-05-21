@@ -22,6 +22,12 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     barAxisX = new QBarCategoryAxis(chart);
     barAxisX->setGridLineVisible(false);
 
+    valueAxisX = new QValueAxis(chart);
+    valueAxisX->setGridLineVisible(false);
+    valueAxisX->setTickCount(3);
+    valueAxisX->setRange(0, 23.2);
+    valueAxisX->setLabelFormat("%d");
+
     axisY = new QValueAxis(chart);
     axisY->setGridLineVisible(false);
     axisY->setLabelFormat("%d");
@@ -37,8 +43,6 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     setLayout(mainVLayout);
 
     setChartData(mode);
-
-    qDebug() << QDateTime::currentDateTime().addSecs(60 * 60);
 }
 
 void BarChart::setChartData(int mode)
@@ -46,12 +50,10 @@ void BarChart::setChartData(int mode)
     switch (mode) {
     case 0:
         for(int i = 0; i < 24; ++i) {
-//            barCategories.append(QDateTime::currentDateTime().addSecs(60 * 60).toString("d"));
             set->append(i);
         }
         chart->addSeries(series);
-        barAxisX->append(barCategories);
-        chart->setAxisX(barAxisX, series); //previously attached to the series are deleted
+        chart->setAxisX(valueAxisX, series);
         break;
     case 1:
         for(int i = 6; i >= 0; --i) {

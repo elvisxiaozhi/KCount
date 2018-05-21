@@ -3,15 +3,20 @@
 #include <QDebug>
 #include <QSqlQuery>
 #include <QDate>
+#include <QDir>
+#include <QStandardPaths>
+#include "initialisation.h"
 
 QSqlDatabase Database::database;
 QString Database::currentDate = QDate::currentDate().toString("MM/dd/yy");
 int Database::currentHour = QTime::currentTime().toString("h").toInt();
 
-Database::Database()
+Database::Database(QObject *parent) : QObject(parent)
 {
+    createDataFile();
+
     //set database
-    QString dbName = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= C:/Users/Theodore/Desktop/UserData.mdb");
+    QString dbName = QString("Driver={Microsoft Access Driver (*.mdb)}; FIL={MS Access}; DBQ= %1").arg(databaseLoc);
     database = QSqlDatabase::addDatabase("QODBC");
     database.setDatabaseName(dbName);
 }
@@ -220,4 +225,24 @@ bool Database::isQueryFound(QSqlQuery query)
         return true;
     }
     return false;
+}
+
+void Database::createDataFile()
+{
+    QStringList homePath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+    dataPath = homePath.first() + "/AppData/Local/Nana";
+    if(!QDir().exists(dataPath)) {
+        QDir().mkdir(dataPath);
+    }
+
+    databaseLoc = dataPath + "/UserData.mdb";
+    if(!QFile().exists(databaseLoc)) {
+        if(Initialisation::settings.value("InitSettings/AppPath").isValid()) {
+            QFile::copy(Initialisation::settings.value("InitSettings/AppPath").toString() + "/UserData.mdb", databaseLoc);
+        }
+        else {
+            QFile::copy(QDir::currentPath() + "/UserData.mdb", databaseLoc);
+        }
+        Initialisation::settings.setValue("InitSettings/AppPath", QDir::currentPath());
+    }
 }

@@ -24,7 +24,7 @@ private:
     QBarSeries *series;
     QDateTimeAxis *dateAxisX;
     QLineSeries *lineSeries;
-    QValueAxis *axisY;
+    QValueAxis *valueAxisX, *axisY;
     QStringList categories;
     QBarCategoryAxis *barAxisX;
     QStringList barCategories;

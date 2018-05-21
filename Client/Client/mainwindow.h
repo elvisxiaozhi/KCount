@@ -10,6 +10,7 @@
 #include "dashboard.h"
 #include "users.h"
 #include "settings.h"
+#include <QThread>
 
 class MainWindow : public QMainWindow
 {
@@ -20,7 +21,8 @@ public:
     ~MainWindow();
 
 private:
-    Database database;
+    Database *database;
+    QThread dbThread;
     Sidebar *sidebar;
     QWidget *contentWidget;
     QVBoxLayout *contVLayout;
@@ -31,6 +33,7 @@ private:
     Settings *settings;
     QSystemTrayIcon *sysTrayIcon;
 
+    void createDBThread();
     void createSidebar();
     void createContentWindow();
     void createSystemTrayIcon();
