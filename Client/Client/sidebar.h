@@ -9,7 +9,7 @@ class Sidebar : public QDockWidget
 {
     Q_OBJECT
 public:
-    Sidebar();
+    Sidebar(QWidget *parent = nullptr);
 
 private:
     QList<QAction *> actList;

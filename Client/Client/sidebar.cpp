@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QIcon>
 
-Sidebar::Sidebar()
+Sidebar::Sidebar(QWidget *parent) : QDockWidget(parent)
 {
     //hide dock widget title bar
     QWidget *titleBarWidget = new QWidget(this);

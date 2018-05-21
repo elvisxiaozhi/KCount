@@ -4,11 +4,11 @@
 #include <QWidget>
 #include <QtCharts/QChartView>
 #include <QtCharts/QBarSet>
-#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QDateTimeAxis>
 #include <QtCharts/QBarSeries>
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QLegend>
-#include <QtCharts/QAbstractAxis>
+#include <QtCharts/QLineSeries>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -21,8 +21,9 @@ public:
 private:
     QBarSet *set;
     QBarSeries *series;
-    QBarCategoryAxis *axis;
-    QValueAxis *axisX, *axisY;
+    QDateTimeAxis *axisX;
+    QLineSeries *lineSeries;
+    QValueAxis *axisY;
     QStringList categories;
     QChart *chart;
     QChartView *view;

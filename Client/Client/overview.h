@@ -21,7 +21,7 @@ public:
     void updateDatabase();
 
 private:
-    QHBoxLayout *timeSpanHLayout;
+    QHBoxLayout timeSpanHLayout;
     QVBoxLayout *mainVLayout;
     QGridLayout *lblGLayout;
     QComboBox *timeSpanBox;

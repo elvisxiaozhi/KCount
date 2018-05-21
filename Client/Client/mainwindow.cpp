@@ -21,7 +21,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::createSidebar()
 {
-    sidebar = new Sidebar;
+    sidebar = new Sidebar(this);
     addDockWidget(Qt::LeftDockWidgetArea, sidebar);
 }
 
@@ -32,18 +32,23 @@ void MainWindow::createContentWindow()
     contentWidget->setLayout(contVLayout);
     setCentralWidget(contentWidget);
 
-    contentVec.push_back(&overview);
-    contentVec.push_back(&dashboard);
-    contentVec.push_back(&users);
-    contentVec.push_back(&settings);
+    overview = new Overview(contentWidget);
+    dashboard = new Dashboard(contentWidget);
+    users = new Users(contentWidget);
+    settings = new Settings(contentWidget);
+
+    contentVec.push_back(overview);
+    contentVec.push_back(dashboard);
+    contentVec.push_back(users);
+    contentVec.push_back(settings);
     contentVec.resize(4);
-    dashboard.hide();
-    users.hide();
-    settings.hide();
-    contVLayout->addWidget(&overview);
-    contVLayout->addWidget(&dashboard);
-    contVLayout->addWidget(&users);
-    contVLayout->addWidget(&settings);
+    dashboard->hide();
+    users->hide();
+    settings->hide();
+    contVLayout->addWidget(overview);
+    contVLayout->addWidget(dashboard);
+    contVLayout->addWidget(users);
+    contVLayout->addWidget(settings);
 }
 
 void MainWindow::createSystemTrayIcon()
@@ -51,7 +56,7 @@ void MainWindow::createSystemTrayIcon()
     sysTrayIcon = new QSystemTrayIcon(QIcon(":/Resources/Icons/letter_k.png"), this);
     sysTrayIcon->show();
 
-    QMenu *menu = new QMenu;
+    QMenu *menu = new QMenu(this);
 
     QAction *quitAct = new QAction(tr("Quit"), menu);
 
@@ -59,7 +64,7 @@ void MainWindow::createSystemTrayIcon()
     sysTrayIcon->setContextMenu(menu);
 
     connect(sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::sysTrayIconActivated);
-    connect(quitAct, &QAction::triggered, [this](){ overview.updateDatabase(); qApp->quit(); });
+    connect(quitAct, &QAction::triggered, [this](){ overview->updateDatabase(); qApp->quit(); });
 }
 
 void MainWindow::sysTrayIconActivated(QSystemTrayIcon::ActivationReason reason)

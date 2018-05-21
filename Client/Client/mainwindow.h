@@ -25,10 +25,10 @@ private:
     QWidget *contentWidget;
     QVBoxLayout *contVLayout;
     QVector<QWidget *> contentVec;
-    Overview overview;
-    Dashboard dashboard;
-    Users users;
-    Settings settings;
+    Overview *overview;
+    Dashboard *dashboard;
+    Users *users;
+    Settings *settings;
     QSystemTrayIcon *sysTrayIcon;
 
     void createSidebar();
