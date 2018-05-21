@@ -60,9 +60,9 @@ void Dashboard::createTimeSpanBox()
 
 void Dashboard::createCharts()
 {
-    for(int i = 1; i < 3; ++i) {
+    for(int i = 0; i < 3; ++i) {
         barChartArr[i] = new BarChart(this, i);
-        barChartArr[i]->setFixedSize(600, 300);
+        barChartArr[i]->setFixedSize(600, 200);
         gLayout->addWidget(barChartArr[i], i, 0);
     }
 }

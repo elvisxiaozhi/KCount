@@ -9,6 +9,7 @@
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QLegend>
 #include <QtCharts/QLineSeries>
+#include <QtCharts/QBarCategoryAxis>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -21,12 +22,13 @@ public:
 private:
     QBarSet *set;
     QBarSeries *series;
-    QDateTimeAxis *axisX;
+    QDateTimeAxis *dateAxisX;
     QLineSeries *lineSeries;
     QValueAxis *axisY;
     QStringList categories;
+    QBarCategoryAxis *barAxisX;
+    QStringList barCategories;
     QChart *chart;
-    QChartView *view;
 
     void setChartData(int);
 };
