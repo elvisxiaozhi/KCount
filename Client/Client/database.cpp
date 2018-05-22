@@ -233,14 +233,34 @@ QMap<int, unsigned long> Database::returnBarChartData(int readMode)
         QString query;
 
         switch (readMode) {
-        case 1:
+        case 1: //daily
             for(int i = 0; i < 24; ++i) {
-                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(currentDate).arg(i);
+                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(i);
                 sqlQuery.exec(query);
                 while(sqlQuery.next()) {
                     map.insert(i, sqlQuery.value(0).toInt());
                 }
             }
+            break;
+        case 2: //weekly
+            for(int i = 6; i >= 0; --i) {
+                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(-i).toString("MM/dd/yy"));
+                sqlQuery.exec(query);
+                while(sqlQuery.next()) {
+                    map.insert(6 - i, sqlQuery.value(0).toInt());
+                }
+            }
+            break;
+        case 3: { //monthly
+            int daysInMonth = QDate::currentDate().daysInMonth();
+            for(int i = 0; i < daysInMonth; ++i) {
+                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(i - daysInMonth + 1).toString("MM/dd/yy"));
+                sqlQuery.exec(query);
+                while(sqlQuery.next()) {
+                    map.insert(i, sqlQuery.value(0).toInt());
+                }
+            }
+        }
             break;
         default:
             break;

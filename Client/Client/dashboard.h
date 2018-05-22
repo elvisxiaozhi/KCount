@@ -34,6 +34,7 @@ signals:
 
 private slots:
     void loadData();
+    void comboBoxChanged(int);
 };
 
 #endif // DASHBOARD_H

@@ -33,6 +33,9 @@ private:
     QChart *chart;
 
     void loadChartData(int);
+
+private slots:
+    void testing(bool, int);
 };
 
 #endif // BARCHART_H

@@ -13,6 +13,10 @@ Dashboard::Dashboard(QWidget *parent) : QWidget(parent)
     createCharts();
 
     connect(this, &Dashboard::loadingData, this, &Dashboard::loadData);
+    connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
+            [=](int index){
+        comboBoxChanged(index);
+    });
 }
 
 void Dashboard::setWindowStyleSheet()
@@ -93,4 +97,17 @@ void Dashboard::loadData()
             barChartArr[i]->reloadChart(i);
         }
     }
+}
+
+void Dashboard::comboBoxChanged(int index)
+{
+    for(int i = 1; i <= 4; ++i) {
+        if(i == index) {
+            barChartArr[i]->show();
+        }
+        else {
+            barChartArr[i]->hide();
+        }
+    }
+    loadData();
 }

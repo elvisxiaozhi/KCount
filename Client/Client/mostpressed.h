@@ -13,6 +13,8 @@ class MostPressed : public QWidget
 public:
     explicit MostPressed(QWidget *parent = nullptr);
     static QMap<int, unsigned long int> dailyMap;
+    static QMap<int, unsigned long int> weeklyMap;
+    static QMap<int, unsigned long int> monthlyMap;
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;

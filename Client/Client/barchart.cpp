@@ -43,6 +43,8 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     mainVLayout->addWidget(chartView);
     setLayout(mainVLayout);
 
+    connect(set, &QBarSet::hovered, this, &BarChart::testing);
+
     loadChartData(mode);
 }
 
@@ -55,8 +57,24 @@ void BarChart::reloadChart(int mode)
         set = new QBarSet("BarSet", series);
         series->append(set);
         loadChartData(mode);
-        qDebug() << MostPressed::dailyMap;
         break;
+    case 2:
+        chart->removeSeries(series);
+        series->clear();
+        barCategories.clear();
+        set = new QBarSet("BarSet", series);
+        series->append(set);
+        loadChartData(mode);
+        break;
+    case 3:
+        chart->removeSeries(series);
+        series->clear();
+        lineSeries->clear();
+        set = new QBarSet("BarSet", series);
+        lineSeries = new QLineSeries(chart);
+        series->append(set);
+        loadChartData(mode);
+        qDebug() << MostPressed::monthlyMap;
     default:
         break;
     }
@@ -64,9 +82,9 @@ void BarChart::reloadChart(int mode)
 
 void BarChart::loadChartData(int mode)
 {
+    QMap<int, unsigned long int>::const_iterator it;
     switch (mode) {
     case 1: { //daily
-        QMap<int, unsigned long int>::const_iterator it;
         for(it = MostPressed::dailyMap.cbegin(); it != MostPressed::dailyMap.cend(); ++it) {
             set->append(it.value());
         }
@@ -74,20 +92,20 @@ void BarChart::loadChartData(int mode)
         chart->setAxisX(valueAxisX, series);
     }
         break;
-    case 2: //weekly
-        for(int i = 6; i >= 0; --i) {
-            barCategories.append(QDate::currentDate().addDays(-i).toString("d"));
-            set->append(i + 1);
+    case 2: { //weekly
+        for(it = MostPressed::weeklyMap.cbegin(); it != MostPressed::weeklyMap.cend(); ++it) {
+            barCategories.append(QDate::currentDate().addDays(std::distance(MostPressed::weeklyMap.cbegin(), it) - 6).toString("d"));
+            set->append(it.value());
         }
         chart->addSeries(series);
         barAxisX->append(barCategories);
         chart->setAxisX(barAxisX, series); //previously attached to the series are deleted
+    }
         break;
     case 3: { //monthly
-        int daysInMonth = QDate::currentDate().daysInMonth();
-        for(int i = 0; i < daysInMonth; ++i) {
-            lineSeries->append(QDateTime::currentDateTime().addDays(i - daysInMonth + 1).toMSecsSinceEpoch(), 0);
-            set->append(i);
+        for(it = MostPressed::monthlyMap.cbegin(); it != MostPressed::monthlyMap.cend(); ++it) {
+            lineSeries->append(QDateTime::currentDateTime().addDays(std::distance(MostPressed::monthlyMap.cbegin(), it) - MostPressed::monthlyMap.size() + 1).toMSecsSinceEpoch(), 0);
+            set->append(it.value());
         }
         chart->addSeries(series);
         chart->addSeries(lineSeries);
@@ -112,4 +130,9 @@ void BarChart::loadChartData(int mode)
 
     chart->setAxisY(axisY, series);
     axisY->applyNiceNumbers(); //it must be after setAcisY()
+}
+
+void BarChart::testing(bool, int index)
+{
+    qDebug() << index;
 }
