@@ -11,18 +11,16 @@
 #include "totalpressed.h"
 #include "mostpressed.h"
 #include "mouseclick.h"
-#include "hook.h"
 
 class Overview : public QWidget
 {
     Q_OBJECT
 public:
     explicit Overview(QWidget *parent = nullptr);
-    ~Overview();
     void updateDatabase();
 
 private:
-    QHBoxLayout timeSpanHLayout;
+    QHBoxLayout *timeSpanHLayout;
     QVBoxLayout *mainVLayout;
     QGridLayout *lblGLayout;
     QComboBox *timeSpanBox;
@@ -30,7 +28,6 @@ private:
     MostPressed *mostPressed;
     MouseClick *mouseClick;
     QTimer *timer;
-//    Hook *hook;
 
     void setWindowLayout();
     void setWindowStyleSheet();
@@ -41,10 +38,6 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *);
-
-signals:
-
-public slots:
 
 private slots:
     void timeout();

@@ -15,6 +15,7 @@ public:
     static QMap<int, unsigned long int> dailyMap;
     static QMap<int, unsigned long int> weeklyMap;
     static QMap<int, unsigned long int> monthlyMap;
+    static QMap<int, unsigned long int> yearlyMap;
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;

@@ -262,6 +262,15 @@ QMap<int, unsigned long> Database::returnBarChartData(int readMode)
             }
         }
             break;
+        case 4:
+            for(int i = 0; i < 12; ++i) {
+                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1#").arg(QDate::currentDate().addMonths(-12 + i + 1).toString("MM/dd/yy"));
+                sqlQuery.exec(query);
+                while(sqlQuery.next()) {
+                    map.insert(i, sqlQuery.value(0).toInt());
+                }
+            }
+            break;
         default:
             break;
         }
@@ -309,4 +318,10 @@ void Database::showErrorMsBox()
     connect(&msBox, &MessageBox::fixDatabaseError, [=](){ createDataFile(); });
     msBox.setDetailedText(database.lastError().text());
     msBox.showDatabaseErrorMsBox();
+}
+
+void Database::timeout()
+{
+    currentDate = QDate::currentDate().toString("MM/dd/yy");
+    currentHour = QTime::currentTime().toString("h").toInt();
 }

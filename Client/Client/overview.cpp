@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QTime>
 #include <QKeyEvent>
+#include <database.h>
 
 Overview::Overview(QWidget *parent) : QWidget(parent)
 {
@@ -20,17 +21,7 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
         mostPressed->reloadData(index);
         totalPressed->reloadData(index); /*note most first, then total*/
         mouseClick->reloadData(index);
-
-//        delete hook;
-//        hook = new Hook;
     });
-
-//    hook = new Hook;
-}
-
-Overview::~Overview()
-{
-//    delete hook;
 }
 
 void Overview::updateDatabase()
@@ -42,7 +33,7 @@ void Overview::updateDatabase()
 void Overview::setWindowLayout()
 {
     mainVLayout = new QVBoxLayout(this);
-//    timeSpanHLayout = new QHBoxLayout; //do not set parent
+    timeSpanHLayout = new QHBoxLayout; //do not set parent
     lblGLayout = new QGridLayout;
 
     mainVLayout->addLayout(&timeSpanHLayout);
@@ -73,9 +64,7 @@ void Overview::timeout()
 {
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
     mostPressed->updateDatabase();
-
-//    delete hook;
-//    hook = new Hook;
+    Database::timeout();
 }
 
 void Overview::setWindowStyleSheet()

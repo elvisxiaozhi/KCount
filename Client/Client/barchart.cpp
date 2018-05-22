@@ -74,7 +74,14 @@ void BarChart::reloadChart(int mode)
         lineSeries = new QLineSeries(chart);
         series->append(set);
         loadChartData(mode);
-        qDebug() << MostPressed::monthlyMap;
+    case 4:
+        chart->removeSeries(series);
+        series->clear();
+        lineSeries->clear();
+        set = new QBarSet("BarSet", series);
+        lineSeries = new QLineSeries(chart);
+        series->append(set);
+        loadChartData(mode);
     default:
         break;
     }
@@ -114,11 +121,11 @@ void BarChart::loadChartData(int mode)
     }
         break;
     case 4: //yearly
-        for(int i = 0; i < 12; ++i) {
-            lineSeries->append(QDateTime::currentDateTime().addMonths(-12 + i + 1).toMSecsSinceEpoch(), 0);
-            set->append(i);
-            dateAxisX->setTickCount(12);
+        for(it = MostPressed::yearlyMap.cbegin(); it != MostPressed::yearlyMap.cend(); ++it) {
+            lineSeries->append(QDateTime::currentDateTime().addMonths(-12 + std::distance(MostPressed::yearlyMap.cbegin(), it) + 1).toMSecsSinceEpoch(), 0);
+            set->append(it.value());
         }
+        dateAxisX->setTickCount(12);
         chart->addSeries(series);
         chart->addSeries(lineSeries);
         dateAxisX->setFormat("MMM");
