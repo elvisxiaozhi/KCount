@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QDebug>
 #include <QDateTime>
+#include "mostpressed.h"
 
 BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
 {
@@ -46,16 +47,18 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
 }
 
 void BarChart::setChartData(int mode)
-{    
+{
     switch (mode) {
-    case 0:
-        for(int i = 0; i < 24; ++i) {
-            set->append(i);
+    case 1: { //daily
+        QMap<int, unsigned long int>::const_iterator it;
+        for(it = MostPressed::dailyMap.cbegin(); it != MostPressed::dailyMap.cend(); ++it) {
+            set->append(it.value());
         }
         chart->addSeries(series);
         chart->setAxisX(valueAxisX, series);
+    }
         break;
-    case 1:
+    case 2: //weekly
         for(int i = 6; i >= 0; --i) {
             barCategories.append(QDate::currentDate().addDays(-i).toString("d"));
             set->append(i + 1);
@@ -64,7 +67,7 @@ void BarChart::setChartData(int mode)
         barAxisX->append(barCategories);
         chart->setAxisX(barAxisX, series); //previously attached to the series are deleted
         break;
-    case 2: {
+    case 3: { //monthly
         int daysInMonth = QDate::currentDate().daysInMonth();
         for(int i = 0; i < daysInMonth; ++i) {
             lineSeries->append(QDateTime::currentDateTime().addDays(i - daysInMonth + 1).toMSecsSinceEpoch(), 0);
@@ -76,7 +79,7 @@ void BarChart::setChartData(int mode)
         chart->setAxisX(dateAxisX, lineSeries);
     }
         break;
-    case 3:
+    case 4: //yearly
         for(int i = 0; i < 12; ++i) {
             lineSeries->append(QDateTime::currentDateTime().addMonths(-12 + i + 1).toMSecsSinceEpoch(), 0);
             set->append(i);

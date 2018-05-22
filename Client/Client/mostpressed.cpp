@@ -5,10 +5,15 @@
 #include <QDebug>
 #include "database.h"
 #include "signalemitter.h"
+#include <QTime>
+
+QMap<int, unsigned long int> MostPressed::dailyMap = {};
 
 MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
 {
     mostPressed = Database::returnKeyVec(1);
+    dailyMap = Database::returnBarChartData(1);
+    currentHour = QTime::currentTime().toString("h").toInt();
 
     setWindowStyleSheet();
 
@@ -94,6 +99,8 @@ void MostPressed::reloadData(int index)
 
 void MostPressed::keyPressed(QString pressedKey)
 {
+    ++dailyMap[currentHour];
+
     if(tempKeyMap.contains(pressedKey)) { //if the map has already stored the pressed key
         unsigned long int newValue = tempKeyMap.value(pressedKey) + 1; //then the map key value + 1 pressed time
         tempKeyMap.insert(pressedKey, newValue); //and insert new data to the map

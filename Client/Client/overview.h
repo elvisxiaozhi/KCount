@@ -18,6 +18,7 @@ class Overview : public QWidget
     Q_OBJECT
 public:
     explicit Overview(QWidget *parent = nullptr);
+    ~Overview();
     void updateDatabase();
 
 private:

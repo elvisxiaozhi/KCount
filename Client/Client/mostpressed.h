@@ -12,6 +12,7 @@ class MostPressed : public QWidget
     Q_OBJECT
 public:
     explicit MostPressed(QWidget *parent = nullptr);
+    static QMap<int, unsigned long int> dailyMap;
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
@@ -19,6 +20,7 @@ private:
     QVector<Label *> contents;
     QVector<std::pair<QString, unsigned long int>> mostPressed;
     QMap<QString, unsigned long int> tempKeyMap;
+    int currentHour;
 
     void setWindowStyleSheet();
     void setContents();

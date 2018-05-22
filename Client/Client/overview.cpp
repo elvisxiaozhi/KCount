@@ -18,7 +18,6 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
     connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
             [=](int index){
         mostPressed->reloadData(index);
-        totalPressed->reloadData(index); /*note most first, then total*/
         mouseClick->reloadData(index);
 
         delete hook;
@@ -26,6 +25,11 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
     });
 
     hook = new Hook;
+}
+
+Overview::~Overview()
+{
+    delete hook;
 }
 
 void Overview::updateDatabase()

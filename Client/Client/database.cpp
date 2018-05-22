@@ -224,6 +224,37 @@ void Database::updateLeftClickToDB(const int &leftClickedTimes, const int &right
     }
 }
 
+QMap<int, unsigned long> Database::returnBarChartData(int readMode)
+{
+    QMap<int, unsigned long int> map;
+
+    if(database.open()) {
+        QSqlQuery sqlQuery;
+        QString query;
+
+        switch (readMode) {
+        case 1:
+            for(int i = 0; i < 24; ++i) {
+                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%2# AND CreatedHour = %3").arg(currentDate).arg(i);
+                sqlQuery.exec(query);
+                while(sqlQuery.next()) {
+                    map.insert(i, sqlQuery.value(0).toInt());
+                }
+            }
+            break;
+        default:
+            break;
+        }
+
+        database.close();
+    }
+    else {
+        qDebug() << database.lastError().text();
+    }
+
+    return map;
+}
+
 bool Database::isQueryFound(QSqlQuery query)
 {
     while(query.next()) {

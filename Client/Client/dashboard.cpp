@@ -60,10 +60,13 @@ void Dashboard::createTimeSpanBox()
 
 void Dashboard::createCharts()
 {
-    for(int i = 0; i < 4; ++i) {
+    for(int i = 1; i <= 4; ++i) {
         barChartArr[i] = new BarChart(this, i);
-        barChartArr[i]->setFixedSize(600, 150);
-        gLayout->addWidget(barChartArr[i], i, 0);
+        barChartArr[i]->setFixedSize(600, 300);
+        gLayout->addWidget(barChartArr[i], 0, 0);
+        if(i != 1) {
+            barChartArr[i]->hide();
+        }
     }
 }
 
