@@ -43,10 +43,26 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     mainVLayout->addWidget(chartView);
     setLayout(mainVLayout);
 
-    setChartData(mode);
+    loadChartData(mode);
 }
 
-void BarChart::setChartData(int mode)
+void BarChart::reloadChart(int mode)
+{
+    switch (mode) {
+    case 1:
+        chart->removeSeries(series);
+        series->clear();
+        set = new QBarSet("BarSet", series);
+        series->append(set);
+        loadChartData(mode);
+        qDebug() << MostPressed::dailyMap;
+        break;
+    default:
+        break;
+    }
+}
+
+void BarChart::loadChartData(int mode)
 {
     switch (mode) {
     case 1: { //daily

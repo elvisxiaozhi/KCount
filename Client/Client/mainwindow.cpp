@@ -95,4 +95,7 @@ void MainWindow::changeContent(int index)
             content->hide();
         }
     }
+    if(index == 1) {
+        emit dashboard->loadingData();
+    }
 }

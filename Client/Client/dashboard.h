@@ -28,9 +28,12 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *);
-signals:
 
-public slots:
+signals:
+    void loadingData();
+
+private slots:
+    void loadData();
 };
 
 #endif // DASHBOARD_H

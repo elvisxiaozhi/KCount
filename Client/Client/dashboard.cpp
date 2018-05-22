@@ -11,6 +11,8 @@ Dashboard::Dashboard(QWidget *parent) : QWidget(parent)
     setWindowLayout();
     createTimeSpanBox();
     createCharts();
+
+    connect(this, &Dashboard::loadingData, this, &Dashboard::loadData);
 }
 
 void Dashboard::setWindowStyleSheet()
@@ -82,4 +84,13 @@ void Dashboard::paintEvent(QPaintEvent *event)
     painter.setPen(QColor(255,115,115));
     painter.setFont(QFont("Futura", 20));
     painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Dashboard");
+}
+
+void Dashboard::loadData()
+{
+    for(int i = 1; i <= 4; i++) {
+        if(!barChartArr[i]->isHidden()) {
+            barChartArr[i]->reloadChart(i);
+        }
+    }
 }

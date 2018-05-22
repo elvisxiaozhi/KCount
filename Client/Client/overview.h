@@ -30,7 +30,7 @@ private:
     MostPressed *mostPressed;
     MouseClick *mouseClick;
     QTimer *timer;
-    Hook *hook;
+//    Hook *hook;
 
     void setWindowLayout();
     void setWindowStyleSheet();

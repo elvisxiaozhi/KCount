@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include "hook.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,6 +9,8 @@ int main(int argc, char *argv[])
     w.show();
 
     a.setQuitOnLastWindowClosed(false);
+
+    Hook hook;
 
     return a.exec();
 }

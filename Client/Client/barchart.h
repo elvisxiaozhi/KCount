@@ -19,6 +19,8 @@ class BarChart : public QWidget
 public:
     BarChart(QWidget *parent = nullptr, int mode = 1);
 
+    void reloadChart(int);
+
 private:
     QBarSet *set;
     QBarSeries *series;
@@ -30,7 +32,7 @@ private:
     QStringList barCategories;
     QChart *chart;
 
-    void setChartData(int);
+    void loadChartData(int);
 };
 
 #endif // BARCHART_H

@@ -23,6 +23,9 @@ private:
 protected:
     void paintEvent(QPaintEvent *);
 
+public slots:
+    void reloadData(int);
+
 private slots:
     void keyPressed(QString);
 };

@@ -18,18 +18,19 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
     connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
             [=](int index){
         mostPressed->reloadData(index);
+        totalPressed->reloadData(index); /*note most first, then total*/
         mouseClick->reloadData(index);
 
-        delete hook;
-        hook = new Hook;
+//        delete hook;
+//        hook = new Hook;
     });
 
-    hook = new Hook;
+//    hook = new Hook;
 }
 
 Overview::~Overview()
 {
-    delete hook;
+//    delete hook;
 }
 
 void Overview::updateDatabase()
@@ -73,8 +74,8 @@ void Overview::timeout()
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
     mostPressed->updateDatabase();
 
-    delete hook;
-    hook = new Hook;
+//    delete hook;
+//    hook = new Hook;
 }
 
 void Overview::setWindowStyleSheet()
