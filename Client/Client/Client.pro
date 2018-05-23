@@ -42,7 +42,8 @@ SOURCES += \
     settings.cpp \
     barchart.cpp \
     initialisation.cpp \
-    messagebox.cpp
+    messagebox.cpp \
+    stackedbarchart.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -61,7 +62,8 @@ HEADERS += \
     settings.h \
     barchart.h \
     initialisation.h \
-    messagebox.h
+    messagebox.h \
+    stackedbarchart.h
 
 RESOURCES += \
     ../Resources/resources.qrc

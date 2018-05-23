@@ -36,7 +36,7 @@ void Overview::setWindowLayout()
     timeSpanHLayout = new QHBoxLayout; //do not set parent
     lblGLayout = new QGridLayout;
 
-    mainVLayout->addLayout(&timeSpanHLayout);
+    mainVLayout->addLayout(timeSpanHLayout);
     mainVLayout->addLayout(lblGLayout);
     this->setLayout(mainVLayout);
 }
@@ -96,9 +96,9 @@ void Overview::setTimeSpanBox()
     timeSpanBox->addItems({tr("Hour"), tr("Day"), tr("Week"), tr("Month"), tr("Year")});
     timeSpanBox->setCurrentText("Day");
 
-    timeSpanHLayout.addStretch();
-    timeSpanHLayout.addWidget(spanTextLbl);
-    timeSpanHLayout.addWidget(timeSpanBox);
+    timeSpanHLayout->addStretch();
+    timeSpanHLayout->addWidget(spanTextLbl);
+    timeSpanHLayout->addWidget(timeSpanBox);
 }
 
 void Overview::setLbls()

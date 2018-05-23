@@ -74,6 +74,7 @@ void BarChart::reloadChart(int mode)
         lineSeries = new QLineSeries(chart);
         series->append(set);
         loadChartData(mode);
+        break;
     case 4:
         chart->removeSeries(series);
         series->clear();
@@ -82,6 +83,7 @@ void BarChart::reloadChart(int mode)
         lineSeries = new QLineSeries(chart);
         series->append(set);
         loadChartData(mode);
+        break;
     default:
         break;
     }

@@ -6,7 +6,8 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QGridLayout>
-#include <barchart.h>
+#include "barchart.h"
+#include "stackedbarchart.h"
 
 class Dashboard : public QWidget
 {
@@ -20,6 +21,7 @@ private:
     QGridLayout *gLayout;
     QComboBox *timeSpanBox;
     BarChart *barChartArr[4];
+    StackedBarChart *stackedBarChart;
 
     void setWindowStyleSheet();
     void setWindowLayout();

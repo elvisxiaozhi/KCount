@@ -74,6 +74,10 @@ void Dashboard::createCharts()
             barChartArr[i]->hide();
         }
     }
+
+    stackedBarChart = new StackedBarChart(this);
+    stackedBarChart->setFixedSize(600, 300);
+    gLayout->addWidget(stackedBarChart, 1, 0);
 }
 
 void Dashboard::paintEvent(QPaintEvent *event)
