@@ -13,10 +13,10 @@ Dashboard::Dashboard(QWidget *parent) : QWidget(parent)
     createCharts();
 
     connect(this, &Dashboard::loadingData, this, &Dashboard::loadData);
-    connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
-            [=](int index){
-        comboBoxChanged(index);
-    });
+//    connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
+//            [=](int index){
+//        comboBoxChanged(index);
+//    });
 }
 
 void Dashboard::setWindowStyleSheet()
@@ -66,18 +66,22 @@ void Dashboard::createTimeSpanBox()
 
 void Dashboard::createCharts()
 {
-    for(int i = 1; i <= 4; ++i) {
-        barChartArr[i] = new BarChart(this, i);
-        barChartArr[i]->setFixedSize(600, 300);
-        gLayout->addWidget(barChartArr[i], 0, 0);
-        if(i != 1) {
-            barChartArr[i]->hide();
-        }
-    }
+//    for(int i = 1; i <= 4; ++i) {
+//        barChartArr[i] = new BarChart(this, i);
+//        barChartArr[i]->setFixedSize(600, 300);
+//        gLayout->addWidget(barChartArr[i], 0, 0);
+//        if(i != 1) {
+//            barChartArr[i]->hide();
+//        }
+//    }
 
-    stackedBarChart = new StackedBarChart(this);
-    stackedBarChart->setFixedSize(600, 300);
-    gLayout->addWidget(stackedBarChart, 1, 0);
+    mBarChart = new BarChart(this, 1);
+    mBarChart->setFixedSize(600, 300);
+    gLayout->addWidget(mBarChart, 0, 0);
+
+//    stackedBarChart = new StackedBarChart(this);
+//    stackedBarChart->setFixedSize(600, 300);
+//    gLayout->addWidget(stackedBarChart, 1, 0);
 }
 
 void Dashboard::paintEvent(QPaintEvent *event)
@@ -96,22 +100,23 @@ void Dashboard::paintEvent(QPaintEvent *event)
 
 void Dashboard::loadData()
 {
-    for(int i = 1; i <= 4; i++) {
-        if(!barChartArr[i]->isHidden()) {
-            barChartArr[i]->reloadChart(i);
-        }
-    }
+//    for(int i = 1; i <= 4; i++) {
+//        if(!barChartArr[i]->isHidden()) {
+//            barChartArr[i]->reloadChart(i);
+//        }
+//    }
+    mBarChart->reloadChart(1);
 }
 
 void Dashboard::comboBoxChanged(int index)
 {
-    for(int i = 1; i <= 4; ++i) {
-        if(i == index) {
-            barChartArr[i]->show();
-        }
-        else {
-            barChartArr[i]->hide();
-        }
-    }
+//    for(int i = 1; i <= 4; ++i) {
+//        if(i == index) {
+//            barChartArr[i]->show();
+//        }
+//        else {
+//            barChartArr[i]->hide();
+//        }
+//    }
     loadData();
 }

@@ -10,6 +10,7 @@
 #include <QtCharts/QLegend>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QBarCategoryAxis>
+#include <QLabel>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -31,6 +32,8 @@ private:
     QBarCategoryAxis *barAxisX;
     QStringList barCategories;
     QChart *chart;
+    QChartView *chartView;
+    QLabel *label;
 
     void loadChartData(int);
 

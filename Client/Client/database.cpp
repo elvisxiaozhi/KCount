@@ -264,7 +264,7 @@ QMap<int, unsigned long> Database::returnBarChartData(int readMode)
             break;
         case 4:
             for(int i = 0; i < 12; ++i) {
-                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE CreatedDate = #%1#").arg(QDate::currentDate().addMonths(-12 + i + 1).toString("MM/dd/yy"));
+                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(QDate::currentDate().addMonths(-i).toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(-i - 1).toString("MM/dd/yy"));
                 sqlQuery.exec(query);
                 while(sqlQuery.next()) {
                     map.insert(i, sqlQuery.value(0).toInt());
