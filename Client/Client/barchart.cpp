@@ -82,6 +82,13 @@ void BarChart::reloadChart(int mode)
         break;
     case 2:
         reloadChart(weeklyMap, mode);
+        break;
+    case 3:
+        reloadChart(monthlyMap, mode);
+        break;
+    case 4:
+        reloadChart(yearlyMap, mode);
+        break;
     default:
         break;
     }
@@ -119,16 +126,16 @@ void BarChart::loadChartData(int mode)
     }
         break;
     case 4: //yearly
-            for(auto it = yearlyMap.cbegin(); it != yearlyMap.cend(); ++it) {
-                lineSeries->append(QDateTime::currentDateTime().addMonths(-12 + std::distance(yearlyMap.cbegin(), it) + 1).toMSecsSinceEpoch(), 0);
-                set->append(it.value());
-            }
-            dateAxisX->setTickCount(12);
-            chart->addSeries(series);
-            chart->addSeries(lineSeries);
-            dateAxisX->setFormat("MMM");
-            chart->setAxisX(dateAxisX, lineSeries);
-            break;
+        for(auto it = yearlyMap.cbegin(); it != yearlyMap.cend(); ++it) {
+            lineSeries->append(QDateTime::currentDateTime().addMonths(-12 + std::distance(yearlyMap.cbegin(), it) + 1).toMSecsSinceEpoch(), 0);
+            set->append(it.value());
+        }
+        dateAxisX->setTickCount(12);
+        chart->addSeries(series);
+        chart->addSeries(lineSeries);
+        dateAxisX->setFormat("MMM");
+        chart->setAxisX(dateAxisX, lineSeries);
+        break;
     default:
         break;
     }
@@ -162,7 +169,7 @@ void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
                 barCategories.clear(); //only for weekly chart
 
                 //lineSeries for monthly and yearly charts
-                lineSeries->clear();
+                delete lineSeries;
                 lineSeries = new QLineSeries(chart);
 
                 loadChartData(mode);
