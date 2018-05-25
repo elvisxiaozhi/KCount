@@ -75,9 +75,9 @@ void Dashboard::createCharts()
         }
     }
 
-//    stackedBarChart = new StackedBarChart(this);
-//    stackedBarChart->setFixedSize(600, 300);
-//    gLayout->addWidget(stackedBarChart, 1, 0);
+    stackedBarChart = new StackedBarChart(this);
+    stackedBarChart->setFixedSize(600, 300);
+    gLayout->addWidget(stackedBarChart, 1, 0);
 }
 
 void Dashboard::paintEvent(QPaintEvent *event)
@@ -96,11 +96,15 @@ void Dashboard::paintEvent(QPaintEvent *event)
 
 void Dashboard::loadData()
 {
+    stackedBarChart->hide();
+
     for(int i = 1; i <= 4; i++) {
         if(!barChartArr[i]->isHidden()) {
             barChartArr[i]->reloadChart(i);
         }
     }
+
+    stackedBarChart->show();
 }
 
 void Dashboard::comboBoxChanged(int index)
@@ -114,4 +118,5 @@ void Dashboard::comboBoxChanged(int index)
             barChartArr[i]->hide();
         }
     }
+    stackedBarChart->show();
 }
