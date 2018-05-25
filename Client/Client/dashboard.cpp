@@ -75,7 +75,7 @@ void Dashboard::createCharts()
 //        }
 //    }
 
-    mBarChart = new BarChart(this, 1);
+    mBarChart = new BarChart(this, 3);
     mBarChart->setFixedSize(600, 300);
     gLayout->addWidget(mBarChart, 0, 0);
 
@@ -105,7 +105,7 @@ void Dashboard::loadData()
 //            barChartArr[i]->reloadChart(i);
 //        }
 //    }
-    mBarChart->reloadChart(1);
+    mBarChart->reloadChart(3);
 }
 
 void Dashboard::comboBoxChanged(int index)

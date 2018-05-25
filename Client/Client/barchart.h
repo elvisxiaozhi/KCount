@@ -20,6 +20,11 @@ class BarChart : public QWidget
 public:
     BarChart(QWidget *parent = nullptr, int mode = 1);
 
+    static QMap<int, unsigned long int> dailyMap;
+    static QMap<int, unsigned long int> weeklyMap;
+    static QMap<int, unsigned long int> monthlyMap;
+    static QMap<int, unsigned long int> yearlyMap;
+
     void reloadChart(int);
 
 private:
@@ -32,10 +37,10 @@ private:
     QBarCategoryAxis *barAxisX;
     QStringList barCategories;
     QChart *chart;
-    QChartView *chartView;
     QLabel *label;
 
     void loadChartData(int);
+    void reloadChart(QMap<int, unsigned long int> &, int);
 
 private slots:
     void testing(bool, int);

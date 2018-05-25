@@ -6,19 +6,11 @@
 #include "database.h"
 #include "signalemitter.h"
 #include <QTime>
-
-QMap<int, unsigned long int> MostPressed::dailyMap = {};
-QMap<int, unsigned long int> MostPressed::weeklyMap = {};
-QMap<int, unsigned long int> MostPressed::monthlyMap = {};
-QMap<int, unsigned long int> MostPressed::yearlyMap = {};
+#include "barchart.h"
 
 MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
 {
     mostPressed = Database::returnKeyVec(1);
-    dailyMap = Database::returnBarChartData(1);
-    weeklyMap = Database::returnBarChartData(2);
-    monthlyMap = Database::returnBarChartData(3);
-    yearlyMap = Database::returnBarChartData(4);
     currentHour = QTime::currentTime().toString("h").toInt();
 
     setWindowStyleSheet();
@@ -105,10 +97,10 @@ void MostPressed::reloadData(int index)
 
 void MostPressed::keyPressed(QString pressedKey)
 {
-    ++dailyMap[currentHour];
-    ++weeklyMap[weeklyMap.size() - 1];
-    ++monthlyMap[monthlyMap.size() - 1];
-    ++yearlyMap[yearlyMap.size() - 1];
+    ++BarChart::dailyMap[currentHour];
+    ++BarChart::weeklyMap[BarChart::weeklyMap.size() - 1];
+    ++BarChart::monthlyMap[BarChart::monthlyMap.size() - 1];
+    ++BarChart::yearlyMap[BarChart::yearlyMap.size() - 1];
 
     if(tempKeyMap.contains(pressedKey)) { //if the map has already stored the pressed key
         unsigned long int newValue = tempKeyMap.value(pressedKey) + 1; //then the map key value + 1 pressed time
