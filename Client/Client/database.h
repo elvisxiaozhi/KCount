@@ -20,6 +20,8 @@ public:
 private:
     static QSqlDatabase database;
     static QString currentDate;
+    static QString firstDayOfMonth;
+    static QString lastDayOfMonth;
     static int currentHour;
     QString dataPath;
     QString databaseLoc;

@@ -71,7 +71,7 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     mainVLayout->addWidget(label);
     setLayout(mainVLayout);
 
-//    connect(set, &QBarSet::hovered, this, &BarChart::testing);
+    connect(set, &QBarSet::hovered, this, &BarChart::testing);
 }
 
 void BarChart::reloadChart(int mode)
@@ -186,5 +186,5 @@ void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
 
 void BarChart::testing(bool, int index)
 {
-    qDebug() << index;
+    qDebug() << set->at(index);
 }

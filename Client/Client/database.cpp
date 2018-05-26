@@ -11,6 +11,8 @@
 QSqlDatabase Database::database;
 QString Database::currentDate = QDate::currentDate().toString("MM/dd/yy");
 int Database::currentHour = QTime::currentTime().toString("h").toInt();
+QString Database::firstDayOfMonth = QDate::currentDate().toString("MM/dd/yy").replace(0, 2, "01");
+QString Database::lastDayOfMonth = QDate::currentDate().toString("MM/dd/yy").replace(0, 2, QString::number(QDate::currentDate().daysInMonth()));
 
 Database::Database(QObject *parent) : QObject(parent)
 {
@@ -24,6 +26,8 @@ Database::Database(QObject *parent) : QObject(parent)
     if(!database.open()) {
         showErrorMsBox();
     }
+
+    qDebug() << firstDayOfMonth << lastDayOfMonth;
 }
 
 unsigned long int Database::returnTotalPressedTimes(int readMode)
@@ -264,7 +268,7 @@ QMap<int, unsigned long> Database::returnBarChartData(int readMode)
             break;
         case 4:
             for(int i = 0; i < 12; ++i) {
-                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(QDate::currentDate().addMonths(-i).toString("MM/dd/yy")).arg(QDate::currentDate().addMonths(-i - 1).toString("MM/dd/yy"));
+                query = QString("SELECT SUM(PressedTimes) FROM KeyPress WHERE WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(firstDayOfMonth).arg(lastDayOfMonth);
                 sqlQuery.exec(query);
                 while(sqlQuery.next()) {
                     map.insert(i, sqlQuery.value(0).toInt());
