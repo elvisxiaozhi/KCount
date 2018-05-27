@@ -127,14 +127,12 @@ void BarChart::loadChartData(int mode)
         break;
     case 4: //yearly
         for(auto it = yearlyMap.cbegin(); it != yearlyMap.cend(); ++it) {
-            lineSeries->append(QDateTime::currentDateTime().addMonths(-12 + std::distance(yearlyMap.cbegin(), it) + 1).toMSecsSinceEpoch(), 0);
+            barCategories.append(QDate::currentDate().addMonths(-11 + std::distance(yearlyMap.cbegin(), it)).toString("MMM"));
             set->append(it.value());
         }
-        dateAxisX->setTickCount(12);
         chart->addSeries(series);
-        chart->addSeries(lineSeries);
-        dateAxisX->setFormat("MMM");
-        chart->setAxisX(dateAxisX, lineSeries);
+        barAxisX->append(barCategories);
+        chart->setAxisX(barAxisX, series); //previously attached to the series are deleted
         break;
     default:
         break;
