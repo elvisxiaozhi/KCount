@@ -7,6 +7,7 @@
 #include <QtCharts/QBarSet>
 #include <QtCharts/QLegend>
 #include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -22,6 +23,9 @@ private:
     QStackedBarSeries *series;
     QStringList categories;
     QBarCategoryAxis *barAxisX;
+    QValueAxis *valueAxisX, *axisY;
+
+    void loadChartData();
 
 signals:
 

@@ -100,7 +100,7 @@ void Dashboard::loadData()
 
     for(int i = 0; i < 4; i++) {
         if(!barChartArr[i]->isHidden()) {
-            barChartArr[i]->reloadChart(i);
+            barChartArr[i]->reloadChart(i + 1);
         }
     }
 
@@ -112,7 +112,7 @@ void Dashboard::comboBoxChanged(int index)
     for(int i = 0; i < 4; ++i) {
         if(i + 1 == index) {
             barChartArr[i]->show();
-            barChartArr[i]->reloadChart(i);
+            barChartArr[i]->reloadChart(i + 1);
         }
         else {
             barChartArr[i]->hide();

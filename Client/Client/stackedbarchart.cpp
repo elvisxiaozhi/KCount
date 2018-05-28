@@ -21,19 +21,38 @@ StackedBarChart::StackedBarChart(QWidget *parent) : QWidget(parent)
     leftSet = new QBarSet("LeftSet", series);
     rightSet = new QBarSet("RightSet", series);
 
-    *leftSet << 1 << 2 << 3 << 4 << 5 << 6;
-    *rightSet << 5 << 0 << 0 << 4 << 0 << 7;
-
-    barAxisX = new QBarCategoryAxis(chart);
-
-    QStringList categories;
-    categories << "Jan" << "Feb" << "Mar" << "Apr" << "May" << "Jun";
-    barAxisX->append(categories);
-
     series->append(leftSet);
     series->append(rightSet);
 
+    valueAxisX = new QValueAxis(chart);
+    valueAxisX->setGridLineVisible(false);
+    valueAxisX->setTickCount(3);
+    valueAxisX->setRange(0, 23.2);
+    valueAxisX->setLabelFormat("%d");
+
+    axisY = new QValueAxis(chart);
+    axisY->setGridLineVisible(false);
+    axisY->setLabelFormat("%d");
+
+    loadChartData();
+
+//    barAxisX = new QBarCategoryAxis(chart);
+
+//    QStringList categories;
+//    categories << "Jan" << "Feb" << "Mar" << "Apr" << "May" << "Jun";
+//    barAxisX->append(categories);
+}
+
+void StackedBarChart::loadChartData()
+{
+    for(int i = 0; i < 24; ++i) {
+        leftSet->append(i);
+        rightSet->append(24 - i);
+    }
+
     chart->addSeries(series);
-    chart->createDefaultAxes();
-    chart->setAxisX(barAxisX, series);
+    chart->setAxisX(valueAxisX, series);
+
+    chart->setAxisY(axisY, series);
+    axisY->applyNiceNumbers(); //it must be after setAcisY()
 }
