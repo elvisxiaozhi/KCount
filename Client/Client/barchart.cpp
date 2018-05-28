@@ -115,7 +115,6 @@ void BarChart::loadChartData(int mode)
     }
         break;
     case 3: { //monthly
-        qDebug() << monthlyMap;
         for(auto it = monthlyMap.cbegin(); it != monthlyMap.cend(); ++it) {
             lineSeries->append(QDateTime::currentDateTime().addDays(std::distance(monthlyMap.cbegin(), it) - monthlyMap.size() + 1).toMSecsSinceEpoch(), 0);
             set->append(it.value());

@@ -18,7 +18,8 @@ class StackedBarChart : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StackedBarChart(QWidget *parent = nullptr, int mode = 1);
+    StackedBarChart(QWidget *parent = nullptr, int mode = 1);
+
     static QMap<int, std::pair<int, int> > dailyMap;
     static QMap<int, std::pair<int, int> > weeklyMap;
     static QMap<int, std::pair<int, int> > monthlyMap;
