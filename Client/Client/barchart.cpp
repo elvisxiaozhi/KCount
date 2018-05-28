@@ -44,6 +44,7 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
 
     barAxisX = new QBarCategoryAxis(chart);
     barAxisX->setGridLineVisible(false);
+    barAxisX->append(barCategories);
 
     valueAxisX = new QValueAxis(chart);
     valueAxisX->setGridLineVisible(false);
@@ -110,7 +111,6 @@ void BarChart::loadChartData(int mode)
             set->append(it.value());
         }
         chart->addSeries(series);
-        barAxisX->append(barCategories);
         chart->setAxisX(barAxisX, series); //previously attached to the series are deleted
     }
         break;
@@ -131,7 +131,6 @@ void BarChart::loadChartData(int mode)
             set->append(it.value());
         }
         chart->addSeries(series);
-        barAxisX->append(barCategories);
         chart->setAxisX(barAxisX, series); //previously attached to the series are deleted
         break;
     default:

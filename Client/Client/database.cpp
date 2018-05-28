@@ -24,8 +24,6 @@ Database::Database(QObject *parent) : QObject(parent)
     if(!database.open()) {
         showErrorMsBox();
     }
-
-//    qDebug() << firstDayOfMonth << lastDayOfMonth;
 }
 
 unsigned long int Database::returnTotalPressedTimes(int readMode)
@@ -275,6 +273,34 @@ QMap<int, unsigned long> Database::returnBarChartData(int readMode)
             break;
         default:
             break;
+        }
+
+        database.close();
+    }
+    else {
+        qDebug() << database.lastError().text();
+    }
+
+    return map;
+}
+
+QMap<int, std::pair<int, int> > Database::returnStackedBarChartData()
+{
+    QMap<int, std::pair<int, int> > map;
+
+    if(database.open()) {
+        QSqlQuery sqlQuery;
+        QString query;
+
+        for(int i = 0; i < 24; ++i) {
+            query = QString("SELECT LeftClick, RightClick FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(i);
+            sqlQuery.exec(query);
+            if(isQueryFound(sqlQuery)) {
+                map.insert(i, std::make_pair(sqlQuery.value(0).toInt(), sqlQuery.value(1).toInt()));
+            }
+            else {
+                map.insert(i, std::make_pair(0, 0));
+            }
         }
 
         database.close();

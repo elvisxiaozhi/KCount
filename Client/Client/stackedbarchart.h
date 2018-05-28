@@ -16,16 +16,18 @@ class StackedBarChart : public QWidget
     Q_OBJECT
 public:
     explicit StackedBarChart(QWidget *parent = nullptr);
+    static QMap<int, std::pair<int, int> > dailyMap;
+    static QMap<int, std::pair<int, int> > weeklyMap;
 
 private:
     QChart *chart;
     QBarSet *leftSet, *rightSet;
     QStackedBarSeries *series;
-    QStringList categories;
+    QStringList barCategories;
     QBarCategoryAxis *barAxisX;
     QValueAxis *valueAxisX, *axisY;
 
-    void loadChartData();
+    void loadChartData(int);
 
 signals:
 

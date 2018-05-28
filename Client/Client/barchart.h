@@ -33,7 +33,6 @@ private:
     QDateTimeAxis *dateAxisX;
     QLineSeries *lineSeries;
     QValueAxis *valueAxisX, *axisY;
-    QStringList categories;
     QBarCategoryAxis *barAxisX;
     QStringList barCategories;
     QChart *chart;

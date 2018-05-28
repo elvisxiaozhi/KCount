@@ -1,8 +1,16 @@
 #include "stackedbarchart.h"
 #include <QVBoxLayout>
+#include <QDebug>
+#include "database.h"
+#include <QDate>
+
+QMap<int, std::pair<int, int> > StackedBarChart::dailyMap = {};
+QMap<int, std::pair<int, int> > StackedBarChart::weeklyMap = {};
 
 StackedBarChart::StackedBarChart(QWidget *parent) : QWidget(parent)
 {
+    dailyMap = Database::returnStackedBarChartData();
+
     chart = new QChart;
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->setTheme(QChart::ChartThemeBlueIcy);
@@ -34,24 +42,44 @@ StackedBarChart::StackedBarChart(QWidget *parent) : QWidget(parent)
     axisY->setGridLineVisible(false);
     axisY->setLabelFormat("%d");
 
-    loadChartData();
+    barAxisX = new QBarCategoryAxis(chart);
+    barAxisX->setGridLineVisible(false);
+    barAxisX->append(barCategories);
 
-//    barAxisX = new QBarCategoryAxis(chart);
-
-//    QStringList categories;
-//    categories << "Jan" << "Feb" << "Mar" << "Apr" << "May" << "Jun";
-//    barAxisX->append(categories);
+    loadChartData(2);
 }
 
-void StackedBarChart::loadChartData()
+void StackedBarChart::loadChartData(int mode)
 {
-    for(int i = 0; i < 24; ++i) {
-        leftSet->append(i);
-        rightSet->append(24 - i);
-    }
+    switch (mode) {
+    case 1:
+        for(auto it = dailyMap.cbegin(); it != dailyMap.cend(); ++it) {
+            leftSet->append(it.value().first);
+            rightSet->append(it.value().second);
+        }
 
-    chart->addSeries(series);
-    chart->setAxisX(valueAxisX, series);
+        chart->addSeries(series);
+        chart->setAxisX(valueAxisX, series);
+        break;
+    case 2: { //weekly
+//       for(auto it = weeklyMap.cbegin(); it != weeklyMap.cend(); ++it) {
+//           barCategories.append(QDate::currentDate().addDays(std::distance(weeklyMap.cbegin(), it) - 6).toString("d"));
+//           set->append(it.value());
+//       }
+        for(int i = 0; i < 7; ++i) {
+            barCategories.append(QDate::currentDate().addDays(i - 6).toString("d"));
+            leftSet->append(i);
+            rightSet->append(7 - i);
+        }
+
+        chart->addSeries(series);
+
+        chart->setAxisX(barAxisX, series); //previously attached to the series are deleted
+    }
+        break;
+    default:
+        break;
+    }
 
     chart->setAxisY(axisY, series);
     axisY->applyNiceNumbers(); //it must be after setAcisY()
