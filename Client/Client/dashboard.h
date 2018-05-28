@@ -21,7 +21,7 @@ private:
     QGridLayout *gLayout;
     QComboBox *timeSpanBox;
     BarChart *barChartArr[4];
-    StackedBarChart *stackedBarChart;
+    StackedBarChart *stackedBarChartArr[4];
 
     void setWindowStyleSheet();
     void setWindowLayout();

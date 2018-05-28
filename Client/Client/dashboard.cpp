@@ -75,9 +75,14 @@ void Dashboard::createCharts()
         }
     }
 
-    stackedBarChart = new StackedBarChart(this);
-    stackedBarChart->setFixedSize(600, 300);
-    gLayout->addWidget(stackedBarChart, 1, 0);
+    for(int i = 0; i < 4; ++i) {
+        stackedBarChartArr[i] = new StackedBarChart(this, i + 1);
+        stackedBarChartArr[i]->setFixedSize(600, 300);
+        gLayout->addWidget(stackedBarChartArr[i], 1, 0);
+        if(i != 0) {
+            stackedBarChartArr[i]->hide();
+        }
+    }
 }
 
 void Dashboard::paintEvent(QPaintEvent *event)
@@ -96,7 +101,14 @@ void Dashboard::paintEvent(QPaintEvent *event)
 
 void Dashboard::loadData()
 {
-    stackedBarChart->hide();
+    int index = 0;
+
+    for(int i = 0; i < 4; i++) {
+        if(!stackedBarChartArr[i]->isHidden()) {
+            stackedBarChartArr[i]->reloadChart(i + 1);
+            index = i;
+        }
+    }
 
     for(int i = 0; i < 4; i++) {
         if(!barChartArr[i]->isHidden()) {
@@ -104,7 +116,7 @@ void Dashboard::loadData()
         }
     }
 
-    stackedBarChart->show();
+    stackedBarChartArr[index]->show();
 }
 
 void Dashboard::comboBoxChanged(int index)
@@ -119,5 +131,13 @@ void Dashboard::comboBoxChanged(int index)
         }
     }
 
-    stackedBarChart->show();
+    for(int i = 0; i < 4; ++i) {
+        if(i + 1 == index) {
+            stackedBarChartArr[i]->show();
+            stackedBarChartArr[i]->reloadChart(i + 1);
+        }
+        else {
+            stackedBarChartArr[i]->hide();
+        }
+    }
 }

@@ -16,7 +16,7 @@ public:
     static unsigned long int returnClickedTimes(QString, int);
     static void updateLeftClickToDB(const int &, const int &);
     static QMap<int, unsigned long int> returnBarChartData(int readMode = 1);
-    static QMap<int, std::pair<int, int> > returnStackedBarChartData();
+    static QMap<int, std::pair<int, int> > returnStackedBarChartData(int readMode = 1);
 
 private:
     static QSqlDatabase database;

@@ -284,7 +284,7 @@ QMap<int, unsigned long> Database::returnBarChartData(int readMode)
     return map;
 }
 
-QMap<int, std::pair<int, int> > Database::returnStackedBarChartData()
+QMap<int, std::pair<int, int> > Database::returnStackedBarChartData(int readMode)
 {
     QMap<int, std::pair<int, int> > map;
 
@@ -292,15 +292,59 @@ QMap<int, std::pair<int, int> > Database::returnStackedBarChartData()
         QSqlQuery sqlQuery;
         QString query;
 
-        for(int i = 0; i < 24; ++i) {
-            query = QString("SELECT LeftClick, RightClick FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(i);
-            sqlQuery.exec(query);
-            if(isQueryFound(sqlQuery)) {
-                map.insert(i, std::make_pair(sqlQuery.value(0).toInt(), sqlQuery.value(1).toInt()));
+        switch (readMode) {
+        case 1:
+            for(int i = 0; i < 24; ++i) {
+                query = QString("SELECT LeftClick, RightClick FROM MouseClick WHERE CreatedDate = #%1# AND CreatedHour = %2").arg(currentDate).arg(i);
+                sqlQuery.exec(query);
+                if(isQueryFound(sqlQuery)) {
+                    map.insert(i, std::make_pair(sqlQuery.value(0).toInt(), sqlQuery.value(1).toInt()));
+                }
+                else {
+                    map.insert(i, std::make_pair(0, 0));
+                }
             }
-            else {
-                map.insert(i, std::make_pair(0, 0));
+            break;
+        case 2:
+            for(int i = 6; i >= 0; --i) {
+                query = QString("SELECT SUM(LeftClick), SUM(RightClick) FROM MouseClick WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(6 - i).toString("MM/dd/yy"));
+                sqlQuery.exec(query);
+                if(isQueryFound(sqlQuery)) {
+                    map.insert(i, std::make_pair(sqlQuery.value(0).toInt(), sqlQuery.value(1).toInt()));
+                }
+                else {
+                    map.insert(i, std::make_pair(0, 0));
+                }
             }
+            break;
+        case 3: { //monthly
+            int daysInMonth = QDate::currentDate().daysInMonth();
+            for(int i = 0; i < daysInMonth; ++i) {
+                query = QString("SELECT SUM(LeftClick), SUM(RightClick) FROM MouseClick WHERE CreatedDate = #%1#").arg(QDate::currentDate().addDays(i - daysInMonth + 1).toString("MM/dd/yy"));
+                sqlQuery.exec(query);
+                if(isQueryFound(sqlQuery)) {
+                    map.insert(i, std::make_pair(sqlQuery.value(0).toInt(), sqlQuery.value(1).toInt()));
+                }
+                else {
+                    map.insert(i, std::make_pair(0, 0));
+                }
+            }
+        }
+            break;
+        case 4:
+            for(int i = 0; i < 12; ++i) {
+                query = QString("SELECT SUM(LeftClick), SUM(RightClick) FROM MouseClick WHERE CreatedDate BETWEEN #%1# AND #%2#").arg(QDate::currentDate().addMonths(-11 + i).toString("MM/dd/yy").replace(3, 2, "01")).arg(QDate::currentDate().addMonths(-11 + i).toString("MM/dd/yy").replace(3, 2, QString::number(QDate::currentDate().addMonths(-11 + i).daysInMonth())));
+                sqlQuery.exec(query);
+                if(isQueryFound(sqlQuery)) {
+                    map.insert(i, std::make_pair(sqlQuery.value(0).toInt(), sqlQuery.value(1).toInt()));
+                }
+                else {
+                    map.insert(i, std::make_pair(0, 0));
+                }
+            }
+            break;
+        default:
+            break;
         }
 
         database.close();
