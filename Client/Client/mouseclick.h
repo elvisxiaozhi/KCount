@@ -17,6 +17,7 @@ private:
     QHBoxLayout *contHLayout;
     QLabel *title, *rightClickCont, *leftClickCont;
     unsigned long int leftClickedTimes, rightClickedTimes, tempLeftClickedTimes, tempRightClickedTimes;
+    int currentHour;
 
     void setWindowStyleSheet();
 

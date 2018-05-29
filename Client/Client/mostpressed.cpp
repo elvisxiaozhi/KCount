@@ -85,6 +85,7 @@ void MostPressed::updateDatabase()
 {
     Database::updatePressedKeyToDB(tempKeyMap);
     tempKeyMap.clear(); //after updating datebase, clear the map, so it can store new data for the next hour
+    currentHour = QTime::currentTime().toString("h").toInt();
 }
 
 void MostPressed::reloadData(int index)

@@ -64,6 +64,7 @@ void Overview::timeout()
 {
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
     mostPressed->updateDatabase();
+    mouseClick->updateDatabase();
     Database::timeout();
 }
 

@@ -5,6 +5,8 @@
 #include "signalemitter.h"
 #include "database.h"
 #include <QDebug>
+#include "stackedbarchart.h"
+#include <QTime>
 
 MouseClick::MouseClick(QWidget *parent) : QWidget(parent)
 {
@@ -12,6 +14,7 @@ MouseClick::MouseClick(QWidget *parent) : QWidget(parent)
     rightClickedTimes = Database::returnClickedTimes("RightClick", 1);
     tempLeftClickedTimes = 0;
     tempRightClickedTimes = 0;
+    currentHour = QTime::currentTime().toString("h").toInt();
 
     setWindowStyleSheet();
 
@@ -68,6 +71,7 @@ void MouseClick::updateDatabase()
     Database::updateLeftClickToDB(tempLeftClickedTimes, tempRightClickedTimes);
     tempLeftClickedTimes = 0;
     tempRightClickedTimes = 0;
+    currentHour = QTime::currentTime().toString("h").toInt();
 }
 
 void MouseClick::reloadData(int index)
@@ -81,14 +85,26 @@ void MouseClick::reloadData(int index)
 
 void MouseClick::leftClicked()
 {
-    leftClickedTimes++;
-    tempLeftClickedTimes++;
+    ++leftClickedTimes;
+    ++tempLeftClickedTimes;
+
+    ++StackedBarChart::dailyMap[currentHour].first;
+    ++StackedBarChart::weeklyMap[StackedBarChart::weeklyMap.size() - 1].first;
+    ++StackedBarChart::monthlyMap[StackedBarChart::monthlyMap.size() - 1].first;
+    ++StackedBarChart::yearlyMap[StackedBarChart::yearlyMap.size() - 1].first;
+
     leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
 }
 
 void MouseClick::rightClicked()
 {
-    rightClickedTimes++;
-    tempRightClickedTimes++;
+    ++rightClickedTimes;
+    ++tempRightClickedTimes;
+
+    ++StackedBarChart::dailyMap[currentHour].second;
+    ++StackedBarChart::weeklyMap[StackedBarChart::weeklyMap.size() - 1].second;
+    ++StackedBarChart::monthlyMap[StackedBarChart::monthlyMap.size() - 1].second;
+    ++StackedBarChart::yearlyMap[StackedBarChart::yearlyMap.size() - 1].second;
+
     rightClickCont->setText(QString("right:<br><br> %1").arg(rightClickedTimes));
 }
