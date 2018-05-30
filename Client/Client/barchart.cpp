@@ -73,8 +73,6 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     mainVLayout->addWidget(chartView);
     mainVLayout->addWidget(label);
     setLayout(mainVLayout);
-
-    connect(set, &QBarSet::hovered, this, &BarChart::changeBarColor);
 }
 
 void BarChart::reloadChart(int mode)
@@ -142,7 +140,7 @@ void BarChart::loadChartData(int mode)
     }
     chart->setAxisY(axisY, series);
     axisY->applyNiceNumbers(); //it must be after setAcisY()
-    connect(set, &QBarSet::hovered, this, &BarChart::changeBarColor);
+    connect(set, &QBarSet::hovered, this, &BarChart::changeBarColor); //only connect once, or there will be QGraphicsItem::setParentItem issue
 }
 
 void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
@@ -188,8 +186,8 @@ void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
 
 void BarChart::changeBarColor(bool status, int)
 {
-    QPoint p = chartView->mapFromGlobal(QCursor::pos());
     if(status) {
+        QPoint p = chartView->mapFromGlobal(QCursor::pos());
         QGraphicsItem *it = chartView->itemAt(p);
         hoverItem.setParentItem(it);
         hoverItem.setRect(it->boundingRect());

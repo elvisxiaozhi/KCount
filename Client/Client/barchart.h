@@ -37,8 +37,8 @@ private:
     QStringList barCategories;
     QChart *chart;
     QLabel *label;
-    QGraphicsRectItem hoverItem;
     QChartView *chartView;
+    QGraphicsRectItem hoverItem;
 
     void loadChartData(int);
     void reloadChart(QMap<int, unsigned long int> &, int);
