@@ -206,9 +206,13 @@ void StackedBarChart::changeBarColor(bool status, int)
         hoverItem.setParentItem(it);
         hoverItem.setRect(it->boundingRect());
         hoverItem.show();
+
+        series->setLabelsVisible(true);
     }
     else {
         hoverItem.setParentItem(nullptr);
         hoverItem.hide();
+
+        series->setLabelsVisible(false);
     }
 }

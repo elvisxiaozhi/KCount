@@ -39,6 +39,7 @@ private:
     QLabel *label;
     QChartView *chartView;
     QGraphicsRectItem hoverItem;
+    QBrush labelBrush;
 
     void loadChartData(int);
     void reloadChart(QMap<int, unsigned long int> &, int);

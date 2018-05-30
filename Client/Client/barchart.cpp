@@ -36,8 +36,12 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     chart->legend()->setAlignment(Qt::AlignBottom);
 
     series = new QBarSeries(chart);
+    series->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd);
+
     set = new QBarSet("BarSet", series);
     series->append(set);
+
+    labelBrush.setColor(QColor(255, 192, 203));
 
     dateAxisX = new QDateTimeAxis(chart);
     dateAxisX->setGridLineVisible(false);
@@ -138,6 +142,8 @@ void BarChart::loadChartData(int mode)
     default:
         break;
     }
+
+    set->setLabelBrush(labelBrush);
     chart->setAxisY(axisY, series);
     axisY->applyNiceNumbers(); //it must be after setAcisY()
     connect(set, &QBarSet::hovered, this, &BarChart::changeBarColor); //only connect once, or there will be QGraphicsItem::setParentItem issue
@@ -192,9 +198,13 @@ void BarChart::changeBarColor(bool status, int)
         hoverItem.setParentItem(it);
         hoverItem.setRect(it->boundingRect());
         hoverItem.show();
+
+        series->setLabelsVisible(true);
     }
     else {
         hoverItem.setParentItem(nullptr);
         hoverItem.hide();
+
+        series->setLabelsVisible(false);
     }
 }
