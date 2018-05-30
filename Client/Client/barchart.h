@@ -37,12 +37,14 @@ private:
     QStringList barCategories;
     QChart *chart;
     QLabel *label;
+    QGraphicsRectItem hoverItem;
+    QChartView *chartView;
 
     void loadChartData(int);
     void reloadChart(QMap<int, unsigned long int> &, int);
 
 private slots:
-    void testing(bool, int);
+    void changeBarColor(bool, int);
 };
 
 #endif // BARCHART_H

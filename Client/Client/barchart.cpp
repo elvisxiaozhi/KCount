@@ -58,7 +58,7 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     lineSeries = new QLineSeries(chart);
     lineSeries->hide();
 
-    QChartView *chartView = new QChartView(chart);
+    chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
     label = new QLabel(this);
@@ -66,12 +66,15 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     label->setAlignment(Qt::AlignCenter);
     label->hide();
 
+    hoverItem.setBrush(QBrush(Qt::red));
+    hoverItem.setPen(Qt::NoPen);
+
     QVBoxLayout *mainVLayout = new QVBoxLayout(this);
     mainVLayout->addWidget(chartView);
     mainVLayout->addWidget(label);
     setLayout(mainVLayout);
 
-    connect(set, &QBarSet::hovered, this, &BarChart::testing);
+    connect(set, &QBarSet::hovered, this, &BarChart::changeBarColor);
 }
 
 void BarChart::reloadChart(int mode)
@@ -139,6 +142,7 @@ void BarChart::loadChartData(int mode)
     }
     chart->setAxisY(axisY, series);
     axisY->applyNiceNumbers(); //it must be after setAcisY()
+    connect(set, &QBarSet::hovered, this, &BarChart::changeBarColor);
 }
 
 void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
@@ -182,7 +186,17 @@ void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
     }
 }
 
-void BarChart::testing(bool, int index)
+void BarChart::changeBarColor(bool status, int)
 {
-    qDebug() << set->at(index);
+    QPoint p = chartView->mapFromGlobal(QCursor::pos());
+    if(status) {
+        QGraphicsItem *it = chartView->itemAt(p);
+        hoverItem.setParentItem(it);
+        hoverItem.setRect(it->boundingRect());
+        hoverItem.show();
+    }
+    else {
+        hoverItem.setParentItem(nullptr);
+        hoverItem.hide();
+    }
 }
