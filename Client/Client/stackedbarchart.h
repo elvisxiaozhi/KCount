@@ -37,13 +37,14 @@ private:
     QDateTimeAxis *dateAxisX;
     QLineSeries *lineSeries;
     QLabel *label;
+    QChartView *chartView;
+    QGraphicsRectItem hoverItem;
 
     void loadChartData(int);
     void reloadChart(QMap<int, std::pair<int, int> > &, int);
 
-signals:
-
-public slots:
+private slots:
+    void changeBarColor(bool, int);
 };
 
 #endif // STACKEDBARCHART_H

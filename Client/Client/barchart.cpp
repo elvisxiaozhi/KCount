@@ -66,7 +66,7 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     label->setAlignment(Qt::AlignCenter);
     label->hide();
 
-    hoverItem.setBrush(QBrush(Qt::red));
+    hoverItem.setBrush(QBrush(QColor(255, 192, 203)));
     hoverItem.setPen(Qt::NoPen);
 
     QVBoxLayout *mainVLayout = new QVBoxLayout(this);

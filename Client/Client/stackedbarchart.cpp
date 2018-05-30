@@ -34,7 +34,7 @@ StackedBarChart::StackedBarChart(QWidget *parent, int mode) : QWidget(parent)
     chart->legend()->setVisible(false);
     chart->legend()->setAlignment(Qt::AlignBottom);
 
-    QChartView *chartView = new QChartView(chart);
+    chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
     label = new QLabel(this);
@@ -73,6 +73,9 @@ StackedBarChart::StackedBarChart(QWidget *parent, int mode) : QWidget(parent)
 
     lineSeries = new QLineSeries(chart);
     lineSeries->hide();
+
+    hoverItem.setBrush(QBrush(QColor(255, 192, 203)));
+    hoverItem.setPen(Qt::NoPen);
 }
 
 void StackedBarChart::reloadChart(int mode)
@@ -147,6 +150,9 @@ void StackedBarChart::loadChartData(int mode)
 
     chart->setAxisY(axisY, series);
     axisY->applyNiceNumbers(); //it must be after setAcisY()
+
+    connect(leftSet, &QBarSet::hovered, this, &StackedBarChart::changeBarColor);
+    connect(rightSet, &QBarSet::hovered, this, &StackedBarChart::changeBarColor);
 }
 
 void StackedBarChart::reloadChart(QMap<int, std::pair<int, int> > &map, int mode)
@@ -189,5 +195,20 @@ void StackedBarChart::reloadChart(QMap<int, std::pair<int, int> > &map, int mode
             chart->hide();
             label->show();
         }
+    }
+}
+
+void StackedBarChart::changeBarColor(bool status, int)
+{
+    if(status) {
+        QPoint p = chartView->mapFromGlobal(QCursor::pos());
+        QGraphicsItem *it = chartView->itemAt(p);
+        hoverItem.setParentItem(it);
+        hoverItem.setRect(it->boundingRect());
+        hoverItem.show();
+    }
+    else {
+        hoverItem.setParentItem(nullptr);
+        hoverItem.hide();
     }
 }
