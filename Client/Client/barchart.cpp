@@ -30,6 +30,7 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     }
 
     chart = new QChart;
+    chart->setTitle("Key Pressed Bar Chart");
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->setTheme(QChart::ChartThemeBlueIcy);
     chart->legend()->setVisible(false);

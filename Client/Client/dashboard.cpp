@@ -75,6 +75,10 @@ void Dashboard::createCharts()
         }
     }
 
+    pieChart = new PieChart(this);
+    pieChart->setFixedSize(300, 300);
+    gLayout->addWidget(pieChart, 0, 1);
+
     for(int i = 0; i < 4; ++i) {
         stackedBarChartArr[i] = new StackedBarChart(this, i + 1);
         stackedBarChartArr[i]->setFixedSize(600, 300);

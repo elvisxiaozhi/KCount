@@ -29,6 +29,7 @@ StackedBarChart::StackedBarChart(QWidget *parent, int mode) : QWidget(parent)
     }
 
     chart = new QChart;
+    chart->setTitle("Mouse Clicked Bar Chart");
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->setTheme(QChart::ChartThemeBlueIcy);
     chart->legend()->setVisible(false);

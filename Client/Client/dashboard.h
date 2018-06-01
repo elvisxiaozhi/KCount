@@ -8,6 +8,7 @@
 #include <QGridLayout>
 #include "barchart.h"
 #include "stackedbarchart.h"
+#include "piechart.h"
 
 class Dashboard : public QWidget
 {
@@ -22,6 +23,7 @@ private:
     QComboBox *timeSpanBox;
     BarChart *barChartArr[4];
     StackedBarChart *stackedBarChartArr[4];
+    PieChart *pieChart;
 
     void setWindowStyleSheet();
     void setWindowLayout();
