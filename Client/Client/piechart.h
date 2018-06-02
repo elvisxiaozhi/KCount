@@ -12,12 +12,16 @@ class PieChart : public QWidget
 public:
     explicit PieChart(QWidget *parent = nullptr);
 
+    void reloadChart();
+
 private:
     QPieSeries *series;
+    QVector<std::pair<QString, unsigned long int>> dailyVec;
 
-signals:
+    void reloadChartData();
 
-public slots:
+private slots:
+    void keyPressed(QString);
 };
 
 #endif // PIECHART_H

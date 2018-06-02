@@ -121,6 +121,8 @@ void Dashboard::loadData()
     }
 
     stackedBarChartArr[index]->show();
+
+    pieChart->reloadChart();
 }
 
 void Dashboard::comboBoxChanged(int index)
