@@ -17,6 +17,7 @@ public:
 private:
     QPieSeries *series;
     QVector<std::pair<QString, unsigned long int>> mostPressedVec;
+    QVector<QColor> colorVec;
 
     void reloadChartData();
 

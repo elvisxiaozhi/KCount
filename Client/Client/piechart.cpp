@@ -11,6 +11,7 @@
 PieChart::PieChart(QWidget *parent, int mode) : QWidget(parent)
 {
     mostPressedVec = Database::returnKeyVec(mode);
+    colorVec = { QColor(255,0,0), QColor(255,215,0), QColor(0,255,0), QColor(0,128,128), QColor(255,192,203) };
 
     series = new QPieSeries();
 
@@ -48,6 +49,18 @@ void PieChart::reloadChartData()
             QPieSlice *slice = series->slices().at(i);
             slice->setLabelVisible();
             slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+            slice->setBrush(colorVec[i]);
+
+            connect(slice, &QPieSlice::hovered, [slice, this](bool status){
+                if(status) {
+                    slice->setExploded(true);
+                    slice->setLabelPosition(QPieSlice::LabelOutside);
+                }
+                else {
+                    slice->setExploded(false);
+                    slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+                }
+            });
         }
     }
     else {
@@ -56,6 +69,18 @@ void PieChart::reloadChartData()
             QPieSlice *slice = series->slices().at(i);
             slice->setLabelVisible();
             slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+            slice->setBrush(colorVec[i]);
+
+            connect(slice, &QPieSlice::hovered, [slice, this](bool status){
+                if(status) {
+                    slice->setExploded(true);
+                    slice->setLabelPosition(QPieSlice::LabelOutside);
+                }
+                else {
+                    slice->setExploded(false);
+                    slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+                }
+            });
         }
     }
 }
