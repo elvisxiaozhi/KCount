@@ -10,15 +10,18 @@ class PieChart : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PieChart(QWidget *parent = nullptr);
+    explicit PieChart(QWidget *parent = nullptr, int mode = 1);
 
-    void reloadChart();
+    void reloadChart(int);
 
 private:
     QPieSeries *series;
     QVector<std::pair<QString, unsigned long int>> dailyVec;
+    QVector<std::pair<QString, unsigned long int>> weeklyVec;
+    QVector<std::pair<QString, unsigned long int>> monthlyVec;
+    QVector<std::pair<QString, unsigned long int>> yearlyVec;
 
-    void reloadChartData();
+    void reloadChartData(QVector<std::pair<QString, unsigned long int>> &);
 
 private slots:
     void keyPressed(QString);
