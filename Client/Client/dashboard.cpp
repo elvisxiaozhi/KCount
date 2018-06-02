@@ -75,18 +75,14 @@ void Dashboard::createCharts()
         }
     }
 
-    for(int i = 0; i < 4; ++i) {
-        pieChartArr[i] = new PieChart(this, i + 1);
+    for(int i = 0; i < 5; ++i) {
+        pieChartArr[i] = new PieChart(this, i);
         pieChartArr[i]->setFixedSize(300, 300);
         gLayout->addWidget(pieChartArr[i], 0, 1);
-        if(i != 0) {
+        if(i != 1) {
             pieChartArr[i]->hide();
         }
     }
-
-//    pieChart = new PieChart(this);
-//    pieChart->setFixedSize(300, 300);
-//    gLayout->addWidget(pieChart, 0, 1);
 
     for(int i = 0; i < 4; ++i) {
         stackedBarChartArr[i] = new StackedBarChart(this, i + 1);
@@ -129,9 +125,9 @@ void Dashboard::loadData()
         }
     }
 
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 5; i++) {
         if(!pieChartArr[i]->isHidden()) {
-            pieChartArr[i]->reloadChart(i + 1);
+            pieChartArr[i]->reloadChart();
         }
     }
 
@@ -160,13 +156,22 @@ void Dashboard::comboBoxChanged(int index)
         }
     }
 
-    for(int i = 0; i < 4; ++i) {
-        if(i + 1 == index) {
+    for(int i = 0; i < 5; ++i) {
+        if(i == index) {
             pieChartArr[i]->show();
-            pieChartArr[i]->reloadChart(i + 1);
+            pieChartArr[i]->reloadChart();
         }
         else {
             pieChartArr[i]->hide();
+        }
+    }
+
+    if(index == 0) {
+        for(int i = 0; i < 4; i++) {
+            if(!stackedBarChartArr[i]->isHidden()) {
+                stackedBarChartArr[i]->hide();
+                barChartArr[i]->hide();
+            }
         }
     }
 }

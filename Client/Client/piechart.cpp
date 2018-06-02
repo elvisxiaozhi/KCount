@@ -10,22 +10,7 @@
 
 PieChart::PieChart(QWidget *parent, int mode) : QWidget(parent)
 {
-    switch (mode) {
-    case 1:
-        dailyVec = Database::returnKeyVec(1);
-        break;
-    case 2:
-        weeklyVec = Database::returnKeyVec(2);
-        break;
-    case 3:
-        monthlyVec = Database::returnKeyVec(3);
-        break;
-    case 4:
-        yearlyVec = Database::returnKeyVec(4);
-        break;
-    default:
-        break;
-    }
+    mostPressedVec = Database::returnKeyVec(mode);
 
     series = new QPieSeries();
 
@@ -45,48 +30,29 @@ PieChart::PieChart(QWidget *parent, int mode) : QWidget(parent)
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &PieChart::keyPressed);
 }
 
-void PieChart::reloadChart(int mode)
+void PieChart::reloadChart()
 {
     series->clear();
 
-    switch (mode) {
-    case 1:
-        qDebug() << "D";
-        reloadChartData(dailyVec);
-        break;
-    case 2:
-        qDebug() << "W";
-        reloadChartData(weeklyVec);
-        break;
-    case 3:
-        qDebug() << "M";
-        reloadChartData(monthlyVec);
-        break;
-    case 4:
-        qDebug() << "Y";
-        reloadChartData(yearlyVec);
-        break;
-    default:
-        break;
-    }
+    reloadChartData();
 }
 
-void PieChart::reloadChartData(QVector<std::pair<QString, unsigned long> > &vec)
+void PieChart::reloadChartData()
 {
-    std::sort(vec.begin(), vec.end(),
+    std::sort(mostPressedVec.begin(), mostPressedVec.end(),
               [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
 
-    if(vec.size() >= 5) {
+    if(mostPressedVec.size() >= 5) {
         for(int i = 0; i < 5; ++i) {
-            series->append(vec[i].first, vec[i].second);
+            series->append(mostPressedVec[i].first, mostPressedVec[i].second);
             QPieSlice *slice = series->slices().at(i);
             slice->setLabelVisible();
             slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
         }
     }
     else {
-        for(int i = 0; i < vec.size(); ++i) {
-            series->append(vec[i].first, vec[i].second);
+        for(int i = 0; i < mostPressedVec.size(); ++i) {
+            series->append(mostPressedVec[i].first, mostPressedVec[i].second);
             QPieSlice *slice = series->slices().at(i);
             slice->setLabelVisible();
             slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
@@ -96,39 +62,12 @@ void PieChart::reloadChartData(QVector<std::pair<QString, unsigned long> > &vec)
 
 void PieChart::keyPressed(QString pressedKey)
 {
-    auto dailyIt = std::find_if(dailyVec.begin(), dailyVec.end(),
+    auto dailyIt = std::find_if(mostPressedVec.begin(), mostPressedVec.end(),
         [pressedKey](const std::pair<QString, unsigned long int> &element){ return element.first == pressedKey; });
-    if(dailyIt != dailyVec.end()) {
+    if(dailyIt != mostPressedVec.end()) {
         ++(*dailyIt).second;
     }
     else {
-        dailyVec.push_back(std::make_pair(pressedKey, 1));
-    }
-
-    auto weeklyIt = std::find_if(weeklyVec.begin(), weeklyVec.end(),
-        [pressedKey](const std::pair<QString, unsigned long int> &element){ return element.first == pressedKey; });
-    if(weeklyIt != weeklyVec.end()) {
-        ++(*weeklyIt).second;
-    }
-    else {
-        weeklyVec.push_back(std::make_pair(pressedKey, 1));
-    }
-
-    auto monthlyIt = std::find_if(monthlyVec.begin(), monthlyVec.end(),
-        [pressedKey](const std::pair<QString, unsigned long int> &element){ return element.first == pressedKey; });
-    if(monthlyIt != monthlyVec.end()) {
-        ++(*monthlyIt).second;
-    }
-    else {
-        monthlyVec.push_back(std::make_pair(pressedKey, 1));
-    }
-
-    auto yearlyIt = std::find_if(yearlyVec.begin(), yearlyVec.end(),
-        [pressedKey](const std::pair<QString, unsigned long int> &element){ return element.first == pressedKey; });
-    if(yearlyIt != yearlyVec.end()) {
-        ++(*yearlyIt).second;
-    }
-    else {
-        yearlyVec.push_back(std::make_pair(pressedKey, 1));
+        mostPressedVec.push_back(std::make_pair(pressedKey, 1));
     }
 }

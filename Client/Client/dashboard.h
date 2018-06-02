@@ -23,8 +23,7 @@ private:
     QComboBox *timeSpanBox;
     BarChart *barChartArr[4];
     StackedBarChart *stackedBarChartArr[4];
-    PieChart *pieChartArr[4];
-    PieChart *pieChart;
+    PieChart *pieChartArr[5];
 
     void setWindowStyleSheet();
     void setWindowLayout();
