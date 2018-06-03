@@ -32,6 +32,7 @@ private:
     Users *users;
     Settings *settings;
     QSystemTrayIcon *sysTrayIcon;
+    QAction *startOnBootAct;
 
     void createDBThread();
     void createSidebar();
@@ -41,6 +42,7 @@ private:
 private slots:
     void sysTrayIconActivated(QSystemTrayIcon::ActivationReason);
     void changeContent(int);
+    void startOnBootActChanged();
 };
 
 #endif // MAINWINDOW_H

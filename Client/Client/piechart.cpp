@@ -20,6 +20,7 @@ PieChart::PieChart(QWidget *parent, int mode) : QWidget(parent)
     chart->setTitle(tr("Key Pressed Pie Chart"));
     chart->legend()->hide();
     chart->setAnimationOptions(QChart::AllAnimations);
+    chart->setDropShadowEnabled(true);
 
     QChartView *chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);

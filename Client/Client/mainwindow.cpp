@@ -69,12 +69,23 @@ void MainWindow::createSystemTrayIcon()
 
     QMenu *menu = new QMenu(this);
 
-    QAction *quitAct = new QAction(tr("Quit"), menu);
+    startOnBootAct = new QAction(tr("Start on Boot"), sysTrayIcon);
+    startOnBootAct->setCheckable(true);
 
+//    Settings::startOnBootSettings.setValue("Nana", QCoreApplication::applicationFilePath().replace('/', '\\')); //set start on boot to default
+    if(Settings::startOnBootSettings.value("Nana").isValid()) {
+        startOnBootAct->setChecked(true);
+    }
+
+    QAction *quitAct = new QAction(tr("Quit"), menu);
+    quitAct->setIcon(QIcon(":/Resources/Icons/quit.png"));
+
+    menu->addAction(startOnBootAct);
     menu->addAction(quitAct);
     sysTrayIcon->setContextMenu(menu);
 
     connect(sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::sysTrayIconActivated);
+    connect(startOnBootAct, &QAction::changed, this, &MainWindow::startOnBootActChanged);
     connect(quitAct, &QAction::triggered, [this](){ overview->updateDatabase(); qApp->quit(); });
 }
 
@@ -97,5 +108,15 @@ void MainWindow::changeContent(int index)
     }
     if(index == 1) {
         emit dashboard->loadingData();
+    }
+}
+
+void MainWindow::startOnBootActChanged()
+{
+    if(startOnBootAct->isChecked()) {
+        Settings::startOnBootSettings.setValue("Nana", QCoreApplication::applicationFilePath().replace('/', '\\'));
+    }
+    else {
+        Settings::startOnBootSettings.remove("Nana");
     }
 }

@@ -4,6 +4,8 @@
 #include <QStyleOption>
 #include <QDebug>
 
+QSettings Settings::startOnBootSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
     setWindowStyleSheet();
