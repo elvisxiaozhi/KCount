@@ -3,6 +3,7 @@
 #include <QMenu>
 #include <QCoreApplication>
 #include <QDebug>
+#include "initialisation.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -86,7 +87,7 @@ void MainWindow::createSystemTrayIcon()
 
     connect(sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::sysTrayIconActivated);
     connect(startOnBootAct, &QAction::changed, this, &MainWindow::startOnBootActChanged);
-    connect(quitAct, &QAction::triggered, [this](){ overview->updateDatabase(); qApp->quit(); });
+    connect(quitAct, &QAction::triggered, [this](){ Initialisation::exitCode = 0; overview->updateDatabase(); qApp->quit(); });
 }
 
 void MainWindow::sysTrayIconActivated(QSystemTrayIcon::ActivationReason reason)

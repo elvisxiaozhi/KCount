@@ -1,9 +1,10 @@
 #include "hook.h"
-#include <windows.h>
 #include <QDebug>
 #include "signalemitter.h"
+#include "initialisation.h"
 
 HHOOK hHook = NULL;
+HWINEVENTHOOK winEventHook = NULL;
 
 void UpdateKeyState(BYTE *keystate, int keycode)
 {
@@ -65,11 +66,35 @@ LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
     return CallNextHookEx(hHook, nCode, wParam, lParam);
 }
 
+void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWND hwnd, LONG/* idObject*/, LONG/* idChild*/, DWORD/* dwEventThread*/, DWORD/* dwmsEventTime*/)
+{
+    if(dwEvent == EVENT_SYSTEM_FOREGROUND) {
+        wchar_t wnd_title[256];
+        hwnd = GetForegroundWindow();
+        GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
+//        std::wcout << wnd_title << std::endl;
+        qDebug() << QString::fromUtf16((ushort*)wnd_title);
+    }
+}
+
 Hook::Hook()
 {
     hHook = SetWindowsHookEx(WH_KEYBOARD_LL, MyLowLevelKeyBoardProc, NULL, 0);
     hHook = SetWindowsHookEx(WH_MOUSE_LL, LowLevelMouseProc, NULL, 0);
     if (hHook == NULL) {
         qDebug() << "Hook Failed";
+    }
+
+    MSG msg;
+    winEventHook = ::SetWinEventHook(EVENT_MIN, EVENT_MAX, NULL, MyWinEventProc, 0, 0, WINEVENT_OUTOFCONTEXT);
+    if (winEventHook == NULL) {
+        qDebug() << "Win Event Hook failed";
+    }
+    while(GetMessageW(&msg, 0, 0, 0)) {
+        DispatchMessageW(&msg);
+
+        if(Initialisation::exitCode == 0) {
+            PostQuitMessage(0);
+        }
     }
 }
