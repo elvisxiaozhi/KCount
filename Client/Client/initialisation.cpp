@@ -1,7 +1,7 @@
 #include "initialisation.h"
 
 QSettings Initialisation::settings("InitSettings", "Nana");
-int Initialisation::exitCode = 1;
+bool Initialisation::quit = false;
 
 Initialisation::Initialisation()
 {

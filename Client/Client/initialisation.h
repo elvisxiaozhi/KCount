@@ -8,7 +8,7 @@ class Initialisation
 public:
     Initialisation();
     static QSettings settings;
-    static int exitCode;
+    static bool quit;
 };
 
 #endif // INITIALISATION_H

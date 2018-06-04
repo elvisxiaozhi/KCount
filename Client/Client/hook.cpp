@@ -93,8 +93,9 @@ Hook::Hook()
     while(GetMessageW(&msg, 0, 0, 0)) {
         DispatchMessageW(&msg);
 
-        if(Initialisation::exitCode == 0) {
+        if(Initialisation::quit) {
             PostQuitMessage(0);
+            break;
         }
     }
 }
