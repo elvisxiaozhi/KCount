@@ -70,10 +70,21 @@ void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWN
 {
     if(dwEvent == EVENT_SYSTEM_FOREGROUND) {
         wchar_t wnd_title[256];
+
         hwnd = GetForegroundWindow();
-        GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
-//        std::wcout << wnd_title << std::endl;
-        qDebug() << QString::fromUtf16((ushort*)wnd_title);
+
+        HWND hParent = GetWindow(hwnd, GW_OWNER);
+
+        if(hParent == NULL) {
+            GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
+//            std::wcout << wnd_title << std::endl;
+            qDebug() << "Child:" << QString::fromUtf16((ushort*)wnd_title);
+        }
+        else {
+            GetWindowText(hParent, wnd_title, sizeof(wnd_title));
+            qDebug() << "Parent:" << QString::fromUtf16((ushort*)wnd_title);
+        }
+
     }
 }
 
