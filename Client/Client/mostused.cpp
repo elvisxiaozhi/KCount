@@ -44,4 +44,7 @@ void MostUsed::paintEvent(QPaintEvent *)
 void MostUsed::appChanged(QString processName)
 {
     qDebug() << processName;
+    QRegExp regEx("\\\\");
+    QStringList processNameList = processName.split(regEx);
+    qDebug() << processNameList.at(processNameList.size() - 1);
 }
