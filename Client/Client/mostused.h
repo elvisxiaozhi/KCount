@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QElapsedTimer>
 
 class MostUsed : public QWidget
 {
@@ -12,6 +13,8 @@ public:
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
+    QElapsedTimer timer;
+    QVector<std::pair<QString, float> >mostUsedVec;
 
     void setWindowStyleSheet();
 

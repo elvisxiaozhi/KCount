@@ -8,6 +8,8 @@
 
 MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
 {
+    timer.start();
+
     setWindowStyleSheet();
 
     mainVLayout = new QVBoxLayout(this);
@@ -43,8 +45,24 @@ void MostUsed::paintEvent(QPaintEvent *)
 
 void MostUsed::appChanged(QString processName)
 {
-    qDebug() << processName;
     QRegExp regEx("\\\\");
     QStringList processNameList = processName.split(regEx);
-    qDebug() << processNameList.at(processNameList.size() - 1);
+    QString appName = processNameList.at(processNameList.size() - 1);
+    float elapsedTime = timer.elapsed();
+
+    auto it = std::find_if(
+                mostUsedVec.begin(), mostUsedVec.end(),
+                [appName](const std::pair<QString, float> &element){ return element.first == appName; }
+                );
+    if(it != mostUsedVec.end()) {
+        (*it).second += elapsedTime;
+    }
+    else {
+        mostUsedVec.push_back(std::make_pair(appName, elapsedTime));
+    }
+
+    qDebug() << appName << "Used time: " << elapsedTime / 1000;
+    qDebug() << mostUsedVec;
+
+    timer.start(); //output first, then restart the timer
 }
