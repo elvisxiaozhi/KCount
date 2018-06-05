@@ -78,13 +78,11 @@ void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWN
         if(hParent == NULL) {
             GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
 //            std::wcout << wnd_title << std::endl;
-            qDebug() << "Child:" << QString::fromUtf16((ushort*)wnd_title);
         }
         else {
-            GetWindowText(hParent, wnd_title, sizeof(wnd_title));
-            qDebug() << "Parent:" << QString::fromUtf16((ushort*)wnd_title);
+            GetWindowText(hParent, wnd_title, sizeof(wnd_title));     
         }
-
+        Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)wnd_title));
     }
 }
 

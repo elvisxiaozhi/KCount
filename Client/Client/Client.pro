@@ -44,7 +44,8 @@ SOURCES += \
     initialisation.cpp \
     messagebox.cpp \
     stackedbarchart.cpp \
-    piechart.cpp
+    piechart.cpp \
+    mostused.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -65,7 +66,8 @@ HEADERS += \
     initialisation.h \
     messagebox.h \
     stackedbarchart.h \
-    piechart.h
+    piechart.h \
+    mostused.h
 
 RESOURCES += \
     ../Resources/resources.qrc

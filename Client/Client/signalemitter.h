@@ -14,6 +14,7 @@ signals:
     void keyPressed(QString);
     void leftClicked();
     void rightClicked();
+    void appChanged(QString);
 
 public slots:
 };

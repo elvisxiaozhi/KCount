@@ -11,6 +11,7 @@
 #include "totalpressed.h"
 #include "mostpressed.h"
 #include "mouseclick.h"
+#include "mostused.h"
 
 class Overview : public QWidget
 {
@@ -27,6 +28,7 @@ private:
     TotalPressed *totalPressed;
     MostPressed *mostPressed;
     MouseClick *mouseClick;
+    MostUsed *mostUsed;
     QTimer *timer;
 
     void setWindowLayout();
