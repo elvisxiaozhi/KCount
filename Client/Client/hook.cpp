@@ -71,19 +71,19 @@ LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWND hwnd, LONG/* idObject*/, LONG/* idChild*/, DWORD/* dwEventThread*/, DWORD/* dwmsEventTime*/)
 {
     if(dwEvent == EVENT_SYSTEM_FOREGROUND) {
-        wchar_t wnd_title[256];
+//        wchar_t wnd_title[256];
 
         hwnd = GetForegroundWindow();
 
-        HWND hParent = GetWindow(hwnd, GW_OWNER);
+//        HWND hParent = GetWindow(hwnd, GW_OWNER);
 
-        if(hParent == NULL) {
-            GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
-//            std::wcout << wnd_title << std::endl;
-        }
-        else {
-            GetWindowText(hParent, wnd_title, sizeof(wnd_title));     
-        }
+//        if(hParent == NULL) {
+//            GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
+////            std::wcout << wnd_title << std::endl;
+//        }
+//        else {
+//            GetWindowText(hParent, wnd_title, sizeof(wnd_title));
+//        }
 
         DWORD dwPID;
         GetWindowThreadProcessId(hwnd, &dwPID);
@@ -97,12 +97,13 @@ void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWN
             TCHAR Buffer[MAX_PATH];
             if(GetModuleFileNameEx(Handle, 0, Buffer, MAX_PATH)) {
                 // At this point, buffer contains the full path to the executable
-                qDebug() << "Path" << QString::fromUtf16((ushort*)Buffer);
+//                qDebug() << "Path" << QString::fromUtf16((ushort*)Buffer);
+                Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)Buffer));
             }
             CloseHandle(Handle);
         }
 
-        Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)wnd_title));
+//        Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)wnd_title));
     }
 }
 

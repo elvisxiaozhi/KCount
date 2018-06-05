@@ -41,7 +41,7 @@ void MostUsed::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 }
 
-void MostUsed::appChanged(QString appName)
+void MostUsed::appChanged(QString processName)
 {
-    qDebug() << appName;
+    qDebug() << processName;
 }
