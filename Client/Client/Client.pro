@@ -7,6 +7,7 @@
 QT       += core gui
 QT += sql
 QT += charts
+LIBS += -L/C:/Users/Theodore/OneDrive/Code/C++/KCount/Client/Resources/Libs -lpsapi
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

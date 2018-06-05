@@ -2,6 +2,8 @@
 #include <QDebug>
 #include "signalemitter.h"
 #include "initialisation.h"
+#include <tchar.h>
+#include <psapi.h>
 
 HHOOK hHook = NULL;
 HWINEVENTHOOK winEventHook = NULL;
@@ -82,6 +84,24 @@ void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWN
         else {
             GetWindowText(hParent, wnd_title, sizeof(wnd_title));     
         }
+
+        DWORD dwPID;
+        GetWindowThreadProcessId(hwnd, &dwPID);
+
+        HANDLE Handle = OpenProcess(
+                          PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+                          FALSE,
+                          dwPID
+                        );
+        if(Handle) {
+            TCHAR Buffer[MAX_PATH];
+            if(GetModuleFileNameEx(Handle, 0, Buffer, MAX_PATH)) {
+                // At this point, buffer contains the full path to the executable
+                qDebug() << "Path" << QString::fromUtf16((ushort*)Buffer);
+            }
+            CloseHandle(Handle);
+        }
+
         Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)wnd_title));
     }
 }
