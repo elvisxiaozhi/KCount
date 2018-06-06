@@ -163,12 +163,12 @@ void Database::updateUsedAppToDB(const QMap<QString, float> &map)
                 insertQuery.bindValue(":CreatedDate", currentDate);
                 insertQuery.bindValue(":CreatedHour", currentHour);
                 insertQuery.bindValue(":UsedApp", it.first);
-                insertQuery.bindValue(":UsedTime", it.second);
+                insertQuery.bindValue(":UsedTime", QString::number(it.second).toDouble()); //has to set to double
                 insertQuery.exec();
             }
             else {
                 QSqlQuery updateSqlQuery;
-                QString updateQuery = QString("UPDATE AppUsage SET UsedTime = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND UsedApp = '%4'").arg(QString::number(it.second + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour).arg(it.first);
+                QString updateQuery = QString("UPDATE AppUsage SET UsedTime = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND UsedApp = '%4'").arg(QString::number(it.second + sqlQuery.value(0).toDouble())).arg(currentDate).arg(currentHour).arg(it.first);
                 updateSqlQuery.exec(updateQuery);
             }
         }
