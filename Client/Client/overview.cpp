@@ -29,6 +29,7 @@ void Overview::updateDatabase()
 {
     mostPressed->updateDatabase();
     mouseClick->updateDatabase();
+    mostUsed->updateDatabase();
 }
 
 void Overview::setWindowLayout()

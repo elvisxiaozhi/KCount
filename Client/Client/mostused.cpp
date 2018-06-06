@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QDebug>
 #include "signalemitter.h"
-#include <iomanip> // std::setprecision
+#include "database.h"
 
 MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
 {
@@ -87,6 +87,12 @@ void MostUsed::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 }
 
+void MostUsed::updateDatabase()
+{
+    Database::updateUsedAppToDB(tempAppMap);
+    tempAppMap.clear(); //after updating datebase, clear the map, so it can store new data for the next hour
+}
+
 void MostUsed::appChanged(QString processName)
 {
     QRegExp regEx("\\\\");
@@ -94,6 +100,15 @@ void MostUsed::appChanged(QString processName)
     QString appName = processNameList.at(processNameList.size() - 1);
     float elapsedTime = timer.elapsed();
     float decimalNum = QString::number((elapsedTime / 1000), 'f', 2).toFloat();
+
+    if(tempAppMap.contains(appName)) {
+        float newValue = tempAppMap.value(appName) + decimalNum;
+        tempAppMap.insert(appName, newValue);
+    }
+    else {
+        tempAppMap.insert(appName, decimalNum);
+    }
+    qDebug() << tempAppMap;
 
     auto it = std::find_if(
                 mostUsedVec.begin(), mostUsedVec.end(),

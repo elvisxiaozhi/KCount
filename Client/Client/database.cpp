@@ -149,6 +149,37 @@ void Database::updatePressedKeyToDB(const QMap<QString, unsigned long int> &map)
     }
 }
 
+void Database::updateUsedAppToDB(const QMap<QString, float> &map)
+{
+    if(database.open()) {
+        for(auto it : map.toStdMap()) {
+            QSqlQuery sqlQuery;
+            QString query = QString("SELECT UsedTime FROM AppUsage WHERE CreatedDate = #%1# AND CreatedHour = %2 AND UsedApp = '%3'").arg(currentDate).arg(currentHour).arg(it.first);
+            sqlQuery.exec(query);
+            if(!isQueryFound(sqlQuery)) {
+                QSqlQuery insertQuery;
+                insertQuery.prepare("INSERT INTO AppUsage (CreatedDate, CreatedHour, UsedApp, UsedTime)"
+                                    "VALUES(:CreatedDate, :CreatedHour, :UsedApp, :UsedTime);");
+                insertQuery.bindValue(":CreatedDate", currentDate);
+                insertQuery.bindValue(":CreatedHour", currentHour);
+                insertQuery.bindValue(":UsedApp", it.first);
+                insertQuery.bindValue(":UsedTime", it.second);
+                insertQuery.exec();
+            }
+            else {
+                QSqlQuery updateSqlQuery;
+                QString updateQuery = QString("UPDATE AppUsage SET UsedTime = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND UsedApp = '%4'").arg(QString::number(it.second + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour).arg(it.first);
+                updateSqlQuery.exec(updateQuery);
+            }
+        }
+
+        database.close();
+    }
+    else {
+        qDebug() << database.lastError().text();
+    }
+}
+
 unsigned long int Database::returnClickedTimes(QString clickType, int readMode)
 {
     unsigned long int clickedTimes = 0;

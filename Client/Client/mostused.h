@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QElapsedTimer>
 #include <label.h>
+#include <QMap>
 
 class MostUsed : public QWidget
 {
@@ -18,6 +19,7 @@ private:
     QVBoxLayout *mainVLayout, *contVLayout;
     QElapsedTimer timer;
     QVector<std::pair<QString, float> >mostUsedVec;
+    QMap<QString, float> tempAppMap;
     QVector<Label *> contents;
 
     void setWindowStyleSheet();
@@ -26,7 +28,8 @@ private:
 protected:
     void paintEvent(QPaintEvent *);
 
-signals:
+public slots:
+    void updateDatabase();
 
 private slots:
     void appChanged(QString);

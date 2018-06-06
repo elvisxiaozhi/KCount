@@ -13,6 +13,7 @@ public:
     static unsigned long int returnTotalPressedTimes(int);
     static QVector<std::pair<QString, unsigned long int>> returnKeyVec(int);
     static void updatePressedKeyToDB(const QMap<QString, unsigned long int> &);
+    static void updateUsedAppToDB(const QMap<QString, float> &);
     static unsigned long int returnClickedTimes(QString, int);
     static void updateLeftClickToDB(const int &, const int &);
     static QMap<int, unsigned long int> returnBarChartData(int readMode = 1);
