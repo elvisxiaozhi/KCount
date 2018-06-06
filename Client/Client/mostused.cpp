@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QDebug>
 #include "signalemitter.h"
+#include <iomanip> // std::setprecision
 
 MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
 {
@@ -49,19 +50,20 @@ void MostUsed::appChanged(QString processName)
     QStringList processNameList = processName.split(regEx);
     QString appName = processNameList.at(processNameList.size() - 1);
     float elapsedTime = timer.elapsed();
+    float decimalNum = QString::number((elapsedTime / 1000), 'f', 2).toFloat();
 
     auto it = std::find_if(
                 mostUsedVec.begin(), mostUsedVec.end(),
                 [appName](const std::pair<QString, float> &element){ return element.first == appName; }
                 );
     if(it != mostUsedVec.end()) {
-        (*it).second += elapsedTime;
+        (*it).second += decimalNum;
     }
     else {
-        mostUsedVec.push_back(std::make_pair(appName, elapsedTime));
+        mostUsedVec.push_back(std::make_pair(appName, decimalNum));
     }
 
-    qDebug() << appName << "Used time: " << elapsedTime / 1000;
+    qDebug() << appName << "Used time: " << decimalNum;
     qDebug() << mostUsedVec;
 
     timer.start(); //output first, then restart the timer
