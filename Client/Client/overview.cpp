@@ -16,6 +16,7 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
 
     setTimer(); //set the time, so the database will save automatically in each hour
 
+    connect(this, &Overview::loadingData, this, &Overview::loadData);
     connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
             [=](int index){
         mostPressed->reloadData(index);
@@ -66,6 +67,11 @@ void Overview::timeout()
     mostPressed->updateDatabase();
     mouseClick->updateDatabase();
     Database::timeout();
+}
+
+void Overview::loadData()
+{
+    mostUsed->setData();
 }
 
 void Overview::setWindowStyleSheet()

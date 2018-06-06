@@ -38,6 +38,7 @@ private:
     void createSidebar();
     void createContentWindow();
     void createSystemTrayIcon();
+    bool event(QEvent *);
 
 private slots:
     void sysTrayIconActivated(QSystemTrayIcon::ActivationReason);

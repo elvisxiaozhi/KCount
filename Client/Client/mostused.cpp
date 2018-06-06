@@ -23,17 +23,60 @@ MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 
+    contents.resize(5);
+    for(int i = 0; i < contents.size(); ++i) {
+        contents[i] = new Label(0, 20);
+        contents[i]->setFixedHeight(40);
+        contVLayout->addWidget(contents[i]);
+    }
+    setContents();
+
     mainVLayout->addWidget(title);
+    mainVLayout->addLayout(contVLayout);
 
     connect(Emitter::Instance(), &SignalEmitter::appChanged, this, &MostUsed::appChanged);
+}
+
+void MostUsed::setData()
+{
+    std::sort(mostUsedVec.begin(), mostUsedVec.end(),
+              [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
+
+    setContents();
 }
 
 void MostUsed::setWindowStyleSheet()
 {
     setStyleSheet(
-                "QWidget { background: #FFE4E1; }"
+                "QWidget { background: #7FFFD4; }"
                 "QLabel#Title { font: 20px; color: #666666; }"
                 );
+}
+
+void MostUsed::setContents()
+{
+    if(mostUsedVec.isEmpty()) {
+        for(int i = 0; i < 5; ++i) {
+            contents[i]->setText("");
+            contents[i]->setLabelColor(0);
+        }
+    }
+    if(mostUsedVec.size() > 5) {
+        for(int i = 0; i < 5; ++i) {
+            contents[i]->setText(mostUsedVec[i].first + ": " + QString::number(mostUsedVec[i].second));
+            contents[i]->setLabelColor(mostUsedVec[i].second);
+        }
+    }
+    else {
+        for(int i = 0; i < mostUsedVec.size(); ++i) {
+            contents[i]->setText(mostUsedVec[i].first + ": " + QString::number(mostUsedVec[i].second));
+            contents[i]->setLabelColor(mostUsedVec[i].second);
+        }
+        for(int i = 0; i < 5 - mostUsedVec.size(); ++i) {
+            contents[4 - i]->setText(""); //note the 4 - i
+            contents[4 - i]->setLabelColor(0);
+        }
+    }
 }
 
 void MostUsed::paintEvent(QPaintEvent *)
@@ -62,9 +105,6 @@ void MostUsed::appChanged(QString processName)
     else {
         mostUsedVec.push_back(std::make_pair(appName, decimalNum));
     }
-
-    qDebug() << appName << "Used time: " << decimalNum;
-    qDebug() << mostUsedVec;
 
     timer.start(); //output first, then restart the timer
 }

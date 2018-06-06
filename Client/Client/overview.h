@@ -41,8 +41,12 @@ private:
 protected:
     void paintEvent(QPaintEvent *);
 
+signals:
+    void loadingData();
+
 private slots:
     void timeout();
+    void loadData();
 };
 
 #endif // OVERVIEW_H

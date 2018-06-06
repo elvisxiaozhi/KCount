@@ -91,6 +91,23 @@ void MainWindow::createSystemTrayIcon()
     connect(quitAct, &QAction::triggered, [this](){ Initialisation::quit = true; overview->updateDatabase(); qApp->quit(); });
 }
 
+bool MainWindow::event(QEvent *event)
+{
+    if(event->type() == QEvent::WindowActivate) {
+        for(int i = 0; i < contentVec.size(); ++i) {
+            if(!contentVec[i]->isHidden()) {
+                if(i == 0) {
+                    emit overview->loadingData();
+                }
+                if(i == 1) {
+                    emit dashboard->loadingData();
+                }
+            }
+        }
+    }
+    return QWidget::event(event);
+}
+
 void MainWindow::sysTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == 2 || reason == 3) { //tray icon was double clicked or clicked
@@ -107,6 +124,9 @@ void MainWindow::changeContent(int index)
         else {
             content->hide();
         }
+    }
+    if(index == 0) {
+        emit overview->loadingData();
     }
     if(index == 1) {
         emit dashboard->loadingData();
