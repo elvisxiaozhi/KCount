@@ -40,6 +40,8 @@ void MainWindow::createSidebar()
 
 void MainWindow::createContentWindow()
 {
+    setWindowTitle("Nana");
+
     contentWidget = new QWidget(this);
     contVLayout = new QVBoxLayout(contentWidget);
     contentWidget->setLayout(contVLayout);
@@ -66,7 +68,7 @@ void MainWindow::createContentWindow()
 
 void MainWindow::createSystemTrayIcon()
 {
-    sysTrayIcon = new QSystemTrayIcon(QIcon(":/Resources/Icons/letter_k.png"), this);
+    sysTrayIcon = new QSystemTrayIcon(QIcon(":/Resources/Icons/letter-n.png"), this);
     sysTrayIcon->show();
 
     QMenu *menu = new QMenu(this);

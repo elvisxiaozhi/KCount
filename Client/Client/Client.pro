@@ -9,6 +9,8 @@ QT += sql
 QT += charts
 LIBS += -L/C:/Users/Theodore/OneDrive/Code/C++/KCount/Client/Resources/Libs -lpsapi
 
+RC_ICONS = letter-n.ico
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Client

@@ -11,7 +11,7 @@
         <file>Icons/notification.png</file>
         <file>Icons/down-arrow.png</file>
         <file>Icons/up-arrow.png</file>
-        <file>Icons/letter_k.png</file>
         <file>Icons/quit.png</file>
+        <file>Icons/letter-n.png</file>
     </qresource>
 </RCC>

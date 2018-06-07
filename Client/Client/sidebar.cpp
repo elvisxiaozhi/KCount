@@ -48,6 +48,12 @@ QAction *Sidebar::actionAt(const QPoint &point)
 void Sidebar::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
+
+    //paint the title
+    painter.setPen(QColor(255,115,115));
+    painter.setFont(QFont("Futura", 20));
+    painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Nana");
+
     painter.fillRect(rect(), QColor(240, 248, 255)); //set background color
     int posY = 10;
     for(auto action : actList) {
