@@ -12,6 +12,7 @@ public:
     explicit Database(QObject *parent = nullptr);
     static unsigned long int returnTotalPressedTimes(int);
     static QVector<std::pair<QString, unsigned long int>> returnKeyVec(int);
+    static QVector<std::pair<QString, float> > returnAppVec(int);
     static void updatePressedKeyToDB(const QMap<QString, unsigned long int> &);
     static void updateUsedAppToDB(const QMap<QString, float> &);
     static unsigned long int returnClickedTimes(QString, int);

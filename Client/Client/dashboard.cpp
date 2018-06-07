@@ -4,6 +4,7 @@
 #include <QStyleOption>
 #include <QDebug>
 #include <QLabel>
+#include <QKeyEvent>
 
 Dashboard::Dashboard(QWidget *parent) : QWidget(parent)
 {
@@ -92,6 +93,19 @@ void Dashboard::createCharts()
             stackedBarChartArr[i]->hide();
         }
     }
+}
+
+bool Dashboard::eventFilter(QObject *watched, QEvent *event)
+{
+    if(timeSpanBox){
+        if(timeSpanBox == watched && event->type() == QEvent::KeyPress){
+           QKeyEvent *key = static_cast<QKeyEvent *>(event);
+           if(!key->text().isEmpty()) {
+               return true;
+           }
+        }
+    }
+    return QObject::eventFilter(watched, event);
 }
 
 void Dashboard::paintEvent(QPaintEvent *event)

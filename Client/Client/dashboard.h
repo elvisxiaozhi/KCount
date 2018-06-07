@@ -29,6 +29,7 @@ private:
     void setWindowLayout();
     void createTimeSpanBox();
     void createCharts();
+    bool eventFilter(QObject *watched, QEvent *event);
 
 protected:
     void paintEvent(QPaintEvent *);

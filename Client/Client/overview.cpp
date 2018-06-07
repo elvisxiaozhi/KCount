@@ -22,6 +22,7 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
         mostPressed->reloadData(index);
         totalPressed->reloadData(index); /*note most first, then total*/
         mouseClick->reloadData(index);
+        mostUsed->reloadData(index);
     });
 }
 

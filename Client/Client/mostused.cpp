@@ -10,6 +10,7 @@
 MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
 {
     timer.start();
+    mostUsedVec = Database::returnAppVec(1);
 
     setWindowStyleSheet();
 
@@ -93,6 +94,14 @@ void MostUsed::updateDatabase()
     tempAppMap.clear(); //after updating datebase, clear the map, so it can store new data for the next hour
 }
 
+void MostUsed::reloadData(int index)
+{
+    updateDatabase();
+    mostUsedVec.clear();
+    mostUsedVec = Database::returnAppVec(index);
+    setContents();
+}
+
 void MostUsed::appChanged(QString processName)
 {
     QRegExp regEx("\\\\");
@@ -108,7 +117,6 @@ void MostUsed::appChanged(QString processName)
     else {
         tempAppMap.insert(appName, decimalNum);
     }
-    qDebug() << tempAppMap;
 
     auto it = std::find_if(
                 mostUsedVec.begin(), mostUsedVec.end(),

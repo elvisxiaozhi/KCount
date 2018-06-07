@@ -113,6 +113,51 @@ QVector<std::pair<QString, unsigned long int>> Database::returnKeyVec(int readMo
     return vec;
 }
 
+QVector<std::pair<QString, float> > Database::returnAppVec(int readMode)
+{
+    QVector<std::pair<QString, float>> vec;
+
+    if(database.open()) {
+        QSqlQuery sqlQuery;
+        QString query;
+
+        switch (readMode) {
+        case 0: //hour
+            query = QString("SELECT UsedApp, SUM(UsedTime) FROM AppUsage WHERE CreatedDate = #%1# AND CreatedHour = %2 GROUP BY UsedApp").arg(currentDate).arg(currentHour);
+            break;
+        case 1: //day
+            query = QString("SELECT UsedApp, SUM(UsedTime) FROM AppUsage WHERE CreatedDate = #%1# GROUP BY UsedApp").arg(currentDate);
+            break;
+        case 2: //week
+            query = QString("SELECT UsedApp, SUM(UsedTime) FROM AppUsage WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY UsedApp").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
+            break;
+        case 3: //month
+            query = QString("SELECT UsedApp, SUM(UsedTime) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY UsedApp").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            break;
+        case 4: //year
+            query = QString("SELECT UsedApp, SUM(UsedTime) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY UsedApp").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            break;
+        default:
+            break;
+        }
+
+        sqlQuery.exec(query);
+        while(sqlQuery.next()) {
+            vec.push_back(std::make_pair(sqlQuery.value(0).toString(), sqlQuery.value(1).toDouble()));
+        }
+
+        database.close();
+    }
+    else {
+        qDebug() << database.lastError().text();
+    }
+
+    std::sort(vec.begin(), vec.end(),
+              [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
+
+    return vec;
+}
+
 void Database::updatePressedKeyToDB(const QMap<QString, unsigned long int> &map)
 {
     if(database.open()) {
