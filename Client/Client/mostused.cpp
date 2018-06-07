@@ -6,11 +6,14 @@
 #include <QDebug>
 #include "signalemitter.h"
 #include "database.h"
+#include <QCoreApplication>
 
 MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
 {
     timer.start();
     mostUsedVec = Database::returnAppVec(1);
+    QStringList currentAppName = qApp->applicationFilePath().split("/");
+    lastAppName = currentAppName.at(currentAppName.size() - 1);
 
     setWindowStyleSheet();
 
@@ -117,24 +120,25 @@ void MostUsed::appChanged(QString processName)
         usedTime = std::floor(elapsedTime / 1000);
     }
 
-    if(tempAppMap.contains(appName)) {
-        int newValue = tempAppMap.value(appName) + usedTime;
-        tempAppMap.insert(appName, newValue);
+    if(tempAppMap.contains(lastAppName)) {
+        int newValue = tempAppMap.value(lastAppName) + usedTime;
+        tempAppMap.insert(lastAppName, newValue);
     }
     else {
-        tempAppMap.insert(appName, usedTime);
+        tempAppMap.insert(lastAppName, usedTime);
     }
 
     auto it = std::find_if(
                 mostUsedVec.begin(), mostUsedVec.end(),
-                [appName](const std::pair<QString, int> &element){ return element.first == appName; }
+                [this](const std::pair<QString, int> &element){ return element.first == lastAppName; }
                 );
     if(it != mostUsedVec.end()) {
         (*it).second += usedTime;
     }
     else {
-        mostUsedVec.push_back(std::make_pair(appName, usedTime));
+        mostUsedVec.push_back(std::make_pair(lastAppName, usedTime));
     }
 
     timer.start(); //output first, then restart the timer
+    lastAppName = appName;
 }

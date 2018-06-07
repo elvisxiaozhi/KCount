@@ -21,6 +21,7 @@ private:
     QVector<std::pair<QString, int> >mostUsedVec;
     QMap<QString, int> tempAppMap;
     QVector<Label *> contents;
+    QString lastAppName;
 
     void setWindowStyleSheet();
     void setContents();
