@@ -34,7 +34,7 @@ QAction *Sidebar::addAction(const QString &text, const QIcon &icon)
 
 QAction *Sidebar::actionAt(const QPoint &point)
 {
-    int posY = 10;
+    int posY = 110;
     for(auto action : actList) {
         QRect actRect(0, posY, rect().width(), 30);
         if(actRect.contains(point)) {
@@ -49,13 +49,9 @@ void Sidebar::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
-    //paint the title
-    painter.setPen(QColor(255,115,115));
-    painter.setFont(QFont("Futura", 20));
-    painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Nana");
-
+    //draw menu
     painter.fillRect(rect(), QColor(240, 248, 255)); //set background color
-    int posY = 10;
+    int posY = 110;
     for(auto action : actList) {
         if(action == checkedAct) {
             QPen checkedPen;  // creates a default pen
@@ -97,6 +93,11 @@ void Sidebar::paintEvent(QPaintEvent *event)
 
         posY += 50;
     }
+
+    //paint the title and it has to be after menu is drew
+    painter.setPen(QColor(195,151,151));
+    painter.setFont(QFont("Futura", 20));
+    painter.drawText(QRect(30, 30, 100, 50), "Nana");
 }
 
 void Sidebar::mousePressEvent(QMouseEvent *event)
