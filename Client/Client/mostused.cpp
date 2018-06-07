@@ -56,6 +56,7 @@ void MostUsed::setWindowStyleSheet()
 
 void MostUsed::setContents()
 {
+//    qDebug() <<  mostUsedVec[0].second << QString::number(mostUsedVec[0].second % 60) << mostUsedVec[0].second / 60;
     if(mostUsedVec.isEmpty()) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText("");
@@ -107,26 +108,32 @@ void MostUsed::appChanged(QString processName)
     QRegExp regEx("\\\\");
     QStringList processNameList = processName.split(regEx);
     QString appName = processNameList.at(processNameList.size() - 1);
-    float elapsedTime = timer.elapsed();
-    float decimalNum = QString::number((elapsedTime / 1000), 'f', 2).toFloat();
+    int elapsedTime = timer.elapsed();
+    int usedTime = 0;
+    if(timer.elapsed() % 1000 >= 500) {
+        usedTime = std::ceil(elapsedTime / 1000);
+    }
+    else {
+        usedTime = std::floor(elapsedTime / 1000);
+    }
 
     if(tempAppMap.contains(appName)) {
-        float newValue = tempAppMap.value(appName) + decimalNum;
+        int newValue = tempAppMap.value(appName) + usedTime;
         tempAppMap.insert(appName, newValue);
     }
     else {
-        tempAppMap.insert(appName, decimalNum);
+        tempAppMap.insert(appName, usedTime);
     }
 
     auto it = std::find_if(
                 mostUsedVec.begin(), mostUsedVec.end(),
-                [appName](const std::pair<QString, float> &element){ return element.first == appName; }
+                [appName](const std::pair<QString, int> &element){ return element.first == appName; }
                 );
     if(it != mostUsedVec.end()) {
-        (*it).second += decimalNum;
+        (*it).second += usedTime;
     }
     else {
-        mostUsedVec.push_back(std::make_pair(appName, decimalNum));
+        mostUsedVec.push_back(std::make_pair(appName, usedTime));
     }
 
     timer.start(); //output first, then restart the timer

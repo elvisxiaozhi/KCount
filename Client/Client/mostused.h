@@ -18,8 +18,8 @@ public:
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
     QElapsedTimer timer;
-    QVector<std::pair<QString, float> >mostUsedVec;
-    QMap<QString, float> tempAppMap;
+    QVector<std::pair<QString, int> >mostUsedVec;
+    QMap<QString, int> tempAppMap;
     QVector<Label *> contents;
 
     void setWindowStyleSheet();

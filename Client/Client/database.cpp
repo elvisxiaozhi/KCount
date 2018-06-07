@@ -113,9 +113,9 @@ QVector<std::pair<QString, unsigned long int>> Database::returnKeyVec(int readMo
     return vec;
 }
 
-QVector<std::pair<QString, float> > Database::returnAppVec(int readMode)
+QVector<std::pair<QString, int> > Database::returnAppVec(int readMode)
 {
-    QVector<std::pair<QString, float>> vec;
+    QVector<std::pair<QString, int>> vec;
 
     if(database.open()) {
         QSqlQuery sqlQuery;
@@ -143,7 +143,7 @@ QVector<std::pair<QString, float> > Database::returnAppVec(int readMode)
 
         sqlQuery.exec(query);
         while(sqlQuery.next()) {
-            vec.push_back(std::make_pair(sqlQuery.value(0).toString(), sqlQuery.value(1).toDouble()));
+            vec.push_back(std::make_pair(sqlQuery.value(0).toString(), sqlQuery.value(1).toInt()));
         }
 
         database.close();
@@ -194,7 +194,7 @@ void Database::updatePressedKeyToDB(const QMap<QString, unsigned long int> &map)
     }
 }
 
-void Database::updateUsedAppToDB(const QMap<QString, float> &map)
+void Database::updateUsedAppToDB(const QMap<QString, int> &map)
 {
     if(database.open()) {
         for(auto it : map.toStdMap()) {
@@ -208,12 +208,12 @@ void Database::updateUsedAppToDB(const QMap<QString, float> &map)
                 insertQuery.bindValue(":CreatedDate", currentDate);
                 insertQuery.bindValue(":CreatedHour", currentHour);
                 insertQuery.bindValue(":UsedApp", it.first);
-                insertQuery.bindValue(":UsedTime", QString::number(it.second).toDouble()); //has to set to double
+                insertQuery.bindValue(":UsedTime", QString::number(it.second).toInt()); //has to set to double
                 insertQuery.exec();
             }
             else {
                 QSqlQuery updateSqlQuery;
-                QString updateQuery = QString("UPDATE AppUsage SET UsedTime = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND UsedApp = '%4'").arg(QString::number(it.second + sqlQuery.value(0).toDouble())).arg(currentDate).arg(currentHour).arg(it.first);
+                QString updateQuery = QString("UPDATE AppUsage SET UsedTime = %1 WHERE CreatedDate = #%2# AND CreatedHour = %3 AND UsedApp = '%4'").arg(QString::number(it.second + sqlQuery.value(0).toInt())).arg(currentDate).arg(currentHour).arg(it.first);
                 updateSqlQuery.exec(updateQuery);
             }
         }
