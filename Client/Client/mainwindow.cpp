@@ -70,16 +70,12 @@ void MainWindow::createSystemTrayIcon()
 {
     sysTrayIcon = new QSystemTrayIcon(QIcon(":/Resources/Icons/letter-n.png"), this);
     sysTrayIcon->show();
+    sysTrayIcon->setToolTip(tr("Nana 2.0 Beta"));
 
     QMenu *menu = new QMenu(this);
 
     startOnBootAct = new QAction(tr("Start on Boot"), sysTrayIcon);
     startOnBootAct->setCheckable(true);
-
-//    Settings::startOnBootSettings.setValue("Nana", QCoreApplication::applicationFilePath().replace('/', '\\')); //set start on boot to default
-    if(Settings::startOnBootSettings.value("Nana").isValid()) {
-        startOnBootAct->setChecked(true);
-    }
 
     QAction *quitAct = new QAction(tr("Quit"), menu);
     quitAct->setIcon(QIcon(":/Resources/Icons/quit.png"));

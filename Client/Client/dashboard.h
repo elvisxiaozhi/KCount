@@ -9,6 +9,7 @@
 #include "barchart.h"
 #include "stackedbarchart.h"
 #include "piechart.h"
+#include <QScrollArea>
 
 class Dashboard : public QWidget
 {
@@ -19,6 +20,8 @@ public:
 private:
     QVBoxLayout *mainVLayout;
     QHBoxLayout *timeSpanHLayout;
+    QScrollArea *scrollArea;
+    QWidget *scrollWidget;
     QGridLayout *gLayout;
     QComboBox *timeSpanBox;
     BarChart *barChartArr[4];

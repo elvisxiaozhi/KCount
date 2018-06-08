@@ -42,11 +42,25 @@ void Dashboard::setWindowLayout()
 {
     mainVLayout = new QVBoxLayout(this);
     timeSpanHLayout = new QHBoxLayout; //do not set parent
+
+    scrollArea = new QScrollArea(this);
+    scrollArea->setBackgroundRole(QPalette::Window);
+    scrollArea->setFrameShadow(QFrame::Plain);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setFixedSize(1000, 450);
+
+    scrollWidget = new QWidget(this);
+
     gLayout = new QGridLayout;
 
+    scrollWidget->setLayout(gLayout);
+
     mainVLayout->addLayout(timeSpanHLayout);
-    mainVLayout->addLayout(gLayout);
+    mainVLayout->addWidget(scrollArea);
     this->setLayout(mainVLayout);
+
+    scrollArea->setWidget(scrollWidget); //needs to be in the last
 }
 
 void Dashboard::createTimeSpanBox()
