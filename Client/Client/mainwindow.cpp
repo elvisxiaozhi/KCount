@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     createSidebar();
     createContentWindow();
     createSystemTrayIcon();
-    setMinimumSize(1200, 900);
+    setFixedSize(1250, 800);
 
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
 }

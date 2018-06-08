@@ -37,11 +37,25 @@ void Overview::setWindowLayout()
 {
     mainVLayout = new QVBoxLayout(this);
     timeSpanHLayout = new QHBoxLayout; //do not set parent
+
+    scrollArea = new QScrollArea(this);
+    scrollArea->setBackgroundRole(QPalette::Window);
+    scrollArea->setFrameShadow(QFrame::Plain);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setFixedSize(1000, 450);
+
+    scrollWidget = new QWidget(this);
+
     lblGLayout = new QGridLayout;
 
+    scrollWidget->setLayout(lblGLayout);
+
     mainVLayout->addLayout(timeSpanHLayout);
-    mainVLayout->addLayout(lblGLayout);
+    mainVLayout->addWidget(scrollArea);
     this->setLayout(mainVLayout);
+
+    scrollArea->setWidget(scrollWidget); //needs to be in the last
 }
 
 void Overview::paintEvent(QPaintEvent *event)
@@ -113,16 +127,16 @@ void Overview::setTimeSpanBox()
 void Overview::setLbls()
 {
     totalPressed = new TotalPressed(this);
-    totalPressed->setMaximumSize(300, 300);
+    totalPressed->setFixedSize(300, 300);
 
     mostPressed = new MostPressed(this);
-    mostPressed->setMaximumSize(300, 300);
+    mostPressed->setFixedSize(300, 300);
 
     mouseClick = new MouseClick(this);
-    mouseClick->setMaximumSize(300, 300);
+    mouseClick->setFixedSize(300, 300);
 
     mostUsed = new MostUsed(this);
-    mostUsed->setMaximumSize(300, 300);
+    mostUsed->setFixedSize(300, 300);
 
     lblGLayout->addWidget(totalPressed, 0, 0);
     lblGLayout->addWidget(mostPressed, 0, 1);

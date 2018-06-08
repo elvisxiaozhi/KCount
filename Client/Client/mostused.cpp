@@ -59,7 +59,6 @@ void MostUsed::setWindowStyleSheet()
 
 void MostUsed::setContents()
 {
-//    qDebug() <<  mostUsedVec[0].second << QString::number(mostUsedVec[0].second % 60) << mostUsedVec[0].second / 60;
     if(mostUsedVec.isEmpty()) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText("");
@@ -68,13 +67,13 @@ void MostUsed::setContents()
     }
     if(mostUsedVec.size() > 5) {
         for(int i = 0; i < 5; ++i) {
-            contents[i]->setText(mostUsedVec[i].first + ": " + QString::number(mostUsedVec[i].second));
+            contents[i]->setText(mostUsedVec[i].first + ": " + QString::number(mostUsedVec[i].second / 60) + "m " + QString::number(mostUsedVec[i].second % 60) + "s");
             contents[i]->setLabelColor(mostUsedVec[i].second);
         }
     }
     else {
         for(int i = 0; i < mostUsedVec.size(); ++i) {
-            contents[i]->setText(mostUsedVec[i].first + ": " + QString::number(mostUsedVec[i].second));
+            contents[i]->setText(mostUsedVec[i].first + ": " + QString::number(mostUsedVec[i].second / 60) + "m " + QString::number(mostUsedVec[i].second % 60) + "s");
             contents[i]->setLabelColor(mostUsedVec[i].second);
         }
         for(int i = 0; i < 5 - mostUsedVec.size(); ++i) {

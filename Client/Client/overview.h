@@ -12,6 +12,7 @@
 #include "mostpressed.h"
 #include "mouseclick.h"
 #include "mostused.h"
+#include <QScrollArea>
 
 class Overview : public QWidget
 {
@@ -24,6 +25,8 @@ private:
     QHBoxLayout *timeSpanHLayout;
     QVBoxLayout *mainVLayout;
     QGridLayout *lblGLayout;
+    QScrollArea *scrollArea;
+    QWidget *scrollWidget;
     QComboBox *timeSpanBox;
     TotalPressed *totalPressed;
     MostPressed *mostPressed;
