@@ -48,7 +48,8 @@ SOURCES += \
     messagebox.cpp \
     stackedbarchart.cpp \
     piechart.cpp \
-    mostused.cpp
+    mostused.cpp \
+    customtitlebar.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -70,7 +71,8 @@ HEADERS += \
     messagebox.h \
     stackedbarchart.h \
     piechart.h \
-    mostused.h
+    mostused.h \
+    customtitlebar.h
 
 RESOURCES += \
     ../Resources/resources.qrc
