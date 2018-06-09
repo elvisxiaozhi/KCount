@@ -62,23 +62,23 @@ void MostUsed::setContents()
     if(mostUsedVec.isEmpty()) {
         for(int i = 0; i < 5; ++i) {
             contents[i]->setText("");
-            contents[i]->setLabelColor(0);
+            contents[i]->setAppUsageLblColor(0);
         }
     }
     if(mostUsedVec.size() > 5) {
         for(int i = 0; i < 5; ++i) {
             setLblText(contents[i], mostUsedVec[i].first, mostUsedVec[i].second);
-            contents[i]->setLabelColor(mostUsedVec[i].second);
+            contents[i]->setAppUsageLblColor(mostUsedVec[i].second);
         }
     }
     else {
         for(int i = 0; i < mostUsedVec.size(); ++i) {
             setLblText(contents[i], mostUsedVec[i].first, mostUsedVec[i].second);
-            contents[i]->setLabelColor(mostUsedVec[i].second);
+            contents[i]->setAppUsageLblColor(mostUsedVec[i].second);
         }
         for(int i = 0; i < 5 - mostUsedVec.size(); ++i) {
             contents[4 - i]->setText(""); //note the 4 - i
-            contents[4 - i]->setLabelColor(0);
+            contents[4 - i]->setAppUsageLblColor(0);
         }
     }
 }

@@ -9,6 +9,7 @@ public:
     Label(unsigned long int, int);
 
     void setLabelColor(const unsigned long int &);
+    void setAppUsageLblColor(const unsigned long int &);
 
 private:
     unsigned long int lblTimes;
