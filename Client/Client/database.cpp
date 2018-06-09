@@ -132,10 +132,10 @@ QVector<std::pair<QString, int> > Database::returnAppVec(int readMode)
             query = QString("SELECT UsedApp, SUM(UsedTime) FROM AppUsage WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY UsedApp").arg(currentDate).arg(QDate::currentDate().addDays(-7).toString("MM/dd/yy"));
             break;
         case 3: //month
-            query = QString("SELECT UsedApp, SUM(UsedTime) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY UsedApp").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
+            query = QString("SELECT UsedApp, SUM(UsedTime) FROM AppUsage WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY UsedApp").arg(currentDate).arg(QDate::currentDate().addMonths(-1).toString("MM/dd/yy"));
             break;
         case 4: //year
-            query = QString("SELECT UsedApp, SUM(UsedTime) FROM KeyPress WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY UsedApp").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
+            query = QString("SELECT UsedApp, SUM(UsedTime) FROM AppUsage WHERE CreatedDate BETWEEN #%1# AND #%2# GROUP BY UsedApp").arg(currentDate).arg(QDate::currentDate().addYears(-1).toString("MM/dd/yy"));
             break;
         default:
             break;
