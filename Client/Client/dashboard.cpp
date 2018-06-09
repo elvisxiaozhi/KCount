@@ -109,6 +109,10 @@ void Dashboard::createCharts()
             stackedBarChartArr[i]->hide();
         }
     }
+
+    appUsageChart = new AppUsageStackedBarChart(this, 1);
+    appUsageChart->setFixedSize(600, 300);
+    gLayout->addWidget(appUsageChart, 2, 0);
 }
 
 bool Dashboard::eventFilter(QObject *watched, QEvent *event)
