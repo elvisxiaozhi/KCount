@@ -18,13 +18,14 @@ public:
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
     QElapsedTimer timer;
-    QVector<std::pair<QString, int> >mostUsedVec;
+    QVector<std::pair<QString, int> > mostUsedVec;
     QMap<QString, int> tempAppMap;
     QVector<Label *> contents;
     QString lastAppName;
 
     void setWindowStyleSheet();
     void setContents();
+    void setLblText(Label *, QString, int);
 
 protected:
     void paintEvent(QPaintEvent *);

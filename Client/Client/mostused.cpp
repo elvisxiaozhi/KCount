@@ -67,19 +67,29 @@ void MostUsed::setContents()
     }
     if(mostUsedVec.size() > 5) {
         for(int i = 0; i < 5; ++i) {
-            contents[i]->setText(mostUsedVec[i].first + ": " + QString::number(mostUsedVec[i].second / 60) + "m " + QString::number(mostUsedVec[i].second % 60) + "s");
+            setLblText(contents[i], mostUsedVec[i].first, mostUsedVec[i].second);
             contents[i]->setLabelColor(mostUsedVec[i].second);
         }
     }
     else {
         for(int i = 0; i < mostUsedVec.size(); ++i) {
-            contents[i]->setText(mostUsedVec[i].first + ": " + QString::number(mostUsedVec[i].second / 60) + "m " + QString::number(mostUsedVec[i].second % 60) + "s");
+            setLblText(contents[i], mostUsedVec[i].first, mostUsedVec[i].second);
             contents[i]->setLabelColor(mostUsedVec[i].second);
         }
         for(int i = 0; i < 5 - mostUsedVec.size(); ++i) {
             contents[4 - i]->setText(""); //note the 4 - i
             contents[4 - i]->setLabelColor(0);
         }
+    }
+}
+
+void MostUsed::setLblText(Label *label, QString appName, int usedTime)
+{
+    if(usedTime / 3600 > 0) {
+        label->setText(appName + ": " + QString::number(usedTime / 3600) + "h " + QString::number((usedTime % 3600) / 60) + "m");
+    }
+    else {
+        label->setText(appName + ": " + QString::number(usedTime / 60) + "m " + QString::number(usedTime % 60) + "s");
     }
 }
 
