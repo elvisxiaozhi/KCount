@@ -45,6 +45,7 @@ private:
 private slots:
     void sysTrayIconActivated(QSystemTrayIcon::ActivationReason);
     void changeContent(int);
+    void sidebarActChanged(int);
     void startOnBootActChanged();
 };
 

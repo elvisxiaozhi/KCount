@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     setFixedSize(1250, 800);
 
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
+    connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
 }
 
 MainWindow::~MainWindow()
@@ -41,6 +42,7 @@ void MainWindow::createSidebar()
 void MainWindow::createContentWindow()
 {
     setWindowTitle("Nana");
+    setWindowFlags(Qt::Window | Qt::FramelessWindowHint); //hide title bar
 
     contentWidget = new QWidget(this);
     setCentralWidget(contentWidget);
@@ -135,6 +137,16 @@ void MainWindow::changeContent(int index)
     }
     if(index == 1) {
         emit dashboard->loadingData();
+    }
+}
+
+void MainWindow::sidebarActChanged(int index)
+{
+    if(index == 0) {
+        this->showMinimized();
+    }
+    if(index == 1) {
+        this->close();
     }
 }
 

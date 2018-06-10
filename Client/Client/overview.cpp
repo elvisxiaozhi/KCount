@@ -71,10 +71,10 @@ void Overview::paintEvent(QPaintEvent *event)
     painter.setFont(QFont("Futura", 20));
     painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Overview");
 
-   //paint notification icon
-    QIcon icon(":/Resources/Icons/notification.png");
-    QRect iconRect(800, 55, 30, 30);
-    icon.paint(&painter, iconRect);
+//   //paint notification icon
+//    QIcon icon(":/Resources/Icons/notification.png");
+//    QRect iconRect(800, 55, 30, 30);
+//    icon.paint(&painter, iconRect);
 }
 
 void Overview::timeout()
