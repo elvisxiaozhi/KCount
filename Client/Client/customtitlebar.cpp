@@ -1,10 +1,22 @@
 #include "customtitlebar.h"
-#include "windows.h"
+#include <QPaintEvent>
+#include <QStyleOption>
+#include <QPainter>
+#include <QDebug>
 
-CustomTitleBar::CustomTitleBar()
+CustomTitleBar::CustomTitleBar(QWidget *parent) : QWidget(parent)
 {
-//    LONG_PTR dwStyle = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX;
-//    hWnd = CreateWindow(szAppName, szTitle, dwStyle,
-//        CW_USEDEFAULT, 0,  CW_USEDEFAULT, 0,
-//        NULL, NULL, hInstance, NULL);
+    setStyleSheet("QWidget { background-color: red; }");
+    setFixedSize(1050, 40);
+}
+
+void CustomTitleBar::paintEvent(QPaintEvent *)
+{
+    //to make the custom widget able to set style sheet
+    QStyleOption opt;
+    opt.init(this);
+    QPainter painter(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
+
+//    painter.fillRect(QRect(0, 0, event->rect().width(), 40), QColor(195,151,151));
 }

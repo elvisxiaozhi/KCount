@@ -1,11 +1,17 @@
 #ifndef CUSTOMTITLEBAR_H
 #define CUSTOMTITLEBAR_H
 
+#include <QWidget>
 
-class CustomTitleBar
+class CustomTitleBar : public QWidget
 {
+    Q_OBJECT
 public:
-    CustomTitleBar();
+    explicit CustomTitleBar(QWidget *parent = nullptr);
+
+protected:
+    void paintEvent(QPaintEvent *);
+
 };
 
 #endif // CUSTOMTITLEBAR_H

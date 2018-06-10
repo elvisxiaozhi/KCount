@@ -11,6 +11,7 @@
 #include "users.h"
 #include "settings.h"
 #include <QThread>
+#include "customtitlebar.h"
 
 class MainWindow : public QMainWindow
 {
@@ -26,6 +27,7 @@ private:
     Sidebar *sidebar;
     QWidget *contentWidget;
     QVBoxLayout *contVLayout;
+    CustomTitleBar *titleBar;
     QVector<QWidget *> contentVec;
     Overview *overview;
     Dashboard *dashboard;

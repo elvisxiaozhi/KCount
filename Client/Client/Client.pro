@@ -49,8 +49,8 @@ SOURCES += \
     stackedbarchart.cpp \
     piechart.cpp \
     mostused.cpp \
-    customtitlebar.cpp \
-    appusagestackedbarchart.cpp
+    appusagestackedbarchart.cpp \
+    customtitlebar.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -73,8 +73,8 @@ HEADERS += \
     stackedbarchart.h \
     piechart.h \
     mostused.h \
-    customtitlebar.h \
-    appusagestackedbarchart.h
+    appusagestackedbarchart.h \
+    customtitlebar.h
 
 RESOURCES += \
     ../Resources/resources.qrc

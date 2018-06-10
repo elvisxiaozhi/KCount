@@ -43,9 +43,13 @@ void MainWindow::createContentWindow()
     setWindowTitle("Nana");
 
     contentWidget = new QWidget(this);
-    contVLayout = new QVBoxLayout(contentWidget);
-    contentWidget->setLayout(contVLayout);
     setCentralWidget(contentWidget);
+
+    contVLayout = new QVBoxLayout();
+    contVLayout->setContentsMargins(0, 0, 0, 0);
+    contentWidget->setLayout(contVLayout);
+
+    titleBar = new CustomTitleBar(contentWidget);
 
     overview = new Overview(contentWidget);
     dashboard = new Dashboard(contentWidget);
@@ -60,6 +64,9 @@ void MainWindow::createContentWindow()
     dashboard->hide();
     users->hide();
     settings->hide();
+
+    contVLayout->addWidget(titleBar);
+
     contVLayout->addWidget(overview);
     contVLayout->addWidget(dashboard);
     contVLayout->addWidget(users);
