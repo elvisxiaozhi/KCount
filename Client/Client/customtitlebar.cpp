@@ -3,6 +3,8 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QDebug>
+#include <windows.h>
+#include <QWindow>
 
 CustomTitleBar::CustomTitleBar(QWidget *parent) : QWidget(parent)
 {
@@ -75,7 +77,16 @@ void CustomTitleBar::paintEvent(QPaintEvent *event)
 
 void CustomTitleBar::mousePressEvent(QMouseEvent *event)
 {
-    startPos = event->pos();
+//    startPos = event->pos();
+
+    if (event->buttons().testFlag(Qt::LeftButton)) //use the native windows api, the issue that window suddently move will not show, do not know why
+    {
+        HWND hWnd = ::GetAncestor((HWND)(window()->windowHandle()->winId()), GA_ROOT);
+        POINT pt;
+        ::GetCursorPos(&pt);
+        ::ReleaseCapture();
+        ::SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, POINTTOPOINTS(pt));
+    }
 
     QAction *action = actionAt(event->pos());
     checkedAct = action;
@@ -83,18 +94,18 @@ void CustomTitleBar::mousePressEvent(QMouseEvent *event)
         int index = std::find(actList.begin(), actList.end(), checkedAct) - actList.begin();
         emit actionChanged(index);
     }
-    update(); //update must be in the last, or the window will suddently move to another place
+//    update(); //update must be in the last, or the window will suddently move to another place
 }
 
 void CustomTitleBar::mouseMoveEvent(QMouseEvent *event)
 {
-    if(event->buttons() == Qt::LeftButton) {
-        QPoint delta = event->pos() - startPos;
-        QWidget *w = window();
-        if(w) {
-            w->move(w->pos()+ delta);
-        }
-    }
+//    if(event->buttons() == Qt::LeftButton) {
+//        QPoint delta = event->pos() - startPos;
+//        QWidget *w = window();
+//        if(w) {
+//            w->move(w->pos()+ delta);
+//        }
+//    }
 
     QAction *action = actionAt(event->pos());
     hoveredAct = action;
