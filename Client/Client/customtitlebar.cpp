@@ -12,7 +12,7 @@ CustomTitleBar::CustomTitleBar(QWidget *parent) : QWidget(parent)
     hoveredAct = NULL;
 
     addAction("—", QIcon(""));
-    addAction("X", QIcon(""));
+    addAction("×", QIcon(""));
 
     setStyleSheet("QWidget { background-color: #C39797; }");
     setFixedSize(1050, 45);
@@ -75,28 +75,28 @@ void CustomTitleBar::paintEvent(QPaintEvent *event)
 
 void CustomTitleBar::mousePressEvent(QMouseEvent *event)
 {
+    startPos = event->pos();
+
     QAction *action = actionAt(event->pos());
     checkedAct = action;
     if(checkedAct != NULL) {
         int index = std::find(actList.begin(), actList.end(), checkedAct) - actList.begin();
         emit actionChanged(index);
     }
-    update();
-
-    startPos = event->pos();
+    update(); //update must be in the last, or the window will suddently move to another place
 }
 
 void CustomTitleBar::mouseMoveEvent(QMouseEvent *event)
 {
-    QAction *action = actionAt(event->pos());
-    hoveredAct = action;
-    update();
-
-    if (event->buttons() && Qt::LeftButton) {
+    if(event->buttons() == Qt::LeftButton) {
         QPoint delta = event->pos() - startPos;
         QWidget *w = window();
         if(w) {
             w->move(w->pos()+ delta);
         }
     }
+
+    QAction *action = actionAt(event->pos());
+    hoveredAct = action;
+    update(); //update must be in the last, or the window will suddently move to another place
 }
