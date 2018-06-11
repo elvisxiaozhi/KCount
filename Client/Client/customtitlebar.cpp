@@ -16,7 +16,7 @@ CustomTitleBar::CustomTitleBar(QWidget *parent) : QWidget(parent)
     addAction("—", QIcon(""));
     addAction("×", QIcon(""));
 
-    setStyleSheet("QWidget { background-color: #C39797; }");
+    setStyleSheet("QWidget { background-color: #F3D6E4; }");
     setFixedSize(1050, 45);
 }
 
@@ -60,12 +60,17 @@ void CustomTitleBar::paintEvent(QPaintEvent *event)
             hoveredPen.setBrush(QColor(255, 0, 0));
             painter.setPen(hoveredPen);
 
+            painter.setPen(QColor(255,255,255)); //change text color when hover
+
             if(action->text() == "—") {
-                painter.fillRect(QRect(960, 0, 45, 45), QColor(0, 255, 0)); //set background color
+                painter.fillRect(QRect(960, 0, 45, 45), QColor(0,255,255)); //set background color
             }
-            if(action->text() == "X") {
-                painter.fillRect(QRect(1005, 0, 45, 45), QColor(255, 255, 0)); //set background color
+            if(action->text() == "×") {
+                painter.fillRect(QRect(1005, 0, 45, 45), QColor(233, 75, 60)); //set background color
             }
+        }
+        else {
+            painter.setPen(QColor(128,128,128)); //change the text color to normal grey when not hover
         }
 
         QRect textRect(posX, 8, event->rect().width(), event->rect().height());
