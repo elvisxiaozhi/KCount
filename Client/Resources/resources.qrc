@@ -13,5 +13,6 @@
         <file>Icons/up-arrow.png</file>
         <file>Icons/quit.png</file>
         <file>Icons/letter-n.png</file>
+        <file>Icons/switch.png</file>
     </qresource>
 </RCC>

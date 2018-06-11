@@ -51,7 +51,7 @@ SOURCES += \
     mostused.cpp \
     appusagestackedbarchart.cpp \
     customtitlebar.cpp \
-    customlabel.cpp
+    custombutton.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -76,7 +76,7 @@ HEADERS += \
     mostused.h \
     appusagestackedbarchart.h \
     customtitlebar.h \
-    customlabel.h
+    custombutton.h
 
 RESOURCES += \
     ../Resources/resources.qrc

@@ -7,6 +7,7 @@
 #include "label.h"
 #include "customlabel.h"
 #include <QHBoxLayout>
+#include "custombutton.h"
 
 class TotalPressed : public QWidget
 {
@@ -21,6 +22,7 @@ private:
     Label *content;
     unsigned long int totalPressedTimes;
     CustomLabel *swicthLbl;
+    CustomButton *switchBtn;
 
     void setWindowStyleSheet();
 

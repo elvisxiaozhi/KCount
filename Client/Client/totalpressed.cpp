@@ -20,7 +20,10 @@ TotalPressed::TotalPressed(QWidget *parent)
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 
-    swicthLbl = new CustomLabel(this);
+//    swicthLbl = new CustomLabel(this);
+//    swicthLbl->setPixmap(QPixmap(":/Resources/Icons/switch.png"));
+    switchBtn = new CustomButton(this);
+    switchBtn->setIcon(QIcon(":/Resources/Icons/switch.png"));
 
     lblHLayout = new QHBoxLayout();
 
@@ -32,7 +35,8 @@ TotalPressed::TotalPressed(QWidget *parent)
 
     lblHLayout->addSpacerItem(spacerItem);
     lblHLayout->addWidget(title);
-    lblHLayout->addWidget(swicthLbl);
+    lblHLayout->addWidget(switchBtn);
+
     mainVLayout->addLayout(lblHLayout);
     mainVLayout->addWidget(content);
 
