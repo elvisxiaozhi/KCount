@@ -127,6 +127,9 @@ void Overview::setTimeSpanBox()
 
 void Overview::setLbls()
 {
+    mostUsed = new MostUsed(this);
+    mostUsed->setFixedSize(300, 300);
+
     totalPressed = new TotalPressed(this);
     totalPressed->setFixedSize(300, 300);
 
@@ -136,13 +139,10 @@ void Overview::setLbls()
     mouseClick = new MouseClick(this);
     mouseClick->setFixedSize(300, 300);
 
-    mostUsed = new MostUsed(this);
-    mostUsed->setFixedSize(300, 300);
-
-    lblGLayout->addWidget(totalPressed, 0, 0);
-    lblGLayout->addWidget(mostPressed, 0, 1);
-    lblGLayout->addWidget(mouseClick, 0, 2);
-    lblGLayout->addWidget(mostUsed, 1, 0);
+    lblGLayout->addWidget(mostUsed, 0, 0);
+    lblGLayout->addWidget(totalPressed, 0, 1);
+    lblGLayout->addWidget(mostPressed, 0, 2);
+    lblGLayout->addWidget(mouseClick, 1, 0);
 }
 
 void Overview::setTimer()

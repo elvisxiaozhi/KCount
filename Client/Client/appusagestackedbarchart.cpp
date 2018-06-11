@@ -42,7 +42,8 @@ AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode) : QW
 
     chart->addSeries(series);
 
-    QBarCategoryAxis *axis = new QBarCategoryAxis(chart);
-    chart->createDefaultAxes();
-    chart->setAxisY(axis, series);
+//    QBarCategoryAxis *axis = new QBarCategoryAxis(chart);
+//    axis->setGridLineVisible(false);
+//    chart->createDefaultAxes();
+//    chart->setAxisY(axis, series);
 }

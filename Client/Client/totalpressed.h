@@ -5,6 +5,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include "label.h"
+#include "customlabel.h"
+#include <QHBoxLayout>
 
 class TotalPressed : public QWidget
 {
@@ -14,9 +16,11 @@ public:
 
 private:
     QVBoxLayout *mainVLayout;
+    QHBoxLayout *lblHLayout;
     QLabel *title;
     Label *content;
     unsigned long int totalPressedTimes;
+    CustomLabel *swicthLbl;
 
     void setWindowStyleSheet();
 

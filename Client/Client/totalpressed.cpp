@@ -5,6 +5,7 @@
 #include "signalemitter.h"
 #include <QDebug>
 #include "database.h"
+#include <QSpacerItem>
 
 TotalPressed::TotalPressed(QWidget *parent)
     : QWidget(parent)
@@ -19,11 +20,20 @@ TotalPressed::TotalPressed(QWidget *parent)
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 
+    swicthLbl = new CustomLabel(this);
+
+    lblHLayout = new QHBoxLayout();
+
     content = new Label(totalPressedTimes, 70);
     content->setText(QString::number(totalPressedTimes));
     content->setFixedHeight(200);
 
-    mainVLayout->addWidget(title);
+    QSpacerItem *spacerItem = new QSpacerItem(45, 1, QSizePolicy::Fixed, QSizePolicy::Fixed); //used to fix the title in the absolute center
+
+    lblHLayout->addSpacerItem(spacerItem);
+    lblHLayout->addWidget(title);
+    lblHLayout->addWidget(swicthLbl);
+    mainVLayout->addLayout(lblHLayout);
     mainVLayout->addWidget(content);
 
     setWindowStyleSheet();

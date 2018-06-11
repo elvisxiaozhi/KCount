@@ -50,7 +50,8 @@ SOURCES += \
     piechart.cpp \
     mostused.cpp \
     appusagestackedbarchart.cpp \
-    customtitlebar.cpp
+    customtitlebar.cpp \
+    customlabel.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -74,7 +75,8 @@ HEADERS += \
     piechart.h \
     mostused.h \
     appusagestackedbarchart.h \
-    customtitlebar.h
+    customtitlebar.h \
+    customlabel.h
 
 RESOURCES += \
     ../Resources/resources.qrc
