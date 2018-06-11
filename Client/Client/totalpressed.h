@@ -5,7 +5,6 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include "label.h"
-#include "customlabel.h"
 #include <QHBoxLayout>
 #include "custombutton.h"
 
@@ -21,7 +20,6 @@ private:
     QLabel *title;
     Label *content;
     unsigned long int totalPressedTimes;
-    CustomLabel *swicthLbl;
     CustomButton *switchBtn;
 
     void setWindowStyleSheet();

@@ -20,8 +20,6 @@ TotalPressed::TotalPressed(QWidget *parent)
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 
-//    swicthLbl = new CustomLabel(this);
-//    swicthLbl->setPixmap(QPixmap(":/Resources/Icons/switch.png"));
     switchBtn = new CustomButton(this);
     switchBtn->setIcon(QIcon(":/Resources/Icons/switch.png"));
 
