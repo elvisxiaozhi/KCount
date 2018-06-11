@@ -81,7 +81,9 @@ void CustomTitleBar::mousePressEvent(QMouseEvent *event)
         int index = std::find(actList.begin(), actList.end(), checkedAct) - actList.begin();
         emit actionChanged(index);
     }
-//    update();
+    update();
+
+    startPos = event->pos();
 }
 
 void CustomTitleBar::mouseMoveEvent(QMouseEvent *event)
@@ -89,4 +91,12 @@ void CustomTitleBar::mouseMoveEvent(QMouseEvent *event)
     QAction *action = actionAt(event->pos());
     hoveredAct = action;
     update();
+
+    if (event->buttons() && Qt::LeftButton) {
+        QPoint delta = event->pos() - startPos;
+        QWidget *w = window();
+        if(w) {
+            w->move(w->pos()+ delta);
+        }
+    }
 }
