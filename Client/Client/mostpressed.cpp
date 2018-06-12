@@ -124,25 +124,21 @@ void MostPressed::createScrollWidget()
 
     scrollWidget->setLayout(scrollContVLayout);
     scrollArea->setWidget(scrollWidget);
+
+    createScrollConts();
 }
 
 void MostPressed::createScrollConts()
 {
-    delete scrollWidget;
-
-    scrollWidget = new QWidget(this);
-
-    scrollContVLayout = new QVBoxLayout();
-    scrollContVLayout->setSpacing(0);
-
-    scrollArea->setWidget(scrollWidget);
-    scrollWidget->setLayout(scrollContVLayout);
-
-    for(int i = 0; i < mostPressed.size(); ++i) {
+    for(int i = 0; i < mostPressed.size() - scrollConts.size(); ++i) {
         Label *contLbl = new Label(0, 20);
-        contLbl->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
-        contLbl->setLabelColor(mostPressed[i].second);
         scrollContVLayout->addWidget(contLbl);
+        scrollConts.push_back(contLbl);
+    }
+
+    for(int i = 0; i < scrollConts.size(); ++i) {
+        scrollConts[i]->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
+        scrollConts[i]->setLabelColor(mostPressed[i].second);
     }
 }
 
