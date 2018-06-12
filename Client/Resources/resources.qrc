@@ -14,5 +14,7 @@
         <file>Icons/quit.png</file>
         <file>Icons/letter-n.png</file>
         <file>Icons/switch.png</file>
+        <file>Icons/show_more.png</file>
+        <file>Icons/show_less.png</file>
     </qresource>
 </RCC>

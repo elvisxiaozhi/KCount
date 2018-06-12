@@ -135,14 +135,18 @@ void Overview::setLbls()
 
     mostPressed = new MostPressed(this);
     mostPressed->setFixedSize(300, 300);
+    mostPressed->hide();
 
     mouseClick = new MouseClick(this);
     mouseClick->setFixedSize(300, 300);
 
     lblGLayout->addWidget(mostUsed, 0, 0);
     lblGLayout->addWidget(totalPressed, 0, 1);
-    lblGLayout->addWidget(mostPressed, 0, 2);
-    lblGLayout->addWidget(mouseClick, 1, 0);
+    lblGLayout->addWidget(mostPressed, 0, 1);
+    lblGLayout->addWidget(mouseClick, 0, 2);
+
+    connect(totalPressed, &TotalPressed::switchBtnClicked, [this](){ mostPressed->show(); });
+    connect(mostPressed, &MostPressed::switchBtnClicked, [this](){ totalPressed->show(); });
 }
 
 void Overview::setTimer()

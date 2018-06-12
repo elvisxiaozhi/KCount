@@ -25,6 +25,25 @@ MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 
+    switchBtn = new CustomButton(this);
+    switchBtn->setIcon(QIcon(":/Resources/Icons/switch.png"));
+
+    showMoreBtn = new CustomButton(this);
+    showMoreBtn->setIcon(QIcon(":/Resources/Icons/show_more.png"));
+
+    showLessBtn = new CustomButton(this);
+    showLessBtn->setIcon(QIcon(":/Resources/Icons/show_less.png"));
+    showLessBtn->hide();
+
+    lblHLayout = new QHBoxLayout();
+
+    lblHLayout->addWidget(switchBtn);
+    lblHLayout->addStretch();
+    lblHLayout->addWidget(title);
+    lblHLayout->addStretch();
+    lblHLayout->addWidget(showMoreBtn);
+    lblHLayout->addWidget(showLessBtn);
+
     contents.resize(5);
     for(int i = 0; i < contents.size(); ++i) {
         contents[i] = new Label(0, 20);
@@ -33,10 +52,13 @@ MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
     }
     setContents();
 
-    mainVLayout->addWidget(title);
+    mainVLayout->addLayout(lblHLayout);
     mainVLayout->addLayout(contVLayout);
 
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &MostPressed::keyPressed);
+    connect(switchBtn, &CustomButton::clicked, [this](){ this->hide(); emit switchBtnClicked(); });
+    connect(showMoreBtn, &CustomButton::clicked, [this](){ showMoreBtn->hide(); showLessBtn->show(); });
+    connect(showLessBtn, &CustomButton::clicked, [this](){ showMoreBtn->show(); showLessBtn->hide(); });
 }
 
 void MostPressed::setWindowStyleSheet()

@@ -27,6 +27,9 @@ private:
 protected:
     void paintEvent(QPaintEvent *);
 
+signals:
+    void switchBtnClicked();
+
 public slots:
     void reloadData(int);
 

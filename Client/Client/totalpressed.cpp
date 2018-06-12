@@ -5,7 +5,6 @@
 #include "signalemitter.h"
 #include <QDebug>
 #include "database.h"
-#include <QSpacerItem>
 
 TotalPressed::TotalPressed(QWidget *parent)
     : QWidget(parent)
@@ -41,6 +40,7 @@ TotalPressed::TotalPressed(QWidget *parent)
     setWindowStyleSheet();
 
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &TotalPressed::keyPressed);
+    connect(switchBtn, &CustomButton::clicked, [this](){ this->hide(); emit switchBtnClicked(); });
 }
 
 void TotalPressed::setWindowStyleSheet()

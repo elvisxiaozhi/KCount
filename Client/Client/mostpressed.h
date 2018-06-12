@@ -6,6 +6,8 @@
 #include <QMap>
 #include <QVBoxLayout>
 #include <label.h>
+#include <QHBoxLayout>
+#include "custombutton.h"
 
 class MostPressed : public QWidget
 {
@@ -15,17 +17,22 @@ public:
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
+    QHBoxLayout *lblHLayout;
     QLabel *title;
     QVector<Label *> contents;
     QVector<std::pair<QString, unsigned long int>> mostPressed;
     QMap<QString, unsigned long int> tempKeyMap;
     int currentHour;
+    CustomButton *switchBtn, *showMoreBtn, *showLessBtn;
 
     void setWindowStyleSheet();
     void setContents();
 
 protected:
     void paintEvent(QPaintEvent *);
+
+signals:
+    void switchBtnClicked();
 
 public slots:
     void updateDatabase();
