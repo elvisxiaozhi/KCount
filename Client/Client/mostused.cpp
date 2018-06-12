@@ -8,10 +8,10 @@
 #include "database.h"
 #include <QCoreApplication>
 
-MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
+MostUsed::MostUsed(QWidget *parent, int mode) : QWidget(parent)
 {
     timer.start();
-    mostUsedVec = Database::returnAppVec(1);
+    mostUsedVec = Database::returnAppVec(mode);
     QStringList currentAppName = qApp->applicationFilePath().split("/");
     lastAppName = QString(currentAppName.at(currentAppName.size() - 1)).split(".exe").first();
 
@@ -23,6 +23,7 @@ MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
     connect(showLessBtn, &CustomButton::clicked, [this](){ showMoreBtn->show(); showLessBtn->hide(); scrollArea->hide(); contWidget->show(); });
 }
 
+//setData is called whenever the time span icon clicked or over view page is clicked
 void MostUsed::setData()
 {
     std::sort(mostUsedVec.begin(), mostUsedVec.end(),
@@ -52,7 +53,7 @@ void MostUsed::setMainLayout()
     title->setAlignment(Qt::AlignCenter);
 
     showMoreBtn = new CustomButton(this);
-    showMoreBtn->setIcon(QIcon(":/Resources/Icons/switch.png"));
+    showMoreBtn->setIcon(QIcon(":/Resources/Icons/show_more.png"));
 
     showLessBtn = new CustomButton(this);
     showLessBtn->setIcon(QIcon(":/Resources/Icons/show_less.png"));
@@ -183,13 +184,21 @@ void MostUsed::updateDatabase()
     tempAppMap.clear(); //after updating datebase, clear the map, so it can store new data for the next hour
 }
 
+//reloadData is called when a new day arrives
+//because there are 5 objects, it can not call updateDatabase() in this function
 void MostUsed::reloadData(int index)
 {
-    updateDatabase();
-    mostUsedVec.clear();
     mostUsedVec = Database::returnAppVec(index);
-    setContents();
-    createScrollConts();
+
+    //need to delete yesterday scroll widget, so the widget can put new data for today
+    delete scrollWidget;
+    scrollWidget = new QWidget(this);
+
+    scrollContVLayout = new QVBoxLayout();
+    scrollContVLayout->setContentsMargins(0, 0, 0, 0);
+    scrollContVLayout->setSpacing(0);
+
+    scrollWidget->setLayout(scrollContVLayout);
 }
 
 void MostUsed::appChanged(QString processName)

@@ -8,9 +8,9 @@
 #include <QTime>
 #include "barchart.h"
 
-MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
+MostPressed::MostPressed(QWidget *parent, int mode) : QWidget(parent)
 {
-    mostPressed = Database::returnKeyVec(1);
+    mostPressed = Database::returnKeyVec(mode);
     currentHour = QTime::currentTime().toString("h").toInt();
 
     setMainLayout();

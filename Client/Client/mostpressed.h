@@ -14,7 +14,7 @@ class MostPressed : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MostPressed(QWidget *parent = nullptr);
+    explicit MostPressed(QWidget *parent = nullptr, int mode = 1);
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;

@@ -14,7 +14,7 @@ class MostUsed : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MostUsed(QWidget *parent = nullptr);
+    explicit MostUsed(QWidget *parent = nullptr, int mode = 1);
 
     void setData();
 

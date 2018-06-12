@@ -8,10 +8,10 @@
 #include "stackedbarchart.h"
 #include <QTime>
 
-MouseClick::MouseClick(QWidget *parent) : QWidget(parent)
+MouseClick::MouseClick(QWidget *parent, int mode) : QWidget(parent)
 {
-    leftClickedTimes = Database::returnClickedTimes("LeftClick", 1);
-    rightClickedTimes = Database::returnClickedTimes("RightClick", 1);
+    leftClickedTimes = Database::returnClickedTimes("LeftClick", mode);
+    rightClickedTimes = Database::returnClickedTimes("RightClick", mode);
     tempLeftClickedTimes = 0;
     tempRightClickedTimes = 0;
     currentHour = QTime::currentTime().toString("h").toInt();

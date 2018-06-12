@@ -6,10 +6,10 @@
 #include <QDebug>
 #include "database.h"
 
-TotalPressed::TotalPressed(QWidget *parent)
+TotalPressed::TotalPressed(QWidget *parent, int mode)
     : QWidget(parent)
 {
-    totalPressedTimes = Database::returnTotalPressedTimes(1);
+    totalPressedTimes = Database::returnTotalPressedTimes(mode);
 
     mainVLayout = new QVBoxLayout(this);
     setLayout(mainVLayout);

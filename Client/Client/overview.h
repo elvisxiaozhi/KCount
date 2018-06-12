@@ -28,11 +28,11 @@ private:
     QScrollArea *scrollArea;
     QWidget *scrollWidget;
     QComboBox *timeSpanBox;
-    TotalPressed *totalPressed;
-    MostPressed *mostPressed;
-    MouseClick *mouseClick;
-    MostUsed *mostUsed;
     QTimer *timer;
+    MostUsed *mostUsedArr[5];
+    TotalPressed *totalPressedArr[5];
+    MostPressed *mostPressedArr[5];
+    MouseClick *mouseClickArr[5];
 
     void setWindowLayout();
     void setWindowStyleSheet();
@@ -50,6 +50,7 @@ signals:
 private slots:
     void timeout();
     void loadData();
+    void comboBoxChanged(int);
 };
 
 #endif // OVERVIEW_H

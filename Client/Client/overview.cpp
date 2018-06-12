@@ -18,19 +18,16 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
 
     connect(this, &Overview::loadingData, this, &Overview::loadData);
     connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
-            [=](int index){
-        mostPressed->reloadData(index);
-        totalPressed->reloadData(index); /*note most first, then total*/
-        mouseClick->reloadData(index);
-        mostUsed->reloadData(index);
-    });
+            [=](int index){ comboBoxChanged(index); });
 }
 
 void Overview::updateDatabase()
 {
-    mostPressed->updateDatabase();
-    mouseClick->updateDatabase();
-    mostUsed->updateDatabase();
+    //because each of them has five objects, and each object has a temp vector that can used to save to database
+    //only need one of them to be saved to database, here I chose the index 1(daily)
+    mostPressedArr[1]->updateDatabase();
+    mouseClickArr[1]->updateDatabase();
+    mostUsedArr[1]->updateDatabase();
 }
 
 void Overview::setWindowLayout()
@@ -70,23 +67,62 @@ void Overview::paintEvent(QPaintEvent *event)
     painter.setPen(QColor(255,115,115));
     painter.setFont(QFont("Futura", 20));
     painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Overview");
-
-//   //paint notification icon
-//    QIcon icon(":/Resources/Icons/notification.png");
-//    QRect iconRect(800, 55, 30, 30);
-//    icon.paint(&painter, iconRect);
 }
 
 void Overview::timeout()
 {
     timer->start(1000 * 60 * 60); //1 sec * 60 (= 1 minute) * 60 (= 1 hour) and it starts in every hour
-    updateDatabase();
-    Database::timeout();
+    updateDatabase(); //note must update first
+    Database::timeout(); //when database timeout, the current hour will change
+
+    //then reload data will successfully work
+    if(QTime::currentTime().toString("h").toInt() == 0) {
+        for(int i = 0; i < 5; ++i) {
+            mostUsedArr[i]->reloadData(i); //reload data first when a new day has arrived
+        }
+        loadData(); //after reloading data, then set the new data to label
+    }
 }
 
 void Overview::loadData()
 {
-    mostUsed->setData();
+    //loading app usage data when clicked overview page
+    for(int i = 0; i < 5; ++i) {
+        if(mostUsedArr[i]->isVisible()) {
+            mostUsedArr[i]->setData();
+        }
+    }
+}
+
+void Overview::comboBoxChanged(int index)
+{
+    for(int i = 0; i < 5; ++i) {
+        if(i == index) {
+            mostUsedArr[i]->show();
+            mostUsedArr[i]->setData();
+
+            if(totalPressedArr[i]->isVisible()) {
+                totalPressedArr[i]->show();
+            }
+            else {
+                mostPressedArr[i]->show();
+            }
+
+            mouseClickArr[i]->show();
+        }
+        else {
+            mostUsedArr[i]->hide();
+
+            if(totalPressedArr[i]->isVisible()) {
+                totalPressedArr[i]->hide();
+            }
+            else {
+                mostPressedArr[i]->hide();
+            }
+
+            mouseClickArr[i]->hide();
+        }
+    }
 }
 
 void Overview::setWindowStyleSheet()
@@ -127,26 +163,37 @@ void Overview::setTimeSpanBox()
 
 void Overview::setLbls()
 {
-    mostUsed = new MostUsed(this);
-    mostUsed->setFixedSize(300, 300);
+    for(int i = 0; i < 5; ++i) {
+        mostUsedArr[i] = new MostUsed(this, i);
+        mostUsedArr[i]->setFixedSize(300, 300);
+        if(i != 1) {
+            mostUsedArr[i]->hide();
+        }
 
-    totalPressed = new TotalPressed(this);
-    totalPressed->setFixedSize(300, 300);
+        totalPressedArr[i] = new TotalPressed(this, i);
+        totalPressedArr[i]->setFixedSize(300, 300);
+        if(i != 1) {
+            totalPressedArr[i]->hide();
+        }
 
-    mostPressed = new MostPressed(this);
-    mostPressed->setFixedSize(300, 300);
-    mostPressed->hide();
+        mostPressedArr[i] = new MostPressed(this, i);
+        mostPressedArr[i]->setFixedSize(300, 300);
+        mostPressedArr[i]->hide();
 
-    mouseClick = new MouseClick(this);
-    mouseClick->setFixedSize(300, 300);
+        mouseClickArr[i] = new MouseClick(this, i);
+        mouseClickArr[i]->setFixedSize(300, 300);
+        if(i != 1) {
+            mouseClickArr[i]->hide();
+        }
 
-    lblGLayout->addWidget(mostUsed, 0, 0);
-    lblGLayout->addWidget(totalPressed, 0, 1);
-    lblGLayout->addWidget(mostPressed, 0, 1);
-    lblGLayout->addWidget(mouseClick, 0, 2);
+        lblGLayout->addWidget(mostUsedArr[i], 0, 0);
+        lblGLayout->addWidget(totalPressedArr[i], 0, 1);
+        lblGLayout->addWidget(mostPressedArr[i], 0, 1);
+        lblGLayout->addWidget(mouseClickArr[i], 0, 2);
 
-    connect(totalPressed, &TotalPressed::switchBtnClicked, [this](){ mostPressed->show(); });
-    connect(mostPressed, &MostPressed::switchBtnClicked, [this](){ totalPressed->show(); });
+        connect(totalPressedArr[i], &TotalPressed::switchBtnClicked, [this, i](){ mostPressedArr[i]->show(); });
+        connect(mostPressedArr[i], &MostPressed::switchBtnClicked, [this, i](){ totalPressedArr[i]->show(); });
+    }
 }
 
 void Overview::setTimer()
