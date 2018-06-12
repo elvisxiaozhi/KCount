@@ -18,10 +18,8 @@ MostPressed::MostPressed(QWidget *parent) : QWidget(parent)
 
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &MostPressed::keyPressed);
     connect(switchBtn, &CustomButton::clicked, [this](){ this->hide(); emit switchBtnClicked(); });
-    connect(showMoreBtn, &CustomButton::clicked, [this](){ showMoreBtn->hide(); showLessBtn->show(); });
-    connect(showLessBtn, &CustomButton::clicked, [this](){ showMoreBtn->show(); showLessBtn->hide(); });
-    connect(showMoreBtn, &CustomButton::clicked, [this](){ scrollArea->show(); contWidget->hide(); });
-    connect(showLessBtn, &CustomButton::clicked, [this](){ scrollArea->hide(); contWidget->show(); });
+    connect(showMoreBtn, &CustomButton::clicked, [this](){ showMoreBtn->hide(); showLessBtn->show(); scrollArea->show(); contWidget->hide(); });
+    connect(showLessBtn, &CustomButton::clicked, [this](){ showMoreBtn->show(); showLessBtn->hide(); scrollArea->hide(); contWidget->show(); });
 }
 
 void MostPressed::setMainLayout()
@@ -126,45 +124,25 @@ void MostPressed::createScrollWidget()
 
     scrollWidget->setLayout(scrollContVLayout);
     scrollArea->setWidget(scrollWidget);
-
-    createScrollConts();
-    setScrollConts();
 }
 
 void MostPressed::createScrollConts()
 {
-    scrollConts.clear();
-    scrollConts.resize(mostPressed.size());
-    for(int i = 0; i < scrollConts.size(); ++i) {
-        scrollConts[i] = new Label(0, 20);
-//        scrollConts[i]->setFixedHeight(40); //the scroll cont will shrink if the height is not fixed
-        scrollContVLayout->addWidget(scrollConts[i]);
-    }
-}
+    delete scrollWidget;
 
-void MostPressed::setScrollConts()
-{
-    if(mostPressed.isEmpty()) {
-        for(int i = 0; i < 5; ++i) {
-            scrollConts[i]->setText("");
-            scrollConts[i]->setLabelColor(0);
-        }
-    }
-    if(mostPressed.size() > 5) {
-        for(int i = 0; i < scrollConts.size(); ++i) {
-            scrollConts[i]->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
-            scrollConts[i]->setLabelColor(mostPressed[i].second);
-        }
-    }
-    else {
-        for(int i = 0; i < mostPressed.size(); ++i) {
-            scrollConts[i]->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
-            scrollConts[i]->setLabelColor(mostPressed[i].second);
-        }
-        for(int i = 0; i < 5 - mostPressed.size(); ++i) {
-            scrollConts[4 - i]->setText(""); //note the 4 - i
-            scrollConts[4 - i]->setLabelColor(0);
-        }
+    scrollWidget = new QWidget(this);
+
+    scrollContVLayout = new QVBoxLayout();
+    scrollContVLayout->setSpacing(0);
+
+    scrollArea->setWidget(scrollWidget);
+    scrollWidget->setLayout(scrollContVLayout);
+
+    for(int i = 0; i < mostPressed.size(); ++i) {
+        Label *contLbl = new Label(0, 20);
+        contLbl->setText(mostPressed[i].first + ": " + QString::number(mostPressed[i].second));
+        contLbl->setLabelColor(mostPressed[i].second);
+        scrollContVLayout->addWidget(contLbl);
     }
 }
 
@@ -220,5 +198,5 @@ void MostPressed::keyPressed(QString pressedKey)
 
     //update each time when key is pressed, or the number will suddently change too much
     setContents();
-    setScrollConts();
+    createScrollConts();
 }

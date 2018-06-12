@@ -29,14 +29,12 @@ private:
     QScrollArea *scrollArea;
     QWidget *scrollWidget;
     QVBoxLayout *scrollContVLayout;
-    QVector<Label *> scrollConts;
 
     void setMainLayout();
     void setWindowStyleSheet();
     void setContents();
     void createScrollWidget();
     void createScrollConts();
-    void setScrollConts();
 
 protected:
     void paintEvent(QPaintEvent *);

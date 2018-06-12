@@ -13,7 +13,7 @@ MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
     timer.start();
     mostUsedVec = Database::returnAppVec(1);
     QStringList currentAppName = qApp->applicationFilePath().split("/");
-    lastAppName = currentAppName.at(currentAppName.size() - 1);
+    lastAppName = QString(currentAppName.at(currentAppName.size() - 1)).split(".exe").first();
 
     setWindowStyleSheet();
 
@@ -119,7 +119,7 @@ void MostUsed::appChanged(QString processName)
 {
     QRegExp regEx("\\\\");
     QStringList processNameList = processName.split(regEx);
-    QString appName = processNameList.at(processNameList.size() - 1);
+    QString appName = QString(processNameList.at(processNameList.size() - 1)).split(".exe").first();
     int elapsedTime = timer.elapsed();
     int usedTime = 0;
     if(timer.elapsed() % 1000 >= 500) {
