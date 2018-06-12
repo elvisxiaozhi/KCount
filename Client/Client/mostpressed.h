@@ -8,6 +8,7 @@
 #include <label.h>
 #include <QHBoxLayout>
 #include "custombutton.h"
+#include <QScrollArea>
 
 class MostPressed : public QWidget
 {
@@ -17,6 +18,7 @@ public:
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
+    QWidget *contWidget;
     QHBoxLayout *lblHLayout;
     QLabel *title;
     QVector<Label *> contents;
@@ -24,9 +26,17 @@ private:
     QMap<QString, unsigned long int> tempKeyMap;
     int currentHour;
     CustomButton *switchBtn, *showMoreBtn, *showLessBtn;
+    QScrollArea *scrollArea;
+    QWidget *scrollWidget;
+    QVBoxLayout *scrollContVLayout;
+    QVector<Label *> scrollConts;
 
+    void setMainLayout();
     void setWindowStyleSheet();
     void setContents();
+    void createScrollWidget();
+    void createScrollConts();
+    void setScrollConts();
 
 protected:
     void paintEvent(QPaintEvent *);
