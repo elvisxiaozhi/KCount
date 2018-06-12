@@ -6,6 +6,9 @@
 #include <QElapsedTimer>
 #include <label.h>
 #include <QMap>
+#include "custombutton.h"
+#include <QHBoxLayout>
+#include <QScrollArea>
 
 class MostUsed : public QWidget
 {
@@ -17,15 +20,25 @@ public:
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
+    QHBoxLayout *headerHLayout;
+    QWidget *contWidget;
     QElapsedTimer timer;
     QVector<std::pair<QString, int> > mostUsedVec;
     QMap<QString, int> tempAppMap;
     QVector<Label *> contents;
     QString lastAppName;
+    CustomButton *showMoreBtn, *showLessBtn;
+    QScrollArea *scrollArea;
+    QWidget *scrollWidget;
+    QVBoxLayout *scrollContVLayout;
+    QVector<Label *> scrollConts;
 
+    void setMainLayout();
     void setWindowStyleSheet();
     void setContents();
     void setLblText(Label *, QString, int);
+    void createScrollWidget();
+    void createScrollConts();
 
 protected:
     void paintEvent(QPaintEvent *);

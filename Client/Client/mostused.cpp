@@ -15,17 +15,56 @@ MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
     QStringList currentAppName = qApp->applicationFilePath().split("/");
     lastAppName = QString(currentAppName.at(currentAppName.size() - 1)).split(".exe").first();
 
+    setMainLayout();
     setWindowStyleSheet();
 
+    connect(Emitter::Instance(), &SignalEmitter::appChanged, this, &MostUsed::appChanged);
+    connect(showMoreBtn, &CustomButton::clicked, [this](){ showMoreBtn->hide(); showLessBtn->show(); scrollArea->show(); contWidget->hide(); });
+    connect(showLessBtn, &CustomButton::clicked, [this](){ showMoreBtn->show(); showLessBtn->hide(); scrollArea->hide(); contWidget->show(); });
+}
+
+void MostUsed::setData()
+{
+    std::sort(mostUsedVec.begin(), mostUsedVec.end(),
+              [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
+
+    setContents();
+}
+
+void MostUsed::setMainLayout()
+{
     mainVLayout = new QVBoxLayout(this);
     setLayout(mainVLayout);
+
+    contWidget = new QWidget(this);
+    contWidget->setFixedHeight(200);
+
     contVLayout = new QVBoxLayout;
+    contVLayout->setContentsMargins(0, 0, 0, 0);
     contVLayout->setSpacing(0);
+
+    contWidget->setLayout(contVLayout);
 
     QLabel *title = new QLabel(this);
     title->setText("Most Used");
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
+
+    showMoreBtn = new CustomButton(this);
+    showMoreBtn->setIcon(QIcon(":/Resources/Icons/switch.png"));
+
+    showLessBtn = new CustomButton(this);
+    showLessBtn->setIcon(QIcon(":/Resources/Icons/show_less.png"));
+    showLessBtn->hide();
+
+    headerHLayout = new QHBoxLayout();
+
+    QSpacerItem *spacerItem = new QSpacerItem(45, 1, QSizePolicy::Fixed, QSizePolicy::Fixed); //used to fix the title in the absolute center
+
+    headerHLayout->addSpacerItem(spacerItem);
+    headerHLayout->addWidget(title);
+    headerHLayout->addWidget(showMoreBtn);
+    headerHLayout->addWidget(showLessBtn);
 
     contents.resize(5);
     for(int i = 0; i < contents.size(); ++i) {
@@ -35,18 +74,11 @@ MostUsed::MostUsed(QWidget *parent) : QWidget(parent)
     }
     setContents();
 
-    mainVLayout->addWidget(title);
-    mainVLayout->addLayout(contVLayout);
+    createScrollWidget();
 
-    connect(Emitter::Instance(), &SignalEmitter::appChanged, this, &MostUsed::appChanged);
-}
-
-void MostUsed::setData()
-{
-    std::sort(mostUsedVec.begin(), mostUsedVec.end(),
-              [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
-
-    setContents();
+    mainVLayout->addLayout(headerHLayout);
+    mainVLayout->addWidget(contWidget);
+    mainVLayout->addWidget(scrollArea);
 }
 
 void MostUsed::setWindowStyleSheet()
@@ -93,6 +125,48 @@ void MostUsed::setLblText(Label *label, QString appName, int usedTime)
     }
 }
 
+void MostUsed::createScrollWidget()
+{
+    scrollArea = new QScrollArea(this);
+    scrollArea->setBackgroundRole(QPalette::Window);
+    scrollArea->setFrameShadow(QFrame::Plain);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->hide();
+
+    scrollWidget = new QWidget(this);
+
+    scrollContVLayout = new QVBoxLayout();
+    scrollContVLayout->setSpacing(0);
+
+    scrollWidget->setLayout(scrollContVLayout);
+    scrollArea->setWidget(scrollWidget);
+
+    createScrollConts();
+}
+
+void MostUsed::createScrollConts()
+{
+    for(int i = 0; i < mostUsedVec.size() - scrollConts.size(); ++i) {
+        Label *contLbl = new Label(0, 20);
+        scrollContVLayout->addWidget(contLbl);
+        scrollConts.push_back(contLbl);
+    }
+
+    for(int i = 0; i < scrollConts.size(); ++i) {
+        scrollConts[i]->setAppUsageLblColor(mostUsedVec[i].second);
+
+        QString appName = mostUsedVec[i].first;
+        int usedTime = mostUsedVec[i].second;
+        if(usedTime / 3600 > 0) {
+            scrollConts[i]->setText(appName + ": " + QString::number(usedTime / 3600) + "h " + QString::number((usedTime % 3600) / 60) + "m");
+        }
+        else {
+            scrollConts[i]->setText(appName + ": " + QString::number(usedTime / 60) + "m " + QString::number(usedTime % 60) + "s");
+        }
+    }
+}
+
 void MostUsed::paintEvent(QPaintEvent *)
 {
     QStyleOption opt;
@@ -113,6 +187,7 @@ void MostUsed::reloadData(int index)
     mostUsedVec.clear();
     mostUsedVec = Database::returnAppVec(index);
     setContents();
+    createScrollConts();
 }
 
 void MostUsed::appChanged(QString processName)

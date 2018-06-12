@@ -31,6 +31,7 @@ void MostPressed::setMainLayout()
     contWidget->setFixedHeight(200); //need to set fix height
 
     contVLayout = new QVBoxLayout;
+    contVLayout->setContentsMargins(0, 0, 0, 0);
     contVLayout->setSpacing(0);
 
     contWidget->setLayout(contVLayout);
