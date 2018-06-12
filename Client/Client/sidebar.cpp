@@ -94,10 +94,15 @@ void Sidebar::paintEvent(QPaintEvent *event)
         posY += 50;
     }
 
+   //paint icon
+    QIcon icon(":/Resources/Icons/letter-n.png");
+    QRect iconRect(20, 39, 35, 35);
+    icon.paint(&painter, iconRect);
+
     //paint the title and it has to be after menu is drew
     painter.setPen(QColor(195,151,151));
-    painter.setFont(QFont("Futura", 20));
-    painter.drawText(QRect(30, 30, 100, 50), "Nana");
+    painter.setFont(QFont("Futura", 25));
+    painter.drawText(QRect(65, 30, 100, 50), "Nana");
 }
 
 void Sidebar::mousePressEvent(QMouseEvent *event)

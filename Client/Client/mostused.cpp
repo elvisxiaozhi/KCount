@@ -29,6 +29,7 @@ void MostUsed::setData()
               [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
 
     setContents();
+    createScrollConts();
 }
 
 void MostUsed::setMainLayout()
