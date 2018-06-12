@@ -40,10 +40,13 @@ MouseClick::MouseClick(QWidget *parent) : QWidget(parent)
     rightClickCont->setFixedSize(140, 200);
     rightClickCont->setText(QString("right:<br><br> %1").arg(rightClickedTimes));
 
+    QSpacerItem *spacerItem = new QSpacerItem(1, 14, QSizePolicy::Fixed, QSizePolicy::Fixed); //make the content a little bit higher
+
     contHLayout->addWidget(leftClickCont);
     contHLayout->addWidget(rightClickCont);
     mainVLayout->addWidget(title);
     mainVLayout->addLayout(contHLayout);
+    mainVLayout->addSpacerItem(spacerItem);
 
     connect(Emitter::Instance(), &SignalEmitter::leftClicked, this, &MouseClick::leftClicked);
     connect(Emitter::Instance(), &SignalEmitter::rightClicked, this, &MouseClick::rightClicked);
