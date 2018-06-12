@@ -161,8 +161,6 @@ void MostPressed::updateDatabase()
 
 void MostPressed::reloadData(int index)
 {
-    updateDatabase();
-    mostPressed.clear();
     mostPressed = Database::returnKeyVec(index);
     setContents();
 }

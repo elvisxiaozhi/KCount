@@ -79,7 +79,6 @@ void MouseClick::updateDatabase()
 
 void MouseClick::reloadData(int index)
 {
-    updateDatabase();
     leftClickedTimes = Database::returnClickedTimes("LeftClick", index);
     leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
     rightClickedTimes = Database::returnClickedTimes("RightClick", index);
