@@ -138,6 +138,7 @@ void MostUsed::createScrollWidget()
     scrollWidget = new QWidget(this);
 
     scrollContVLayout = new QVBoxLayout();
+    scrollContVLayout->setContentsMargins(0, 0, 0, 0);
     scrollContVLayout->setSpacing(0);
 
     scrollWidget->setLayout(scrollContVLayout);
