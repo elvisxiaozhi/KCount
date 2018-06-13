@@ -10,6 +10,7 @@
 #include <QtCharts/QHorizontalStackedBarSeries>
 #include <QtCharts/QValueAxis>
 #include <QVBoxLayout>
+#include <QElapsedTimer>
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -19,11 +20,12 @@ class AppUsageStackedBarChart : public QWidget
 public:
     explicit AppUsageStackedBarChart(QWidget *parent = nullptr, int mode = 1);
 
-    static QVector<std::pair<QString, int> > usageVec;
-
     void reloadChart();
 
 private:
+    QVector<std::pair<QString, int> > usageVec;
+    QString lastAppName;
+    QElapsedTimer timer;
     QVBoxLayout *mainVLayout;
     QChart *chart;
     QChartView *chartView;
@@ -32,6 +34,9 @@ private:
     QValueAxis *valueAxisX;
 
     void loadChartData();
+
+private slots:
+    void appChanged(QString);
 };
 
 #endif // APPUSAGESTACKEDBARCHART_H
