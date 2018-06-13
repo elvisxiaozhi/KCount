@@ -19,8 +19,6 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
     connect(this, &Overview::loadingData, this, &Overview::loadData);
     connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
             [=](int index){ comboBoxChanged(index); });
-
-    qDebug() << "running";
 }
 
 void Overview::updateDatabase()
@@ -77,14 +75,15 @@ void Overview::timeout()
     updateDatabase(); //note must update first
     Database::timeout(); //when database timeout, the current hour will change
 
-    //then reload data will successfully work
+    //delete old widgets
     if(QTime::currentTime().toString("h").toInt() == 0) {
         for(int i = 0; i < 5; ++i) {
-//            mostUsedArr[i]->reloadData(i); //reload data first when a new day has arrived
-            mostPressedArr[i]->reloadData(i); //most pressed first
-            totalPressedArr[i]->reloadData(i); //then total
-            mouseClickArr[i]->reloadData(i);
+            delete mostUsedArr[i];
+            delete totalPressedArr[i];
+            delete mostPressedArr[i];
+            delete mouseClickArr[i];
         }
+        setLbls(); //add new widgets for the new day
     }
 }
 

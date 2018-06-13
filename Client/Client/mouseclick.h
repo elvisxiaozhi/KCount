@@ -24,11 +24,8 @@ private:
 protected:
     void paintEvent(QPaintEvent *);
 
-signals:
-
 public slots:
     void updateDatabase();
-    void reloadData(int);
 
 private slots:
     void leftClicked();

@@ -45,7 +45,6 @@ protected:
 
 public slots:
     void updateDatabase();
-    void reloadData(int);
 
 private slots:
     void appChanged(QString);

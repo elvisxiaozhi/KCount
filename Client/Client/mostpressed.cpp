@@ -159,12 +159,6 @@ void MostPressed::updateDatabase()
     currentHour = QTime::currentTime().toString("h").toInt();
 }
 
-void MostPressed::reloadData(int index)
-{
-    mostPressed = Database::returnKeyVec(index);
-    setContents();
-}
-
 void MostPressed::keyPressed(QString pressedKey)
 {
     ++BarChart::dailyMap[currentHour];

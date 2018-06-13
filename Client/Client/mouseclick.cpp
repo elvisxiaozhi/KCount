@@ -77,14 +77,6 @@ void MouseClick::updateDatabase()
     currentHour = QTime::currentTime().toString("h").toInt();
 }
 
-void MouseClick::reloadData(int index)
-{
-    leftClickedTimes = Database::returnClickedTimes("LeftClick", index);
-    leftClickCont->setText(QString("Left:<br><br> %1").arg(leftClickedTimes));
-    rightClickedTimes = Database::returnClickedTimes("RightClick", index);
-    rightClickCont->setText(QString("Left:<br><br> %1").arg(rightClickedTimes));
-}
-
 void MouseClick::leftClicked()
 {
     ++leftClickedTimes;

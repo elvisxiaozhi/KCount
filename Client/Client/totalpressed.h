@@ -30,9 +30,6 @@ protected:
 signals:
     void switchBtnClicked();
 
-public slots:
-    void reloadData(int);
-
 private slots:
     void keyPressed(QString);
 };

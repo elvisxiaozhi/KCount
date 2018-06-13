@@ -59,13 +59,6 @@ void TotalPressed::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 }
 
-void TotalPressed::reloadData(int index)
-{
-    totalPressedTimes = Database::returnTotalPressedTimes(index);
-    content->setText(QString::number(totalPressedTimes));
-    content->setLabelColor(totalPressedTimes);
-}
-
 void TotalPressed::keyPressed(QString)
 {
     totalPressedTimes++;

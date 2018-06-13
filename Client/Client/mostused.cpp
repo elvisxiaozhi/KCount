@@ -184,28 +184,6 @@ void MostUsed::updateDatabase()
     tempAppMap.clear(); //after updating datebase, clear the map, so it can store new data for the next hour
 }
 
-//reloadData is called when a new day arrives
-//because there are 5 objects, it can not call updateDatabase() in this function
-void MostUsed::reloadData(int index)
-{
-//    //need to delete yesterday scroll widget, so the widget can put new data for today
-//    delete scrollWidget;
-//    scrollWidget = new QWidget(this);
-
-//    scrollContVLayout = new QVBoxLayout();
-//    scrollContVLayout->setContentsMargins(0, 0, 0, 0);
-//    scrollContVLayout->setSpacing(0);
-
-//    scrollWidget->setLayout(scrollContVLayout);
-
-    mostUsedVec = Database::returnAppVec(index);
-
-    qDebug() << mostUsedVec;
-
-//    setContents();
-//    createScrollConts();
-}
-
 void MostUsed::appChanged(QString processName)
 {
     QRegExp regEx("\\\\");
