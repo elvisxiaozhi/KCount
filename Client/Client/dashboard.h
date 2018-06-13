@@ -28,7 +28,7 @@ private:
     BarChart *barChartArr[4];
     StackedBarChart *stackedBarChartArr[4];
     PieChart *pieChartArr[5];
-    AppUsageStackedBarChart *appUsageChart;
+    AppUsageStackedBarChart *appUsageChartArr[5];
 
     void setWindowStyleSheet();
     void setWindowLayout();

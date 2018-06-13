@@ -110,9 +110,14 @@ void Dashboard::createCharts()
         }
     }
 
-    appUsageChart = new AppUsageStackedBarChart(this, 1);
-    appUsageChart->setFixedSize(600, 300);
-    gLayout->addWidget(appUsageChart, 2, 0);
+    for(int i = 0; i < 5; ++i) {
+        appUsageChartArr[i] = new AppUsageStackedBarChart(this, i);
+        appUsageChartArr[i]->setFixedSize(600, 300);
+        gLayout->addWidget(appUsageChartArr[i], 2, 0);
+        if(i != 1) {
+            pieChartArr[i]->hide();
+        }
+    }
 }
 
 bool Dashboard::eventFilter(QObject *watched, QEvent *event)
@@ -165,6 +170,12 @@ void Dashboard::loadData()
         }
     }
 
+    for(int i = 0; i < 5; i++) {
+        if(!appUsageChartArr[i]->isHidden()) {
+            appUsageChartArr[i]->reloadChart();
+        }
+    }
+
     stackedBarChartArr[index]->show();
 }
 
@@ -197,6 +208,16 @@ void Dashboard::comboBoxChanged(int index)
         }
         else {
             pieChartArr[i]->hide();
+        }
+    }
+
+    for(int i = 0; i < 5; ++i) {
+        if(i == index) {
+            appUsageChartArr[i]->show();
+            appUsageChartArr[i]->reloadChart();
+        }
+        else {
+            appUsageChartArr[i]->hide();
         }
     }
 

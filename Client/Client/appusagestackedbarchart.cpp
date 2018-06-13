@@ -1,38 +1,42 @@
 #include "appusagestackedbarchart.h"
-#include <QVBoxLayout>
 #include "database.h"
 #include <QDebug>
 
-QVector<std::pair<QString, int> > AppUsageStackedBarChart::dailyVec = {};
+QVector<std::pair<QString, int> > AppUsageStackedBarChart::usageVec = {};
 
 AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode) : QWidget(parent)
 {
-    switch (mode) {
-    case 1:
-        dailyVec = Database::returnAppVec(mode);
-        break;
-    default:
-        break;
-    }
+    usageVec = Database::returnAppVec(mode);
 
+    loadChartData();
+}
+
+void AppUsageStackedBarChart::loadChartData()
+{
     chart = new QChart();
     chart->setTitle("App Usage");
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->legend()->setVisible(false);
     chart->legend()->setAlignment(Qt::AlignBottom);
 
-    QChartView *chartView = new QChartView(chart);
+    chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
-    QVBoxLayout *mainVLayout = new QVBoxLayout(this);
-    mainVLayout->addWidget(chartView);
+    mainVLayout = new QVBoxLayout(this);
     setLayout(mainVLayout);
+    mainVLayout->addWidget(chartView);
 
     series = new QHorizontalStackedBarSeries(chart);
 
-    for(int i = 0; i < dailyVec.size(); ++i) {
-        QBarSet *barSet = new QBarSet(dailyVec[i].first, series);
-        barSet->append(dailyVec[i].second);
+    valueAxisX = new QValueAxis(chart);
+    valueAxisX->setGridLineVisible(false);
+    valueAxisX->setTickCount(3);
+//    valueAxisX->setRange(0, 23.2);
+    valueAxisX->setLabelFormat("%d");
+
+    for(int i = 0; i < usageVec.size(); ++i) {
+        QBarSet *barSet = new QBarSet(usageVec[i].first, series);
+        barSet->append(usageVec[i].second);
         setVec.push_back(barSet);
     }
 
@@ -41,9 +45,14 @@ AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode) : QW
     }
 
     chart->addSeries(series);
+    chart->setAxisX(valueAxisX, series);
+}
 
-//    QBarCategoryAxis *axis = new QBarCategoryAxis(chart);
-//    axis->setGridLineVisible(false);
-//    chart->createDefaultAxes();
-//    chart->setAxisY(axis, series);
+void AppUsageStackedBarChart::reloadChart()
+{
+    delete mainVLayout;
+    delete chart;
+    usageVec.clear();
+
+    loadChartData();
 }

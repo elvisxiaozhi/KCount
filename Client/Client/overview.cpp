@@ -104,25 +104,13 @@ void Overview::comboBoxChanged(int index)
             mostUsedArr[i]->show();
             mostUsedArr[i]->setData();
 
-            if(totalPressedArr[i]->isVisible()) {
-                totalPressedArr[i]->show();
-            }
-            else {
-                mostPressedArr[i]->show();
-            }
-
+            totalPressedArr[i]->show();
             mouseClickArr[i]->show();
         }
         else {
             mostUsedArr[i]->hide();
-
-            if(totalPressedArr[i]->isVisible()) {
-                totalPressedArr[i]->hide();
-            }
-            else {
-                mostPressedArr[i]->hide();
-            }
-
+            totalPressedArr[i]->hide();
+            mostPressedArr[i]->hide();
             mouseClickArr[i]->hide();
         }
     }
