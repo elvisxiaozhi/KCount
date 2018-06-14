@@ -32,7 +32,9 @@ QAction *CustomTitleBar::actionAt(const QPoint &point)
 {
     int posX = 960;
     for(auto action : actList) {
-        QRect actRect(posX, 8, 45, 45); //has to be 50, 50
+        //35, 35 or whatever it fits, they have to be less than its width and height 45, 45
+        //or sometimes the hover effect will stay
+        QRect actRect(posX, 8, 35, 35);
         if(actRect.contains(point)) {
             return action;
         }
