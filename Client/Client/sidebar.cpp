@@ -108,7 +108,12 @@ void Sidebar::paintEvent(QPaintEvent *event)
 void Sidebar::mousePressEvent(QMouseEvent *event)
 {
     QAction *action = actionAt(event->pos());
-    checkedAct = action;
+
+    //specify the sidebar clickable area,
+    //so to make sure that the sidebar menu will only change in the clickable area
+    if(event->pos().y() >= 110 && event->pos().y() <= 310) {
+        checkedAct = action;
+    }
     if(checkedAct != NULL) {
         int index = std::find(actList.begin(), actList.end(), checkedAct) - actList.begin();
         emit actionChanged(index);

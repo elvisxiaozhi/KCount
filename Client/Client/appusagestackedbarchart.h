@@ -37,6 +37,7 @@ private:
 
 private slots:
     void appChanged(QString);
+    void hovered(bool, int);
 };
 
 #endif // APPUSAGESTACKEDBARCHART_H

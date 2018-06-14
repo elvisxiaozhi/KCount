@@ -29,6 +29,7 @@ void AppUsageStackedBarChart::loadChartData()
     mainVLayout->addWidget(chartView);
 
     series = new QHorizontalStackedBarSeries(chart);
+    series->setLabelsVisible(true);
 
     int totalUsage = 0;
     std::for_each(usageVec.begin(), usageVec.end(),
@@ -46,6 +47,8 @@ void AppUsageStackedBarChart::loadChartData()
         QBarSet *barSet = new QBarSet(usageVec[i].first, series);
         barSet->append(usageVec[i].second);
         setVec.push_back(barSet);
+
+        connect(barSet, &QBarSet::hovered, this, &AppUsageStackedBarChart::hovered);
     }
 
     for(int i = 0; i < setVec.size(); ++i) {
@@ -83,6 +86,14 @@ void AppUsageStackedBarChart::appChanged(QString processName)
 
     timer.start(); //output first, then restart the timer
     lastAppName = appName;
+}
+
+void AppUsageStackedBarChart::hovered(bool status, int)
+{
+    if(status) {
+        QBarSet *barSender = qobject_cast<QBarSet *>(sender());
+        qDebug() << barSender->label();
+    }
 }
 
 void AppUsageStackedBarChart::reloadChart()
