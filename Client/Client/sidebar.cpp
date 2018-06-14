@@ -36,7 +36,9 @@ QAction *Sidebar::actionAt(const QPoint &point)
 {
     int posY = 110;
     for(auto action : actList) {
-        QRect actRect(0, posY, rect().width(), 30);
+        //set the width to 150 or whatever fits, just do not use event->rect().width()
+        //or it will cause the hover effect stays sometimes
+        QRect actRect(0, posY, 150, 30);
         if(actRect.contains(point)) {
             return action;
         }
