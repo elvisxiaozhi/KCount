@@ -149,18 +149,16 @@ void Dashboard::paintEvent(QPaintEvent *event)
 
 void Dashboard::loadData()
 {
-    int index = 0;
-
-    for(int i = 0; i < 4; i++) {
-        if(!stackedBarChartArr[i]->isHidden()) {
-            stackedBarChartArr[i]->reloadChart(i + 1);
-            index = i;
-        }
-    }
+//    int index = 0;
 
     for(int i = 0; i < 4; i++) {
         if(!barChartArr[i]->isHidden()) {
             barChartArr[i]->reloadChart(i + 1);
+        }
+
+        if(!stackedBarChartArr[i]->isHidden()) {
+            stackedBarChartArr[i]->reloadChart(i + 1);
+//            index = i;
         }
     }
 
@@ -168,15 +166,13 @@ void Dashboard::loadData()
         if(!pieChartArr[i]->isHidden()) {
             pieChartArr[i]->reloadChart();
         }
-    }
 
-    for(int i = 0; i < 5; i++) {
         if(!appUsageChartArr[i]->isHidden()) {
             appUsageChartArr[i]->reloadChart();
         }
     }
 
-    stackedBarChartArr[index]->show();
+//    stackedBarChartArr[index]->show();
 }
 
 void Dashboard::comboBoxChanged(int index)
@@ -185,18 +181,13 @@ void Dashboard::comboBoxChanged(int index)
         if(i + 1 == index) {
             barChartArr[i]->show();
             barChartArr[i]->reloadChart(i + 1);
-        }
-        else {
-            barChartArr[i]->hide();
-        }
-    }
 
-    for(int i = 0; i < 4; ++i) {
-        if(i + 1 == index) {
             stackedBarChartArr[i]->show();
             stackedBarChartArr[i]->reloadChart(i + 1);
         }
         else {
+            barChartArr[i]->hide();
+
             stackedBarChartArr[i]->hide();
         }
     }
@@ -205,18 +196,13 @@ void Dashboard::comboBoxChanged(int index)
         if(i == index) {
             pieChartArr[i]->show();
             pieChartArr[i]->reloadChart();
-        }
-        else {
-            pieChartArr[i]->hide();
-        }
-    }
 
-    for(int i = 0; i < 5; ++i) {
-        if(i == index) {
             appUsageChartArr[i]->show();
             appUsageChartArr[i]->reloadChart();
         }
         else {
+            pieChartArr[i]->hide();
+
             appUsageChartArr[i]->hide();
         }
     }
