@@ -110,6 +110,8 @@ void AppUsageStackedBarChart::hovered(bool status, int)
 
         QPointF p(6.6, 0.15);
 
+//        qDebug() << chart->mapToPosition(QCursor::pos());
+
         m_tooltip->setAnchor(p);
         m_tooltip->setZValue(11);
         m_tooltip->updateGeometry();

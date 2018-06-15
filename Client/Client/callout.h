@@ -27,9 +27,6 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,QWidget *widget);
 
-protected:
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-
 private:
     QString m_text;
     QRectF m_textRect;
