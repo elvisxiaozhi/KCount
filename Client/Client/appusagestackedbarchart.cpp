@@ -21,15 +21,6 @@ AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode)
     setRenderHint(QPainter::Antialiasing);
     setMouseTracking(true);
 
-    loadChartData(); 
-
-    scene()->addItem(chart);
-
-    connect(Emitter::Instance(), &SignalEmitter::appChanged, this, &AppUsageStackedBarChart::appChanged);
-}
-
-void AppUsageStackedBarChart::loadChartData()
-{
     chart = new QChart();
     chart->setTitle("App Usage");
     chart->setAnimationOptions(QChart::AllAnimations);
@@ -39,6 +30,15 @@ void AppUsageStackedBarChart::loadChartData()
     chart->setContentsMargins(0, 0, 0, 0);
     chart->setMinimumSize(600, 300);
 
+    scene()->addItem(chart);
+
+    loadChartData(); 
+
+    connect(Emitter::Instance(), &SignalEmitter::appChanged, this, &AppUsageStackedBarChart::appChanged);
+}
+
+void AppUsageStackedBarChart::loadChartData()
+{
     series = new QHorizontalStackedBarSeries(chart);
     series->setLabelsVisible(true);
 
@@ -99,18 +99,18 @@ void AppUsageStackedBarChart::appChanged(QString processName)
     lastAppName = appName;
 }
 
-void AppUsageStackedBarChart::hovered(bool status, int index)
+void AppUsageStackedBarChart::hovered(bool status, int)
 {
     if (m_tooltip == 0)
         m_tooltip = new Callout(chart);
 
     if (status) {
         QBarSet *barSender = qobject_cast<QBarSet *>(sender());
-        m_tooltip->setText(QString(barSender->label() + ": ") + QString::number(usageVec[index].second));
+        m_tooltip->setText(QString(barSender->label() + ": ") + QString::number(barSender->sum()));
 
-        QPointF pf(6.6, 0.15);
+        QPointF p(6.6, 0.15);
 
-        m_tooltip->setAnchor(pf);
+        m_tooltip->setAnchor(p);
         m_tooltip->setZValue(11);
         m_tooltip->updateGeometry();
         m_tooltip->show();
@@ -122,9 +122,11 @@ void AppUsageStackedBarChart::hovered(bool status, int index)
 
 void AppUsageStackedBarChart::reloadChart()
 {
-//    delete chart;
-//    setVec.clear();
+    delete valueAxisX;
+    chart->removeSeries(series);
+    series->clear();
+    delete series;
+    setVec.clear();
 
-//    qDebug() << "Re";
-//    loadChartData();
+    loadChartData();
 }
