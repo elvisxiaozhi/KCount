@@ -8,6 +8,8 @@
 
 Dashboard::Dashboard(QWidget *parent) : QWidget(parent)
 {
+    titleVec = {"Hourly", "Daily", "Weekly", "Monthly", "Yearly"};
+
     setWindowStyleSheet();
     setWindowLayout();
     createTimeSpanBox();
@@ -111,11 +113,11 @@ void Dashboard::createCharts()
     }
 
     for(int i = 0; i < 5; ++i) {
-        appUsageChartArr[i] = new AppUsageStackedBarChart(this, i);
+        appUsageChartArr[i] = new AppUsageStackedBarChart(this, i, QString("%1 App Usage").arg(titleVec[i]));
         appUsageChartArr[i]->setFixedSize(600, 300);
         gLayout->addWidget(appUsageChartArr[i], 2, 0);
         if(i != 1) {
-            pieChartArr[i]->hide();
+            appUsageChartArr[i]->hide();
         }
     }
 }
@@ -149,8 +151,6 @@ void Dashboard::paintEvent(QPaintEvent *event)
 
 void Dashboard::loadData()
 {
-//    int index = 0;
-
     for(int i = 0; i < 4; i++) {
         if(!barChartArr[i]->isHidden()) {
             barChartArr[i]->reloadChart(i + 1);
@@ -158,7 +158,6 @@ void Dashboard::loadData()
 
         if(!stackedBarChartArr[i]->isHidden()) {
             stackedBarChartArr[i]->reloadChart(i + 1);
-//            index = i;
         }
     }
 
@@ -171,8 +170,6 @@ void Dashboard::loadData()
             appUsageChartArr[i]->reloadChart();
         }
     }
-
-//    stackedBarChartArr[index]->show();
 }
 
 void Dashboard::comboBoxChanged(int index)

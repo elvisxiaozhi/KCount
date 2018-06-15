@@ -29,6 +29,7 @@ private:
     StackedBarChart *stackedBarChartArr[4];
     PieChart *pieChartArr[5];
     AppUsageStackedBarChart *appUsageChartArr[5];
+    QVector<QString> titleVec;
 
     void setWindowStyleSheet();
     void setWindowLayout();

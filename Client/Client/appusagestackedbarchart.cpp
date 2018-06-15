@@ -4,7 +4,7 @@
 #include "signalemitter.h"
 #include "callout.h"
 
-AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode)
+AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode, QString title)
     : QGraphicsView(new QGraphicsScene, parent),
       chart(0),
       m_tooltip(0)
@@ -22,7 +22,7 @@ AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode)
     setMouseTracking(true);
 
     chart = new QChart();
-    chart->setTitle("App Usage");
+    chart->setTitle(title);
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->legend()->setVisible(false);
     chart->legend()->setAlignment(Qt::AlignBottom);

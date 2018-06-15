@@ -19,7 +19,7 @@ class AppUsageStackedBarChart : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit AppUsageStackedBarChart(QWidget *parent = nullptr, int mode = 1);
+    explicit AppUsageStackedBarChart(QWidget *parent = nullptr, int mode = 1, QString title = "App Usage");
 
     void reloadChart();
 
