@@ -12,6 +12,8 @@
 #include <QVBoxLayout>
 #include <QElapsedTimer>
 
+class Callout;
+
 QT_CHARTS_USE_NAMESPACE
 
 class AppUsageStackedBarChart : public QGraphicsView
@@ -32,6 +34,7 @@ private:
     QVector<QBarSet *> setVec;
     QHorizontalStackedBarSeries *series;
     QValueAxis *valueAxisX;
+    Callout *m_tooltip;
 
     void loadChartData();
 

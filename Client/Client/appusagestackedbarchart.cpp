@@ -2,11 +2,12 @@
 #include "database.h"
 #include <QDebug>
 #include "signalemitter.h"
+#include "callout.h"
 
 AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode)
     : QGraphicsView(new QGraphicsScene, parent),
-      chart(0)
-//      m_tooltip(0)
+      chart(0),
+      m_tooltip(0)
 {
     timer.start();
     usageVec = Database::returnAppVec(mode);
@@ -107,9 +108,22 @@ void AppUsageStackedBarChart::appChanged(QString processName)
 
 void AppUsageStackedBarChart::hovered(bool status, int)
 {
-    if(status) {
+    if (m_tooltip == 0)
+        m_tooltip = new Callout(chart);
+
+    if (status) {
         QBarSet *barSender = qobject_cast<QBarSet *>(sender());
-        qDebug() << barSender->label();
+        m_tooltip->setText(QString(barSender->label()));
+
+        QPointF pf(6.6, 0.15);
+
+        m_tooltip->setAnchor(pf);
+        m_tooltip->setZValue(11);
+        m_tooltip->updateGeometry();
+        m_tooltip->show();
+    }
+    else {
+        m_tooltip->hide();
     }
 }
 

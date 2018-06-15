@@ -118,9 +118,6 @@ void Dashboard::createCharts()
             pieChartArr[i]->hide();
         }
     }
-
-//    view.setFixedSize(600, 300);
-    gLayout->addWidget(&view, 3, 0);
 }
 
 bool Dashboard::eventFilter(QObject *watched, QEvent *event)
