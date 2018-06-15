@@ -22,13 +22,11 @@ QRectF Callout::boundingRect() const
     return rect;
 }
 
-void Callout::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Callout::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
     QPainterPath path;
     path.addRoundedRect(m_rect, 5, 5); //set the rectangle round corners
-    painter->setBrush(QColor(255, 255, 255));
+    painter->setBrush(QColor(255, 192, 203));
     painter->drawPath(path);
     painter->drawText(m_textRect, m_text);
 }
@@ -37,7 +35,7 @@ void Callout::setText(const QString &text)
 {
     m_text = text;
     QFontMetrics metrics(m_font);
-    m_textRect = metrics.boundingRect(QRect(0, 0, 150, 150), Qt::AlignLeft, m_text);
+    m_textRect = metrics.boundingRect(QRect(30, 0, 15, 15), Qt::AlignCenter, m_text); //draw a 15 * 15 area and the text is align in the central area
     m_textRect.translate(5, 5);
     prepareGeometryChange();
     m_rect = m_textRect.adjusted(-5, -5, 5, 5); //this line is kind of like to make sure that the text in the rectangle has margins
