@@ -11,6 +11,7 @@
 #include "piechart.h"
 #include <QScrollArea>
 #include "appusagestackedbarchart.h"
+#include "view.h"
 
 class Dashboard : public QWidget
 {
@@ -29,6 +30,8 @@ private:
     StackedBarChart *stackedBarChartArr[4];
     PieChart *pieChartArr[5];
     AppUsageStackedBarChart *appUsageChartArr[5];
+
+    View view;
 
     void setWindowStyleSheet();
     void setWindowLayout();

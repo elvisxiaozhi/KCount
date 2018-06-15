@@ -51,7 +51,9 @@ SOURCES += \
     mostused.cpp \
     appusagestackedbarchart.cpp \
     customtitlebar.cpp \
-    custombutton.cpp
+    custombutton.cpp \
+    callout.cpp \
+    view.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -76,7 +78,9 @@ HEADERS += \
     mostused.h \
     appusagestackedbarchart.h \
     customtitlebar.h \
-    custombutton.h
+    custombutton.h \
+    callout.h \
+    view.h
 
 RESOURCES += \
     ../Resources/resources.qrc
