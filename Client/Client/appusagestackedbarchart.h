@@ -14,7 +14,7 @@
 
 QT_CHARTS_USE_NAMESPACE
 
-class AppUsageStackedBarChart : public QWidget
+class AppUsageStackedBarChart : public QGraphicsView
 {
     Q_OBJECT
 public:

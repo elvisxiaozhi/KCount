@@ -3,12 +3,26 @@
 #include <QDebug>
 #include "signalemitter.h"
 
-AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode) : QWidget(parent)
+AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode)
+    : QGraphicsView(new QGraphicsScene, parent),
+      chart(0)
+//      m_tooltip(0)
 {
     timer.start();
     usageVec = Database::returnAppVec(mode);
 
-    loadChartData();
+    setFixedSize(600, 300);
+    setDragMode(QGraphicsView::NoDrag);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setContentsMargins(0, 0, 0, 0);
+    setFrameStyle(QFrame::NoFrame);
+    setRenderHint(QPainter::Antialiasing);
+    setMouseTracking(true);
+
+    loadChartData(); 
+
+    scene()->addItem(chart);
 
     connect(Emitter::Instance(), &SignalEmitter::appChanged, this, &AppUsageStackedBarChart::appChanged);
 }
@@ -20,13 +34,16 @@ void AppUsageStackedBarChart::loadChartData()
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->legend()->setVisible(false);
     chart->legend()->setAlignment(Qt::AlignBottom);
+    chart->setDropShadowEnabled(true);
+    chart->setContentsMargins(0, 0, 0, 0);
+    chart->setMinimumSize(600, 300);
 
-    chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
+//    chartView = new QChartView(chart);
+//    chartView->setRenderHint(QPainter::Antialiasing);
 
-    mainVLayout = new QVBoxLayout(this);
-    setLayout(mainVLayout);
-    mainVLayout->addWidget(chartView);
+//    mainVLayout = new QVBoxLayout(this);
+//    setLayout(mainVLayout);
+//    mainVLayout->addWidget(chartView);
 
     series = new QHorizontalStackedBarSeries(chart);
     series->setLabelsVisible(true);
@@ -98,9 +115,9 @@ void AppUsageStackedBarChart::hovered(bool status, int)
 
 void AppUsageStackedBarChart::reloadChart()
 {
-    delete mainVLayout;
-    delete chart;
-    setVec.clear();
+//    delete mainVLayout;
+//    delete chart;
+//    setVec.clear();
 
-    loadChartData();
+//    loadChartData();
 }

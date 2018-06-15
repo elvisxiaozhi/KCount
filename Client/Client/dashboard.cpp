@@ -119,7 +119,7 @@ void Dashboard::createCharts()
         }
     }
 
-    view.setFixedSize(600, 300);
+//    view.setFixedSize(600, 300);
     gLayout->addWidget(&view, 3, 0);
 }
 

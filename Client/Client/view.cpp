@@ -45,11 +45,21 @@ View::View(QWidget *parent)
       chart(0),
       m_tooltip(0)
 {
+    setFixedSize(600, 300);
+    setDragMode(QGraphicsView::NoDrag);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setContentsMargins(0, 0, 0, 0);
+    setFrameStyle(QFrame::NoFrame);
+    setRenderHint(QPainter::Antialiasing);
+    setMouseTracking(true);
+
     chart = new QChart;
     chart->setTitle("App Usage");
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->legend()->setVisible(false);
     chart->legend()->setAlignment(Qt::AlignBottom);
+    chart->setDropShadowEnabled(true);
     chart->setContentsMargins(0, 0, 0, 0);
     chart->setMinimumSize(600, 300);
 
@@ -66,13 +76,8 @@ View::View(QWidget *parent)
     chart->addSeries(series);
 
     chart->createDefaultAxes();
-    chart->setAcceptHoverEvents(true);
 
-    setRenderHint(QPainter::Antialiasing);
     scene()->addItem(chart);
-
-    this->setContentsMargins(0, 0, 0, 0);
-    this->setMouseTracking(true);
 }
 
 void View::getName(bool status, int)
@@ -84,7 +89,7 @@ void View::getName(bool status, int)
         QBarSet *barSender = qobject_cast<QBarSet *>(sender());
         m_tooltip->setText(QString(barSender->label()));
 
-        QPointF pf(7, 0.15);
+        QPointF pf(6.6, 0.15);
 
         m_tooltip->setAnchor(pf);
         m_tooltip->setZValue(11);
