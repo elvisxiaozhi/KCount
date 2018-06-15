@@ -9,7 +9,6 @@
 #include <QtCharts/QBarCategoryAxis>
 #include <QtCharts/QHorizontalStackedBarSeries>
 #include <QtCharts/QValueAxis>
-#include <QVBoxLayout>
 #include <QElapsedTimer>
 
 class Callout;
@@ -28,9 +27,7 @@ private:
     QVector<std::pair<QString, int> > usageVec;
     QString lastAppName;
     QElapsedTimer timer;
-    QVBoxLayout *mainVLayout;
     QChart *chart;
-    QChartView *chartView;
     QVector<QBarSet *> setVec;
     QHorizontalStackedBarSeries *series;
     QValueAxis *valueAxisX;

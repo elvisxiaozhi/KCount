@@ -39,13 +39,6 @@ void AppUsageStackedBarChart::loadChartData()
     chart->setContentsMargins(0, 0, 0, 0);
     chart->setMinimumSize(600, 300);
 
-//    chartView = new QChartView(chart);
-//    chartView->setRenderHint(QPainter::Antialiasing);
-
-//    mainVLayout = new QVBoxLayout(this);
-//    setLayout(mainVLayout);
-//    mainVLayout->addWidget(chartView);
-
     series = new QHorizontalStackedBarSeries(chart);
     series->setLabelsVisible(true);
 
@@ -106,14 +99,14 @@ void AppUsageStackedBarChart::appChanged(QString processName)
     lastAppName = appName;
 }
 
-void AppUsageStackedBarChart::hovered(bool status, int)
+void AppUsageStackedBarChart::hovered(bool status, int index)
 {
     if (m_tooltip == 0)
         m_tooltip = new Callout(chart);
 
     if (status) {
         QBarSet *barSender = qobject_cast<QBarSet *>(sender());
-        m_tooltip->setText(QString(barSender->label()));
+        m_tooltip->setText(QString(barSender->label() + ": ") + QString::number(usageVec[index].second));
 
         QPointF pf(6.6, 0.15);
 
@@ -129,9 +122,9 @@ void AppUsageStackedBarChart::hovered(bool status, int)
 
 void AppUsageStackedBarChart::reloadChart()
 {
-//    delete mainVLayout;
 //    delete chart;
 //    setVec.clear();
 
+//    qDebug() << "Re";
 //    loadChartData();
 }
