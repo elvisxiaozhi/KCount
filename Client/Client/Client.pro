@@ -52,7 +52,8 @@ SOURCES += \
     appusagestackedbarchart.cpp \
     customtitlebar.cpp \
     custombutton.cpp \
-    callout.cpp
+    callout.cpp \
+    notification.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -78,7 +79,8 @@ HEADERS += \
     appusagestackedbarchart.h \
     customtitlebar.h \
     custombutton.h \
-    callout.h
+    callout.h \
+    notification.h
 
 RESOURCES += \
     ../Resources/resources.qrc

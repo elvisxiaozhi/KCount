@@ -12,6 +12,7 @@
 #include "settings.h"
 #include <QThread>
 #include "customtitlebar.h"
+#include "notification.h"
 
 class MainWindow : public QMainWindow
 {
@@ -35,6 +36,7 @@ private:
     Settings *settings;
     QSystemTrayIcon *sysTrayIcon;
     QAction *startOnBootAct;
+    Notification *notification;
 
     void createDBThread();
     void createSidebar();

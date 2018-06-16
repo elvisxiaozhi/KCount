@@ -15,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
     createSystemTrayIcon();
     setFixedSize(1250, 800);
 
+    notification = new Notification(this);
+    notification->show();
+
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
     connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
 }
