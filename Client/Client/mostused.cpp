@@ -33,16 +33,6 @@ void MostUsed::setData()
     createScrollConts();
 }
 
-int MostUsed::getMostUsedTime()
-{
-    return mostUsedVec[0].second;
-}
-
-QString MostUsed::getMostUsedName()
-{
-    return mostUsedVec[0].first;
-}
-
 void MostUsed::setMainLayout()
 {
     mainVLayout = new QVBoxLayout(this);
@@ -180,6 +170,24 @@ void MostUsed::createScrollConts()
     }
 }
 
+bool MostUsed::hasAppReachedLimit()
+{
+    std::sort(mostUsedVec.begin(), mostUsedVec.end(),
+              [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
+
+    if(mostUsedVec[0].second >= 10800) {
+        if(std::find(alertedApp.begin(), alertedApp.end(), mostUsedVec[0].first) != alertedApp.end()) {
+            return false;
+        }
+        else {
+            alertedApp.push_back(mostUsedVec[0].first);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void MostUsed::paintEvent(QPaintEvent *)
 {
     QStyleOption opt;
@@ -225,6 +233,10 @@ void MostUsed::appChanged(QString processName)
     }
     else {
         mostUsedVec.push_back(std::make_pair(lastAppName, usedTime));
+    }
+
+    if(hasAppReachedLimit()) {
+        emit limitAppAlert(mostUsedVec[0].first);
     }
 
     timer.start(); //output first, then restart the timer

@@ -19,6 +19,7 @@ Overview::Overview(QWidget *parent) : QWidget(parent)
     connect(this, &Overview::loadingData, this, &Overview::loadData);
     connect(timeSpanBox, QOverload<int>::of(&QComboBox::activated),
             [=](int index){ comboBoxChanged(index); });
+    connect(mostUsedArr[1], &MostUsed::limitAppAlert, [this](QString appName){ emit limitAppAlert(appName); });
 }
 
 void Overview::updateDatabase()
@@ -94,10 +95,6 @@ void Overview::loadData()
         if(mostUsedArr[i]->isVisible()) {
             mostUsedArr[i]->setData();
         }
-    }
-
-    if(mostUsedArr[1]->getMostUsedTime() >= 10800) {
-        emit limitAppAlert(mostUsedArr[1]->getMostUsedName());
     }
 }
 

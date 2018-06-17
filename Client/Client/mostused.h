@@ -17,8 +17,6 @@ public:
     explicit MostUsed(QWidget *parent = nullptr, int mode = 1);
 
     void setData();
-    int getMostUsedTime();
-    QString getMostUsedName();
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
@@ -34,6 +32,7 @@ private:
     QWidget *scrollWidget;
     QVBoxLayout *scrollContVLayout;
     QVector<Label *> scrollConts;
+    QVector<QString> alertedApp;
 
     void setMainLayout();
     void setWindowStyleSheet();
@@ -41,9 +40,13 @@ private:
     void setLblText(Label *, QString, int);
     void createScrollWidget();
     void createScrollConts();
+    bool hasAppReachedLimit();
 
 protected:
     void paintEvent(QPaintEvent *);
+
+signals:
+    void limitAppAlert(QString);
 
 public slots:
     void updateDatabase();
