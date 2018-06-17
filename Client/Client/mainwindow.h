@@ -36,7 +36,7 @@ private:
     Settings *settings;
     QSystemTrayIcon *sysTrayIcon;
     QAction *startOnBootAct;
-    Notification *notification;
+    Notification notification;
 
     void createDBThread();
     void createSidebar();

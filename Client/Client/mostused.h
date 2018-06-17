@@ -17,6 +17,8 @@ public:
     explicit MostUsed(QWidget *parent = nullptr, int mode = 1);
 
     void setData();
+    int getMostUsedTime();
+    QString getMostUsedName();
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;

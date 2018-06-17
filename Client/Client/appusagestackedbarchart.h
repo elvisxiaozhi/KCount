@@ -33,7 +33,7 @@ private:
     QValueAxis *valueAxisX;
     Callout *m_tooltip;
 
-    void loadChartData();
+    void loadChartData();    
 
 private slots:
     void appChanged(QString);

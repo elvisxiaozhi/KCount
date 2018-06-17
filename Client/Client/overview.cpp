@@ -95,6 +95,10 @@ void Overview::loadData()
             mostUsedArr[i]->setData();
         }
     }
+
+    if(mostUsedArr[1]->getMostUsedTime() >= 10800) {
+        emit limitAppAlert(mostUsedArr[1]->getMostUsedName());
+    }
 }
 
 void Overview::comboBoxChanged(int index)

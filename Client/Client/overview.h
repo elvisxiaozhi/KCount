@@ -46,6 +46,7 @@ protected:
 
 signals:
     void loadingData();
+    void limitAppAlert(QString);
 
 private slots:
     void timeout();

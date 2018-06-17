@@ -39,6 +39,9 @@ AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode, QStr
 
 void AppUsageStackedBarChart::loadChartData()
 {
+    std::sort(usageVec.begin(), usageVec.end(),
+              [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
+
     series = new QHorizontalStackedBarSeries(chart);
     series->setLabelsVisible(true);
 

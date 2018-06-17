@@ -15,9 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
     createSystemTrayIcon();
     setFixedSize(1250, 800);
 
-    notification = new Notification(this);
-    notification->show();
-
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
     connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
 }
@@ -76,6 +73,8 @@ void MainWindow::createContentWindow()
     contVLayout->addWidget(dashboard);
     contVLayout->addWidget(users);
     contVLayout->addWidget(settings);
+
+    connect(overview, &Overview::limitAppAlert, [this](QString appName){ notification.setLabelText(appName); notification.show(); });
 }
 
 void MainWindow::createSystemTrayIcon()

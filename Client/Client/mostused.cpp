@@ -33,6 +33,16 @@ void MostUsed::setData()
     createScrollConts();
 }
 
+int MostUsed::getMostUsedTime()
+{
+    return mostUsedVec[0].second;
+}
+
+QString MostUsed::getMostUsedName()
+{
+    return mostUsedVec[0].first;
+}
+
 void MostUsed::setMainLayout()
 {
     mainVLayout = new QVBoxLayout(this);
