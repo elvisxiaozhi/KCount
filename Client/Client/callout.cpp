@@ -30,8 +30,6 @@ void Callout::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
     painter->setBrush(QColor(255, 192, 203));
     painter->drawPath(path);
     painter->drawText(m_textRect, m_text);
-
-    qDebug() << m_rect;
 }
 
 void Callout::setText(const QString &text)
