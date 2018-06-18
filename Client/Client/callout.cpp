@@ -4,6 +4,7 @@
 #include <QtWidgets/QGraphicsSceneMouseEvent>
 #include <QtGui/QMouseEvent>
 #include <QtCharts/QChart>
+#include <QDebug>
 
 Callout::Callout(QChart *chart):
     QGraphicsItem(chart),
@@ -46,8 +47,14 @@ void Callout::setAnchor(QPointF point)
     m_anchor = point;
 }
 
+//this function is used to adjust callout position
+void Callout::setPosition(QPoint p)
+{
+    custom_p = p;
+}
+
 void Callout::updateGeometry()
 {
     prepareGeometryChange();
-    setPos(m_chart->mapToPosition(m_anchor) + QPoint(10, -50));
+    setPos(m_chart->mapToPosition(m_anchor) + custom_p);
 }

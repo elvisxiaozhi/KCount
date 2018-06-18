@@ -115,8 +115,10 @@ void AppUsageStackedBarChart::appChanged(QString processName)
 
 void AppUsageStackedBarChart::hovered(bool status, int)
 {
-    if (m_tooltip == 0)
+    if (m_tooltip == 0) {
         m_tooltip = new Callout(chart);
+        m_tooltip->setPosition(QPoint(10, -50));
+    }
 
     if (status) {
         QPoint point = chartView->mapFromGlobal(QCursor::pos());

@@ -22,6 +22,7 @@ public:
 
     void setText(const QString &text);
     void setAnchor(QPointF point);
+    void setPosition(QPoint);
     void updateGeometry();
 
     QRectF boundingRect() const;
@@ -34,6 +35,7 @@ private:
     QPointF m_anchor;
     QFont m_font;
     QChart *m_chart;
+    QPoint custom_p;
 };
 
 #endif // CALLOUT_H

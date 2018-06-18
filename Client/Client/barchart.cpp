@@ -206,8 +206,10 @@ void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
 
 void BarChart::changeBarColor(bool status, int)
 {
-    if (m_tooltip == 0)
+    if (m_tooltip == 0) {
         m_tooltip = new Callout(chart);
+        m_tooltip->setPosition(QPoint(10, -200));
+    }
 
     if(status) {
         QPoint p = chartView->mapFromGlobal(QCursor::pos());
@@ -216,21 +218,16 @@ void BarChart::changeBarColor(bool status, int)
         hoverItem.setRect(it->boundingRect());
         hoverItem.show();
 
-        series->setLabelsVisible(true);
-
         QBarSet *barSender = qobject_cast<QBarSet *>(sender());
-        m_tooltip->setText(QString::number(barSender->sum()));
-        QPointF point(-1, 9);
+        m_tooltip->setText(barSender->label());
+        QPointF point(-1, 5);
         m_tooltip->setAnchor(point);
-//        m_tooltip->setZValue(11);
         m_tooltip->updateGeometry();
         m_tooltip->show();
     }
     else {
         hoverItem.setParentItem(nullptr);
         hoverItem.hide();
-
-        series->setLabelsVisible(false);
 
         m_tooltip->hide();
     }

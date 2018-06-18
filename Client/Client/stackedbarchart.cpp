@@ -2,6 +2,7 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include "database.h"
+#include "callout.h"
 #include <QDate>
 
 QMap<int, std::pair<int, int> > StackedBarChart::dailyMap = {};
@@ -9,7 +10,10 @@ QMap<int, std::pair<int, int> > StackedBarChart::weeklyMap = {};
 QMap<int, std::pair<int, int> > StackedBarChart::monthlyMap = {};
 QMap<int, std::pair<int, int> > StackedBarChart::yearlyMap = {};
 
-StackedBarChart::StackedBarChart(QWidget *parent, int mode) : QWidget(parent)
+StackedBarChart::StackedBarChart(QWidget *parent, int mode)
+    : QGraphicsView(new QGraphicsScene, parent),
+      chart(0),
+      m_tooltip(0)
 {
     switch (mode) {
     case 1:
@@ -46,7 +50,6 @@ StackedBarChart::StackedBarChart(QWidget *parent, int mode) : QWidget(parent)
     QVBoxLayout *mainVLayout = new QVBoxLayout(this);
     mainVLayout->addWidget(chartView);
     mainVLayout->addWidget(label);
-    setLayout(mainVLayout);
 
     series = new QStackedBarSeries(chart);
 
@@ -77,6 +80,16 @@ StackedBarChart::StackedBarChart(QWidget *parent, int mode) : QWidget(parent)
 
     hoverItem.setBrush(QBrush(QColor(255, 192, 203)));
     hoverItem.setPen(Qt::NoPen);
+
+    setFixedSize(600, 300);
+    setDragMode(QGraphicsView::NoDrag);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setContentsMargins(0, 0, 0, 0);
+    setFrameStyle(QFrame::NoFrame);
+    setRenderHint(QPainter::Antialiasing);
+    setMouseTracking(true);
+    setLayout(mainVLayout);
 }
 
 void StackedBarChart::reloadChart(int mode)
@@ -201,6 +214,11 @@ void StackedBarChart::reloadChart(QMap<int, std::pair<int, int> > &map, int mode
 
 void StackedBarChart::changeBarColor(bool status, int)
 {
+    if (m_tooltip == 0) {
+        m_tooltip = new Callout(chart);
+        m_tooltip->setPosition(QPoint(10, -200));
+    }
+
     if(status) {
         QPoint p = chartView->mapFromGlobal(QCursor::pos());
         QGraphicsItem *it = chartView->itemAt(p);
@@ -208,12 +226,17 @@ void StackedBarChart::changeBarColor(bool status, int)
         hoverItem.setRect(it->boundingRect());
         hoverItem.show();
 
-        series->setLabelsVisible(true);
+        QBarSet *barSender = qobject_cast<QBarSet *>(sender());
+        m_tooltip->setText(barSender->label());
+        QPointF point(-1, 5);
+        m_tooltip->setAnchor(point);
+        m_tooltip->updateGeometry();
+        m_tooltip->show();
     }
     else {
         hoverItem.setParentItem(nullptr);
         hoverItem.hide();
 
-        series->setLabelsVisible(false);
+        m_tooltip->hide();
     }
 }

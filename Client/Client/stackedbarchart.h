@@ -12,9 +12,11 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QDateTimeAxis>
 
+class Callout;
+
 QT_CHARTS_USE_NAMESPACE
 
-class StackedBarChart : public QWidget
+class StackedBarChart : public QGraphicsView
 {
     Q_OBJECT
 public:
@@ -39,6 +41,7 @@ private:
     QLabel *label;
     QChartView *chartView;
     QGraphicsRectItem hoverItem;
+    Callout *m_tooltip;
 
     void loadChartData(int);
     void reloadChart(QMap<int, std::pair<int, int> > &, int);
