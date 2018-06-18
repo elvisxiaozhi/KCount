@@ -134,6 +134,7 @@ void MostUsed::createScrollWidget()
     scrollArea->setFrameShadow(QFrame::Plain);
     scrollArea->setFrameShape(QFrame::NoFrame);
     scrollArea->setWidgetResizable(true);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->hide();
 
     scrollWidget = new QWidget(this);
