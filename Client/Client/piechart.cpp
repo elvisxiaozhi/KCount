@@ -1,21 +1,23 @@
 #include "piechart.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMainWindow>
-#include <QtCharts/QChartView>
 #include <QtCharts/QPieSlice>
 #include <QVBoxLayout>
 #include "database.h"
 #include <QDebug>
 #include "signalemitter.h"
+#include "callout.h"
 
-PieChart::PieChart(QWidget *parent, int mode, QString title) : QWidget(parent)
+PieChart::PieChart(QWidget *parent, int mode, QString title)
+    : QGraphicsView(new QGraphicsScene, parent),
+      m_tooltip(0)
 {
     mostPressedVec = Database::returnKeyVec(mode);
     colorVec = { QColor(255,0,0), QColor(255,215,0), QColor(0,255,0), QColor(0,128,128), QColor(255,192,203) };
 
     series = new QPieSeries();
 
-    QChart *chart = new QChart();
+    chart = new QChart();
     chart->addSeries(series);
     chart->setTitle(title);
     chart->legend()->hide();
@@ -27,6 +29,15 @@ PieChart::PieChart(QWidget *parent, int mode, QString title) : QWidget(parent)
 
     QVBoxLayout *mainVLayout = new QVBoxLayout(this);
     mainVLayout->addWidget(chartView);
+
+    setFixedSize(600, 300);
+    setDragMode(QGraphicsView::NoDrag);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setContentsMargins(0, 0, 0, 0);
+    setFrameStyle(QFrame::NoFrame);
+    setRenderHint(QPainter::Antialiasing);
+    setMouseTracking(true);
     setLayout(mainVLayout);
 
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &PieChart::keyPressed);
@@ -52,16 +63,7 @@ void PieChart::reloadChartData()
             slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
             slice->setBrush(colorVec[i]);
 
-            connect(slice, &QPieSlice::hovered, [slice, this](bool status){
-                if(status) {
-                    slice->setExploded(true);
-                    slice->setLabelPosition(QPieSlice::LabelOutside);
-                }
-                else {
-                    slice->setExploded(false);
-                    slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
-                }
-            });
+            connect(slice, &QPieSlice::hovered, this, &PieChart::hovered);
         }
     }
     else {
@@ -72,16 +74,7 @@ void PieChart::reloadChartData()
             slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
             slice->setBrush(colorVec[i]);
 
-            connect(slice, &QPieSlice::hovered, [slice, this](bool status){
-                if(status) {
-                    slice->setExploded(true);
-                    slice->setLabelPosition(QPieSlice::LabelOutside);
-                }
-                else {
-                    slice->setExploded(false);
-                    slice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
-                }
-            });
+            connect(slice, &QPieSlice::hovered, this, &PieChart::hovered);
         }
     }
 }
@@ -95,5 +88,30 @@ void PieChart::keyPressed(QString pressedKey)
     }
     else {
         mostPressedVec.push_back(std::make_pair(pressedKey, 1));
+    }
+}
+
+void PieChart::hovered(bool status)
+{
+    if (m_tooltip == 0) {
+        m_tooltip = new Callout(chart);
+        m_tooltip->setPosition(QPoint(10, 30));
+    }
+
+    QPieSlice *sliceSender = qobject_cast<QPieSlice *>(sender());
+    if(status) {
+        sliceSender->setExploded(true);
+        sliceSender->setLabelPosition(QPieSlice::LabelOutside);
+
+        m_tooltip->setText("Text");
+        m_tooltip->setAnchor(QPointF(7, 7));
+        m_tooltip->updateGeometry();
+        m_tooltip->show();
+    }
+    else {
+        sliceSender->setExploded(false);
+        sliceSender->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+
+        m_tooltip->hide();
     }
 }
