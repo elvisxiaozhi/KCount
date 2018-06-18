@@ -16,29 +16,32 @@ BarChart::BarChart(QWidget *parent, int mode)
       chart(0),
       m_tooltip(0)
 {
-    switch (mode) {
-    case 1:
-        dailyMap = Database::returnBarChartData(mode);
-        break;
-    case 2:
-        weeklyMap = Database::returnBarChartData(mode);
-        break;
-    case 3:
-        monthlyMap = Database::returnBarChartData(mode);
-        break;
-    case 4:
-        yearlyMap = Database::returnBarChartData(mode);
-        break;
-    default:
-        break;
-    }
-
     chart = new QChart;
-    chart->setTitle("Key Pressed Bar Chart");
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->setTheme(QChart::ChartThemeBlueIcy);
     chart->legend()->setVisible(false);
     chart->legend()->setAlignment(Qt::AlignBottom);
+
+    switch (mode) {
+    case 1:
+        dailyMap = Database::returnBarChartData(mode);
+        chart->setTitle("Daily Key Pressed");
+        break;
+    case 2:
+        weeklyMap = Database::returnBarChartData(mode);
+        chart->setTitle("Weekly Key Pressed");
+        break;
+    case 3:
+        monthlyMap = Database::returnBarChartData(mode);
+        chart->setTitle("Monthly Key Pressed");
+        break;
+    case 4:
+        yearlyMap = Database::returnBarChartData(mode);
+        chart->setTitle("Yearly Key Pressed");
+        break;
+    default:
+        break;
+    }
 
     series = new QBarSeries(chart);
     series->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd);

@@ -15,29 +15,32 @@ StackedBarChart::StackedBarChart(QWidget *parent, int mode)
       chart(0),
       m_tooltip(0)
 {
-    switch (mode) {
-    case 1:
-        dailyMap = Database::returnStackedBarChartData(mode);
-        break;
-    case 2:
-        weeklyMap = Database::returnStackedBarChartData(mode);
-        break;
-    case 3:
-        monthlyMap = Database::returnStackedBarChartData(mode);
-        break;
-    case 4:
-        yearlyMap = Database::returnStackedBarChartData(mode);
-        break;
-    default:
-        break;
-    }
-
     chart = new QChart();
-    chart->setTitle("Mouse Clicked Bar Chart");
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->setTheme(QChart::ChartThemeBlueIcy);
     chart->legend()->setVisible(false);
     chart->legend()->setAlignment(Qt::AlignBottom);
+
+    switch (mode) {
+    case 1:
+        dailyMap = Database::returnStackedBarChartData(mode);
+        chart->setTitle("Daily Mouse Clicked");
+        break;
+    case 2:
+        weeklyMap = Database::returnStackedBarChartData(mode);
+        chart->setTitle("Weekly Mouse Clicked");
+        break;
+    case 3:
+        monthlyMap = Database::returnStackedBarChartData(mode);
+        chart->setTitle("Monthly Mouse Clicked");
+        break;
+    case 4:
+        yearlyMap = Database::returnStackedBarChartData(mode);
+        chart->setTitle("Yearly Mouse Clicked");
+        break;
+    default:
+        break;
+    }
 
     chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);

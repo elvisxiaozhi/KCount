@@ -95,7 +95,7 @@ void Dashboard::createCharts()
     }
 
     for(int i = 0; i < 5; ++i) {
-        pieChartArr[i] = new PieChart(this, i);
+        pieChartArr[i] = new PieChart(this, i, QString("%1 Key Pressed").arg(titleVec[i]));
         pieChartArr[i]->setFixedSize(300, 300);
         gLayout->addWidget(pieChartArr[i], 0, 1);
         if(i != 1) {

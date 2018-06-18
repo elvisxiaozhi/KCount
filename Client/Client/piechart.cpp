@@ -8,7 +8,7 @@
 #include <QDebug>
 #include "signalemitter.h"
 
-PieChart::PieChart(QWidget *parent, int mode) : QWidget(parent)
+PieChart::PieChart(QWidget *parent, int mode, QString title) : QWidget(parent)
 {
     mostPressedVec = Database::returnKeyVec(mode);
     colorVec = { QColor(255,0,0), QColor(255,215,0), QColor(0,255,0), QColor(0,128,128), QColor(255,192,203) };
@@ -17,7 +17,7 @@ PieChart::PieChart(QWidget *parent, int mode) : QWidget(parent)
 
     QChart *chart = new QChart();
     chart->addSeries(series);
-    chart->setTitle(tr("Key Pressed Pie Chart"));
+    chart->setTitle(title);
     chart->legend()->hide();
     chart->setAnimationOptions(QChart::AllAnimations);
     chart->setDropShadowEnabled(true);

@@ -10,7 +10,7 @@ class PieChart : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PieChart(QWidget *parent = nullptr, int mode = 1);
+    explicit PieChart(QWidget *parent = nullptr, int mode = 1, QString title = "Key Pressed");
 
     void reloadChart();
 
