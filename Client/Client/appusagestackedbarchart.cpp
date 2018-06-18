@@ -3,6 +3,7 @@
 #include <QDebug>
 #include "signalemitter.h"
 #include "callout.h"
+#include <QVBoxLayout>
 
 AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode, QString title)
     : QGraphicsView(new QGraphicsScene, parent),
@@ -30,7 +31,17 @@ AppUsageStackedBarChart::AppUsageStackedBarChart(QWidget *parent, int mode, QStr
     chart->setContentsMargins(0, 0, 0, 0);
     chart->setMinimumSize(600, 300);
 
-    scene()->addItem(chart);
+    chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    hoverItem.setBrush(QBrush(QColor(255, 192, 203)));
+    hoverItem.setPen(Qt::NoPen);
+
+    QVBoxLayout *mainVLayout = new QVBoxLayout(this);
+    mainVLayout->addWidget(chartView);
+
+    setLayout(mainVLayout);
+//    scene()->addItem(chart);
 
     loadChartData(); 
 
@@ -113,7 +124,11 @@ void AppUsageStackedBarChart::hovered(bool status, int)
 
         QPointF p(6.6, 0.15);
 
-//        qDebug() << chart->mapToPosition(QCursor::pos());
+        QPoint point = chartView->mapFromGlobal(QCursor::pos());
+        QGraphicsItem *it = chartView->itemAt(point);
+        hoverItem.setParentItem(it);
+        hoverItem.setRect(it->boundingRect());
+        hoverItem.show();
 
         m_tooltip->setAnchor(p);
         m_tooltip->setZValue(11);
@@ -122,6 +137,9 @@ void AppUsageStackedBarChart::hovered(bool status, int)
     }
     else {
         m_tooltip->hide();
+
+        hoverItem.setParentItem(nullptr);
+        hoverItem.hide();
     }
 }
 

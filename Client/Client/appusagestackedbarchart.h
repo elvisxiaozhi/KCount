@@ -33,6 +33,9 @@ private:
     QValueAxis *valueAxisX;
     Callout *m_tooltip;
 
+    QChartView *chartView;
+    QGraphicsRectItem hoverItem;
+
     void loadChartData();    
 
 private slots:
