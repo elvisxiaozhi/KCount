@@ -204,7 +204,7 @@ void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
     }
 }
 
-void BarChart::changeBarColor(bool status, int)
+void BarChart::changeBarColor(bool status, int index)
 {
     if (m_tooltip == 0) {
         m_tooltip = new Callout(chart);
@@ -219,7 +219,7 @@ void BarChart::changeBarColor(bool status, int)
         hoverItem.show();
 
         QBarSet *barSender = qobject_cast<QBarSet *>(sender());
-        m_tooltip->setText(barSender->label());
+        m_tooltip->setText(QString::number(barSender->at(index)));
         QPointF point(-1, 5);
         m_tooltip->setAnchor(point);
         m_tooltip->updateGeometry();

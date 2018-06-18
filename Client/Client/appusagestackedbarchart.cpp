@@ -54,7 +54,6 @@ void AppUsageStackedBarChart::loadChartData()
               [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
 
     series = new QHorizontalStackedBarSeries(chart);
-    series->setLabelsVisible(true);
 
     int totalUsage = 0;
     std::for_each(usageVec.begin(), usageVec.end(),
