@@ -32,7 +32,6 @@ private:
     QHorizontalStackedBarSeries *series;
     QValueAxis *valueAxisX;
     Callout *m_tooltip;
-
     QChartView *chartView;
     QGraphicsRectItem hoverItem;
 

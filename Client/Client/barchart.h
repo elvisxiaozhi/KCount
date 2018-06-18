@@ -12,9 +12,11 @@
 #include <QtCharts/QBarCategoryAxis>
 #include <QLabel>
 
+class Callout;
+
 QT_CHARTS_USE_NAMESPACE
 
-class BarChart : public QWidget
+class BarChart : public QGraphicsView
 {
     Q_OBJECT
 public:
@@ -40,6 +42,7 @@ private:
     QChartView *chartView;
     QGraphicsRectItem hoverItem;
     QBrush labelBrush;
+    Callout *m_tooltip;
 
     void loadChartData(int);
     void reloadChart(QMap<int, unsigned long int> &, int);

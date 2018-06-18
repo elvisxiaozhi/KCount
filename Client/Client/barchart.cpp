@@ -4,13 +4,17 @@
 #include <QDateTime>
 #include "mostpressed.h"
 #include "database.h"
+#include "callout.h"
 
 QMap<int, unsigned long int> BarChart::dailyMap = {};
 QMap<int, unsigned long int> BarChart::weeklyMap = {};
 QMap<int, unsigned long int> BarChart::monthlyMap = {};
 QMap<int, unsigned long int> BarChart::yearlyMap = {};
 
-BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
+BarChart::BarChart(QWidget *parent, int mode)
+    : QGraphicsView(new QGraphicsScene, parent),
+      chart(0),
+      m_tooltip(0)
 {
     switch (mode) {
     case 1:
@@ -77,6 +81,15 @@ BarChart::BarChart(QWidget *parent, int mode) : QWidget(parent)
     QVBoxLayout *mainVLayout = new QVBoxLayout(this);
     mainVLayout->addWidget(chartView);
     mainVLayout->addWidget(label);
+
+    setFixedSize(600, 300);
+    setDragMode(QGraphicsView::NoDrag);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setContentsMargins(0, 0, 0, 0);
+    setFrameStyle(QFrame::NoFrame);
+    setRenderHint(QPainter::Antialiasing);
+    setMouseTracking(true);
     setLayout(mainVLayout);
 }
 
@@ -193,6 +206,9 @@ void BarChart::reloadChart(QMap<int, unsigned long int> &map, int mode)
 
 void BarChart::changeBarColor(bool status, int)
 {
+    if (m_tooltip == 0)
+        m_tooltip = new Callout(chart);
+
     if(status) {
         QPoint p = chartView->mapFromGlobal(QCursor::pos());
         QGraphicsItem *it = chartView->itemAt(p);
@@ -201,11 +217,21 @@ void BarChart::changeBarColor(bool status, int)
         hoverItem.show();
 
         series->setLabelsVisible(true);
+
+        QBarSet *barSender = qobject_cast<QBarSet *>(sender());
+        m_tooltip->setText(QString::number(barSender->sum()));
+        QPointF point(-1, 9);
+        m_tooltip->setAnchor(point);
+//        m_tooltip->setZValue(11);
+        m_tooltip->updateGeometry();
+        m_tooltip->show();
     }
     else {
         hoverItem.setParentItem(nullptr);
         hoverItem.hide();
 
         series->setLabelsVisible(false);
+
+        m_tooltip->hide();
     }
 }

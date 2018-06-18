@@ -119,17 +119,15 @@ void AppUsageStackedBarChart::hovered(bool status, int)
         m_tooltip = new Callout(chart);
 
     if (status) {
-        QBarSet *barSender = qobject_cast<QBarSet *>(sender());
-        m_tooltip->setText(QString(barSender->label() + ": ") + QString::number(barSender->sum()));
-
-        QPointF p(6.6, 0.15);
-
         QPoint point = chartView->mapFromGlobal(QCursor::pos());
         QGraphicsItem *it = chartView->itemAt(point);
         hoverItem.setParentItem(it);
         hoverItem.setRect(it->boundingRect());
         hoverItem.show();
 
+        QBarSet *barSender = qobject_cast<QBarSet *>(sender());
+        m_tooltip->setText(QString(barSender->label() + ": ") + QString::number(barSender->sum()));
+        QPointF p(6.6, 0.15);
         m_tooltip->setAnchor(p);
         m_tooltip->setZValue(11);
         m_tooltip->updateGeometry();
