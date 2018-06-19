@@ -33,6 +33,7 @@ private:
     TotalPressed *totalPressedArr[5];
     MostPressed *mostPressedArr[5];
     MouseClick *mouseClickArr[5];
+    QVector<QString> titleVec;
 
     void setWindowLayout();
     void setWindowStyleSheet();

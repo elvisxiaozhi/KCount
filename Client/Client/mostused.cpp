@@ -8,14 +8,14 @@
 #include "database.h"
 #include <QCoreApplication>
 
-MostUsed::MostUsed(QWidget *parent, int mode) : QWidget(parent)
+MostUsed::MostUsed(QWidget *parent, int mode, QString title) : QWidget(parent)
 {
     timer.start();
     mostUsedVec = Database::returnAppVec(mode);
     QStringList currentAppName = qApp->applicationFilePath().split("/");
     lastAppName = QString(currentAppName.at(currentAppName.size() - 1)).split(".exe").first();
 
-    setMainLayout();
+    setMainLayout(title);
     setWindowStyleSheet();
 
     connect(Emitter::Instance(), &SignalEmitter::appChanged, this, &MostUsed::appChanged);
@@ -33,7 +33,7 @@ void MostUsed::setData()
     createScrollConts();
 }
 
-void MostUsed::setMainLayout()
+void MostUsed::setMainLayout(QString lblTitle)
 {
     mainVLayout = new QVBoxLayout(this);
     setLayout(mainVLayout);
@@ -48,7 +48,7 @@ void MostUsed::setMainLayout()
     contWidget->setLayout(contVLayout);
 
     QLabel *title = new QLabel(this);
-    title->setText("Most Used");
+    title->setText(lblTitle);
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 

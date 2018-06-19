@@ -14,7 +14,7 @@ class MostPressed : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MostPressed(QWidget *parent = nullptr, int mode = 1);
+    explicit MostPressed(QWidget *parent = nullptr, int mode = 1, QString title = "Most Pressed");
 
 private:
     QVBoxLayout *mainVLayout, *contVLayout;
@@ -31,7 +31,7 @@ private:
     QVBoxLayout *scrollContVLayout;
     QVector<Label *> scrollConts;
 
-    void setMainLayout();
+    void setMainLayout(QString);
     void setWindowStyleSheet();
     void setContents();
     void createScrollWidget();

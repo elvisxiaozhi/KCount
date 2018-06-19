@@ -12,7 +12,7 @@ class TotalPressed : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TotalPressed(QWidget *parent = nullptr, int mode = 1);
+    explicit TotalPressed(QWidget *parent = nullptr, int mode = 1, QString lblTitle = "Total Pressed");
 
 private:
     QVBoxLayout *mainVLayout;

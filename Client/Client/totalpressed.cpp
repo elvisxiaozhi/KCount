@@ -6,7 +6,7 @@
 #include <QDebug>
 #include "database.h"
 
-TotalPressed::TotalPressed(QWidget *parent, int mode)
+TotalPressed::TotalPressed(QWidget *parent, int mode, QString lblTitle)
     : QWidget(parent)
 {
     totalPressedTimes = Database::returnTotalPressedTimes(mode);
@@ -15,7 +15,7 @@ TotalPressed::TotalPressed(QWidget *parent, int mode)
     setLayout(mainVLayout);
 
     title = new QLabel(this);
-    title->setText("Total Pressed");
+    title->setText(lblTitle);
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 

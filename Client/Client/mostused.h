@@ -14,7 +14,7 @@ class MostUsed : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MostUsed(QWidget *parent = nullptr, int mode = 1);
+    explicit MostUsed(QWidget *parent = nullptr, int mode = 1, QString title = "Most Used");
 
     void setData();
 
@@ -34,7 +34,7 @@ private:
     QVector<Label *> scrollConts;
     QVector<QString> alertedApp;
 
-    void setMainLayout();
+    void setMainLayout(QString);
     void setWindowStyleSheet();
     void setContents();
     void setLblText(Label *, QString, int);

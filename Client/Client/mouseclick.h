@@ -10,7 +10,7 @@ class MouseClick : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MouseClick(QWidget *parent = nullptr, int mode = 1);
+    explicit MouseClick(QWidget *parent = nullptr, int mode = 1, QString lblTitle = "Total Clicked");
 
 private:
     QVBoxLayout *mainVLayout;

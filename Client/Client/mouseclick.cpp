@@ -8,7 +8,7 @@
 #include "stackedbarchart.h"
 #include <QTime>
 
-MouseClick::MouseClick(QWidget *parent, int mode) : QWidget(parent)
+MouseClick::MouseClick(QWidget *parent, int mode, QString lblTitle) : QWidget(parent)
 {
     leftClickedTimes = Database::returnClickedTimes("LeftClick", mode);
     rightClickedTimes = Database::returnClickedTimes("RightClick", mode);
@@ -24,7 +24,7 @@ MouseClick::MouseClick(QWidget *parent, int mode) : QWidget(parent)
     contHLayout->setSpacing(0);
 
     title = new QLabel(this);
-    title->setText("Total Clicked");
+    title->setText(lblTitle);
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 

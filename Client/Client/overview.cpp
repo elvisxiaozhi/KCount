@@ -9,6 +9,8 @@
 
 Overview::Overview(QWidget *parent) : QWidget(parent)
 {
+    titleVec = {"Hourly", "Daily", "Weekly", "Monthly", "Yearly"};
+
     setWindowLayout();
     setWindowStyleSheet();
     setTimeSpanBox();
@@ -156,23 +158,23 @@ void Overview::setTimeSpanBox()
 void Overview::setLbls()
 {
     for(int i = 0; i < 5; ++i) {
-        mostUsedArr[i] = new MostUsed(this, i);
+        mostUsedArr[i] = new MostUsed(this, i, QString("%1 Most Used").arg(titleVec[i]));
         mostUsedArr[i]->setFixedSize(300, 300);
         if(i != 1) {
             mostUsedArr[i]->hide();
         }
 
-        totalPressedArr[i] = new TotalPressed(this, i);
+        totalPressedArr[i] = new TotalPressed(this, i, QString("%1 Total Pressed").arg(titleVec[i]));
         totalPressedArr[i]->setFixedSize(300, 300);
         if(i != 1) {
             totalPressedArr[i]->hide();
         }
 
-        mostPressedArr[i] = new MostPressed(this, i);
+        mostPressedArr[i] = new MostPressed(this, i, QString("%1 Most Pressed").arg(titleVec[i]));
         mostPressedArr[i]->setFixedSize(300, 300);
         mostPressedArr[i]->hide();
 
-        mouseClickArr[i] = new MouseClick(this, i);
+        mouseClickArr[i] = new MouseClick(this, i, QString("%1 Total Clicked").arg(titleVec[i]));
         mouseClickArr[i]->setFixedSize(300, 300);
         if(i != 1) {
             mouseClickArr[i]->hide();

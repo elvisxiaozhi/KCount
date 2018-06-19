@@ -8,12 +8,12 @@
 #include <QTime>
 #include "barchart.h"
 
-MostPressed::MostPressed(QWidget *parent, int mode) : QWidget(parent)
+MostPressed::MostPressed(QWidget *parent, int mode, QString title) : QWidget(parent)
 {
     mostPressed = Database::returnKeyVec(mode);
     currentHour = QTime::currentTime().toString("h").toInt();
 
-    setMainLayout();
+    setMainLayout(title);
     setWindowStyleSheet();
 
     connect(Emitter::Instance(), &SignalEmitter::keyPressed, this, &MostPressed::keyPressed);
@@ -22,7 +22,7 @@ MostPressed::MostPressed(QWidget *parent, int mode) : QWidget(parent)
     connect(showLessBtn, &CustomButton::clicked, [this](){ showMoreBtn->show(); showLessBtn->hide(); scrollArea->hide(); contWidget->show(); });
 }
 
-void MostPressed::setMainLayout()
+void MostPressed::setMainLayout(QString lblTitle)
 {
     mainVLayout = new QVBoxLayout(this);
     setLayout(mainVLayout);
@@ -37,7 +37,7 @@ void MostPressed::setMainLayout()
     contWidget->setLayout(contVLayout);
 
     title = new QLabel(this);
-    title->setText("Most Pressed");
+    title->setText(lblTitle);
     title->setObjectName("Title");
     title->setAlignment(Qt::AlignCenter);
 
