@@ -211,7 +211,7 @@ void BarChart::changeBarColor(bool status, int index)
 {
     if (m_tooltip == 0) {
         m_tooltip = new Callout(chart);
-        m_tooltip->setPosition(QPoint(10, -200));
+        m_tooltip->setPosition(QPoint(10, -190));
     }
 
     if(status) {

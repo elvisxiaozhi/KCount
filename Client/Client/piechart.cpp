@@ -95,13 +95,12 @@ void PieChart::hovered(bool status)
 {
     if (m_tooltip == 0) {
         m_tooltip = new Callout(chart);
-        m_tooltip->setPosition(QPoint(40, 30));
+        m_tooltip->setPosition(QPoint(40, 230));
     }
 
     QPieSlice *sliceSender = qobject_cast<QPieSlice *>(sender());
     if(status) {
         sliceSender->setExploded(true);
-//        sliceSender->setLabelVisible(false);
 
         m_tooltip->setText(sliceSender->label() + QString(": %1; %2%").arg(QString::number(sliceSender->value())).arg(100 * sliceSender->percentage(), 0, 'f', 1));
         m_tooltip->setAnchor(QPointF(10, 7));
@@ -110,7 +109,6 @@ void PieChart::hovered(bool status)
     }
     else {
         sliceSender->setExploded(false);
-//        sliceSender->setLabelVisible(true);
 
         m_tooltip->hide();
     }

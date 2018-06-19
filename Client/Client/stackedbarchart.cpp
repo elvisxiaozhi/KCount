@@ -219,7 +219,7 @@ void StackedBarChart::changeBarColor(bool status, int index)
 {
     if (m_tooltip == 0) {
         m_tooltip = new Callout(chart);
-        m_tooltip->setPosition(QPoint(10, -200));
+        m_tooltip->setPosition(QPoint(10, -165));
     }
 
     if(status) {
