@@ -82,10 +82,14 @@ void CustomTitleBar::paintEvent(QPaintEvent *event)
         posX += 45;
     }
 
-     //paint icon
-     QIcon icon(":/Resources/Icons/notification.png");
-     QRect iconRect(915 + 12, 10, 25, 25); //plus 12, so the icon can align center
-     icon.paint(&painter, iconRect);
+
+    if(hoveredOnNotify) {
+        painter.fillRect(QRect(915, 0, 45, 45), QColor(0,255,255)); //set background color
+    }
+    //paint icon
+    QIcon icon(":/Resources/Icons/notification.png");
+    QRect iconRect(915 + 10, 10, 25, 25); //plus 12, so the icon can align center
+    icon.paint(&painter, iconRect);
 }
 
 void CustomTitleBar::mousePressEvent(QMouseEvent *event)
@@ -119,6 +123,13 @@ void CustomTitleBar::mouseMoveEvent(QMouseEvent *event)
 //            w->move(w->pos()+ delta);
 //        }
 //    }
+
+    if(event->x() < 960 && event->x() >= 915) {
+        hoveredOnNotify = true;
+    }
+    else {
+        hoveredOnNotify = false;
+    }
 
     QAction *action = actionAt(event->pos());
     hoveredAct = action;

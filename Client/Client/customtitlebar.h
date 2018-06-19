@@ -16,6 +16,7 @@ private:
     QList<QAction *> actList;
     QAction *checkedAct;
     QAction *hoveredAct;
+    bool hoveredOnNotify;
 
     QAction *addAction(const QString &, const QIcon &);
     QAction *actionAt(const QPoint &);
