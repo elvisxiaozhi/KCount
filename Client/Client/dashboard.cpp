@@ -85,40 +85,38 @@ void Dashboard::createTimeSpanBox()
 
 void Dashboard::createCharts()
 {
-    for(int i = 0; i < 4; ++i) {
-        barChartArr[i] = new BarChart(this, i + 1);
-        barChartArr[i]->setFixedSize(600, 300);
-        gLayout->addWidget(barChartArr[i], 0, 0);
-        if(i != 0) {
-            barChartArr[i]->hide();
-        }
-    }
-
-    for(int i = 0; i < 5; ++i) {
-        pieChartArr[i] = new PieChart(this, i, QString("%1 Key Pressed").arg(titleVec[i]));
-        pieChartArr[i]->setFixedSize(300, 300);
-        gLayout->addWidget(pieChartArr[i], 0, 1);
-        if(i != 1) {
-            pieChartArr[i]->hide();
-        }
-    }
-
-    for(int i = 0; i < 4; ++i) {
-        stackedBarChartArr[i] = new StackedBarChart(this, i + 1);
-        stackedBarChartArr[i]->setFixedSize(600, 300);
-        gLayout->addWidget(stackedBarChartArr[i], 1, 0);
-        if(i != 0) {
-            stackedBarChartArr[i]->hide();
-        }
-    }
-
     for(int i = 0; i < 5; ++i) {
         appUsageChartArr[i] = new AppUsageStackedBarChart(this, i, QString("%1 App Usage").arg(titleVec[i]));
         appUsageChartArr[i]->setFixedSize(600, 300);
-        gLayout->addWidget(appUsageChartArr[i], 2, 0);
+
+        pieChartArr[i] = new PieChart(this, i, QString("%1 Key Pressed").arg(titleVec[i]));
+        pieChartArr[i]->setFixedSize(300, 300);
+
         if(i != 1) {
             appUsageChartArr[i]->hide();
+
+            pieChartArr[i]->hide();
         }
+
+        gLayout->addWidget(appUsageChartArr[i], 0, 0);
+        gLayout->addWidget(pieChartArr[i], 1, 1);
+    }
+
+    for(int i = 0; i < 4; ++i) {
+        barChartArr[i] = new BarChart(this, i + 1);
+        barChartArr[i]->setFixedSize(600, 300);
+
+        stackedBarChartArr[i] = new StackedBarChart(this, i + 1);
+        stackedBarChartArr[i]->setFixedSize(600, 300);
+
+        if(i != 0) {
+            barChartArr[i]->hide();
+
+            stackedBarChartArr[i]->hide();
+        }
+
+        gLayout->addWidget(barChartArr[i], 1, 0);
+        gLayout->addWidget(stackedBarChartArr[i], 2, 0);
     }
 }
 
