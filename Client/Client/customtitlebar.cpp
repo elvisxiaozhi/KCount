@@ -40,6 +40,7 @@ QAction *CustomTitleBar::actionAt(const QPoint &point)
         }
         posX += 45;
     }
+
     return NULL;
 }
 
@@ -80,6 +81,11 @@ void CustomTitleBar::paintEvent(QPaintEvent *event)
 
         posX += 45;
     }
+
+     //paint icon
+     QIcon icon(":/Resources/Icons/notification.png");
+     QRect iconRect(915 + 12, 10, 25, 25); //plus 12, so the icon can align center
+     icon.paint(&painter, iconRect);
 }
 
 void CustomTitleBar::mousePressEvent(QMouseEvent *event)
