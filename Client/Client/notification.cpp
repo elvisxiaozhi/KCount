@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDebug>
+#include <windows.h>
 
 Notification::Notification(QWidget *parent) : QDialog(parent)
 {
@@ -27,6 +28,8 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
 
     vLayout->addWidget(contLbl);
     vLayout->addLayout(btnHLayout);
+
+    openRegistry();
 }
 
 void Notification::setLabelText(QString appName)
@@ -34,4 +37,19 @@ void Notification::setLabelText(QString appName)
     qDebug() << appName;
     contText = QString(tr("  %1 has been totally using over 3 hours, take a break. :)")).arg(appName);
     contLbl->setText(contText);
+}
+
+void Notification::openRegistry()
+{
+    HKEY hKey;
+    LPCTSTR lpSubKey = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options");
+
+    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, lpSubKey, 0, KEY_ALL_ACCESS , &hKey);
+
+    if (openRes == ERROR_SUCCESS) {
+        qDebug() << "Success opening key.";
+    }
+    else {
+        qDebug() << "Error opening key.";
+    }
 }

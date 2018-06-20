@@ -17,6 +17,9 @@ private:
 
 public slots:
     void setLabelText(QString);
+
+private slots:
+    void openRegistry();
 };
 
 #endif // NOTIFICATION_H
