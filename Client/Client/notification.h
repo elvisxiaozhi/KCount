@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QPushButton>
 #include <QLabel>
+#include <windows.h>
 
 class Notification : public QDialog
 {
@@ -14,6 +15,8 @@ private:
     QPushButton *limitBtn;
     QString contText;
     QLabel *contLbl;
+
+    void showErrorText(DWORD);
 
 public slots:
     void setLabelText(QString);

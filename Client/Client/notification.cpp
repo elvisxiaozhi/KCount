@@ -4,7 +4,6 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDebug>
-#include <windows.h>
 
 Notification::Notification(QWidget *parent) : QDialog(parent)
 {
@@ -32,6 +31,14 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
     openRegistry();
 }
 
+void Notification::showErrorText(DWORD errorNum)
+{
+    char *messageBuffer = NULL;
+    FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, errorNum, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+
+    qDebug() << messageBuffer << errorNum;
+}
+
 void Notification::setLabelText(QString appName)
 {
     qDebug() << appName;
@@ -42,14 +49,27 @@ void Notification::setLabelText(QString appName)
 void Notification::openRegistry()
 {
     HKEY hKey;
-    LPCTSTR lpSubKey = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options");
+    LPCTSTR sk = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
 
-    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, lpSubKey, 0, KEY_ALL_ACCESS , &hKey);
+    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sk, 0, KEY_ALL_ACCESS , &hKey);
 
     if (openRes == ERROR_SUCCESS) {
         qDebug() << "Success opening key.";
     }
     else {
         qDebug() << "Error opening key.";
+
+        showErrorText(openRes);
+    }
+
+    LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, sk, 0, NULL, REG_OPTION_BACKUP_RESTORE, KEY_ALL_ACCESS, NULL, &hKey, NULL);
+
+    if (createResKey == ERROR_SUCCESS) {
+        qDebug() << "Success creating key.";
+    }
+    else {
+        qDebug() << "Error creating key.";
+
+        showErrorText(createResKey);
     }
 }
