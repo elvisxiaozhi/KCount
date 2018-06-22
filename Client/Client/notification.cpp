@@ -36,7 +36,7 @@ void Notification::showErrorText(DWORD errorNum)
     char *messageBuffer = NULL;
     FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, errorNum, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
-    qDebug() << messageBuffer << errorNum;
+    qDebug() <<  errorNum << messageBuffer;
 }
 
 void Notification::setLabelText(QString appName)
@@ -62,7 +62,7 @@ void Notification::openRegistry()
         showErrorText(openRes);
     }
 
-    LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, sk, 0, NULL, REG_OPTION_BACKUP_RESTORE, KEY_ALL_ACCESS, NULL, &hKey, NULL);
+    LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, sk, 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);
 
     if (createResKey == ERROR_SUCCESS) {
         qDebug() << "Success creating key.";
