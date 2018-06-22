@@ -40,6 +40,56 @@ void Notification::showErrorText(DWORD errorNum)
     qDebug() <<  errorNum << messageBuffer;
 }
 
+void Notification::deleteRegValue()
+{
+    PCTSTR deleteValue = TEXT("debugger");
+    LONG deletValueRes = RegDeleteValue(hKey, deleteValue);
+
+    if(deletValueRes == ERROR_SUCCESS) {
+        qDebug() << "delete success!";
+    }
+    else {
+        qDebug() << "delete failed!";
+        showErrorText(deletValueRes);
+    }
+}
+
+void Notification::deleteRegKey()
+{
+    HKEY hKey;
+    LPCTSTR sk = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options");
+
+    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sk, 0, KEY_ALL_ACCESS , &hKey);
+
+    if (openRes == ERROR_SUCCESS) {
+        qDebug() << "Success opening key.";
+    }
+    else {
+        qDebug() << "Error opening key.";
+        showErrorText(openRes);
+    }
+
+    PCTSTR deleteKey = TEXT("notepad.exe");
+    LONG deleteKeyRes = RegDeleteKey(hKey, deleteKey);
+
+    if(deleteKeyRes == ERROR_SUCCESS) {
+        qDebug() << "Delete key success";
+    }
+    else {
+        qDebug() << "Delete key failed";
+        showErrorText(deleteKeyRes);
+    }
+
+    LONG closeOut = RegCloseKey(hKey);
+
+    if(closeOut == ERROR_SUCCESS) {
+        qDebug() << "Success closing key.";
+    }
+    else {
+        qDebug() << "Error closing key.";
+    }
+}
+
 void Notification::setLabelText(QString appName)
 {
     qDebug() << appName;
