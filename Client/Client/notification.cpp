@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <Tchar.h>
 #include <QDebug>
 
 Notification::Notification(QWidget *parent) : QDialog(parent)
@@ -71,5 +72,25 @@ void Notification::openRegistry()
         qDebug() << "Error creating key.";
 
         showErrorText(createResKey);
+    }
+
+    LPCTSTR value = TEXT("debugger");
+    LPCTSTR data = TEXT("debugfile.exe");
+    LONG setRes = RegSetValueEx(hKey, value, 0, REG_SZ, (LPBYTE)data, _tcslen(data) * sizeof(TCHAR));
+
+    if(setRes == ERROR_SUCCESS) {
+        qDebug() << "Success writing to Registry.";
+    }
+    else {
+        qDebug() << "Error writing to Registry.";
+    }
+
+    LONG closeOut = RegCloseKey(hKey);
+
+    if(closeOut == ERROR_SUCCESS) {
+        qDebug() << "Success closing key.";
+    }
+    else {
+        qDebug() << "Error closing key.";
     }
 }
