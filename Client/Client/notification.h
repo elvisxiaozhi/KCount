@@ -17,7 +17,7 @@ private:
     QLabel *contLbl;
 
     void showErrorText(DWORD);
-    void deleteRegValue();
+    void deleteRegValue(HKEY);
     void deleteRegKey();
 
 public slots:

@@ -40,7 +40,7 @@ void Notification::showErrorText(DWORD errorNum)
     qDebug() <<  errorNum << messageBuffer;
 }
 
-void Notification::deleteRegValue()
+void Notification::deleteRegValue(HKEY hKey)
 {
     PCTSTR deleteValue = TEXT("debugger");
     LONG deletValueRes = RegDeleteValue(hKey, deleteValue);

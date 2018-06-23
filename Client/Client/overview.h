@@ -48,6 +48,7 @@ protected:
 signals:
     void loadingData();
     void limitAppAlert(QString);
+    void newDayComes();
 
 private slots:
     void timeout();

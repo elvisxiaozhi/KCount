@@ -147,6 +147,19 @@ void Dashboard::paintEvent(QPaintEvent *event)
     painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Dashboard");
 }
 
+void Dashboard::newDayComes()
+{
+    for(int i = 0; i < 4; ++i) {
+        delete barChartArr[i];
+        delete stackedBarChartArr[i];
+    }
+    for(int i = 0; i < 5; ++i) {
+        delete appUsageChartArr[i];
+        delete pieChartArr[i];
+    }
+    createCharts();
+}
+
 void Dashboard::loadData()
 {
     for(int i = 0; i < 4; i++) {

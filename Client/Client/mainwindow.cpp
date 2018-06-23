@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
     connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
+    connect(overview, &Overview::newDayComes, dashboard, &Dashboard::newDayComes);
 }
 
 MainWindow::~MainWindow()

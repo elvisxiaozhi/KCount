@@ -81,6 +81,7 @@ void Overview::timeout()
     //delete old widgets
     if(QTime::currentTime().toString("h").toInt() == 0) {
         for(int i = 0; i < 5; ++i) {
+            emit newDayComes();
             delete mostUsedArr[i];
             delete totalPressedArr[i];
             delete mostPressedArr[i];

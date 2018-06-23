@@ -43,6 +43,9 @@ protected:
 signals:
     void loadingData();
 
+public slots:
+    void newDayComes();
+
 private slots:
     void loadData();
     void comboBoxChanged(int);
