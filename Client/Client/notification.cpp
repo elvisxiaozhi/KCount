@@ -5,6 +5,9 @@
 #include <QHBoxLayout>
 #include <Tchar.h>
 #include <QDebug>
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
+#include <QFile>
 
 Notification::Notification(QWidget *parent) : QDialog(parent)
 {
@@ -30,6 +33,8 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
     vLayout->addLayout(btnHLayout);
 
     connect(limitBtn, &QPushButton::clicked, this, &Notification::openRegistry);
+
+    writeXml();
 }
 
 void Notification::showErrorText(DWORD errorNum)
@@ -87,6 +92,25 @@ void Notification::deleteRegKey()
     }
     else {
         qDebug() << "Error closing key.";
+    }
+}
+
+void Notification::writeXml()
+{
+    QFile file("C:\\Users\\Theodore\\Desktop\\test.xml");
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    if(file.open(QIODevice::WriteOnly)) {
+        xmlWriter.writeStartDocument();
+        xmlWriter.writeStartElement("LimitedApps");
+//        for(int i = 0; i < dateNamesVec.size(); i++) {
+            xmlWriter.writeStartElement("app");
+            xmlWriter.writeTextElement("name", "myApp");
+            xmlWriter.writeTextElement("isDefaultKey", "True");
+            xmlWriter.writeEndElement();
+//        }
+        xmlWriter.writeEndDocument();
+        file.close();
     }
 }
 
@@ -149,6 +173,11 @@ void Notification::createRegistry(HKEY hKey, LPCTSTR sk)
     else {
         qDebug() << "Error writing to Registry.";
     }
+
+//    if(isDefaultKey(hKey)) {
+
+//    }
+    writeXml();
 }
 
 bool Notification::isDefaultKey(HKEY hKey)

@@ -20,6 +20,7 @@ private:
     void showErrorText(DWORD);
     void deleteRegValue(HKEY);
     void deleteRegKey();
+    void writeXml();
 
 public slots:
     void setLabelText(QString);
