@@ -25,7 +25,8 @@ public slots:
     void setLabelText(QString);
 
 private slots:
-    void createRegistry();
+    void openRegistry();
+    void createRegistry(HKEY, LPCTSTR);
 };
 
 #endif // NOTIFICATION_H

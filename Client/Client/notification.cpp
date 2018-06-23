@@ -29,7 +29,7 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
     vLayout->addWidget(contLbl);
     vLayout->addLayout(btnHLayout);
 
-    connect(limitBtn, &QPushButton::clicked, this, &Notification::createRegistry);
+    connect(limitBtn, &QPushButton::clicked, this, &Notification::openRegistry);
 }
 
 void Notification::showErrorText(DWORD errorNum)
@@ -98,7 +98,7 @@ void Notification::setLabelText(QString appName)
     limitAppName = appName;
 }
 
-void Notification::createRegistry()
+void Notification::openRegistry()
 {
     HKEY hKey;
     LPCTSTR sk = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
@@ -114,6 +114,8 @@ void Notification::createRegistry()
         else {
             qDebug() << "User Created Key";
         }
+
+        createRegistry(hKey, sk);
     }
     else {
         qDebug() << "Error opening key.";
@@ -121,6 +123,18 @@ void Notification::createRegistry()
         showErrorText(openRes);
     }
 
+    LONG closeOut = RegCloseKey(hKey);
+
+    if(closeOut == ERROR_SUCCESS) {
+        qDebug() << "Success closing key.";
+    }
+    else {
+        qDebug() << "Error closing key.";
+    }
+}
+
+void Notification::createRegistry(HKEY hKey, LPCTSTR sk)
+{
     LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, sk, 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);
 
     if (createResKey == ERROR_SUCCESS) {
@@ -141,14 +155,5 @@ void Notification::createRegistry()
     }
     else {
         qDebug() << "Error writing to Registry.";
-    }
-
-    LONG closeOut = RegCloseKey(hKey);
-
-    if(closeOut == ERROR_SUCCESS) {
-        qDebug() << "Success closing key.";
-    }
-    else {
-        qDebug() << "Error closing key.";
     }
 }
