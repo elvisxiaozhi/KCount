@@ -15,6 +15,7 @@ private:
     QPushButton *limitBtn;
     QString contText;
     QLabel *contLbl;
+    QString limitAppName;
 
     void showErrorText(DWORD);
     void deleteRegValue(HKEY);
@@ -24,7 +25,7 @@ public slots:
     void setLabelText(QString);
 
 private slots:
-    void openRegistry();
+    void createRegistry();
 };
 
 #endif // NOTIFICATION_H

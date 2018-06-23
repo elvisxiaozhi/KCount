@@ -29,7 +29,7 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
     vLayout->addWidget(contLbl);
     vLayout->addLayout(btnHLayout);
 
-    openRegistry();
+    connect(limitBtn, &QPushButton::clicked, this, &Notification::createRegistry);
 }
 
 void Notification::showErrorText(DWORD errorNum)
@@ -61,7 +61,7 @@ void Notification::deleteRegKey()
 
     LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sk, 0, KEY_ALL_ACCESS , &hKey);
 
-    if (openRes == ERROR_SUCCESS) {
+    if(openRes == ERROR_SUCCESS) {
         qDebug() << "Success opening key.";
     }
     else {
@@ -95,9 +95,10 @@ void Notification::setLabelText(QString appName)
     qDebug() << appName;
     contText = QString(tr("  %1 has been totally using over 3 hours, take a break. :)")).arg(appName);
     contLbl->setText(contText);
+    limitAppName = appName;
 }
 
-void Notification::openRegistry()
+void Notification::createRegistry()
 {
     HKEY hKey;
     LPCTSTR sk = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
@@ -106,6 +107,13 @@ void Notification::openRegistry()
 
     if (openRes == ERROR_SUCCESS) {
         qDebug() << "Success opening key.";
+
+        if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
+            qDebug() << "Default Key";
+        }
+        else {
+            qDebug() << "User Created Key";
+        }
     }
     else {
         qDebug() << "Error opening key.";
