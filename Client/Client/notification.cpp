@@ -34,7 +34,7 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
 
     connect(limitBtn, &QPushButton::clicked, this, &Notification::openRegistry);
 
-    writeXml();
+//    writeXml();
 }
 
 void Notification::showErrorText(DWORD errorNum)
