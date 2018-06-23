@@ -108,13 +108,6 @@ void Notification::openRegistry()
     if (openRes == ERROR_SUCCESS) {
         qDebug() << "Success opening key.";
 
-        if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
-            qDebug() << "Default Key";
-        }
-        else {
-            qDebug() << "User Created Key";
-        }
-
         createRegistry(hKey, sk);
     }
     else {
@@ -156,4 +149,16 @@ void Notification::createRegistry(HKEY hKey, LPCTSTR sk)
     else {
         qDebug() << "Error writing to Registry.";
     }
+}
+
+bool Notification::isDefaultKey(HKEY hKey)
+{
+    if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
+        qDebug() << "Default Key";
+        return true;
+    }
+    else {
+        qDebug() << "User Created Key";
+    }
+    return false;
 }

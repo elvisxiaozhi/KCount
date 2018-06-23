@@ -27,6 +27,7 @@ public slots:
 private slots:
     void openRegistry();
     void createRegistry(HKEY, LPCTSTR);
+    bool isDefaultKey(HKEY);
 };
 
 #endif // NOTIFICATION_H
