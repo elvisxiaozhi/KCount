@@ -33,9 +33,9 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
     vLayout->addWidget(contLbl);
     vLayout->addLayout(btnHLayout);
 
-    xmlPath = Database::dataPath + "/test.xml";
+    xmlPath = Database::dataPath + "/LimitedApp.xml";
 
-    connect(limitBtn, &QPushButton::clicked, this, &Notification::openRegistry);
+    connect(limitBtn, &QPushButton::clicked, this, &Notification::createRegistry);
 }
 
 void Notification::showErrorText(DWORD errorNum)
@@ -96,20 +96,34 @@ void Notification::deleteRegKey()
     }
 }
 
-void Notification::writeXml()
+void Notification::writeXml(QString appName, bool isDefaultKey)
 {
-    QFile file("C:\\Users\\Theodore\\Desktop\\test.xml");
+    readXml();
+
+    QFile file(xmlPath);
     QXmlStreamWriter xmlWriter(&file);
     xmlWriter.setAutoFormatting(true);
     if(file.open(QIODevice::WriteOnly)) {
         xmlWriter.writeStartDocument();
         xmlWriter.writeStartElement("LimitedApps");
-//        for(int i = 0; i < dateNamesVec.size(); i++) {
+        for(auto mapKey : xmlMap.keys()) {
             xmlWriter.writeStartElement("App");
-            xmlWriter.writeTextElement("Name", "MyApp");
-            xmlWriter.writeTextElement("IsDefaultKey", "True");
+            xmlWriter.writeTextElement("Name", mapKey);
+            xmlWriter.writeTextElement("IsDefaultKey", xmlMap.value(mapKey));
             xmlWriter.writeEndElement();
-//        }
+        }
+
+        xmlWriter.writeStartElement("App");
+        xmlWriter.writeTextElement("Name", appName);
+        if(isDefaultKey) {
+            xmlWriter.writeTextElement("IsDefaultKey", "True");
+        }
+        else {
+            xmlWriter.writeTextElement("IsDefaultKey", "False");
+        }
+
+        xmlWriter.writeEndElement();
+
         xmlWriter.writeEndDocument();
         file.close();
     }
@@ -117,10 +131,13 @@ void Notification::writeXml()
 
 void Notification::readXml()
 {
+    xmlMap.clear();
+
     QXmlStreamReader xmlReader;
-    QFile file("C:\\Users\\Theodore\\Desktop\\test.xml");
+    QFile file(xmlPath);
     file.open(QIODevice::ReadOnly);
     xmlReader.setDevice(&file);
+    QString appName, isDefaultKey;
     while(!xmlReader.atEnd()) {
         QXmlStreamReader::TokenType token = xmlReader.readNext();
         if(token == QXmlStreamReader::StartElement) {
@@ -128,10 +145,11 @@ void Notification::readXml()
                 continue;
             }
             if(xmlReader.name() == "Name") {
-                qDebug() << xmlReader.readElementText();
+                appName = xmlReader.readElementText();
             }
             if(xmlReader.name() == "IsDefaultKey") {
-                qDebug() << xmlReader.readElementText();
+                isDefaultKey = xmlReader.readElementText();
+                xmlMap.insert(appName, isDefaultKey); //insert here, or map will be inserted empty QString
             }
         }
     }
@@ -140,42 +158,16 @@ void Notification::readXml()
 
 void Notification::setLabelText(QString appName)
 {
-    qDebug() << appName;
     contText = QString(tr("  %1 has been totally using over 3 hours, take a break. :)")).arg(appName);
     contLbl->setText(contText);
     limitAppName = appName;
 }
 
-void Notification::openRegistry()
+void Notification::createRegistry()
 {
     HKEY hKey;
     LPCTSTR sk = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
 
-    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sk, 0, KEY_ALL_ACCESS , &hKey);
-
-    if (openRes == ERROR_SUCCESS) {
-        qDebug() << "Success opening key.";
-
-        createRegistry(hKey, sk);
-    }
-    else {
-        qDebug() << "Error opening key.";
-
-        showErrorText(openRes);
-    }
-
-    LONG closeOut = RegCloseKey(hKey);
-
-    if(closeOut == ERROR_SUCCESS) {
-        qDebug() << "Success closing key.";
-    }
-    else {
-        qDebug() << "Error closing key.";
-    }
-}
-
-void Notification::createRegistry(HKEY hKey, LPCTSTR sk)
-{
     LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, sk, 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);
 
     if (createResKey == ERROR_SUCCESS) {
@@ -198,10 +190,25 @@ void Notification::createRegistry(HKEY hKey, LPCTSTR sk)
         qDebug() << "Error writing to Registry.";
     }
 
-//    if(isDefaultKey(hKey)) {
+    if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
+        qDebug() << "Default Key";
+    }
+    else {
+        qDebug() << "User Created Key";
+    }
 
-//    }
-    writeXml();
+    //writeXml needs to be there, or the registry can not be closed
+    QStringList regList = QString::fromUtf16((ushort*)sk).split("\\");
+    writeXml(regList[regList.size() - 1], isDefaultKey(hKey));
+
+    LONG closeOut = RegCloseKey(hKey);
+
+    if(closeOut == ERROR_SUCCESS) {
+        qDebug() << "Success closing key.";
+    }
+    else {
+        qDebug() << "Error closing key.";
+    }
 }
 
 bool Notification::isDefaultKey(HKEY hKey)

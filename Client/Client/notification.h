@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QPushButton>
 #include <QLabel>
+#include <QMap>
 #include <windows.h>
 
 class Notification : public QDialog
@@ -16,19 +17,19 @@ private:
     QString contText;
     QLabel *contLbl;
     QString limitAppName, xmlPath;
+    QMap<QString, QString> xmlMap;
 
     void showErrorText(DWORD);
     void deleteRegValue(HKEY);
     void deleteRegKey();
-    void writeXml();
+    void writeXml(QString, bool);
     void readXml();
 
 public slots:
     void setLabelText(QString);
 
 private slots:
-    void openRegistry();
-    void createRegistry(HKEY, LPCTSTR);
+    void createRegistry();
     bool isDefaultKey(HKEY);
 };
 
