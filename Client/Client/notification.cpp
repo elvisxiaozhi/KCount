@@ -190,16 +190,9 @@ void Notification::createRegistry()
         qDebug() << "Error writing to Registry.";
     }
 
-    if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
-        qDebug() << "Default Key";
-    }
-    else {
-        qDebug() << "User Created Key";
-    }
-
     //writeXml needs to be there, or the registry can not be closed
     QStringList regList = QString::fromUtf16((ushort*)sk).split("\\");
-    writeXml(regList[regList.size() - 1], isDefaultKey(hKey));
+    writeXml(regList[regList.size() - 1], isDefaultKey(hKey, sk));
 
     LONG closeOut = RegCloseKey(hKey);
 
@@ -211,14 +204,23 @@ void Notification::createRegistry()
     }
 }
 
-bool Notification::isDefaultKey(HKEY hKey)
+bool Notification::isDefaultKey(HKEY hKey, LPCTSTR sk)
 {
-    if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
-        qDebug() << "Default Key";
-        return true;
+    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sk, 0, KEY_ALL_ACCESS , &hKey);
+    if (openRes == ERROR_SUCCESS) {
+        qDebug() << "Success opening key.";
+
+        if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
+            qDebug() << "Default Key";
+            return true;
+        }
+        else {
+            qDebug() << "User Created Key";
+        }
     }
     else {
-        qDebug() << "User Created Key";
+        qDebug() << "Error opening key.";
     }
+
     return false;
 }
