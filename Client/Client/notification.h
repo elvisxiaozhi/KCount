@@ -15,12 +15,13 @@ private:
     QPushButton *limitBtn;
     QString contText;
     QLabel *contLbl;
-    QString limitAppName;
+    QString limitAppName, xmlPath;
 
     void showErrorText(DWORD);
     void deleteRegValue(HKEY);
     void deleteRegKey();
     void writeXml();
+    void readXml();
 
 public slots:
     void setLabelText(QString);

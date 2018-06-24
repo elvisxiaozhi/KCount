@@ -8,6 +8,7 @@
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QFile>
+#include "database.h"
 
 Notification::Notification(QWidget *parent) : QDialog(parent)
 {
@@ -32,9 +33,9 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
     vLayout->addWidget(contLbl);
     vLayout->addLayout(btnHLayout);
 
-    connect(limitBtn, &QPushButton::clicked, this, &Notification::openRegistry);
+    xmlPath = Database::dataPath + "/test.xml";
 
-//    writeXml();
+    connect(limitBtn, &QPushButton::clicked, this, &Notification::openRegistry);
 }
 
 void Notification::showErrorText(DWORD errorNum)
@@ -104,14 +105,37 @@ void Notification::writeXml()
         xmlWriter.writeStartDocument();
         xmlWriter.writeStartElement("LimitedApps");
 //        for(int i = 0; i < dateNamesVec.size(); i++) {
-            xmlWriter.writeStartElement("app");
-            xmlWriter.writeTextElement("name", "myApp");
-            xmlWriter.writeTextElement("isDefaultKey", "True");
+            xmlWriter.writeStartElement("App");
+            xmlWriter.writeTextElement("Name", "MyApp");
+            xmlWriter.writeTextElement("IsDefaultKey", "True");
             xmlWriter.writeEndElement();
 //        }
         xmlWriter.writeEndDocument();
         file.close();
     }
+}
+
+void Notification::readXml()
+{
+    QXmlStreamReader xmlReader;
+    QFile file("C:\\Users\\Theodore\\Desktop\\test.xml");
+    file.open(QIODevice::ReadOnly);
+    xmlReader.setDevice(&file);
+    while(!xmlReader.atEnd()) {
+        QXmlStreamReader::TokenType token = xmlReader.readNext();
+        if(token == QXmlStreamReader::StartElement) {
+            if(xmlReader.name() == "App") {
+                continue;
+            }
+            if(xmlReader.name() == "Name") {
+                qDebug() << xmlReader.readElementText();
+            }
+            if(xmlReader.name() == "IsDefaultKey") {
+                qDebug() << xmlReader.readElementText();
+            }
+        }
+    }
+    file.close();
 }
 
 void Notification::setLabelText(QString appName)

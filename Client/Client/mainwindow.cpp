@@ -75,7 +75,9 @@ void MainWindow::createContentWindow()
     contVLayout->addWidget(users);
     contVLayout->addWidget(settings);
 
-    connect(overview, &Overview::limitAppAlert, [this](QString appName){ notification.setLabelText(appName); notification.show(); });
+    notification = new Notification(this); //notification needs to be created after database
+
+    connect(overview, &Overview::limitAppAlert, [this](QString appName){ notification->setLabelText(appName); notification->show(); });
 }
 
 void MainWindow::createSystemTrayIcon()

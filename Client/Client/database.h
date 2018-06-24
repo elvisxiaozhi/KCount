@@ -19,12 +19,12 @@ public:
     static void updateLeftClickToDB(const int &, const int &);
     static QMap<int, unsigned long int> returnBarChartData(int readMode = 1);
     static QMap<int, std::pair<int, int> > returnStackedBarChartData(int readMode = 1);
+    static QString dataPath;
 
 private:
     static QSqlDatabase database;
     static QString currentDate;
     static int currentHour;
-    QString dataPath;
     QString databaseLoc;
 
     static bool isQueryFound(QSqlQuery); 

@@ -85,7 +85,7 @@ HEADERS += \
 RESOURCES += \
     ../Resources/resources.qrc
 
-##load the rc file
-#win32 {
-#    RC_FILE = AdminPriv.rc
-#}
+#load the rc file
+win32 {
+    RC_FILE = AdminPriv.rc
+}

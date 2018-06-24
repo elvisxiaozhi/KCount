@@ -11,6 +11,7 @@
 QSqlDatabase Database::database;
 QString Database::currentDate = QDate::currentDate().toString("MM/dd/yy");
 int Database::currentHour = QTime::currentTime().toString("h").toInt();
+QString Database::dataPath = "";
 
 Database::Database(QObject *parent) : QObject(parent)
 {
