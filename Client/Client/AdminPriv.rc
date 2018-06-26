@@ -1,3 +1,4 @@
 #include <windows.h>
 
 CREATEPROCESS_MANIFEST_RESOURCE_ID	RT_MANIFEST	"AdminPriv.exe.manifest"
+IDI_ICON1 ICON DISCARDABLE "letter-n.ico"

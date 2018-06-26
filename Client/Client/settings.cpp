@@ -9,6 +9,7 @@ QSettings Settings::startOnBootSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {
     setWindowStyleSheet();
+    setWindowLayout();
 }
 
 void Settings::setWindowStyleSheet()
@@ -16,6 +17,29 @@ void Settings::setWindowStyleSheet()
     setStyleSheet(
                 "QWidget { background-color: #eeeeee; }"
                 );
+}
+
+void Settings::setWindowLayout()
+{
+    mainVLayout = new QVBoxLayout(this);
+
+    scrollArea = new QScrollArea(this);
+    scrollArea->setBackgroundRole(QPalette::Window);
+    scrollArea->setFrameShadow(QFrame::Plain);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setFixedSize(1000, 450);
+
+    scrollWidget = new QWidget(this);
+
+    scrollVLayout = new QVBoxLayout;
+
+    scrollWidget->setLayout(scrollVLayout);
+
+    mainVLayout->addWidget(scrollArea);
+    this->setLayout(mainVLayout);
+
+    scrollArea->setWidget(scrollWidget);  //needs to be in the last
 }
 
 void Settings::paintEvent(QPaintEvent *event)

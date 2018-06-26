@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QSettings>
+#include <QScrollArea>
+#include <QVBoxLayout>
 
 class Settings : public QWidget
 {
@@ -12,7 +14,12 @@ public:
     static QSettings startOnBootSettings;
 
 private:
+    QVBoxLayout *mainVLayout, *scrollVLayout;
+    QScrollArea *scrollArea;
+    QWidget *scrollWidget;
+
     void setWindowStyleSheet();
+    void setWindowLayout();
 
 protected:
     void paintEvent(QPaintEvent *);

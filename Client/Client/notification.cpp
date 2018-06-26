@@ -36,6 +36,7 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
     xmlPath = Database::dataPath + "/LimitedApp.xml";
 
     connect(limitBtn, &QPushButton::clicked, this, &Notification::createRegistry);
+    connect(limitBtn, &QPushButton::clicked, [this](){ this->close(); });
 }
 
 void Notification::showErrorText(DWORD errorNum)
@@ -170,7 +171,9 @@ void Notification::setLabelText(QString appName)
 
 void Notification::createRegistry()
 {
-    QString subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe";
+//    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1.exe").arg(limitAppName);
+
+    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
 
     HKEY hKey;
 
