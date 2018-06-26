@@ -176,7 +176,7 @@ bool MostUsed::hasAppReachedLimit()
     std::sort(mostUsedVec.begin(), mostUsedVec.end(),
               [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
 
-    if(mostUsedVec[0].second >= 1500) {//10800
+    if(mostUsedVec[0].second >= 10800) {//10800
         if(std::find(alertedApp.begin(), alertedApp.end(), mostUsedVec[0].first) != alertedApp.end()) {
             return false;
         }

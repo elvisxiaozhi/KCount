@@ -10,12 +10,16 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
 {
     setWindowStyleSheet();
     setWindowLayout();
+    createLimitsLayout();
 }
 
 void Settings::setWindowStyleSheet()
 {
     setStyleSheet(
                 "QWidget { background-color: #eeeeee; }"
+                ".QToolButton { background-color: #3498DB; font-size: 15px; color: white; border-radius: 2px; border: 2px solid #FF5A5F; padding: 3px 5px; margin: 5px 2px; }"
+                ".QToolButton:hover { background-color: #BB8FCE; font-size: 17px; }"
+                ".QToolButton:pressed { background-color: #EC7063 }"
                 );
 }
 
@@ -40,6 +44,28 @@ void Settings::setWindowLayout()
     this->setLayout(mainVLayout);
 
     scrollArea->setWidget(scrollWidget);  //needs to be in the last
+}
+
+void Settings::createLimitsLayout()
+{
+    limitsBtn = new QToolButton(scrollWidget);
+    limitsBtn->setMinimumSize(970, 10);
+    limitsBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
+    limitsBtn->setText("App Limits");
+    limitsBtn->setLayoutDirection(Qt::RightToLeft);
+    limitsBtn->setCheckable(true);
+
+    scrollVLayout->addWidget(limitsBtn);
+
+    connect(limitsBtn, &QToolButton::clicked, [this](bool checked) {
+        if(checked) {
+            limitsBtn->setIcon(QIcon(":/Resources/Icons/up-arrow.png"));
+        }
+        else {
+            limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
+        }
+    });
 }
 
 void Settings::paintEvent(QPaintEvent *event)

@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QScrollArea>
 #include <QVBoxLayout>
+#include <QToolButton>
 
 class Settings : public QWidget
 {
@@ -17,9 +18,12 @@ private:
     QVBoxLayout *mainVLayout, *scrollVLayout;
     QScrollArea *scrollArea;
     QWidget *scrollWidget;
+    QVBoxLayout *limitsHLayout;
+    QToolButton *limitsBtn;
 
     void setWindowStyleSheet();
     void setWindowLayout();
+    void createLimitsLayout();
 
 protected:
     void paintEvent(QPaintEvent *);
