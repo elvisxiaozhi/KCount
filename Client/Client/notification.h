@@ -24,6 +24,7 @@ private:
     void deleteRegKey();
     void writeXml(QString, bool);
     void readXml();
+    inline const WCHAR *QStoWCHAR(const QString &);
 
 public slots:
     void setLabelText(QString);

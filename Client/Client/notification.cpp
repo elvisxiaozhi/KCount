@@ -156,6 +156,11 @@ void Notification::readXml()
     file.close();
 }
 
+const WCHAR *Notification::QStoWCHAR(const QString &qs)
+{
+    return (const WCHAR *)qs.utf16();
+}
+
 void Notification::setLabelText(QString appName)
 {
     contText = QString(tr("  %1 has been totally using over 3 hours, take a break. :)")).arg(appName);
@@ -165,10 +170,11 @@ void Notification::setLabelText(QString appName)
 
 void Notification::createRegistry()
 {
-    HKEY hKey;
-    LPCTSTR sk = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
+    QString subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe";
 
-    LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, sk, 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);
+    HKEY hKey;
+
+    LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);
 
     if (createResKey == ERROR_SUCCESS) {
         qDebug() << "Success creating key.";
@@ -191,8 +197,8 @@ void Notification::createRegistry()
     }
 
     //writeXml needs to be there, or the registry can not be closed
-    QStringList regList = QString::fromUtf16((ushort*)sk).split("\\");
-    writeXml(regList[regList.size() - 1], isDefaultKey(hKey, sk));
+    QStringList regList = subKey.split("\\");
+    writeXml(regList[regList.size() - 1], isDefaultKey(hKey, QStoWCHAR(subKey)));
 
     LONG closeOut = RegCloseKey(hKey);
 
@@ -207,7 +213,7 @@ void Notification::createRegistry()
 bool Notification::isDefaultKey(HKEY hKey, LPCTSTR sk)
 {
     LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sk, 0, KEY_ALL_ACCESS , &hKey);
-    if (openRes == ERROR_SUCCESS) {
+    if (openRes == ERROR_SUCCESS) { //must open first
         qDebug() << "Success opening key.";
 
         if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {

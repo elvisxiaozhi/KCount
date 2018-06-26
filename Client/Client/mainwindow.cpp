@@ -18,12 +18,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
     connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
     connect(overview, &Overview::newDayComes, dashboard, &Dashboard::newDayComes);
+    connect(overview, &Overview::limitAppAlert, [this](QString appName){ notification->setLabelText(appName); notification->show(); });
 }
 
 MainWindow::~MainWindow()
 {
     dbThread.quit();
     dbThread.wait();
+    delete notification;
+//    delete database; //this line will cause the program to quit unsuccessfully
 }
 
 void MainWindow::createDBThread()
@@ -75,9 +78,9 @@ void MainWindow::createContentWindow()
     contVLayout->addWidget(users);
     contVLayout->addWidget(settings);
 
-    notification = new Notification(this); //notification needs to be created after database
-
-    connect(overview, &Overview::limitAppAlert, [this](QString appName){ notification->setLabelText(appName); notification->show(); });
+    //notification needs to be created after database
+    //also note do not set parent for notification
+    notification = new Notification();
 }
 
 void MainWindow::createSystemTrayIcon()
