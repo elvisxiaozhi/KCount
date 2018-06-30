@@ -6,6 +6,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QToolButton>
+#include <QTabWidget>
 
 class Settings : public QWidget
 {
@@ -20,6 +21,7 @@ private:
     QWidget *scrollWidget;
     QVBoxLayout *limitsHLayout;
     QToolButton *limitsBtn;
+    QTabWidget *tabWidget;
 
     void setWindowStyleSheet();
     void setWindowLayout();

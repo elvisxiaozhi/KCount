@@ -40,6 +40,9 @@ void Settings::setWindowLayout()
 
     scrollWidget->setLayout(scrollVLayout);
 
+    tabWidget = new QTabWidget(scrollWidget);
+    tabWidget->hide();
+
     mainVLayout->addWidget(scrollArea);
     this->setLayout(mainVLayout);
 
@@ -57,13 +60,16 @@ void Settings::createLimitsLayout()
     limitsBtn->setCheckable(true);
 
     scrollVLayout->addWidget(limitsBtn);
+    scrollVLayout->addWidget(tabWidget); //tab widget needs to be added under the limitsBtn
 
     connect(limitsBtn, &QToolButton::clicked, [this](bool checked) {
         if(checked) {
             limitsBtn->setIcon(QIcon(":/Resources/Icons/up-arrow.png"));
+            tabWidget->show();
         }
         else {
             limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
+            tabWidget->hide();
         }
     });
 }
