@@ -3,6 +3,10 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QDebug>
+#include <QLabel>
+#include <QXmlStreamReader>
+#include <QFile>
+#include "database.h"
 
 QSettings Settings::startOnBootSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 
@@ -23,6 +27,9 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
             limitsWidget->hide();
         }
     });
+
+    readXml();
+    qDebug() << limitedAppVec;
 }
 
 void Settings::setWindowStyleSheet()
@@ -32,7 +39,7 @@ void Settings::setWindowStyleSheet()
                 ".QToolButton { background-color: #3498DB; font-size: 15px; color: white; border-radius: 2px; border: 2px solid #FF5A5F; padding: 3px 5px; margin: 5px 2px; }"
                 ".QToolButton:hover { background-color: #BB8FCE; font-size: 17px; }"
                 ".QToolButton:pressed { background-color: #EC7063 }"
-                "QWidget#LimitsWidget { background-color: white; }"
+                "QWidget#LimitsWidget, #Tab { background-color: white; }"
                 "QTabBar::tab { background-color: #E8F8F5; margin-right: 5px; min-width: 50px; padding: 10px 20px; }"
                 "QTabBar::tab:selected { background: #007ACC; color: #fff; border-top: 2px solid #F1C40F; border-left: 2px solid #F1C40F; border-right: 2px solid #F1C40F; }"
                 "QTabBar::tab:hover { font: bold; background-color: #BB8FCE; }"
@@ -90,7 +97,9 @@ void Settings::createLimitsWidget()
     tabWidget = new QTabWidget(limitsWidget);
 
     limitedTab = new QWidget(tabWidget);
+    limitedTab->setObjectName("Tab");
     allowedTab = new QWidget(tabWidget);
+    allowedTab->setObjectName("Tab");
 
     tabWidget->addTab(limitedTab, "Limited");
     tabWidget->addTab(allowedTab, "Allowed");
@@ -98,6 +107,41 @@ void Settings::createLimitsWidget()
     limitsVLayout->addWidget(tabWidget);
     limitsWidget->setLayout(limitsVLayout);
     scrollVLayout->addWidget(limitsWidget);
+
+    createLimitsTabConts();
+}
+
+void Settings::createLimitsTabConts()
+{
+    limitsTabVLayout = new QVBoxLayout(limitedTab);
+
+    QLabel *limitsLbl = new QLabel(limitedTab);
+    limitsLbl->setText(tr("Limited apps down below will be cleared in the next day"));
+    limitsLbl->setAlignment(Qt::AlignCenter);
+    limitsLbl->setStyleSheet("QLabel { background-color: white; }");
+
+    limitsTabVLayout->addWidget(limitsLbl);
+}
+
+void Settings::readXml()
+{
+    limitedAppVec.clear();
+
+    QXmlStreamReader xmlReader;
+    QFile file(Database::dataPath + "/LimitedApp.xml");
+    file.open(QIODevice::ReadOnly);
+    xmlReader.setDevice(&file);
+    QString appName;
+    while(!xmlReader.atEnd()) {
+        QXmlStreamReader::TokenType token = xmlReader.readNext();
+        if(token == QXmlStreamReader::StartElement) {
+            if(xmlReader.name() == "Name") {
+                appName = xmlReader.readElementText();
+                limitedAppVec.push_back(appName);
+            }
+        }
+    }
+    file.close();
 }
 
 void Settings::paintEvent(QPaintEvent *event)

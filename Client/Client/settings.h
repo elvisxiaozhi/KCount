@@ -22,14 +22,17 @@ private:
     QVBoxLayout *limitsHLayout;
     QToolButton *limitsBtn;
     QWidget *limitsWidget;
-    QVBoxLayout *limitsVLayout;
+    QVBoxLayout *limitsVLayout, *limitsTabVLayout;
     QTabWidget *tabWidget;
     QWidget *limitedTab, *allowedTab;
+    QVector<QString> limitedAppVec;
 
     void setWindowStyleSheet();
     void setWindowLayout();
     void createLimitsLayout();
     void createLimitsWidget();
+    void createLimitsTabConts();
+    void readXml();
 
 protected:
     void paintEvent(QPaintEvent *);
