@@ -7,6 +7,7 @@
 #include <QXmlStreamReader>
 #include <QFile>
 #include "database.h"
+#include <QHBoxLayout>
 
 QSettings Settings::startOnBootSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 
@@ -21,15 +22,21 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
         if(checked) {
             limitsBtn->setIcon(QIcon(":/Resources/Icons/up-arrow.png"));
             limitsWidget->show();
+            updateLimitsWidget();
         }
         else {
             limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
             limitsWidget->hide();
+            delete limitedListVLayout;
+            for(int i = 0; i < lineEditVec.size(); ++i) {
+                delete lineEditVec[i];
+                delete deleteBtnVec[i];
+            }
+            lineEditVec.clear();
+            deleteBtnVec.clear();
+            delete limitsAddHLayout;
         }
     });
-
-    readXml();
-    qDebug() << limitedAppVec;
 }
 
 void Settings::setWindowStyleSheet()
@@ -118,6 +125,7 @@ void Settings::createLimitsTabConts()
     QLabel *limitsLbl = new QLabel(limitedTab);
     limitsLbl->setText(tr("Limited apps down below will be cleared in the next day"));
     limitsLbl->setAlignment(Qt::AlignCenter);
+    limitsLbl->setFixedHeight(30);
     limitsLbl->setStyleSheet("QLabel { background-color: white; }");
 
     limitsTabVLayout->addWidget(limitsLbl);
@@ -156,4 +164,41 @@ void Settings::paintEvent(QPaintEvent *event)
     painter.setPen(QColor(255,115,115));
     painter.setFont(QFont("Futura", 20));
     painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Settings");
+}
+
+void Settings::updateLimitsWidget()
+{
+    limitedListVLayout = new QVBoxLayout();
+    limitsTabVLayout->addLayout(limitedListVLayout);
+
+    readXml();
+
+    for(int i = 0; i < limitedAppVec.size(); ++i) {
+        QHBoxLayout *hLayout = new QHBoxLayout();
+
+        QLineEdit *lineEdit = new QLineEdit(limitsWidget);
+        lineEdit->setText(limitedAppVec[i]);
+        lineEdit->setStyleSheet("QLineEdit { background-color: white; }");
+        lineEditVec.push_back(lineEdit);
+
+        QPushButton *btn = new QPushButton(limitsWidget);
+        btn->setText("Delete");
+        deleteBtnVec.push_back(btn);
+
+        hLayout->addWidget(lineEdit);
+        hLayout->addWidget(btn);
+
+        limitedListVLayout->addLayout(hLayout);
+    }
+
+    limitedListVLayout->addStretch();
+
+    limitsAddHLayout = new QHBoxLayout;
+
+    QPushButton *limitedAddBtn = new QPushButton(limitsWidget);
+    limitedAddBtn->setText("Add");
+
+    limitsAddHLayout->addWidget(limitedAddBtn);
+    limitsAddHLayout->addStretch();
+    limitedListVLayout->addLayout(limitsAddHLayout);
 }

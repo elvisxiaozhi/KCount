@@ -7,6 +7,8 @@
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QTabWidget>
+#include <QLineEdit>
+#include <QPushButton>
 
 class Settings : public QWidget
 {
@@ -22,10 +24,13 @@ private:
     QVBoxLayout *limitsHLayout;
     QToolButton *limitsBtn;
     QWidget *limitsWidget;
-    QVBoxLayout *limitsVLayout, *limitsTabVLayout;
+    QVBoxLayout *limitsVLayout, *limitsTabVLayout, *limitedListVLayout;
     QTabWidget *tabWidget;
     QWidget *limitedTab, *allowedTab;
     QVector<QString> limitedAppVec;
+    QVector<QLineEdit *> lineEditVec;
+    QVector<QPushButton *> deleteBtnVec;
+    QHBoxLayout *limitsAddHLayout;
 
     void setWindowStyleSheet();
     void setWindowLayout();
@@ -36,6 +41,9 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *);
+
+private slots:
+    void updateLimitsWidget();
 };
 
 #endif // SETTINGS_H
