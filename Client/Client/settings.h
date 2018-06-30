@@ -21,18 +21,18 @@ private:
     QWidget *scrollWidget;
     QVBoxLayout *limitsHLayout;
     QToolButton *limitsBtn;
+    QWidget *limitsWidget;
+    QVBoxLayout *limitsVLayout;
     QTabWidget *tabWidget;
+    QWidget *limitedTab, *allowedTab;
 
     void setWindowStyleSheet();
     void setWindowLayout();
     void createLimitsLayout();
+    void createLimitsWidget();
 
 protected:
     void paintEvent(QPaintEvent *);
-
-signals:
-
-public slots:
 };
 
 #endif // SETTINGS_H

@@ -11,6 +11,18 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     setWindowStyleSheet();
     setWindowLayout();
     createLimitsLayout();
+    createLimitsWidget();
+
+    connect(limitsBtn, &QToolButton::clicked, [this](bool checked) {
+        if(checked) {
+            limitsBtn->setIcon(QIcon(":/Resources/Icons/up-arrow.png"));
+            limitsWidget->show();
+        }
+        else {
+            limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
+            limitsWidget->hide();
+        }
+    });
 }
 
 void Settings::setWindowStyleSheet()
@@ -20,6 +32,12 @@ void Settings::setWindowStyleSheet()
                 ".QToolButton { background-color: #3498DB; font-size: 15px; color: white; border-radius: 2px; border: 2px solid #FF5A5F; padding: 3px 5px; margin: 5px 2px; }"
                 ".QToolButton:hover { background-color: #BB8FCE; font-size: 17px; }"
                 ".QToolButton:pressed { background-color: #EC7063 }"
+                "QWidget#LimitsWidget { background-color: white; }"
+                "QTabBar::tab { background-color: #E8F8F5; margin-right: 5px; min-width: 50px; padding: 10px 20px; }"
+                "QTabBar::tab:selected { background: #007ACC; color: #fff; border-top: 2px solid #F1C40F; border-left: 2px solid #F1C40F; border-right: 2px solid #F1C40F; }"
+                "QTabBar::tab:hover { font: bold; background-color: #BB8FCE; }"
+                "QTabBar::tab:pressed { background-color: #EC7063 }"
+                "QTabWidget::pane { border: 2px solid #FF5A5F; }"
                 );
 }
 
@@ -37,11 +55,10 @@ void Settings::setWindowLayout()
     scrollWidget = new QWidget(this);
 
     scrollVLayout = new QVBoxLayout;
+    scrollVLayout->setSpacing(0);
+    scrollVLayout->setContentsMargins(30, 0, 0, 0);
 
     scrollWidget->setLayout(scrollVLayout);
-
-    tabWidget = new QTabWidget(scrollWidget);
-    tabWidget->hide();
 
     mainVLayout->addWidget(scrollArea);
     this->setLayout(mainVLayout);
@@ -60,18 +77,27 @@ void Settings::createLimitsLayout()
     limitsBtn->setCheckable(true);
 
     scrollVLayout->addWidget(limitsBtn);
-    scrollVLayout->addWidget(tabWidget); //tab widget needs to be added under the limitsBtn
+}
 
-    connect(limitsBtn, &QToolButton::clicked, [this](bool checked) {
-        if(checked) {
-            limitsBtn->setIcon(QIcon(":/Resources/Icons/up-arrow.png"));
-            tabWidget->show();
-        }
-        else {
-            limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
-            tabWidget->hide();
-        }
-    });
+void Settings::createLimitsWidget()
+{
+    limitsWidget = new QWidget(scrollWidget);
+    limitsWidget->setObjectName("LimitsWidget");
+    limitsWidget->hide();
+
+    limitsVLayout = new QVBoxLayout(limitsWidget);
+
+    tabWidget = new QTabWidget(limitsWidget);
+
+    limitedTab = new QWidget(tabWidget);
+    allowedTab = new QWidget(tabWidget);
+
+    tabWidget->addTab(limitedTab, "Limited");
+    tabWidget->addTab(allowedTab, "Allowed");
+
+    limitsVLayout->addWidget(tabWidget);
+    limitsWidget->setLayout(limitsVLayout);
+    scrollVLayout->addWidget(limitsWidget);
 }
 
 void Settings::paintEvent(QPaintEvent *event)
