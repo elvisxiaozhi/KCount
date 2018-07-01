@@ -33,6 +33,9 @@ void Settings::setWindowStyleSheet()
                 "QTabBar::tab:hover { font: bold; background-color: #BB8FCE; }"
                 "QTabBar::tab:pressed { background-color: #EC7063 }"
                 "QTabWidget::pane { border: 2px solid #FF5A5F; }"
+                "QPushButton#LimitsBottomBtn { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 6px 10px; margin: 5px 2px;}"
+                "QPushButton#LimitsBottomBtn:hover { border: 2px solid #111111; }"
+                "QPushButton#LimitsBottomBtn:pressed { background-color: #EC7063 }"
                 );
 }
 
@@ -109,7 +112,48 @@ void Settings::createLimitsTabConts()
     limitsLbl->setFixedHeight(30);
     limitsLbl->setStyleSheet("QLabel { background-color: white; }");
 
+    listsVLayout = new QVBoxLayout();
+
+    limitsBottomVLayout = new QVBoxLayout();
+
     limitsTabVLayout->addWidget(limitsLbl);
+    limitsTabVLayout->addLayout(listsVLayout);
+
+    createLimitsBottomWidget(); //create limits tab bottom buttons
+}
+
+void Settings::createLimitsBottomWidget()
+{
+    QHBoxLayout *limitsAddHLayout = new QHBoxLayout();
+
+    limitedAddBtn = new QPushButton(limitsWidget);
+    limitedAddBtn->setText("Add");
+    limitedAddBtn->setObjectName("LimitsBottomBtn");
+
+    okBtn = new QPushButton(limitsWidget);
+    okBtn->setText("OK");
+    okBtn->hide();
+    okBtn->setObjectName("LimitsBottomBtn");
+
+    cancelBtn = new QPushButton(limitsWidget);
+    cancelBtn->setText("Cancel");
+    cancelBtn->hide();
+    cancelBtn->setObjectName("LimitsBottomBtn");
+
+    QSpacerItem *leftItem = new QSpacerItem(10, 1, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    limitsAddHLayout->addSpacerItem(leftItem);
+    limitsAddHLayout->addWidget(limitedAddBtn);
+    limitsAddHLayout->addStretch();
+    limitsAddHLayout->addWidget(okBtn);
+    limitsAddHLayout->addWidget(cancelBtn);
+    limitsBottomVLayout->addLayout(limitsAddHLayout);
+
+    limitsTabVLayout->addStretch();
+    limitsTabVLayout->addLayout(limitsBottomVLayout);
+
+    connect(limitedAddBtn, &QPushButton::clicked, this, &Settings::limitedAddBtnClicked);
+    connect(okBtn, &QPushButton::clicked, [this](){ okBtn->hide(); cancelBtn->hide(); limitedAddBtn->show(); });
+    connect(cancelBtn, &QPushButton::clicked, [this](){ okBtn->hide(); cancelBtn->hide(); limitedAddBtn->show(); });
 }
 
 void Settings::paintEvent(QPaintEvent *event)
@@ -128,22 +172,26 @@ void Settings::paintEvent(QPaintEvent *event)
 
 void Settings::updateLimitsWidget()
 {
-    limitedListVLayout = new QVBoxLayout();
-    limitsTabVLayout->addLayout(limitedListVLayout);
+    limitedListWidget = new QWidget(limitedTab);
+    limitedListWidget->setObjectName("LimitsWidget");
+    listsVLayout->addWidget(limitedListWidget);
+
+    QVBoxLayout *limitedListVLayout = new QVBoxLayout();
+    limitedListWidget->setLayout(limitedListVLayout);
 
     Notification::readXml();
 
     for(auto mapKey : Notification::xmlMap.keys()) {
         QHBoxLayout *hLayout = new QHBoxLayout();
 
-        QLineEdit *lineEdit = new QLineEdit(limitsWidget);
+        QLineEdit *lineEdit = new QLineEdit(limitedListWidget);
         lineEdit->setText(mapKey);
         lineEdit->setFixedHeight(25);
         lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
                                 "QLineEdit:focus { border: 2px solid #FF5A5F; }");
         lineEditVec.push_back(lineEdit);
 
-        QPushButton *btn = new QPushButton(limitsWidget);
+        QPushButton *btn = new QPushButton(limitedListWidget);
         btn->setText("Delete");
         btn->setObjectName(QString::number(std::distance(Notification::xmlMap.begin(), Notification::xmlMap.find(mapKey))));
         btn->setStyleSheet("QPushButton { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 5px 5px; margin: 5px 2px;}"
@@ -158,20 +206,7 @@ void Settings::updateLimitsWidget()
 
         connect(btn, &QPushButton::clicked, [this, btn](){ emit delBtnClicked(btn->objectName().toInt()); });
     }
-
     limitedListVLayout->addStretch();
-
-    limitsAddHLayout = new QHBoxLayout;
-
-    QPushButton *limitedAddBtn = new QPushButton(limitsWidget);
-    limitedAddBtn->setText("Add");
-    limitedAddBtn->setStyleSheet("QPushButton { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 6px 10px; margin: 5px 2px;}"
-                                 ".QPushButton:hover { border: 2px solid #111111; }"
-                                 ".QPushButton:pressed { background-color: #EC7063 }");
-
-    limitsAddHLayout->addWidget(limitedAddBtn);
-    limitsAddHLayout->addStretch();
-    limitedListVLayout->addLayout(limitsAddHLayout);
 }
 
 void Settings::limitsBtnClicked(bool checked)
@@ -184,11 +219,7 @@ void Settings::limitsBtnClicked(bool checked)
     else {
         limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
         limitsWidget->hide();
-        delete limitedListVLayout; //delete the parent, the children will be deleted as well
-        for(int i = 0; i < lineEditVec.size(); ++i) {
-            delete lineEditVec[i];
-            delete deleteBtnVec[i];
-        }
+        delete limitedListWidget; //delete the parent, the children will be deleted as well
         lineEditVec.clear();
         deleteBtnVec.clear();
     }
@@ -206,13 +237,16 @@ void Settings::deleteBtnClicked(int index)
 
     Notification::writeXml();
 
-    delete limitedListVLayout; //delete the parent, the children will be deleted as well
-    for(int i = 0; i < lineEditVec.size(); ++i) {
-        delete lineEditVec[i];
-        delete deleteBtnVec[i];
-    }
+    delete limitedListWidget;; //delete the parent, the children will be deleted as well
     lineEditVec.clear();
     deleteBtnVec.clear();
 
     updateLimitsWidget();
+}
+
+void Settings::limitedAddBtnClicked()
+{
+    okBtn->show();
+    cancelBtn->show();
+    limitedAddBtn->hide();
 }

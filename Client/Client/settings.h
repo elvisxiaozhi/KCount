@@ -24,18 +24,20 @@ private:
     QVBoxLayout *limitsHLayout;
     QToolButton *limitsBtn;
     QWidget *limitsWidget;
-    QVBoxLayout *limitsVLayout, *limitsTabVLayout, *limitedListVLayout;
+    QVBoxLayout *limitsVLayout, *limitsTabVLayout, *listsVLayout, *limitsBottomVLayout;
     QTabWidget *tabWidget;
     QWidget *limitedTab, *allowedTab;
+    QWidget *limitedListWidget;
     QVector<QLineEdit *> lineEditVec;
     QVector<QPushButton *> deleteBtnVec;
-    QHBoxLayout *limitsAddHLayout;
+    QPushButton *limitedAddBtn, *okBtn, *cancelBtn;
 
     void setWindowStyleSheet();
     void setWindowLayout();
     void createLimitsLayout();
     void createLimitsWidget();
     void createLimitsTabConts();
+    void createLimitsBottomWidget();
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -47,6 +49,7 @@ private slots:
     void updateLimitsWidget();
     void limitsBtnClicked(bool);
     void deleteBtnClicked(int);
+    void limitedAddBtnClicked();
 };
 
 #endif // SETTINGS_H
