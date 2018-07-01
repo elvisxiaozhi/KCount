@@ -4,10 +4,8 @@
 #include <QStyleOption>
 #include <QDebug>
 #include <QLabel>
-#include <QXmlStreamReader>
-#include <QFile>
-#include "database.h"
 #include <QHBoxLayout>
+#include "notification.h"
 
 QSettings Settings::startOnBootSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 
@@ -18,25 +16,8 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     createLimitsLayout();
     createLimitsWidget();
 
-    connect(limitsBtn, &QToolButton::clicked, [this](bool checked) {
-        if(checked) {
-            limitsBtn->setIcon(QIcon(":/Resources/Icons/up-arrow.png"));
-            limitsWidget->show();
-            updateLimitsWidget();
-        }
-        else {
-            limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
-            limitsWidget->hide();
-            delete limitedListVLayout;
-            for(int i = 0; i < lineEditVec.size(); ++i) {
-                delete lineEditVec[i];
-                delete deleteBtnVec[i];
-            }
-            lineEditVec.clear();
-            deleteBtnVec.clear();
-            delete limitsAddHLayout;
-        }
-    });
+    connect(limitsBtn, &QToolButton::clicked, this, &Settings::limitsBtnClicked);
+    connect(this, &Settings::delBtnClicked, this, &Settings::deleteBtnClicked);
 }
 
 void Settings::setWindowStyleSheet()
@@ -131,27 +112,6 @@ void Settings::createLimitsTabConts()
     limitsTabVLayout->addWidget(limitsLbl);
 }
 
-void Settings::readXml()
-{
-    limitedAppVec.clear();
-
-    QXmlStreamReader xmlReader;
-    QFile file(Database::dataPath + "/LimitedApp.xml");
-    file.open(QIODevice::ReadOnly);
-    xmlReader.setDevice(&file);
-    QString appName;
-    while(!xmlReader.atEnd()) {
-        QXmlStreamReader::TokenType token = xmlReader.readNext();
-        if(token == QXmlStreamReader::StartElement) {
-            if(xmlReader.name() == "Name") {
-                appName = xmlReader.readElementText();
-                limitedAppVec.push_back(appName);
-            }
-        }
-    }
-    file.close();
-}
-
 void Settings::paintEvent(QPaintEvent *event)
 {
     //to make the custom widget able to set style sheet
@@ -171,13 +131,13 @@ void Settings::updateLimitsWidget()
     limitedListVLayout = new QVBoxLayout();
     limitsTabVLayout->addLayout(limitedListVLayout);
 
-    readXml();
+    Notification::readXml();
 
-    for(int i = 0; i < limitedAppVec.size(); ++i) {
+    for(auto mapKey : Notification::xmlMap.keys()) {
         QHBoxLayout *hLayout = new QHBoxLayout();
 
         QLineEdit *lineEdit = new QLineEdit(limitsWidget);
-        lineEdit->setText(limitedAppVec[i]);
+        lineEdit->setText(mapKey);
         lineEdit->setFixedHeight(25);
         lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
                                 "QLineEdit:focus { border: 2px solid #FF5A5F; }");
@@ -185,6 +145,7 @@ void Settings::updateLimitsWidget()
 
         QPushButton *btn = new QPushButton(limitsWidget);
         btn->setText("Delete");
+        btn->setObjectName(QString::number(std::distance(Notification::xmlMap.begin(), Notification::xmlMap.find(mapKey))));
         btn->setStyleSheet("QPushButton { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 5px 5px; margin: 5px 2px;}"
                            ".QPushButton:hover { background-color: #AAAAAA; font-size: 16px; }"
                            ".QPushButton:pressed { background-color: #EC7063 }");
@@ -194,6 +155,8 @@ void Settings::updateLimitsWidget()
         hLayout->addWidget(btn);
 
         limitedListVLayout->addLayout(hLayout);
+
+        connect(btn, &QPushButton::clicked, [this, btn](){ emit delBtnClicked(btn->objectName().toInt()); });
     }
 
     limitedListVLayout->addStretch();
@@ -209,4 +172,25 @@ void Settings::updateLimitsWidget()
     limitsAddHLayout->addWidget(limitedAddBtn);
     limitsAddHLayout->addStretch();
     limitedListVLayout->addLayout(limitsAddHLayout);
+}
+
+void Settings::limitsBtnClicked(bool checked)
+{
+    if(checked) {
+        limitsBtn->setIcon(QIcon(":/Resources/Icons/up-arrow.png"));
+        limitsWidget->show();
+        updateLimitsWidget();
+    }
+    else {
+        limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
+        limitsWidget->hide();
+        delete limitedListVLayout; //delete the parent, the children will be deleted as well
+        lineEditVec.clear();
+        deleteBtnVec.clear();
+    }
+}
+
+void Settings::deleteBtnClicked(int index)
+{
+    qDebug() << deleteBtnVec[index]->text() << lineEditVec[index]->text();
 }

@@ -10,6 +10,8 @@
 #include <QFile>
 #include "database.h"
 
+QMap<QString, QString> Notification::xmlMap = {};
+
 Notification::Notification(QWidget *parent) : QDialog(parent)
 {
     setFixedSize(300, 200);
@@ -32,8 +34,6 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
 
     vLayout->addWidget(contLbl);
     vLayout->addLayout(btnHLayout);
-
-    xmlPath = Database::dataPath + "/LimitedApp.xml";
 
     connect(limitBtn, &QPushButton::clicked, this, &Notification::createRegistry);
     connect(limitBtn, &QPushButton::clicked, [this](){ this->close(); });
@@ -101,6 +101,8 @@ void Notification::writeXml(QString appName, bool isDefaultKey)
 {
     readXml();
 
+    QString xmlPath = Database::dataPath + "/LimitedApp.xml";
+
     QFile file(xmlPath);
     QXmlStreamWriter xmlWriter(&file);
     xmlWriter.setAutoFormatting(true);
@@ -133,6 +135,8 @@ void Notification::writeXml(QString appName, bool isDefaultKey)
 void Notification::readXml()
 {
     xmlMap.clear();
+
+    QString xmlPath = Database::dataPath + "/LimitedApp.xml";
 
     QXmlStreamReader xmlReader;
     QFile file(xmlPath);

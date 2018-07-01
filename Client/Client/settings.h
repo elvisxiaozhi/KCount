@@ -27,7 +27,6 @@ private:
     QVBoxLayout *limitsVLayout, *limitsTabVLayout, *limitedListVLayout;
     QTabWidget *tabWidget;
     QWidget *limitedTab, *allowedTab;
-    QVector<QString> limitedAppVec;
     QVector<QLineEdit *> lineEditVec;
     QVector<QPushButton *> deleteBtnVec;
     QHBoxLayout *limitsAddHLayout;
@@ -37,13 +36,17 @@ private:
     void createLimitsLayout();
     void createLimitsWidget();
     void createLimitsTabConts();
-    void readXml();
 
 protected:
     void paintEvent(QPaintEvent *);
 
+signals:
+    void delBtnClicked(int);
+
 private slots:
     void updateLimitsWidget();
+    void limitsBtnClicked(bool);
+    void deleteBtnClicked(int);
 };
 
 #endif // SETTINGS_H

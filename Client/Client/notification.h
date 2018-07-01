@@ -11,19 +11,20 @@ class Notification : public QDialog
 {
 public:
     explicit Notification(QWidget *parent = 0);
+    static QMap<QString, QString> xmlMap;
+
+    static void readXml();
 
 private:
     QPushButton *limitBtn;
     QString contText;
     QLabel *contLbl;
-    QString limitAppName, xmlPath;
-    QMap<QString, QString> xmlMap;
+    QString limitAppName;
 
     void showErrorText(DWORD);
     void deleteRegValue(HKEY);
     void deleteRegKey();
     void writeXml(QString, bool);
-    void readXml();
     inline const WCHAR *QStoWCHAR(const QString &);
 
 public slots:
