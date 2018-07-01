@@ -178,11 +178,16 @@ void Settings::updateLimitsWidget()
 
         QLineEdit *lineEdit = new QLineEdit(limitsWidget);
         lineEdit->setText(limitedAppVec[i]);
-        lineEdit->setStyleSheet("QLineEdit { background-color: white; }");
+        lineEdit->setFixedHeight(25);
+        lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
+                                "QLineEdit:focus { border: 2px solid #FF5A5F; }");
         lineEditVec.push_back(lineEdit);
 
         QPushButton *btn = new QPushButton(limitsWidget);
         btn->setText("Delete");
+        btn->setStyleSheet("QPushButton { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 5px 5px; margin: 5px 2px;}"
+                           ".QPushButton:hover { background-color: #AAAAAA; font-size: 16px; }"
+                           ".QPushButton:pressed { background-color: #EC7063 }");
         deleteBtnVec.push_back(btn);
 
         hLayout->addWidget(lineEdit);
@@ -197,6 +202,9 @@ void Settings::updateLimitsWidget()
 
     QPushButton *limitedAddBtn = new QPushButton(limitsWidget);
     limitedAddBtn->setText("Add");
+    limitedAddBtn->setStyleSheet("QPushButton { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 6px 10px; margin: 5px 2px;}"
+                                 ".QPushButton:hover { border: 2px solid #111111; }"
+                                 ".QPushButton:pressed { background-color: #EC7063 }");
 
     limitsAddHLayout->addWidget(limitedAddBtn);
     limitsAddHLayout->addStretch();
