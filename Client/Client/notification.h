@@ -14,6 +14,7 @@ public:
     static QMap<QString, QString> xmlMap;
 
     static void readXml();
+    static void writeXml();
 
 private:
     QPushButton *limitBtn;

@@ -126,7 +126,6 @@ void Notification::writeXml(QString appName, bool isDefaultKey)
         }
 
         xmlWriter.writeEndElement();
-
         xmlWriter.writeEndDocument();
         file.close();
     }
@@ -159,6 +158,29 @@ void Notification::readXml()
         }
     }
     file.close();
+}
+
+void Notification::writeXml()
+{
+    QString xmlPath = Database::dataPath + "/LimitedApp.xml";
+
+    QFile file(xmlPath);
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    if(file.open(QIODevice::WriteOnly)) {
+        xmlWriter.writeStartDocument();
+        xmlWriter.writeStartElement("LimitedApps");
+        for(auto mapKey : xmlMap.keys()) {
+            xmlWriter.writeStartElement("App");
+            xmlWriter.writeTextElement("Name", mapKey);
+            xmlWriter.writeTextElement("IsDefaultKey", xmlMap.value(mapKey));
+            xmlWriter.writeEndElement();
+        }
+
+        xmlWriter.writeEndElement();
+        xmlWriter.writeEndDocument();
+        file.close();
+    }
 }
 
 const WCHAR *Notification::QStoWCHAR(const QString &qs)

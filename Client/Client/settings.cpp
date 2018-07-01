@@ -185,6 +185,10 @@ void Settings::limitsBtnClicked(bool checked)
         limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
         limitsWidget->hide();
         delete limitedListVLayout; //delete the parent, the children will be deleted as well
+        for(int i = 0; i < lineEditVec.size(); ++i) {
+            delete lineEditVec[i];
+            delete deleteBtnVec[i];
+        }
         lineEditVec.clear();
         deleteBtnVec.clear();
     }
@@ -192,5 +196,23 @@ void Settings::limitsBtnClicked(bool checked)
 
 void Settings::deleteBtnClicked(int index)
 {
-    qDebug() << deleteBtnVec[index]->text() << lineEditVec[index]->text();
+    int i = 0;
+    for(auto mapKey : Notification::xmlMap.keys()) {
+        if(i == index) {
+            Notification::xmlMap.remove(mapKey);
+        }
+        ++i;
+    }
+
+    Notification::writeXml();
+
+    delete limitedListVLayout; //delete the parent, the children will be deleted as well
+    for(int i = 0; i < lineEditVec.size(); ++i) {
+        delete lineEditVec[i];
+        delete deleteBtnVec[i];
+    }
+    lineEditVec.clear();
+    deleteBtnVec.clear();
+
+    updateLimitsWidget();
 }
