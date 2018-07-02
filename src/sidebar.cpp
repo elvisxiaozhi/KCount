@@ -10,15 +10,15 @@ Sidebar::Sidebar(QWidget *parent) : QDockWidget(parent)
     //hide dock widget title bar
     QWidget *titleBarWidget = new QWidget(this);
     setTitleBarWidget(titleBarWidget);
-    this->titleBarWidget()->hide();
+    titleBarWidget()->hide();
     setMinimumSize(200, 100);
 
     setMouseTracking(true);
 
-    this->addAction(tr("Overview"), QIcon(":/icons/home_24px.png"));
-    this->addAction(tr("Dashboard"), QIcon(":/icons/dashboard_24px.png"));
-    this->addAction(tr("Users"), QIcon(":/icons/users_24px.png"));
-    this->addAction(tr("Settings"), QIcon(":/icons/settings_24px.png"));
+    addAction(tr("Overview"), QIcon(":/icons/home_24px.png"));
+    addAction(tr("Dashboard"), QIcon(":/icons/dashboard_24px.png"));
+    addAction(tr("Users"), QIcon(":/icons/users_24px.png"));
+    addAction(tr("Settings"), QIcon(":/icons/settings_24px.png"));
 
     checkedAct = actList[0];
     hoveredAct = NULL;
@@ -36,9 +36,7 @@ QAction *Sidebar::actionAt(const QPoint &point)
 {
     int posY = 110;
     for(auto action : actList) {
-        //set the width to 150 or whatever fits, just do not use rect().width()
-        //or it will cause the hover effect stays sometimes
-        QRect actRect(0, posY, 150, 50);
+        QRect actRect(0, posY, 200, 50); //set width to 200(its width) and height to 50, or the hover effect will sometimes show and the checked effect will disappear
         if(actRect.contains(point)) {
             return action;
         }
