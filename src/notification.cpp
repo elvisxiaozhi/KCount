@@ -183,9 +183,9 @@ void Notification::writeXml()
     }
 }
 
-const WCHAR *Notification::QStoWCHAR(const QString &qs)
+WCHAR *Notification::QStoWCHAR(QString qs)
 {
-    return (const WCHAR *)qs.utf16();
+    return (WCHAR *)qs.utf16();
 }
 
 void Notification::setLabelText(QString appName)

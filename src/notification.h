@@ -15,6 +15,7 @@ public:
 
     static void readXml();
     static void writeXml();
+    static bool isDefaultKey(QString);
 
 private:
     QPushButton *limitBtn;
@@ -26,14 +27,13 @@ private:
     void deleteRegValue(HKEY);
     void deleteRegKey();
     void writeXml(QString, bool);
-    inline const WCHAR *QStoWCHAR(const QString &);
+    static WCHAR *QStoWCHAR(QString);
 
 public slots:
     void setLabelText(QString);
 
 private slots:
     void createRegistry();
-    bool isDefaultKey(QString);
 };
 
 #endif // NOTIFICATION_H
