@@ -33,7 +33,7 @@ public slots:
 
 private slots:
     void createRegistry();
-    bool isDefaultKey(HKEY, LPCTSTR);
+    bool isDefaultKey(QString);
 };
 
 #endif // NOTIFICATION_H

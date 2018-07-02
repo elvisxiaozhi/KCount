@@ -227,7 +227,7 @@ void Notification::createRegistry()
 
     //writeXml needs to be there, or the registry can not be closed
     QStringList regList = subKey.split("\\");
-    writeXml(regList[regList.size() - 1], isDefaultKey(hKey, QStoWCHAR(subKey)));
+    writeXml(regList[regList.size() - 1], isDefaultKey(subKey));
 
     LONG closeOut = RegCloseKey(hKey);
 
@@ -239,9 +239,11 @@ void Notification::createRegistry()
     }
 }
 
-bool Notification::isDefaultKey(HKEY hKey, LPCTSTR sk)
+bool Notification::isDefaultKey(QString subKey)
 {
-    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sk, 0, KEY_ALL_ACCESS , &hKey);
+    HKEY hKey;
+
+    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, KEY_ALL_ACCESS , &hKey);
     if (openRes == ERROR_SUCCESS) { //must open first
         qDebug() << "Success opening key.";
 
