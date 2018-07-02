@@ -51,6 +51,7 @@ private slots:
     void limitsBtnClicked(bool);
     void deleteBtnClicked(int);
     void limitedAddBtnClicked();
+    void okBtnClicked();
 };
 
 #endif // SETTINGS_H

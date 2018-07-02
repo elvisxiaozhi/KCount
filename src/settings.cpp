@@ -152,7 +152,7 @@ void Settings::createLimitsBottomWidget()
     limitsTabVLayout->addLayout(limitsBottomVLayout);
 
     connect(limitedAddBtn, &QPushButton::clicked, this, &Settings::limitedAddBtnClicked);
-    connect(okBtn, &QPushButton::clicked, [this](){ okBtn->hide(); cancelBtn->hide(); limitedAddBtn->show(); });
+    connect(okBtn, &QPushButton::clicked, this, &Settings::okBtnClicked);
     connect(cancelBtn, &QPushButton::clicked, [this](){ okBtn->hide(); cancelBtn->hide(); limitedAddBtn->show(); removeLimitsListWidget(); updateLimitsWidget(false); });
 }
 
@@ -219,7 +219,7 @@ void Settings::updateLimitsWidget(bool clicked)
 
         QLineEdit *lineEdit = new QLineEdit(limitedListWidget);
         lineEdit->setText("");
-        lineEdit->setFixedSize(850, 25);
+        lineEdit->setFixedSize(837, 25);
         lineEdit->setFocus(Qt::OtherFocusReason);
         lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
                                 "QLineEdit:focus { border: 2px solid #FF5A5F; }");
@@ -274,4 +274,16 @@ void Settings::limitedAddBtnClicked()
 
     removeLimitsListWidget();
     updateLimitsWidget(true);
+}
+
+void Settings::okBtnClicked()
+{
+    okBtn->hide();
+    cancelBtn->hide();
+    limitedAddBtn->show();
+
+    Notification::xmlMap.insert(lineEditVec[lineEditVec.size() - 1]->text(), "False");
+    Notification::writeXml();
+    removeLimitsListWidget();
+    updateLimitsWidget(false);
 }
