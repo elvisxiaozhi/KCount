@@ -153,7 +153,14 @@ void Settings::createLimitsBottomWidget()
 
     connect(limitedAddBtn, &QPushButton::clicked, this, &Settings::limitedAddBtnClicked);
     connect(okBtn, &QPushButton::clicked, [this](){ okBtn->hide(); cancelBtn->hide(); limitedAddBtn->show(); });
-    connect(cancelBtn, &QPushButton::clicked, [this](){ okBtn->hide(); cancelBtn->hide(); limitedAddBtn->show(); });
+    connect(cancelBtn, &QPushButton::clicked, [this](){ okBtn->hide(); cancelBtn->hide(); limitedAddBtn->show(); removeLimitsListWidget(); updateLimitsWidget(false); });
+}
+
+void Settings::removeLimitsListWidget()
+{
+    delete limitedListWidget; //delete the parent, the children will be deleted as well
+    lineEditVec.clear();
+    deleteBtnVec.clear();
 }
 
 void Settings::paintEvent(QPaintEvent *event)
@@ -170,7 +177,7 @@ void Settings::paintEvent(QPaintEvent *event)
     painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Settings");
 }
 
-void Settings::updateLimitsWidget()
+void Settings::updateLimitsWidget(bool clicked)
 {
     limitedListWidget = new QWidget(limitedTab);
     limitedListWidget->setObjectName("LimitsWidget");
@@ -206,6 +213,24 @@ void Settings::updateLimitsWidget()
 
         connect(btn, &QPushButton::clicked, [this, btn](){ emit delBtnClicked(btn->objectName().toInt()); });
     }
+
+    if(clicked) {
+        QHBoxLayout *hLayout = new QHBoxLayout();
+
+        QLineEdit *lineEdit = new QLineEdit(limitedListWidget);
+        lineEdit->setText("");
+        lineEdit->setFixedSize(850, 25);
+        lineEdit->setFocus(Qt::OtherFocusReason);
+        lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
+                                "QLineEdit:focus { border: 2px solid #FF5A5F; }");
+        lineEditVec.push_back(lineEdit);
+
+        hLayout->addWidget(lineEdit);
+        hLayout->addStretch();
+
+        limitedListVLayout->addLayout(hLayout);
+    }
+
     limitedListVLayout->addStretch();
 }
 
@@ -214,14 +239,14 @@ void Settings::limitsBtnClicked(bool checked)
     if(checked) {
         limitsBtn->setIcon(QIcon(":/icons/up-arrow.png"));
         limitsWidget->show();
-        updateLimitsWidget();
+
+        updateLimitsWidget(false);
     }
     else {
         limitsBtn->setIcon(QIcon(":/icons/down-arrow.png"));
         limitsWidget->hide();
-        delete limitedListWidget; //delete the parent, the children will be deleted as well
-        lineEditVec.clear();
-        deleteBtnVec.clear();
+
+        removeLimitsListWidget();
     }
 }
 
@@ -237,11 +262,8 @@ void Settings::deleteBtnClicked(int index)
 
     Notification::writeXml();
 
-    delete limitedListWidget;; //delete the parent, the children will be deleted as well
-    lineEditVec.clear();
-    deleteBtnVec.clear();
-
-    updateLimitsWidget();
+    removeLimitsListWidget();
+    updateLimitsWidget(false);
 }
 
 void Settings::limitedAddBtnClicked()
@@ -249,4 +271,7 @@ void Settings::limitedAddBtnClicked()
     okBtn->show();
     cancelBtn->show();
     limitedAddBtn->hide();
+
+    removeLimitsListWidget();
+    updateLimitsWidget(true);
 }

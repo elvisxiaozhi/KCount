@@ -38,6 +38,7 @@ private:
     void createLimitsWidget();
     void createLimitsTabConts();
     void createLimitsBottomWidget();
+    void removeLimitsListWidget();
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -46,7 +47,7 @@ signals:
     void delBtnClicked(int);
 
 private slots:
-    void updateLimitsWidget();
+    void updateLimitsWidget(bool clicked);
     void limitsBtnClicked(bool);
     void deleteBtnClicked(int);
     void limitedAddBtnClicked();
