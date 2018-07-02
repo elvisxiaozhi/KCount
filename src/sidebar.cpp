@@ -15,10 +15,10 @@ Sidebar::Sidebar(QWidget *parent) : QDockWidget(parent)
 
     setMouseTracking(true);
 
-    this->addAction(tr("Overview"), QIcon(":/Resources/Icons/home_24px.png"));
-    this->addAction(tr("Dashboard"), QIcon(":/Resources/Icons/dashboard_24px.png"));
-    this->addAction(tr("Users"), QIcon(":/Resources/Icons/users_24px.png"));
-    this->addAction(tr("Settings"), QIcon(":/Resources/Icons/settings_24px.png"));
+    this->addAction(tr("Overview"), QIcon(":/icons/home_24px.png"));
+    this->addAction(tr("Dashboard"), QIcon(":/icons/dashboard_24px.png"));
+    this->addAction(tr("Users"), QIcon(":/icons/users_24px.png"));
+    this->addAction(tr("Settings"), QIcon(":/icons/settings_24px.png"));
 
     checkedAct = actList[0];
     hoveredAct = NULL;
@@ -96,8 +96,8 @@ void Sidebar::paintEvent(QPaintEvent *event)
         posY += 50;
     }
 
-   //paint icon
-    QIcon icon(":/Resources/Icons/letter-n.png");
+    //paint icon
+    QIcon icon(":/icons/letter-n.png");
     QRect iconRect(20, 39, 35, 35);
     icon.paint(&painter, iconRect);
 

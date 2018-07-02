@@ -53,10 +53,10 @@ void MostUsed::setMainLayout(QString lblTitle)
     title->setAlignment(Qt::AlignCenter);
 
     showMoreBtn = new CustomButton(this);
-    showMoreBtn->setIcon(QIcon(":/Resources/Icons/show_more.png"));
+    showMoreBtn->setIcon(QIcon(":/icons/show_more.png"));
 
     showLessBtn = new CustomButton(this);
-    showLessBtn->setIcon(QIcon(":/Resources/Icons/show_less.png"));
+    showLessBtn->setIcon(QIcon(":/icons/show_less.png"));
     showLessBtn->hide();
 
     headerHLayout = new QHBoxLayout();

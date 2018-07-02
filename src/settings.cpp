@@ -69,7 +69,7 @@ void Settings::createLimitsLayout()
     limitsBtn = new QToolButton(scrollWidget);
     limitsBtn->setMinimumSize(970, 10);
     limitsBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
+    limitsBtn->setIcon(QIcon(":/icons/down-arrow.png"));
     limitsBtn->setText("App Limits");
     limitsBtn->setLayoutDirection(Qt::RightToLeft);
     limitsBtn->setCheckable(true);
@@ -212,12 +212,12 @@ void Settings::updateLimitsWidget()
 void Settings::limitsBtnClicked(bool checked)
 {
     if(checked) {
-        limitsBtn->setIcon(QIcon(":/Resources/Icons/up-arrow.png"));
+        limitsBtn->setIcon(QIcon(":/icons/up-arrow.png"));
         limitsWidget->show();
         updateLimitsWidget();
     }
     else {
-        limitsBtn->setIcon(QIcon(":/Resources/Icons/down-arrow.png"));
+        limitsBtn->setIcon(QIcon(":/icons/down-arrow.png"));
         limitsWidget->hide();
         delete limitedListWidget; //delete the parent, the children will be deleted as well
         lineEditVec.clear();

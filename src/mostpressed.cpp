@@ -42,13 +42,13 @@ void MostPressed::setMainLayout(QString lblTitle)
     title->setAlignment(Qt::AlignCenter);
 
     switchBtn = new CustomButton(this);
-    switchBtn->setIcon(QIcon(":/Resources/Icons/switch.png"));
+    switchBtn->setIcon(QIcon(":/icons/switch.png"));
 
     showMoreBtn = new CustomButton(this);
-    showMoreBtn->setIcon(QIcon(":/Resources/Icons/show_more.png"));
+    showMoreBtn->setIcon(QIcon(":/icons/show_more.png"));
 
     showLessBtn = new CustomButton(this);
-    showLessBtn->setIcon(QIcon(":/Resources/Icons/show_less.png"));
+    showLessBtn->setIcon(QIcon(":/icons/show_less.png"));
     showLessBtn->hide();
 
     lblHLayout = new QHBoxLayout();

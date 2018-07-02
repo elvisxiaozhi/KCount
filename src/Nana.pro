@@ -4,14 +4,14 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
 QT += sql
 QT += charts
-LIBS += -L/C:/Users/Theodore/OneDrive/Code/C++/KCount/Client/Resources/Libs -lpsapi
+LIBS += -L\lib\ -lpsapi
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Client
+TARGET = Nana
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -24,7 +24,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
 
 SOURCES += \
         main.cpp \
@@ -78,13 +77,11 @@ HEADERS += \
     customtitlebar.h \
     custombutton.h \
     callout.h \
-    notification.h
+    notification.h \
 
-RESOURCES += \
-    ../Resources/resources.qrc
-
-#load the rc file
 win32 {
-    RC_FILE = AdminPriv.rc
+    RC_FILE = config/AdminPriv.rc
 }
 
+RESOURCES += \
+    icons/icons.qrc

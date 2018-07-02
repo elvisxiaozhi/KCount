@@ -132,8 +132,8 @@ void Overview::setWindowStyleSheet()
                 "border-top-right-radius: 3px; border-bottom-right-radius: 3px; /* same radius as the QComboBox */ "
                 "}" //change the shape of drop down menu
                 "QComboBox QAbstractItemView { border: 2px solid darkgray; selection-background-color: #FFC0CB; }" //change the selection bgcolor
-                "QComboBox::down-arrow { image: url(:/Resources/Icons/down-arrow.png); }"
-                "QComboBox::down-arrow:on { image: url(:/Resources/Icons/up-arrow.png); }"
+                "QComboBox::down-arrow { image: url(:/icons/down-arrow.png); }"
+                "QComboBox::down-arrow:on { image: url(:/icons/up-arrow.png); }"
                 "QLabel#SpanTextLbl { background: #D3FFCE; padding: 8px 8px 8px 8px; border: 1px solid gray; border-radius: 8px; }"
                 "QScrollBar:vertical { background: #faebd7; width: 4px; }"
                 "QScrollBar::handle:vertical { background: #ff7373; }"

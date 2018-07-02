@@ -20,7 +20,7 @@ TotalPressed::TotalPressed(QWidget *parent, int mode, QString lblTitle)
     title->setAlignment(Qt::AlignCenter);
 
     switchBtn = new CustomButton(this);
-    switchBtn->setIcon(QIcon(":/Resources/Icons/switch.png"));
+    switchBtn->setIcon(QIcon(":/icons/switch.png"));
 
     lblHLayout = new QHBoxLayout();
 

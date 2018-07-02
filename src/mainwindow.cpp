@@ -85,7 +85,7 @@ void MainWindow::createContentWindow()
 
 void MainWindow::createSystemTrayIcon()
 {
-    sysTrayIcon = new QSystemTrayIcon(QIcon(":/Resources/Icons/letter-n.png"), this);
+    sysTrayIcon = new QSystemTrayIcon(QIcon(":/icons/letter-n.png"), this);
     sysTrayIcon->show();
     sysTrayIcon->setToolTip(tr("Nana 2.0 Beta"));
 
@@ -95,7 +95,7 @@ void MainWindow::createSystemTrayIcon()
     startOnBootAct->setCheckable(true);
 
     QAction *quitAct = new QAction(tr("Quit"), menu);
-    quitAct->setIcon(QIcon(":/Resources/Icons/quit.png"));
+    quitAct->setIcon(QIcon(":/icons/quit.png"));
 
     menu->addAction(startOnBootAct);
     menu->addAction(quitAct);
