@@ -10,7 +10,7 @@ Sidebar::Sidebar(QWidget *parent) : QDockWidget(parent)
     //hide dock widget title bar
     QWidget *titleBarWidget = new QWidget(this);
     setTitleBarWidget(titleBarWidget);
-    titleBarWidget()->hide();
+    this->titleBarWidget()->hide(); //need to add this pointer
     setMinimumSize(200, 100);
 
     setMouseTracking(true);
