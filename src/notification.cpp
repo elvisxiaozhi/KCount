@@ -197,9 +197,9 @@ void Notification::setLabelText(QString appName)
 
 void Notification::createRegistry()
 {
-//    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1.exe").arg(limitAppName);
+    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1.exe").arg(limitAppName);
 
-    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
+//    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
 
     HKEY hKey;
 
@@ -260,4 +260,37 @@ bool Notification::isDefaultKey(QString subKey)
     }
 
     return false;
+}
+
+void Notification::writeXmlToReg(QString limitedApp)
+{
+    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1").arg(limitedApp);
+
+    HKEY hKey;
+
+    LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);
+
+    if (createResKey == ERROR_SUCCESS) {
+        qDebug() << "Success creating key.";
+    }
+
+    LPCTSTR value = TEXT("debugger");
+    LPCTSTR data = TEXT("debugfile.exe");
+    LONG setRes = RegSetValueEx(hKey, value, 0, REG_SZ, (LPBYTE)data, _tcslen(data) * sizeof(TCHAR));
+
+    if(setRes == ERROR_SUCCESS) {
+        qDebug() << "Success writing to Registry.";
+    }
+    else {
+        qDebug() << "Error writing to Registry.";
+    }
+
+    LONG closeOut = RegCloseKey(hKey);
+
+    if(closeOut == ERROR_SUCCESS) {
+        qDebug() << "Success closing key.";
+    }
+    else {
+        qDebug() << "Error closing key.";
+    }
 }

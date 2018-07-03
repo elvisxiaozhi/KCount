@@ -16,6 +16,7 @@ public:
     static void readXml();
     static void writeXml();
     static bool isDefaultKey(QString);
+    static void writeXmlToReg(QString);
 
 private:
     QPushButton *limitBtn;

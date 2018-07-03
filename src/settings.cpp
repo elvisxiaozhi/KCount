@@ -282,7 +282,7 @@ void Settings::okBtnClicked()
     cancelBtn->hide();
     limitedAddBtn->show();
 
-    QString subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe\\" + lineEditVec[lineEditVec.size() - 1]->text();
+    QString subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\" + lineEditVec[lineEditVec.size() - 1]->text();
     qDebug() << subKey;
     if(Notification::isDefaultKey(subKey)) {
         Notification::xmlMap.insert(lineEditVec[lineEditVec.size() - 1]->text(), "True");
@@ -293,4 +293,8 @@ void Settings::okBtnClicked()
     Notification::writeXml();
     removeLimitsListWidget();
     updateLimitsWidget(false);
+
+    for(auto mapKey : Notification::xmlMap.keys()) {
+        Notification::writeXmlToReg(mapKey);
+    }
 }

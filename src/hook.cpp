@@ -99,7 +99,6 @@ void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWN
                 // At this point, buffer contains the full path to the executable
 //                qDebug() << "Path" << QString::fromUtf16((ushort*)Buffer);
                 Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)Buffer));
-                qDebug() << QString::fromUtf16((ushort*)Buffer);
             }
             CloseHandle(Handle);
         }
