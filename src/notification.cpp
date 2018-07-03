@@ -199,8 +199,6 @@ void Notification::createRegistry()
 {
     QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1.exe").arg(limitAppName);
 
-//    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\notepad.exe");
-
     HKEY hKey;
 
     LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);

@@ -283,7 +283,6 @@ void Settings::okBtnClicked()
     limitedAddBtn->show();
 
     QString subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\" + lineEditVec[lineEditVec.size() - 1]->text();
-    qDebug() << subKey;
     if(Notification::isDefaultKey(subKey)) {
         Notification::xmlMap.insert(lineEditVec[lineEditVec.size() - 1]->text(), "True");
     }
