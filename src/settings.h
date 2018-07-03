@@ -9,6 +9,7 @@
 #include <QTabWidget>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QCheckBox>
 
 class Settings : public QWidget
 {
@@ -31,6 +32,8 @@ private:
     QVector<QLineEdit *> lineEditVec;
     QVector<QPushButton *> deleteBtnVec;
     QPushButton *limitedAddBtn, *okBtn, *cancelBtn;
+    QCheckBox *limitsCheckBox;
+    QLineEdit *limitsEdit;
 
     void setWindowStyleSheet();
     void setWindowLayout();
@@ -39,6 +42,7 @@ private:
     void createLimitsTabConts();
     void createLimitsBottomWidget();
     void removeLimitsListWidget();
+    QWidget *createLimitCBLayout();
 
 protected:
     void paintEvent(QPaintEvent *);

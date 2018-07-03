@@ -15,7 +15,6 @@ public:
 
     static void readXml();
     static void writeXml();
-    static bool isDefaultKey(QString);
     static void createRegistry(QString);
     static void deleteRegKey(QString);
     static void deleteRegValue(QString);
@@ -28,6 +27,7 @@ private:
 
     static void showErrorText(DWORD);
     static WCHAR *QStoWCHAR(QString);
+    static bool isDefaultKey(QString);
 
 public slots:
     void setLabelText(QString);

@@ -117,6 +117,7 @@ void Settings::createLimitsTabConts()
     limitsBottomVLayout = new QVBoxLayout();
 
     limitsTabVLayout->addWidget(limitsLbl);
+    limitsTabVLayout->addWidget(createLimitCBLayout());
     limitsTabVLayout->addLayout(listsVLayout);
 
     createLimitsBottomWidget(); //create limits tab bottom buttons
@@ -161,6 +162,37 @@ void Settings::removeLimitsListWidget()
     delete limitedListWidget; //delete the parent, the children will be deleted as well
     lineEditVec.clear();
     deleteBtnVec.clear();
+}
+
+QWidget *Settings::createLimitCBLayout()
+{
+    QWidget *mWidget = new QWidget(limitedTab);
+    mWidget->setStyleSheet("QWidget { background-color: white; }");
+
+    QHBoxLayout *hLayout = new QHBoxLayout(mWidget);
+
+    limitsCheckBox = new QCheckBox(mWidget);
+    limitsCheckBox->setChecked(true);
+
+    QLabel *label = new QLabel(mWidget);
+    label->setText(tr("Limits app usage when reaches: "));
+
+    limitsEdit = new QLineEdit(mWidget);
+    limitsEdit->setText("3");
+    limitsEdit->setFixedSize(20, 20);
+    limitsEdit->setValidator(new QIntValidator(0, 24, limitsEdit));
+
+    QLabel *labelUnit = new QLabel(mWidget);
+    labelUnit->setText(tr("hour(s)"));
+
+    hLayout->addWidget(limitsCheckBox);
+    hLayout->addWidget(label);
+    hLayout->addWidget(limitsEdit);
+    hLayout->addWidget(labelUnit);
+    hLayout->addStretch();
+    mWidget->setLayout(hLayout);
+
+    return mWidget;
 }
 
 void Settings::paintEvent(QPaintEvent *event)
