@@ -47,8 +47,21 @@ void Notification::showErrorText(DWORD errorNum)
     qDebug() <<  errorNum << messageBuffer;
 }
 
-void Notification::deleteRegValue(HKEY hKey)
+void Notification::deleteRegValue(QString limitedApp)
 {
+    HKEY hKey;
+    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1").arg(limitedApp);
+
+    LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, KEY_ALL_ACCESS , &hKey);
+
+    if(openRes == ERROR_SUCCESS) {
+        qDebug() << "Success opening key.";
+    }
+    else {
+        qDebug() << "Error opening key.";
+        showErrorText(openRes);
+    }
+
     PCTSTR deleteValue = TEXT("debugger");
     LONG deletValueRes = RegDeleteValue(hKey, deleteValue);
 
@@ -59,9 +72,18 @@ void Notification::deleteRegValue(HKEY hKey)
         qDebug() << "delete failed!";
         showErrorText(deletValueRes);
     }
+
+    LONG closeOut = RegCloseKey(hKey);
+
+    if(closeOut == ERROR_SUCCESS) {
+        qDebug() << "Success closing key.";
+    }
+    else {
+        qDebug() << "Error closing key.";
+    }
 }
 
-void Notification::deleteRegKey()
+void Notification::deleteRegKey(QString delApp)
 {
     HKEY hKey;
     LPCTSTR sk = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options");
@@ -76,8 +98,7 @@ void Notification::deleteRegKey()
         showErrorText(openRes);
     }
 
-    PCTSTR deleteKey = TEXT("notepad.exe");
-    LONG deleteKeyRes = RegDeleteKey(hKey, deleteKey);
+    LONG deleteKeyRes = RegDeleteKey(hKey, QStoWCHAR(delApp));
 
     if(deleteKeyRes == ERROR_SUCCESS) {
         qDebug() << "Delete key success";
@@ -163,7 +184,7 @@ void Notification::setLabelText(QString appName)
 
 void Notification::createRegistry(QString limitedApp)
 {
-    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1.exe").arg(limitedApp);
+    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1").arg(limitedApp);
 
     HKEY hKey;
 

@@ -255,6 +255,12 @@ void Settings::deleteBtnClicked(int index)
     int i = 0;
     for(auto mapKey : Notification::xmlMap.keys()) {
         if(i == index) {
+            if(Notification::xmlMap.value(mapKey) == "False") {
+                Notification::deleteRegKey(lineEditVec[index]->text());
+            }
+            else {
+                Notification::deleteRegValue(lineEditVec[index]->text());
+            }
             Notification::xmlMap.remove(mapKey);
         }
         ++i;
@@ -282,7 +288,7 @@ void Settings::okBtnClicked()
     cancelBtn->hide();
     limitedAddBtn->show();
 
-    Notification::createRegistry(lineEditVec[lineEditVec.size() - 1]->text().split(".exe").first());
+    Notification::createRegistry(lineEditVec[lineEditVec.size() - 1]->text());
     removeLimitsListWidget();
     updateLimitsWidget(false);
 }
