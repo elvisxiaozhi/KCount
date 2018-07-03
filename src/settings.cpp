@@ -282,18 +282,7 @@ void Settings::okBtnClicked()
     cancelBtn->hide();
     limitedAddBtn->show();
 
-    QString subKey = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\" + lineEditVec[lineEditVec.size() - 1]->text();
-    if(Notification::isDefaultKey(subKey)) {
-        Notification::xmlMap.insert(lineEditVec[lineEditVec.size() - 1]->text(), "True");
-    }
-    else {
-        Notification::xmlMap.insert(lineEditVec[lineEditVec.size() - 1]->text(), "False");
-    }
-    Notification::writeXml();
+    Notification::createRegistry(lineEditVec[lineEditVec.size() - 1]->text().split(".exe").first());
     removeLimitsListWidget();
     updateLimitsWidget(false);
-
-    for(auto mapKey : Notification::xmlMap.keys()) {
-        Notification::writeXmlToReg(mapKey);
-    }
 }

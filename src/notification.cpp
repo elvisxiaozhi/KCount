@@ -35,7 +35,7 @@ Notification::Notification(QWidget *parent) : QDialog(parent)
     vLayout->addWidget(contLbl);
     vLayout->addLayout(btnHLayout);
 
-    connect(limitBtn, &QPushButton::clicked, this, &Notification::createRegistry);
+    connect(limitBtn, &QPushButton::clicked, [this](){ createRegistry(limitAppName); });
     connect(limitBtn, &QPushButton::clicked, [this](){ this->close(); });
 }
 
@@ -94,40 +94,6 @@ void Notification::deleteRegKey()
     }
     else {
         qDebug() << "Error closing key.";
-    }
-}
-
-void Notification::writeXml(QString appName, bool isDefaultKey)
-{
-    readXml();
-
-    QString xmlPath = Database::dataPath + "/LimitedApp.xml";
-
-    QFile file(xmlPath);
-    QXmlStreamWriter xmlWriter(&file);
-    xmlWriter.setAutoFormatting(true);
-    if(file.open(QIODevice::WriteOnly)) {
-        xmlWriter.writeStartDocument();
-        xmlWriter.writeStartElement("LimitedApps");
-        for(auto mapKey : xmlMap.keys()) {
-            xmlWriter.writeStartElement("App");
-            xmlWriter.writeTextElement("Name", mapKey);
-            xmlWriter.writeTextElement("IsDefaultKey", xmlMap.value(mapKey));
-            xmlWriter.writeEndElement();
-        }
-
-        xmlWriter.writeStartElement("App");
-        xmlWriter.writeTextElement("Name", appName);
-        if(isDefaultKey) {
-            xmlWriter.writeTextElement("IsDefaultKey", "True");
-        }
-        else {
-            xmlWriter.writeTextElement("IsDefaultKey", "False");
-        }
-
-        xmlWriter.writeEndElement();
-        xmlWriter.writeEndDocument();
-        file.close();
     }
 }
 
@@ -195,9 +161,9 @@ void Notification::setLabelText(QString appName)
     limitAppName = appName;
 }
 
-void Notification::createRegistry()
+void Notification::createRegistry(QString limitedApp)
 {
-    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1.exe").arg(limitAppName);
+    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1.exe").arg(limitedApp);
 
     HKEY hKey;
 
@@ -224,8 +190,15 @@ void Notification::createRegistry()
     }
 
     //writeXml needs to be there, or the registry can not be closed
+    readXml();
     QStringList regList = subKey.split("\\");
-    writeXml(regList[regList.size() - 1], isDefaultKey(subKey));
+    if(isDefaultKey(subKey)) {
+        xmlMap.insert(regList[regList.size() - 1], "True");
+    }
+    else {
+        xmlMap.insert(regList[regList.size() - 1], "False");
+    }
+    writeXml();
 
     LONG closeOut = RegCloseKey(hKey);
 
@@ -258,37 +231,4 @@ bool Notification::isDefaultKey(QString subKey)
     }
 
     return false;
-}
-
-void Notification::writeXmlToReg(QString limitedApp)
-{
-    QString subKey = QString("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%1").arg(limitedApp);
-
-    HKEY hKey;
-
-    LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);
-
-    if (createResKey == ERROR_SUCCESS) {
-        qDebug() << "Success creating key.";
-    }
-
-    LPCTSTR value = TEXT("debugger");
-    LPCTSTR data = TEXT("debugfile.exe");
-    LONG setRes = RegSetValueEx(hKey, value, 0, REG_SZ, (LPBYTE)data, _tcslen(data) * sizeof(TCHAR));
-
-    if(setRes == ERROR_SUCCESS) {
-        qDebug() << "Success writing to Registry.";
-    }
-    else {
-        qDebug() << "Error writing to Registry.";
-    }
-
-    LONG closeOut = RegCloseKey(hKey);
-
-    if(closeOut == ERROR_SUCCESS) {
-        qDebug() << "Success closing key.";
-    }
-    else {
-        qDebug() << "Error closing key.";
-    }
 }

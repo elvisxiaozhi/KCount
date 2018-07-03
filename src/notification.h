@@ -16,7 +16,7 @@ public:
     static void readXml();
     static void writeXml();
     static bool isDefaultKey(QString);
-    static void writeXmlToReg(QString);
+    static void createRegistry(QString);
 
 private:
     QPushButton *limitBtn;
@@ -24,17 +24,14 @@ private:
     QLabel *contLbl;
     QString limitAppName;
 
-    void showErrorText(DWORD);
-    void deleteRegValue(HKEY);
-    void deleteRegKey();
-    void writeXml(QString, bool);
+    static void showErrorText(DWORD);
+    static void deleteRegValue(HKEY);
+    static void deleteRegKey();
     static WCHAR *QStoWCHAR(QString);
 
 public slots:
     void setLabelText(QString);
 
-private slots:
-    void createRegistry();
 };
 
 #endif // NOTIFICATION_H
