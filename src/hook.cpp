@@ -99,6 +99,7 @@ void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWN
                 // At this point, buffer contains the full path to the executable
 //                qDebug() << "Path" << QString::fromUtf16((ushort*)Buffer);
                 Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)Buffer));
+                qDebug() << QString::fromUtf16((ushort*)Buffer);
             }
             CloseHandle(Handle);
         }
@@ -115,17 +116,21 @@ Hook::Hook()
         qDebug() << "Hook Failed";
     }
 
-    MSG msg;
+//    MSG msg;
     winEventHook = ::SetWinEventHook(EVENT_MIN, EVENT_MAX, NULL, MyWinEventProc, 0, 0, WINEVENT_OUTOFCONTEXT);
     if (winEventHook == NULL) {
         qDebug() << "Win Event Hook failed";
     }
-    while(GetMessageW(&msg, 0, 0, 0)) {
-        DispatchMessageW(&msg);
 
-        if(Initialisation::quit) {
-            PostQuitMessage(0);
-            break;
-        }
-    }
+    //the code below will cause QLineEdit unable to put in lower case letter
+    //I am not sure what the code below does nowadays, cause I forgot to write comments before
+
+//    while(GetMessageW(&msg, 0, 0, 0)) {
+//        DispatchMessageW(&msg);
+
+//        if(Initialisation::quit) {
+//            PostQuitMessage(0);
+//            break;
+//        }
+//    }
 }
