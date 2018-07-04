@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QCheckBox>
+#include "applimits.h"
 
 class Settings : public QWidget
 {
@@ -35,6 +36,7 @@ private:
     QPushButton *limitedAddBtn, *okBtn, *cancelBtn;
     QCheckBox *limitsCheckBox;
     QLineEdit *limitsEdit;
+    AppLimits *appLimits;
 
     void setWindowStyleSheet();
     void setWindowLayout();

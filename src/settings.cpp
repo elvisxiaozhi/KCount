@@ -14,10 +14,15 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     setWindowStyleSheet();
     setWindowLayout();
     scrollVLayout->addWidget(createToolBtn("App Limits"));
-    createLimitsWidget(); //after creating tool btn, make create its widget
+//    createLimitsWidget(); //after creating tool btn, make create its widget
+
+    appLimits = new AppLimits(this);
+    appLimits->createMainLayout();
+    scrollVLayout->addWidget(appLimits);
+
     scrollVLayout->addWidget(createToolBtn("About Nana"));
 
-    connect(this, &Settings::delBtnClicked, this, &Settings::deleteBtnClicked);
+//    connect(this, &Settings::delBtnClicked, this, &Settings::deleteBtnClicked);
 }
 
 void Settings::setWindowStyleSheet()
@@ -27,15 +32,6 @@ void Settings::setWindowStyleSheet()
                 ".QToolButton { background-color: #3498DB; font-size: 15px; color: white; border-radius: 2px; border: 2px solid #FF5A5F; padding: 3px 5px; margin: 5px 2px; }"
                 ".QToolButton:hover { background-color: #BB8FCE; font-size: 17px; }"
                 ".QToolButton:pressed { background-color: #EC7063 }"
-                "QWidget#LimitsWidget, #Tab { background-color: white; }"
-                "QTabBar::tab { background-color: #E8F8F5; margin-right: 5px; min-width: 50px; padding: 10px 20px; }"
-                "QTabBar::tab:selected { background: #007ACC; color: #fff; border-top: 2px solid #F1C40F; border-left: 2px solid #F1C40F; border-right: 2px solid #F1C40F; }"
-                "QTabBar::tab:hover { font: bold; background-color: #BB8FCE; }"
-                "QTabBar::tab:pressed { background-color: #EC7063 }"
-                "QTabWidget::pane { border: 2px solid #FF5A5F; }"
-                "QPushButton#LimitsBottomBtn { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 6px 10px; margin: 5px 2px;}"
-                "QPushButton#LimitsBottomBtn:hover { border: 2px solid #111111; }"
-                "QPushButton#LimitsBottomBtn:pressed { background-color: #EC7063 }"
                 );
 }
 
@@ -275,13 +271,13 @@ void Settings::limitsBtnClicked(QString name, bool checked)
         if(btnVec[i]->text() == name) {
             if(checked) {
                 btnVec[i]->setIcon(QIcon(":/icons/up-arrow.png"));
-                limitsWidget->show();
-                updateLimitsWidget(false);
+                appLimits->show();
+//                updateLimitsWidget(false);
             }
             else {
                 btnVec[i]->setIcon(QIcon(":/icons/down-arrow.png"));
-                limitsWidget->hide();
-                removeLimitsListWidget();
+                appLimits->hide();
+//                removeLimitsListWidget();
             }
         }
     }
