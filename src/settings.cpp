@@ -20,8 +20,6 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     scrollVLayout->addWidget(appLimits);
 
     scrollVLayout->addWidget(createToolBtn("About Nana"));
-
-//    connect(this, &Settings::delBtnClicked, this, &Settings::deleteBtnClicked);
 }
 
 void Settings::setWindowStyleSheet()
@@ -75,47 +73,6 @@ QToolButton *Settings::createToolBtn(QString name)
     return toolBtn;
 }
 
-//void Settings::createLimitsBottomWidget()
-//{
-//    QHBoxLayout *limitsAddHLayout = new QHBoxLayout();
-
-//    limitedAddBtn = new QPushButton(limitsWidget);
-//    limitedAddBtn->setText("Add");
-//    limitedAddBtn->setObjectName("LimitsBottomBtn");
-
-//    okBtn = new QPushButton(limitsWidget);
-//    okBtn->setText("OK");
-//    okBtn->hide();
-//    okBtn->setObjectName("LimitsBottomBtn");
-
-//    cancelBtn = new QPushButton(limitsWidget);
-//    cancelBtn->setText("Cancel");
-//    cancelBtn->hide();
-//    cancelBtn->setObjectName("LimitsBottomBtn");
-
-//    QSpacerItem *leftItem = new QSpacerItem(10, 1, QSizePolicy::Fixed, QSizePolicy::Fixed);
-//    limitsAddHLayout->addSpacerItem(leftItem);
-//    limitsAddHLayout->addWidget(limitedAddBtn);
-//    limitsAddHLayout->addStretch();
-//    limitsAddHLayout->addWidget(okBtn);
-//    limitsAddHLayout->addWidget(cancelBtn);
-//    limitsBottomVLayout->addLayout(limitsAddHLayout);
-
-//    limitsTabVLayout->addStretch();
-//    limitsTabVLayout->addLayout(limitsBottomVLayout);
-
-//    connect(limitedAddBtn, &QPushButton::clicked, this, &Settings::limitedAddBtnClicked);
-//    connect(okBtn, &QPushButton::clicked, this, &Settings::okBtnClicked);
-//    connect(cancelBtn, &QPushButton::clicked, [this](){ okBtn->hide(); cancelBtn->hide(); limitedAddBtn->show(); removeLimitsListWidget(); updateLimitsWidget(false); });
-//}
-
-void Settings::removeLimitsListWidget()
-{
-    delete limitedListWidget; //delete the parent, the children will be deleted as well
-    lineEditVec.clear();
-    deleteBtnVec.clear();
-}
-
 void Settings::paintEvent(QPaintEvent *event)
 {
     //to make the custom widget able to set style sheet
@@ -146,39 +103,6 @@ void Settings::limitsBtnClicked(QString name, bool checked)
             }
         }
     }
-}
-
-void Settings::deleteBtnClicked(int index)
-{
-    int i = 0;
-    for(auto mapKey : Notification::xmlMap.keys()) {
-        if(i == index) {
-            if(Notification::xmlMap.value(mapKey) == "False") {
-                Notification::deleteRegKey(lineEditVec[index]->text());
-            }
-            else {
-                Notification::deleteRegValue(lineEditVec[index]->text());
-            }
-            Notification::xmlMap.remove(mapKey);
-        }
-        ++i;
-    }
-
-    Notification::writeXml();
-
-    removeLimitsListWidget();
-//    updateLimitsWidget(false);
-}
-
-void Settings::okBtnClicked()
-{
-    okBtn->hide();
-    cancelBtn->hide();
-    limitedAddBtn->show();
-
-    Notification::createRegistry(lineEditVec[lineEditVec.size() - 1]->text());
-    removeLimitsListWidget();
-//    updateLimitsWidget(false);
 }
 
 void Settings::showToolBtn(QString name, bool checked)

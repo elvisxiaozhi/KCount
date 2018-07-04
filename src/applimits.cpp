@@ -4,10 +4,13 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include "notification.h"
+#include <QDebug>
 
 AppLimits::AppLimits(QWidget *parent) : QWidget(parent)
 {
     setWidgetStyleSheet();
+
+    connect(this, &AppLimits::delBtnClicked, this, &AppLimits::delLimitedApp);
 }
 
 void AppLimits::createMainLayout()
@@ -123,6 +126,8 @@ void AppLimits::createBtmLayout()
     tabVLayout->addLayout(btmVLayout);
 
     connect(addBtn, &QPushButton::clicked, this, &AppLimits::addBtnClicked);
+    connect(okBtn, &QPushButton::clicked, [this](){ Notification::createRegistry(lineEditVec[lineEditVec.size() - 1]->text()); addOrCxlClicked(); });
+    connect(cancelBtn, &QPushButton::clicked, this, &AppLimits::addOrCxlClicked);
 }
 
 void AppLimits::updateLimitedList(bool clicked)
@@ -141,7 +146,7 @@ void AppLimits::updateLimitedList(bool clicked)
         lineEdit->setFixedHeight(25);
         lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
                                 "QLineEdit:focus { border: 2px solid #FF5A5F; }");
-//        lineEditVec.push_back(lineEdit);
+        lineEditVec.push_back(lineEdit);
 
         QPushButton *btn = new QPushButton(limitedList);
         btn->setText("Delete");
@@ -149,14 +154,14 @@ void AppLimits::updateLimitedList(bool clicked)
         btn->setStyleSheet("QPushButton { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 5px 5px; margin: 5px 2px;}"
                            ".QPushButton:hover { background-color: #AAAAAA; font-size: 16px; }"
                            ".QPushButton:pressed { background-color: #EC7063 }");
-//        deleteBtnVec.push_back(btn);
+        delBtnVec.push_back(btn);
 
         hLayout->addWidget(lineEdit);
         hLayout->addWidget(btn);
 
-        listsVLayout->addLayout(hLayout);
+        vLayout->addLayout(hLayout);
 
-//        connect(btn, &QPushButton::clicked, [this, btn](){ emit delBtnClicked(btn->objectName().toInt()); });
+        connect(btn, &QPushButton::clicked, [this, btn](){ emit delBtnClicked(btn->objectName().toInt()); });
     }
 
     if(clicked) {
@@ -168,23 +173,25 @@ void AppLimits::updateLimitedList(bool clicked)
         lineEdit->setFocus(Qt::OtherFocusReason);
         lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
                                 "QLineEdit:focus { border: 2px solid #FF5A5F; }");
-//        lineEditVec.push_back(lineEdit);
+        lineEditVec.push_back(lineEdit);
 
         hLayout->addWidget(lineEdit);
         hLayout->addStretch();
 
-        listsVLayout->addLayout(hLayout);
+        vLayout->addLayout(hLayout);
     }
 
     listsVLayout->addStretch();
-
     limitedList->setLayout(vLayout);
     listsVLayout->addWidget(limitedList);
 }
 
 void AppLimits::removeLimitedList()
 {
-    delete limitedList;
+    delete limitedList; //delete the parent, the children will be deleted as well
+
+    lineEditVec.clear();
+    delBtnVec.clear();
 }
 
 void AppLimits::paintEvent(QPaintEvent *)
@@ -204,4 +211,35 @@ void AppLimits::addBtnClicked()
 
     removeLimitedList();
     updateLimitedList(true);
+}
+
+void AppLimits::delLimitedApp(int index)
+{
+    int i = 0;
+    for(auto mapKey : Notification::xmlMap.keys()) {
+        if(i == index) {
+            if(Notification::xmlMap.value(mapKey) == "False") {
+                Notification::deleteRegKey(lineEditVec[index]->text());
+            }
+            else {
+                Notification::deleteRegValue(lineEditVec[index]->text());
+            }
+            Notification::xmlMap.remove(mapKey);
+        }
+        ++i;
+    }
+
+    Notification::writeXml();
+    removeLimitedList();
+    updateLimitedList(false);
+}
+
+void AppLimits::addOrCxlClicked()
+{
+    okBtn->hide();
+    cancelBtn->hide();
+    addBtn->show();
+
+    removeLimitedList();
+    updateLimitedList(false);
 }

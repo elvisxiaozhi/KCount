@@ -25,6 +25,8 @@ private:
     QCheckBox *checkBox;
     QLineEdit *limitsEdit;
     QWidget *limitedList;
+    QVector<QLineEdit *> lineEditVec;
+    QVector<QPushButton *> delBtnVec;
     QPushButton *addBtn, *okBtn, *cancelBtn;
 
     void setWidgetStyleSheet();
@@ -35,8 +37,13 @@ private:
 protected:
     void paintEvent(QPaintEvent *);
 
+signals:
+    void delBtnClicked(int);
+
 private slots:
     void addBtnClicked();
+    void delLimitedApp(int);
+    void addOrCxlClicked();
 };
 
 #endif // APPLIMITS_H

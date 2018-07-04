@@ -7,9 +7,7 @@
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QTabWidget>
-#include <QLineEdit>
 #include <QPushButton>
-#include <QCheckBox>
 #include "applimits.h"
 
 class Settings : public QWidget
@@ -25,14 +23,7 @@ private:
     QWidget *scrollWidget;
     QVBoxLayout *limitsHLayout;
     QToolButton *limitsBtn, *aboutBtn;
-    QWidget *limitsWidget;
-    QVBoxLayout *limitsVLayout, *limitsTabVLayout, *listsVLayout, *limitsBottomVLayout;
-    QTabWidget *tabWidget;
-    QWidget *limitedTab, *allowedTab;
-    QWidget *limitedListWidget;
     QVector<QToolButton *> btnVec;
-    QVector<QLineEdit *> lineEditVec;
-    QVector<QPushButton *> deleteBtnVec;
     QPushButton *limitedAddBtn, *okBtn, *cancelBtn;
     QCheckBox *limitsCheckBox;
     QLineEdit *limitsEdit;
@@ -41,18 +32,13 @@ private:
     void setWindowStyleSheet();
     void setWindowLayout();
     QToolButton *createToolBtn(QString);
-    void removeLimitsListWidget();
 
 protected:
     void paintEvent(QPaintEvent *);
 
-signals:
-    void delBtnClicked(int);
 
 private slots:
     void limitsBtnClicked(QString, bool);
-    void deleteBtnClicked(int);
-    void okBtnClicked();
     void showToolBtn(QString, bool);
 };
 
