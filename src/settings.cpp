@@ -13,10 +13,10 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
 {
     setWindowStyleSheet();
     setWindowLayout();
-    createLimitsLayout();
-    createLimitsWidget();
+    scrollVLayout->addWidget(createToolBtn("App Limits"));
+    createLimitsWidget(); //after creating tool btn, make create its widget
+    scrollVLayout->addWidget(createToolBtn("About Nana"));
 
-    connect(limitsBtn, &QToolButton::clicked, this, &Settings::limitsBtnClicked);
     connect(this, &Settings::delBtnClicked, this, &Settings::deleteBtnClicked);
 }
 
@@ -64,17 +64,20 @@ void Settings::setWindowLayout()
     scrollArea->setWidget(scrollWidget);  //needs to be in the last
 }
 
-void Settings::createLimitsLayout()
+QToolButton *Settings::createToolBtn(QString name)
 {
-    limitsBtn = new QToolButton(scrollWidget);
-    limitsBtn->setMinimumSize(970, 10);
-    limitsBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    limitsBtn->setIcon(QIcon(":/icons/down-arrow.png"));
-    limitsBtn->setText("App Limits");
-    limitsBtn->setLayoutDirection(Qt::RightToLeft);
-    limitsBtn->setCheckable(true);
+    QToolButton *toolBtn = new QToolButton(scrollWidget);
+    toolBtn->setMinimumSize(970, 10);
+    toolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    toolBtn->setIcon(QIcon(":/icons/down-arrow.png"));
+    toolBtn->setText(name);
+    toolBtn->setLayoutDirection(Qt::RightToLeft);
+    toolBtn->setCheckable(true);
+    btnVec.push_back(toolBtn);
 
-    scrollVLayout->addWidget(limitsBtn);
+    connect(toolBtn, &QToolButton::clicked, [this, toolBtn](bool checked){ showToolBtn(toolBtn->text(), checked); });
+
+    return toolBtn;
 }
 
 void Settings::createLimitsWidget()
@@ -266,19 +269,21 @@ void Settings::updateLimitsWidget(bool clicked)
     limitedListVLayout->addStretch();
 }
 
-void Settings::limitsBtnClicked(bool checked)
+void Settings::limitsBtnClicked(QString name, bool checked)
 {
-    if(checked) {
-        limitsBtn->setIcon(QIcon(":/icons/up-arrow.png"));
-        limitsWidget->show();
-
-        updateLimitsWidget(false);
-    }
-    else {
-        limitsBtn->setIcon(QIcon(":/icons/down-arrow.png"));
-        limitsWidget->hide();
-
-        removeLimitsListWidget();
+    for(int i = 0; i < btnVec.size(); ++i) {
+        if(btnVec[i]->text() == name) {
+            if(checked) {
+                btnVec[i]->setIcon(QIcon(":/icons/up-arrow.png"));
+                limitsWidget->show();
+                updateLimitsWidget(false);
+            }
+            else {
+                btnVec[i]->setIcon(QIcon(":/icons/down-arrow.png"));
+                limitsWidget->hide();
+                removeLimitsListWidget();
+            }
+        }
     }
 }
 
@@ -323,4 +328,11 @@ void Settings::okBtnClicked()
     Notification::createRegistry(lineEditVec[lineEditVec.size() - 1]->text());
     removeLimitsListWidget();
     updateLimitsWidget(false);
+}
+
+void Settings::showToolBtn(QString name, bool checked)
+{
+    if(name == "App Limits") {
+        limitsBtnClicked(name, checked);
+    }
 }
