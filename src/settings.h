@@ -41,11 +41,7 @@ private:
     void setWindowStyleSheet();
     void setWindowLayout();
     QToolButton *createToolBtn(QString);
-    void createLimitsWidget();
-    void createLimitsTabConts();
-    void createLimitsBottomWidget();
     void removeLimitsListWidget();
-    QWidget *createLimitCBLayout();
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -54,10 +50,8 @@ signals:
     void delBtnClicked(int);
 
 private slots:
-    void updateLimitsWidget(bool);
     void limitsBtnClicked(QString, bool);
     void deleteBtnClicked(int);
-    void limitedAddBtnClicked();
     void okBtnClicked();
     void showToolBtn(QString, bool);
 };

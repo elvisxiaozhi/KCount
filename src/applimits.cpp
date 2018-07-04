@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QHBoxLayout>
+#include "notification.h"
 
 AppLimits::AppLimits(QWidget *parent) : QWidget(parent)
 {
@@ -120,6 +121,70 @@ void AppLimits::createBtmLayout()
     btmVLayout->addLayout(hLayout);
     tabVLayout->addStretch();
     tabVLayout->addLayout(btmVLayout);
+
+    connect(addBtn, &QPushButton::clicked, this, &AppLimits::addBtnClicked);
+}
+
+void AppLimits::updateLimitedList(bool clicked)
+{
+    limitedList = new QWidget(limitedTab);
+
+    QVBoxLayout *vLayout = new QVBoxLayout();
+
+    Notification::readXml();
+
+    for(auto mapKey : Notification::xmlMap.keys()) {
+        QHBoxLayout *hLayout = new QHBoxLayout();
+
+        QLineEdit *lineEdit = new QLineEdit(limitedList);
+        lineEdit->setText(mapKey);
+        lineEdit->setFixedHeight(25);
+        lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
+                                "QLineEdit:focus { border: 2px solid #FF5A5F; }");
+//        lineEditVec.push_back(lineEdit);
+
+        QPushButton *btn = new QPushButton(limitedList);
+        btn->setText("Delete");
+        btn->setObjectName(QString::number(std::distance(Notification::xmlMap.begin(), Notification::xmlMap.find(mapKey))));
+        btn->setStyleSheet("QPushButton { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 5px 5px; margin: 5px 2px;}"
+                           ".QPushButton:hover { background-color: #AAAAAA; font-size: 16px; }"
+                           ".QPushButton:pressed { background-color: #EC7063 }");
+//        deleteBtnVec.push_back(btn);
+
+        hLayout->addWidget(lineEdit);
+        hLayout->addWidget(btn);
+
+        listsVLayout->addLayout(hLayout);
+
+//        connect(btn, &QPushButton::clicked, [this, btn](){ emit delBtnClicked(btn->objectName().toInt()); });
+    }
+
+    if(clicked) {
+        QHBoxLayout *hLayout = new QHBoxLayout();
+
+        QLineEdit *lineEdit = new QLineEdit(limitedList);
+        lineEdit->setText("");
+        lineEdit->setFixedSize(837, 25);
+        lineEdit->setFocus(Qt::OtherFocusReason);
+        lineEdit->setStyleSheet("QLineEdit { background-color: white; }"
+                                "QLineEdit:focus { border: 2px solid #FF5A5F; }");
+//        lineEditVec.push_back(lineEdit);
+
+        hLayout->addWidget(lineEdit);
+        hLayout->addStretch();
+
+        listsVLayout->addLayout(hLayout);
+    }
+
+    listsVLayout->addStretch();
+
+    limitedList->setLayout(vLayout);
+    listsVLayout->addWidget(limitedList);
+}
+
+void AppLimits::removeLimitedList()
+{
+    delete limitedList;
 }
 
 void AppLimits::paintEvent(QPaintEvent *)
@@ -129,4 +194,14 @@ void AppLimits::paintEvent(QPaintEvent *)
     opt.init(this);
     QPainter painter(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
+}
+
+void AppLimits::addBtnClicked()
+{
+    addBtn->hide();
+    okBtn->show();
+    cancelBtn->show();
+
+    removeLimitedList();
+    updateLimitedList(true);
 }
