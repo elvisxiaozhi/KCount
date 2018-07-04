@@ -6,8 +6,6 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QToolButton>
-#include <QTabWidget>
-#include <QPushButton>
 #include "applimits.h"
 
 class Settings : public QWidget
@@ -21,12 +19,8 @@ private:
     QVBoxLayout *mainVLayout, *scrollVLayout;
     QScrollArea *scrollArea;
     QWidget *scrollWidget;
-    QVBoxLayout *limitsHLayout;
     QToolButton *limitsBtn, *aboutBtn;
     QVector<QToolButton *> btnVec;
-    QPushButton *limitedAddBtn, *okBtn, *cancelBtn;
-    QCheckBox *limitsCheckBox;
-    QLineEdit *limitsEdit;
     AppLimits *appLimits;
 
     void setWindowStyleSheet();
@@ -35,7 +29,6 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *);
-
 
 private slots:
     void limitsBtnClicked(QString, bool);

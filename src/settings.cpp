@@ -3,9 +3,6 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QDebug>
-#include <QLabel>
-#include <QHBoxLayout>
-#include "notification.h"
 
 QSettings Settings::startOnBootSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 
@@ -52,7 +49,7 @@ void Settings::setWindowLayout()
     scrollWidget->setLayout(scrollVLayout);
 
     mainVLayout->addWidget(scrollArea);
-    this->setLayout(mainVLayout);
+    setLayout(mainVLayout);
 
     scrollArea->setWidget(scrollWidget);  //needs to be in the last
 }
