@@ -31,6 +31,8 @@ void Settings::setWindowStyleSheet()
                 ".QToolButton { background-color: #3498DB; font-size: 15px; color: white; border-radius: 2px; border: 2px solid #FF5A5F; padding: 3px 5px; margin: 5px 2px; }"
                 ".QToolButton:hover { background-color: #BB8FCE; font-size: 17px; }"
                 ".QToolButton:pressed { background-color: #EC7063 }"
+                "QScrollBar:vertical { background: #faebd7; width: 4px; }"
+                "QScrollBar::handle:vertical { background: #ff7373; }"
                 );
 }
 
@@ -42,6 +44,7 @@ void Settings::setWindowLayout()
     scrollArea->setBackgroundRole(QPalette::Window);
     scrollArea->setFrameShadow(QFrame::Plain);
     scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->setWidgetResizable(true);
     scrollArea->setFixedSize(1000, 450);
 
@@ -62,7 +65,7 @@ void Settings::setWindowLayout()
 QToolButton *Settings::createToolBtn(QString name)
 {
     QToolButton *toolBtn = new QToolButton(scrollWidget);
-    toolBtn->setMinimumSize(970, 10);
+    toolBtn->setFixedSize(970, 40);
     toolBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolBtn->setIcon(QIcon(":/icons/down-arrow.png"));
     toolBtn->setText(name);
