@@ -17,6 +17,9 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     scrollVLayout->addWidget(appLimits);
 
     scrollVLayout->addWidget(createToolBtn("About Nana"));
+
+    about = new About(this);
+    scrollVLayout->addWidget(about);
 }
 
 void Settings::setWindowStyleSheet()
@@ -65,7 +68,7 @@ QToolButton *Settings::createToolBtn(QString name)
     toolBtn->setCheckable(true);
     btnVec.push_back(toolBtn);
 
-    connect(toolBtn, &QToolButton::clicked, [this, toolBtn](bool checked){ showToolBtn(toolBtn->text(), checked); });
+    connect(toolBtn, &QToolButton::clicked, [this, toolBtn](bool checked){ toolBtnClicked(toolBtn->text(), checked); });
 
     return toolBtn;
 }
@@ -84,27 +87,36 @@ void Settings::paintEvent(QPaintEvent *event)
     painter.drawText(QRect(50, 50, event->rect().width(), event->rect().height()), "Settings");
 }
 
-void Settings::limitsBtnClicked(QString name, bool checked)
+void Settings::toolBtnClicked(QString name, bool checked)
 {
     for(int i = 0; i < btnVec.size(); ++i) {
         if(btnVec[i]->text() == name) {
             if(checked) {
                 btnVec[i]->setIcon(QIcon(":/icons/up-arrow.png"));
-                appLimits->show();
-                appLimits->updateLimitedList(false);
             }
             else {
                 btnVec[i]->setIcon(QIcon(":/icons/down-arrow.png"));
-                appLimits->hide();
-                appLimits->removeLimitedList();
             }
         }
     }
-}
 
-void Settings::showToolBtn(QString name, bool checked)
-{
     if(name == "App Limits") {
-        limitsBtnClicked(name, checked);
+        if(checked) {
+            appLimits->show();
+            appLimits->updateLimitedList(false);
+        }
+        else {
+            appLimits->hide();
+            appLimits->removeLimitedList();
+        }
     }
+    if(name == "About Nana") {
+        if(checked) {
+            about->show();
+        }
+        else {
+            about->hide();
+        }
+    }
+
 }

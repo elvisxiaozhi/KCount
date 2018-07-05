@@ -51,7 +51,8 @@ SOURCES += \
     custombutton.cpp \
     callout.cpp \
     notification.cpp \
-    applimits.cpp
+    applimits.cpp \
+    about.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -79,7 +80,8 @@ HEADERS += \
     custombutton.h \
     callout.h \
     notification.h \
-    applimits.h
+    applimits.h \
+    about.h
 
 win32 {
     RC_FILE = config/AdminPriv.rc
