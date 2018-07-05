@@ -20,6 +20,8 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
 
     about = new About(this);
     scrollVLayout->addWidget(about);
+
+    scrollVLayout->addStretch();
 }
 
 void Settings::setWindowStyleSheet()
