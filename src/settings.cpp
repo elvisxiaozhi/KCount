@@ -139,6 +139,8 @@ void Settings::toolBtnClicked(QString name, bool checked)
         }
         else {
             about->hide();
+            about->easterEggLbl->hide();
+            about->setFixedHeight(120);
         }
     }
 }

@@ -1,9 +1,10 @@
 #include "about.h"
-#include <QLabel>
 #include <QHBoxLayout>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QStyleOption>
+#include <QShortcut>
+#include <QDebug>
 
 About::About(QWidget *parent) : QWidget(parent)
 {
@@ -13,6 +14,9 @@ About::About(QWidget *parent) : QWidget(parent)
     setStyleSheet(
                 "QWidget { background-color: white; }"
                 );
+    QShortcut *shortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_N), this);
+
+    connect(shortCut, &QShortcut::activated, this, &About::showEasterEgg);
 }
 
 void About::createMainLayout()
@@ -48,13 +52,11 @@ void About::createMainLayout()
     QLabel *linkLbl = new QLabel(this);
     linkLbl->setText(tr("<a href='https://github.com/elvisxiaozhi/Nana/releases'>https://github.com/elvisxiaozhi/Nana/releases</a>"));
 
-    QHBoxLayout *descHLayout = new QHBoxLayout();
-
-    QLabel *descLbl = new QLabel(this);
-    descLbl->setText("<b>Description: </b>");
-
-    QLabel *descTextLbl = new QLabel(this);
-    descTextLbl->setText(" Dedicated to the one I loved.");
+    easterEggLbl = new QLabel(this);
+    easterEggLbl->hide();
+    easterEggLbl->setText(" Dedicated to the girl I loved. <br> Great memories from 6/6/15 to 12/24/17.");
+    easterEggLbl->setAlignment(Qt::AlignCenter);
+    easterEggLbl->setStyleSheet("QLabel { color: #FF4136; font-size: 20px; }");
 
     QLabel *copyrightLbl = new QLabel(this);
     copyrightLbl->setText("<br>Copyright © 4/14/2018 - . All rights reserved.");
@@ -71,17 +73,19 @@ void About::createMainLayout()
     webHLayout->addWidget(linkLbl);
     webHLayout->addStretch();
 
-    descHLayout->addWidget(descLbl);
-    descHLayout->addWidget(descTextLbl);
-    descHLayout->addStretch();
-
     mainVLayout->addLayout(versionHLayout);
     mainVLayout->addLayout(authorHLayout);
     mainVLayout->addLayout(webHLayout);
-    mainVLayout->addLayout(descHLayout);
+    mainVLayout->addWidget(easterEggLbl);
     mainVLayout->addWidget(copyrightLbl);
     mainVLayout->addStretch();
     setLayout(mainVLayout);
+}
+
+void About::showEasterEgg()
+{
+    easterEggLbl->show();
+    setFixedHeight(150);
 }
 
 void About::paintEvent(QPaintEvent *)
