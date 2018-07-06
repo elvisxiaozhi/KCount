@@ -49,6 +49,7 @@ private slots:
     void changeContent(int);
     void sidebarActChanged(int);
     void startOnBootActChanged();
+    void showNotification(QString);
 };
 
 #endif // MAINWINDOW_H

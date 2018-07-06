@@ -7,6 +7,7 @@
 #include "signalemitter.h"
 #include "database.h"
 #include <QCoreApplication>
+#include "settings.h"
 
 MostUsed::MostUsed(QWidget *parent, int mode, QString title) : QWidget(parent)
 {
@@ -176,7 +177,7 @@ bool MostUsed::hasAppReachedLimit()
     std::sort(mostUsedVec.begin(), mostUsedVec.end(),
               [](const std::pair<QString, unsigned long int> &a, const std::pair<QString, unsigned long int> &b){ return a.second > b.second; });
 
-    if(mostUsedVec[0].second >= 10800) {//10800
+    if(mostUsedVec[0].second >= Settings::settings.value("Settings/ShowLimitsTime").toInt() * 60 * 60) {
         if(std::find(alertedApp.begin(), alertedApp.end(), mostUsedVec[0].first) != alertedApp.end()) {
             return false;
         }

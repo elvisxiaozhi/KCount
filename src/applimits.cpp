@@ -77,24 +77,11 @@ QWidget *AppLimits::createCBLayout()
     QHBoxLayout *hLayout = new QHBoxLayout(mWidget);
 
     checkBox = new QCheckBox(mWidget);
-    if(Settings::settings.value("Settings/AppLimits").isValid()) {
-        if(Settings::settings.value("Settings/AppLimits") == true) {
-            checkBox->setChecked(true);
-        }
-        else {
-            checkBox->setChecked(false);
-        }
-    }
-    else {
-        checkBox->setChecked(true);
-        Settings::settings.setValue("Settings/AppLimits", true);
-    }
 
     QLabel *mLbl = new QLabel(mWidget);
     mLbl->setText(tr("Limits app usage when reaches: "));
 
     limitsEdit = new QLineEdit(mWidget);
-    limitsEdit->setText("3");
     limitsEdit->setFixedSize(20, 20);
     limitsEdit->setValidator(new QIntValidator(0, 24, limitsEdit));
 
@@ -108,8 +95,10 @@ QWidget *AppLimits::createCBLayout()
     hLayout->addStretch();
     mWidget->setLayout(hLayout);
 
-    connect(checkBox, &QCheckBox::clicked, [this](bool checked){ Settings::settings.setValue("Settings/AppLimits", checked);
-        qDebug() << Settings::settings.value("Settings/AppLimits"); });
+    initWidgets();
+
+    connect(checkBox, &QCheckBox::clicked, [this](bool checked){ Settings::settings.setValue("Settings/isLimitsOn", checked); });
+    connect(limitsEdit, &QLineEdit::textChanged, [this](QString text){ Settings::settings.setValue("Settings/ShowLimitsTime", text); });
 
     return mWidget;
 }
@@ -143,6 +132,30 @@ void AppLimits::createBtmLayout()
     connect(addBtn, &QPushButton::clicked, this, &AppLimits::addBtnClicked);
     connect(okBtn, &QPushButton::clicked, [this](){ Notification::createRegistry(lineEditVec[lineEditVec.size() - 1]->text()); addOrCxlClicked(); });
     connect(cancelBtn, &QPushButton::clicked, this, &AppLimits::addOrCxlClicked);
+}
+
+void AppLimits::initWidgets()
+{
+    if(Settings::settings.value("Settings/isLimitsOn").isValid()) {
+        if(Settings::settings.value("Settings/isLimitsOn") == true) {
+            checkBox->setChecked(true);
+        }
+        else {
+            checkBox->setChecked(false);
+        }
+    }
+    else {
+        checkBox->setChecked(true);
+        Settings::settings.setValue("Settings/isLimitsOn", true);
+    }
+
+    if(Settings::settings.value("Settings/ShowLimitsTime").isValid()) {
+        limitsEdit->setText(Settings::settings.value("Settings/ShowLimitsTime").toString());
+    }
+    else {
+        limitsEdit->setText("3");
+        Settings::settings.setValue("Settings/ShowLimitsTime", limitsEdit->text());
+    }
 }
 
 void AppLimits::updateLimitedList(bool clicked)

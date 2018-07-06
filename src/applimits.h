@@ -33,6 +33,7 @@ private:
     void createTabConts();
     QWidget *createCBLayout();
     void createBtmLayout();
+    void initWidgets();
 
 protected:
     void paintEvent(QPaintEvent *);

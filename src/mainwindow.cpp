@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "initialisation.h"
 #include "hook.h"
+#include "settings.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
     connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
     connect(overview, &Overview::newDayComes, dashboard, &Dashboard::newDayComes);
-    connect(overview, &Overview::limitAppAlert, [this](QString appName){ notification->setLabelText(appName); notification->show(); });
+    connect(overview, &Overview::limitAppAlert, this, &MainWindow::showNotification);
 }
 
 MainWindow::~MainWindow()
@@ -165,5 +166,13 @@ void MainWindow::startOnBootActChanged()
     }
     else {
         Settings::startOnBootSettings.remove("Nana");
+    }
+}
+
+void MainWindow::showNotification(QString appName)
+{
+    if(Settings::settings.value("Settings/isLimitsOn") == true) {
+        notification->setLabelText(appName);
+        notification->show();
     }
 }
