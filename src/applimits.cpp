@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include "notification.h"
 #include <QDebug>
+#include "settings.h"
 
 AppLimits::AppLimits(QWidget *parent) : QWidget(parent)
 {
@@ -76,7 +77,18 @@ QWidget *AppLimits::createCBLayout()
     QHBoxLayout *hLayout = new QHBoxLayout(mWidget);
 
     checkBox = new QCheckBox(mWidget);
-    checkBox->setChecked(true);
+    if(Settings::settings.value("Settings/AppLimits").isValid()) {
+        if(Settings::settings.value("Settings/AppLimits") == true) {
+            checkBox->setChecked(true);
+        }
+        else {
+            checkBox->setChecked(false);
+        }
+    }
+    else {
+        checkBox->setChecked(true);
+        Settings::settings.setValue("Settings/AppLimits", true);
+    }
 
     QLabel *mLbl = new QLabel(mWidget);
     mLbl->setText(tr("Limits app usage when reaches: "));
@@ -95,6 +107,9 @@ QWidget *AppLimits::createCBLayout()
     hLayout->addWidget(lblUnit);
     hLayout->addStretch();
     mWidget->setLayout(hLayout);
+
+    connect(checkBox, &QCheckBox::clicked, [this](bool checked){ Settings::settings.setValue("Settings/AppLimits", checked);
+        qDebug() << Settings::settings.value("Settings/AppLimits"); });
 
     return mWidget;
 }
