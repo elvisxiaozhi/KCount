@@ -171,7 +171,7 @@ void MainWindow::startOnBootActChanged()
 
 void MainWindow::showNotification(QString appName)
 {
-    if(Settings::settings.value("Settings/isLimitsOn") == true) {
+    if(Initialisation::settings.value("InitSettings/isLimitsOn") == true) {
         notification->setLabelText(appName);
         notification->show();
     }

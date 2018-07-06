@@ -5,7 +5,6 @@
 #include <QDebug>
 
 QSettings Settings::startOnBootSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-QSettings Settings::settings("My Computer", "Nana"); //must set computer and app names to initiate QSettings
 
 Settings::Settings(QWidget *parent) : QWidget(parent)
 {

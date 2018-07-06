@@ -5,7 +5,7 @@
 #include <QHBoxLayout>
 #include "notification.h"
 #include <QDebug>
-#include "settings.h"
+#include "initialisation.h"
 
 AppLimits::AppLimits(QWidget *parent) : QWidget(parent)
 {
@@ -97,8 +97,8 @@ QWidget *AppLimits::createCBLayout()
 
     initWidgets();
 
-    connect(checkBox, &QCheckBox::clicked, [this](bool checked){ Settings::settings.setValue("Settings/isLimitsOn", checked); });
-    connect(limitsEdit, &QLineEdit::textChanged, [this](QString text){ Settings::settings.setValue("Settings/ShowLimitsTime", text); });
+    connect(checkBox, &QCheckBox::clicked, [this](bool checked){ Initialisation::settings.setValue("InitSettings/isLimitsOn", checked); });
+    connect(limitsEdit, &QLineEdit::textChanged, [this](QString text){ Initialisation::settings.setValue("InitSettings/ShowLimitsTime", text); });
 
     return mWidget;
 }
@@ -136,8 +136,8 @@ void AppLimits::createBtmLayout()
 
 void AppLimits::initWidgets()
 {
-    if(Settings::settings.value("Settings/isLimitsOn").isValid()) {
-        if(Settings::settings.value("Settings/isLimitsOn") == true) {
+    if(Initialisation::settings.value("InitSettings/isLimitsOn").isValid()) {
+        if(Initialisation::settings.value("InitSettings/isLimitsOn") == true) {
             checkBox->setChecked(true);
         }
         else {
@@ -146,15 +146,15 @@ void AppLimits::initWidgets()
     }
     else {
         checkBox->setChecked(true);
-        Settings::settings.setValue("Settings/isLimitsOn", true);
+        Initialisation::settings.setValue("InitSettings/isLimitsOn", true);
     }
 
-    if(Settings::settings.value("Settings/ShowLimitsTime").isValid()) {
-        limitsEdit->setText(Settings::settings.value("Settings/ShowLimitsTime").toString());
+    if(Initialisation::settings.value("InitSettings/ShowLimitsTime").isValid()) {
+        limitsEdit->setText(Initialisation::settings.value("InitSettings/ShowLimitsTime").toString());
     }
     else {
         limitsEdit->setText("3");
-        Settings::settings.setValue("Settings/ShowLimitsTime", limitsEdit->text());
+        Initialisation::settings.setValue("InitSettings/ShowLimitsTime", limitsEdit->text());
     }
 }
 

@@ -4,7 +4,6 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QShortcut>
-#include <QDebug>
 
 About::About(QWidget *parent) : QWidget(parent)
 {
