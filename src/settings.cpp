@@ -11,18 +11,7 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
 {
     setWindowStyleSheet();
     setWindowLayout();
-    scrollVLayout->addWidget(createToolBtn("App Limits"));
-
-    appLimits = new AppLimits(this); //after creating tool btn, make create its widget
-    appLimits->createMainLayout();
-    scrollVLayout->addWidget(appLimits);
-
-    scrollVLayout->addWidget(createToolBtn("About Nana"));
-
-    about = new About(this);
-    scrollVLayout->addWidget(about);
-
-    scrollVLayout->addStretch();
+    createToolBtns();
 }
 
 void Settings::setWindowStyleSheet()
@@ -77,6 +66,24 @@ QToolButton *Settings::createToolBtn(QString name)
     connect(toolBtn, &QToolButton::clicked, [this, toolBtn](bool checked){ toolBtnClicked(toolBtn->text(), checked); });
 
     return toolBtn;
+}
+
+void Settings::createToolBtns()
+{
+    scrollVLayout->addWidget(createToolBtn("App Limits"));
+
+    appLimits = new AppLimits(this); //after creating tool btn, make create its widget
+    appLimits->createMainLayout();
+    scrollVLayout->addWidget(appLimits);
+
+    scrollVLayout->addWidget(createToolBtn("Reset"));
+
+    scrollVLayout->addWidget(createToolBtn("About Nana"));
+
+    about = new About(this);
+    scrollVLayout->addWidget(about);
+
+    scrollVLayout->addStretch();
 }
 
 void Settings::paintEvent(QPaintEvent *event)

@@ -29,6 +29,7 @@ private:
     void setWindowStyleSheet();
     void setWindowLayout();
     QToolButton *createToolBtn(QString);
+    void createToolBtns();
 
 protected:
     void paintEvent(QPaintEvent *);

@@ -36,7 +36,7 @@ QAction *Sidebar::actionAt(const QPoint &point)
 {
     int posY = 110;
     for(auto action : actList) {
-        QRect actRect(0, posY, 200, 50); //set width to 200(its width) and height to 50, or the hover effect will sometimes show and the checked effect will disappear
+        QRect actRect(0, posY, 195, 50); //set width to 195 and height to 50, or the hover effect will sometimes show and the checked effect will disappear
         if(actRect.contains(point)) {
             return action;
         }
