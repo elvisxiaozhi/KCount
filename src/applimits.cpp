@@ -45,7 +45,7 @@ void AppLimits::setWidgetStyleSheet()
                 "QTabBar::tab:pressed { background-color: #EC7063 }"
                 "QTabWidget::pane { border: 2px solid #FF5A5F; }"
                 "QPushButton { background-color: #f0f8ff; font-size: 15px; border-radius: 2px; border: 1px solid #808080; padding: 6px 10px; margin: 5px 2px;}"
-                "QPushButton:hover { border: 2px solid #111111; }"
+                "QPushButton:hover { border: 2px solid #111111; margin: 5px 1px; }"
                 "QPushButton:pressed { background-color: #EC7063 }"
                 );
 }

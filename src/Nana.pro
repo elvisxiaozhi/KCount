@@ -52,7 +52,8 @@ SOURCES += \
     callout.cpp \
     notification.cpp \
     applimits.cpp \
-    about.cpp
+    about.cpp \
+    reset.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -81,7 +82,8 @@ HEADERS += \
     callout.h \
     notification.h \
     applimits.h \
-    about.h
+    about.h \
+    reset.h
 
 win32 {
     RC_FILE = config/AdminPriv.rc

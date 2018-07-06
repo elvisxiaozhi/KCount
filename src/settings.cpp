@@ -77,6 +77,8 @@ void Settings::createToolBtns()
     scrollVLayout->addWidget(appLimits);
 
     scrollVLayout->addWidget(createToolBtn("Reset"));
+    reset = new Reset(this);
+    scrollVLayout->addWidget(reset);
 
     scrollVLayout->addWidget(createToolBtn("About Nana"));
 
@@ -123,6 +125,14 @@ void Settings::toolBtnClicked(QString name, bool checked)
             appLimits->removeLimitedList();
         }
     }
+    if(name == "Reset") {
+        if(checked) {
+            reset->show();
+        }
+        else {
+            reset->hide();
+        }
+    }
     if(name == "About Nana") {
         if(checked) {
             about->show();
@@ -131,5 +141,4 @@ void Settings::toolBtnClicked(QString name, bool checked)
             about->hide();
         }
     }
-
 }

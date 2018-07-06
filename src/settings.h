@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QToolButton>
 #include "applimits.h"
+#include "reset.h"
 #include "about.h"
 
 class Settings : public QWidget
@@ -24,6 +25,7 @@ private:
     QToolButton *limitsBtn, *aboutBtn;
     QVector<QToolButton *> btnVec;
     AppLimits *appLimits;
+    Reset *reset;
     About *about;
 
     void setWindowStyleSheet();
