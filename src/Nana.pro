@@ -29,61 +29,61 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     sidebar.cpp \
-    overview.cpp \
-    totalpressed.cpp \
-    hook.cpp \
-    signalemitter.cpp \
-    database.cpp \
-    mostpressed.cpp \
-    mouseclick.cpp \
     label.cpp \
-    dashboard.cpp \
-    users.cpp \
-    settings.cpp \
-    barchart.cpp \
     initialisation.cpp \
     messagebox.cpp \
-    stackedbarchart.cpp \
-    piechart.cpp \
-    mostused.cpp \
-    appusagestackedbarchart.cpp \
     customtitlebar.cpp \
     custombutton.cpp \
-    callout.cpp \
     notification.cpp \
-    applimits.cpp \
-    about.cpp \
-    reset.cpp
+    core/hook.cpp \
+    core/database.cpp \
+    overview/mostpressed.cpp \
+    overview/mostused.cpp \
+    overview/mouseclick.cpp \
+    overview/overview.cpp \
+    overview/totalpressed.cpp \
+    dashboard/appusagestackedbarchart.cpp \
+    dashboard/barchart.cpp \
+    dashboard/callout.cpp \
+    dashboard/dashboard.cpp \
+    dashboard/piechart.cpp \
+    dashboard/stackedbarchart.cpp \
+    settings/about.cpp \
+    settings/applimits.cpp \
+    settings/reset.cpp \
+    settings/settings.cpp \
+    users/users.cpp \
+    core/signalemitter.cpp
 
 HEADERS += \
         mainwindow.h \
     sidebar.h \
-    overview.h \
-    totalpressed.h \
-    hook.h \
-    signalemitter.h \
-    singleton.h \
-    database.h \
-    mostpressed.h \
-    mouseclick.h \
     label.h \
-    dashboard.h \
-    users.h \
-    settings.h \
-    barchart.h \
     initialisation.h \
     messagebox.h \
-    stackedbarchart.h \
-    piechart.h \
-    mostused.h \
-    appusagestackedbarchart.h \
     customtitlebar.h \
     custombutton.h \
-    callout.h \
     notification.h \
-    applimits.h \
-    about.h \
-    reset.h
+    core/hook.h \
+    core/database.h \
+    overview/mostpressed.h \
+    overview/mostused.h \
+    overview/mouseclick.h \
+    overview/overview.h \
+    overview/totalpressed.h \
+    dashboard/appusagestackedbarchart.h \
+    dashboard/barchart.h \
+    dashboard/callout.h \
+    dashboard/dashboard.h \
+    dashboard/piechart.h \
+    dashboard/stackedbarchart.h \
+    settings/about.h \
+    settings/applimits.h \
+    settings/reset.h \
+    settings/settings.h \
+    users/users.h \
+    core/signalemitter.h \
+    core/singleton.h
 
 win32 {
     RC_FILE = config/AdminPriv.rc

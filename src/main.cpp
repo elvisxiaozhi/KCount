@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "hook.h"
+#include "core/hook.h"
 #include <QDebug>
 
 int main(int argc, char *argv[])

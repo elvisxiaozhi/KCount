@@ -2,9 +2,9 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QPaintEvent>
-#include "signalemitter.h"
+#include "core/signalemitter.h"
 #include <QDebug>
-#include "database.h"
+#include "core/database.h"
 
 TotalPressed::TotalPressed(QWidget *parent, int mode, QString lblTitle)
     : QWidget(parent)

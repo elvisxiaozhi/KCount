@@ -4,8 +4,6 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include "initialisation.h"
-#include "hook.h"
-#include "settings.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

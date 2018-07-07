@@ -2,8 +2,8 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QDateTime>
-#include "mostpressed.h"
-#include "database.h"
+#include "overview/mostpressed.h"
+#include "core/database.h"
 #include "callout.h"
 
 QMap<int, unsigned long int> BarChart::dailyMap = {};

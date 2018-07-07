@@ -1,7 +1,7 @@
 #include "stackedbarchart.h"
 #include <QVBoxLayout>
 #include <QDebug>
-#include "database.h"
+#include "core/database.h"
 #include "callout.h"
 #include <QDate>
 

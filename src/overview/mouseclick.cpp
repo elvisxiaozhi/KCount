@@ -2,10 +2,10 @@
 #include <QPaintEvent>
 #include <QStyleOption>
 #include <QPainter>
-#include "signalemitter.h"
-#include "database.h"
+#include "core/signalemitter.h"
+#include "core/database.h"
 #include <QDebug>
-#include "stackedbarchart.h"
+#include "dashboard/stackedbarchart.h"
 #include <QTime>
 
 MouseClick::MouseClick(QWidget *parent, int mode, QString lblTitle) : QWidget(parent)

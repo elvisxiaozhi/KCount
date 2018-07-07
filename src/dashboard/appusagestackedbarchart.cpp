@@ -1,7 +1,7 @@
 #include "appusagestackedbarchart.h"
-#include "database.h"
+#include "core/database.h"
 #include <QDebug>
-#include "signalemitter.h"
+#include "core/signalemitter.h"
 #include "callout.h"
 #include <QVBoxLayout>
 

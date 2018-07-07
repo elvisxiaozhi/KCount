@@ -4,12 +4,12 @@
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include "sidebar.h"
-#include "overview.h"
-#include "database.h"
+#include "overview/overview.h"
+#include "core/database.h"
 #include <QSystemTrayIcon>
-#include "dashboard.h"
-#include "users.h"
-#include "settings.h"
+#include "dashboard/dashboard.h"
+#include "users/users.h"
+#include "settings/settings.h"
 #include <QThread>
 #include "customtitlebar.h"
 #include "notification.h"

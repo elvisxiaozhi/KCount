@@ -8,7 +8,7 @@
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QFile>
-#include "database.h"
+#include "core/database.h"
 
 QMap<QString, QString> Notification::xmlMap = {};
 

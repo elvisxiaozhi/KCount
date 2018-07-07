@@ -3,9 +3,9 @@
 #include <QtWidgets/QMainWindow>
 #include <QtCharts/QPieSlice>
 #include <QVBoxLayout>
-#include "database.h"
+#include "core/database.h"
 #include <QDebug>
-#include "signalemitter.h"
+#include "core/signalemitter.h"
 #include "callout.h"
 
 PieChart::PieChart(QWidget *parent, int mode, QString title)

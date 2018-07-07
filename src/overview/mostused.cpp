@@ -4,8 +4,8 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QDebug>
-#include "signalemitter.h"
-#include "database.h"
+#include "core/signalemitter.h"
+#include "core/database.h"
 #include <QCoreApplication>
 #include "initialisation.h"
 

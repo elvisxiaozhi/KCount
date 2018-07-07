@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QTime>
 #include <QKeyEvent>
-#include <database.h>
+#include "core/database.h"
 
 Overview::Overview(QWidget *parent) : QWidget(parent)
 {

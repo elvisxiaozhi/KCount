@@ -3,10 +3,10 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QDebug>
-#include "database.h"
-#include "signalemitter.h"
+#include "core/database.h"
+#include "core/signalemitter.h"
 #include <QTime>
-#include "barchart.h"
+#include "dashboard/barchart.h"
 
 MostPressed::MostPressed(QWidget *parent, int mode, QString title) : QWidget(parent)
 {
