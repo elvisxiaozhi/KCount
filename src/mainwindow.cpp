@@ -102,7 +102,7 @@ void MainWindow::createSystemTrayIcon()
 
     connect(sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::sysTrayIconActivated);
     connect(startOnBootAct, &QAction::changed, this, &MainWindow::startOnBootActChanged);
-    connect(quitAct, &QAction::triggered, [this](){ Initialisation::quit = true; overview->updateDatabase(); qApp->quit(); });
+    connect(quitAct, &QAction::triggered, [this](){ /*Initialisation::quit = true;*/ overview->updateDatabase(); qApp->quit(); });
 }
 
 bool MainWindow::event(QEvent *event)
