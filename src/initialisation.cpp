@@ -6,6 +6,7 @@
 #include "core/database.h"
 
 QSettings Initialisation::settings("InitSettings", "Nana");
+QSettings Initialisation::startOnBoot("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
 //bool Initialisation::quit = false;
 
 Initialisation::Initialisation()
@@ -22,16 +23,16 @@ void Initialisation::writeInitXml()
     if(file.open(QIODevice::WriteOnly)) {
         xmlWriter.writeStartDocument();
         xmlWriter.writeStartElement("Init");
-//        for(auto mapKey : xmlMap.keys()) {
-//            xmlWriter.writeStartElement("App");
-            xmlWriter.writeTextElement("Name", "mapKey");
-            xmlWriter.writeTextElement("IsDefaultKey", "Y");
-//            xmlWriter.writeEndElement();
-//        }
 
-//        xmlWriter.writeEndElement();
+        xmlWriter.writeTextElement("AppPath", settings.value("InitSettings/AppPath").toString());
+        if(startOnBoot.value("Nana").isValid()) {
+            xmlWriter.writeTextElement("StartOnBoot", "True");
+        }
+        else {
+            xmlWriter.writeTextElement("StartOnBoot", "False");
+        }
+
         xmlWriter.writeEndDocument();
         file.close();
     }
-    qDebug() << "Done" << path;
 }

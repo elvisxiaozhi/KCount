@@ -15,7 +15,6 @@ class Settings : public QWidget
     Q_OBJECT
 public:
     explicit Settings(QWidget *parent = nullptr);
-    static QSettings startOnBootSettings;
 
 private:
     QVBoxLayout *mainVLayout, *scrollVLayout;

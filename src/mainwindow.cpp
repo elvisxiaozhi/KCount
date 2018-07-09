@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     createSystemTrayIcon();
     setFixedSize(1250, 800);
 
+    Initialisation::writeInitXml();
+
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
     connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
     connect(overview, &Overview::newDayComes, dashboard, &Dashboard::newDayComes);
@@ -160,10 +162,10 @@ void MainWindow::sidebarActChanged(int index)
 void MainWindow::startOnBootActChanged()
 {
     if(startOnBootAct->isChecked()) {
-        Settings::startOnBootSettings.setValue("Nana", QCoreApplication::applicationFilePath().replace('/', '\\'));
+        Initialisation::startOnBoot.setValue("Nana", QCoreApplication::applicationFilePath().replace('/', '\\'));
     }
     else {
-        Settings::startOnBootSettings.remove("Nana");
+        Initialisation::startOnBoot.remove("Nana");
     }
 }
 
