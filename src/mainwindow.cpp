@@ -162,11 +162,13 @@ void MainWindow::sidebarActChanged(int index)
 void MainWindow::startOnBootActChanged()
 {
     if(startOnBootAct->isChecked()) {
-        Initialisation::startOnBoot.setValue("Nana", QCoreApplication::applicationFilePath().replace('/', '\\'));
+        Initialisation::startOnBoot.setValue("Nana", Initialisation::settings.value("InitSettings/AppPath").toString() + "\\OpenProc.exe");
     }
     else {
         Initialisation::startOnBoot.remove("Nana");
     }
+
+    Initialisation::writeInitXml();
 }
 
 void MainWindow::showNotification(QString appName)

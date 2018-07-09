@@ -43,6 +43,8 @@ void Reset::createMainLayout()
     mainVLayout->addLayout(appPathHLayout);
     mainVLayout->addLayout(resetHLayout);
     setLayout(mainVLayout);
+
+    connect(appPathEdit, &QLineEdit::textChanged, [this](){ Initialisation::settings.setValue("InitSettings/AppPath", appPathEdit->text()); Initialisation::writeInitXml(); });
 }
 
 void Reset::paintEvent(QPaintEvent *)
