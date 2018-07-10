@@ -53,7 +53,8 @@ SOURCES += \
     settings/reset.cpp \
     settings/settings.cpp \
     users/users.cpp \
-    core/signalemitter.cpp
+    core/signalemitter.cpp \
+    core/runguard.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -83,7 +84,8 @@ HEADERS += \
     settings/settings.h \
     users/users.h \
     core/signalemitter.h \
-    core/singleton.h
+    core/singleton.h \
+    core/runguard.h
 
 win32 {
     RC_FILE = config/AdminPriv.rc

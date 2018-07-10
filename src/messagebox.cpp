@@ -1,8 +1,6 @@
 #include "messagebox.h"
 #include <QCloseEvent>
 #include <QDebug>
-#include <QFlags>
-#include <QFlag>
 
 MessageBox::MessageBox(QWidget *parent) : QMessageBox(parent)
 {
