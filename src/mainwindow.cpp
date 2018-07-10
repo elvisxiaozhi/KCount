@@ -94,6 +94,9 @@ void MainWindow::createSystemTrayIcon()
 
     startOnBootAct = new QAction(tr("Start on Boot"), sysTrayIcon);
     startOnBootAct->setCheckable(true);
+    if(Initialisation::startOnBoot.value("Nana").isValid()) {
+        startOnBootAct->setChecked(true);
+    }
 
     QAction *quitAct = new QAction(tr("Quit"), menu);
     quitAct->setIcon(QIcon(":/icons/quit.png"));

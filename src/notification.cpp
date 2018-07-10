@@ -45,7 +45,7 @@ void Notification::showErrorText(DWORD errorNum)
     char *messageBuffer = NULL;
     FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, errorNum, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
-    qDebug() <<  errorNum << messageBuffer;
+    qDebug() <<errorNum << messageBuffer;
 }
 
 void Notification::deleteRegValue(QString limitedApp)
@@ -55,32 +55,24 @@ void Notification::deleteRegValue(QString limitedApp)
 
     LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, KEY_ALL_ACCESS , &hKey);
 
-    if(openRes == ERROR_SUCCESS) {
-        qDebug() << "Success opening key.";
-    }
-    else {
-        qDebug() << "Error opening key.";
+    if(openRes != ERROR_SUCCESS) {
+        qDebug() << "Opening registry error: ";
         showErrorText(openRes);
     }
 
     PCTSTR deleteValue = TEXT("debugger");
     LONG deletValueRes = RegDeleteValue(hKey, deleteValue);
 
-    if(deletValueRes == ERROR_SUCCESS) {
-        qDebug() << "delete success!";
-    }
-    else {
-        qDebug() << "delete failed!";
+    if(deletValueRes != ERROR_SUCCESS) {
+        qDebug() << "Deleting registry value error: ";
         showErrorText(deletValueRes);
     }
 
     LONG closeOut = RegCloseKey(hKey);
 
-    if(closeOut == ERROR_SUCCESS) {
-        qDebug() << "Success closing key.";
-    }
-    else {
-        qDebug() << "Error closing key.";
+    if(closeOut != ERROR_SUCCESS) {
+        qDebug() << "Closing registry error: ";
+        showErrorText(closeOut);
     }
 }
 
@@ -91,31 +83,23 @@ void Notification::deleteRegKey(QString delApp)
 
     LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sk, 0, KEY_ALL_ACCESS , &hKey);
 
-    if(openRes == ERROR_SUCCESS) {
-        qDebug() << "Success opening key.";
-    }
-    else {
-        qDebug() << "Error opening key.";
+    if(openRes != ERROR_SUCCESS) {
+        qDebug() << "Opening registry error: ";
         showErrorText(openRes);
     }
 
     LONG deleteKeyRes = RegDeleteKey(hKey, QStoWCHAR(delApp));
 
-    if(deleteKeyRes == ERROR_SUCCESS) {
-        qDebug() << "Delete key success";
-    }
-    else {
-        qDebug() << "Delete key failed";
+    if(deleteKeyRes != ERROR_SUCCESS) {
+        qDebug() << "Deleting registry key error: ";
         showErrorText(deleteKeyRes);
     }
 
     LONG closeOut = RegCloseKey(hKey);
 
-    if(closeOut == ERROR_SUCCESS) {
-        qDebug() << "Success closing key.";
-    }
-    else {
-        qDebug() << "Error closing key.";
+    if(closeOut != ERROR_SUCCESS) {
+        qDebug() << "Closing registry error: ";
+        showErrorText(closeOut);
     }
 }
 
@@ -191,12 +175,8 @@ void Notification::createRegistry(QString limitedApp)
 
     LONG createResKey = RegCreateKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, NULL, 0, KEY_WRITE, NULL, &hKey, NULL);
 
-    if (createResKey == ERROR_SUCCESS) {
-        qDebug() << "Success creating key.";
-    }
-    else {
-        qDebug() << "Error creating key.";
-
+    if (createResKey != ERROR_SUCCESS) {
+        qDebug() << "Creating registry key error: ";
         showErrorText(createResKey);
     }
 
@@ -204,11 +184,9 @@ void Notification::createRegistry(QString limitedApp)
     LPCTSTR data = TEXT("debugfile.exe");
     LONG setRes = RegSetValueEx(hKey, value, 0, REG_SZ, (LPBYTE)data, _tcslen(data) * sizeof(TCHAR));
 
-    if(setRes == ERROR_SUCCESS) {
-        qDebug() << "Success writing to Registry.";
-    }
-    else {
-        qDebug() << "Error writing to Registry.";
+    if(setRes != ERROR_SUCCESS) {
+        qDebug() << "Writing registry key error: ";
+        showErrorText(setRes);
     }
 
     //writeXml needs to be there, or the registry can not be closed
@@ -224,11 +202,9 @@ void Notification::createRegistry(QString limitedApp)
 
     LONG closeOut = RegCloseKey(hKey);
 
-    if(closeOut == ERROR_SUCCESS) {
-        qDebug() << "Success closing key.";
-    }
-    else {
-        qDebug() << "Error closing key.";
+    if(closeOut != ERROR_SUCCESS) {
+        qDebug() << "Closing registry error: ";
+        showErrorText(closeOut);
     }
 }
 
@@ -238,7 +214,6 @@ bool Notification::isDefaultKey(QString subKey)
 
     LONG openRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, QStoWCHAR(subKey), 0, KEY_ALL_ACCESS , &hKey);
     if (openRes == ERROR_SUCCESS) { //must open first
-        qDebug() << "Success opening key.";
 
         if(RegQueryValueEx(hKey, TEXT("MitigationOptions"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
             qDebug() << "Default Key";
@@ -249,7 +224,8 @@ bool Notification::isDefaultKey(QString subKey)
         }
     }
     else {
-        qDebug() << "Error opening key.";
+        qDebug() << "Opening registry key error: ";
+        showErrorText(openRes);
     }
 
     return false;

@@ -3,7 +3,10 @@
 #include <QPainter>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QDebug>
 #include "initialisation.h"
+#include "core/database.h"
+#include <QDir>
 
 Reset::Reset(QWidget *parent) : QWidget(parent)
 {
@@ -45,6 +48,7 @@ void Reset::createMainLayout()
     setLayout(mainVLayout);
 
     connect(appPathEdit, &QLineEdit::textChanged, [this](){ Initialisation::settings.setValue("InitSettings/AppPath", appPathEdit->text()); Initialisation::writeInitXml(); });
+    connect(resetBtn, &QPushButton::clicked, this, &Reset::resetAll);
 }
 
 void Reset::paintEvent(QPaintEvent *)
@@ -53,4 +57,10 @@ void Reset::paintEvent(QPaintEvent *)
     opt.init(this);
     QPainter painter(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
+}
+
+void Reset::resetAll()
+{
+    QDir dir(Database::dataPath);
+    dir.removeRecursively();
 }

@@ -25,12 +25,6 @@ void Initialisation::writeInitXml()
         xmlWriter.writeStartElement("Init");
 
         xmlWriter.writeTextElement("AppPath", settings.value("InitSettings/AppPath").toString());
-        if(startOnBoot.value("Nana").isValid()) {
-            xmlWriter.writeTextElement("StartOnBoot", "True");
-        }
-        else {
-            xmlWriter.writeTextElement("StartOnBoot", "False");
-        }
 
         xmlWriter.writeEndDocument();
         file.close();

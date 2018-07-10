@@ -21,6 +21,9 @@ private:
 
 protected:
     void paintEvent(QPaintEvent *);
+
+private slots:
+    void resetAll();
 };
 
 #endif // RESET_H

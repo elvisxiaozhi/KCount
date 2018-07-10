@@ -456,8 +456,8 @@ void Database::createDataFile()
         }
         else {
             QFile::copy(QDir::currentPath() + "/UserData.mdb", databaseLoc);
+            Initialisation::settings.setValue("InitSettings/AppPath", QDir::currentPath());
         }
-        Initialisation::settings.setValue("InitSettings/AppPath", QDir::currentPath());
     }
 }
 
