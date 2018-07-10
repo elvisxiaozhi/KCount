@@ -11,45 +11,28 @@ MessageBox::MessageBox(QWidget *parent) : QMessageBox(parent)
     setMinimumSize(400, 300);
 }
 
-void MessageBox::showSuccessMsBox()
+void MessageBox::showSuccessMsBox(QString text)
 {
     setWindowTitle(tr("Action Succeeded"));
+    setIcon(QMessageBox::Information);
+    setStandardButtons(QMessageBox::Ok);
+    setText(text);
     setDetailedText("");
     exec();
 }
 
-void MessageBox::showQuestionMsBox(int msBoxType)
+void MessageBox::showQuestionMsBox()
 {
     setIcon(QMessageBox::Warning);
     setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     setDefaultButton(QMessageBox::No);
-    setDetailedText("");
-    if(msBoxType == 2) {
-        setDetailedText(tr("This will reset all your settings, clear the datebase and delete all the user data."));
-    }
-    if(msBoxType == 3) {
-        setDetailedText(tr("This will delete this app and everything relevant to this app completely."));
-    }
+    setText(tr("Are you sure you want to reset everything to default?"));
+    setDetailedText(tr("This will reset all settings to default, including deleting user data."));
     int ret = exec();
 
     switch (ret) {
     case QMessageBox::Yes:
-        switch (msBoxType) {
-        case 0:
-            emit resetSettingsConfirmed();
-            break;
-        case 1:
-            emit clearDatabaseConfirmed();
-            break;
-        case 2:
-            emit resetAllConfirmed();
-            break;
-        case 3:
-            emit deleteAppConfirmed();
-            break;
-        default:
-            break;
-        }
+        emit resetConfirmed();
         break;
     default:
         break;

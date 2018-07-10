@@ -14,8 +14,6 @@ MainWindow::MainWindow(QWidget *parent)
     createSystemTrayIcon();
     setFixedSize(1250, 800);
 
-    Initialisation::writeInitXml();
-
     connect(sidebar, &Sidebar::actionChanged, this, &MainWindow::changeContent);
     connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
     connect(overview, &Overview::newDayComes, dashboard, &Dashboard::newDayComes);

@@ -16,6 +16,9 @@ Reset::Reset(QWidget *parent) : QWidget(parent)
                   "QPushButton:hover { border: 2px solid red; margin: 5px 1px; }"
                   "QPushButton:pressed { background-color: #EC7063 }");
     createMainLayout();
+
+    messageBox = new MessageBox(this);
+    connect(messageBox, &MessageBox::resetConfirmed, this, &Reset::resetAll);
 }
 
 void Reset::createMainLayout()
@@ -48,7 +51,7 @@ void Reset::createMainLayout()
     setLayout(mainVLayout);
 
     connect(appPathEdit, &QLineEdit::textChanged, [this](){ Initialisation::settings.setValue("InitSettings/AppPath", appPathEdit->text()); Initialisation::writeInitXml(); });
-    connect(resetBtn, &QPushButton::clicked, this, &Reset::resetAll);
+    connect(resetBtn, &QPushButton::clicked, [this](){ messageBox->setWindowTitle(tr("Reset All")); messageBox->showQuestionMsBox(); });
 }
 
 void Reset::paintEvent(QPaintEvent *)
@@ -69,4 +72,6 @@ void Reset::resetAll()
 
     Initialisation::settings.remove("InitSettings");
     Initialisation::startOnBoot.remove("Nana");
+
+    messageBox->showSuccessMsBox("App has been set to default.");
 }

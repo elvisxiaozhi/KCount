@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QPushButton>
+#include "messagebox.h"
 
 class Reset : public QWidget
 {
@@ -16,6 +17,7 @@ private:
     QVBoxLayout *mainVLayout;
     QLineEdit *appPathEdit;
     QPushButton *resetBtn;
+    MessageBox *messageBox;
 
     void createMainLayout();
 
