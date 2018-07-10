@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(titleBar, &CustomTitleBar::actionChanged, this, &MainWindow::sidebarActChanged);
     connect(overview, &Overview::newDayComes, dashboard, &Dashboard::newDayComes);
     connect(overview, &Overview::limitAppAlert, this, &MainWindow::showNotification);
+    connect(settings, &Settings::resetStarting, [this](){ startOnBootAct->setChecked(false); });
 }
 
 MainWindow::~MainWindow()

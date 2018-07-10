@@ -41,6 +41,9 @@ protected:
 signals:
     void delBtnClicked(int);
 
+public slots:
+    void reset();
+
 private slots:
     void addBtnClicked();
     void delLimitedApp(int);

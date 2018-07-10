@@ -34,6 +34,9 @@ private:
 protected:
     void paintEvent(QPaintEvent *);
 
+signals:
+    void resetStarting();
+
 private slots:
     void toolBtnClicked(QString, bool);
 };

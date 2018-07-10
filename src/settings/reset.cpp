@@ -61,6 +61,12 @@ void Reset::paintEvent(QPaintEvent *)
 
 void Reset::resetAll()
 {
+    emit resetStarting();
+    appPathEdit->setText("");
+
     QDir dir(Database::dataPath);
     dir.removeRecursively();
+
+    Initialisation::settings.remove("InitSettings");
+    Initialisation::startOnBoot.remove("Nana");
 }

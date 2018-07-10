@@ -231,6 +231,14 @@ void AppLimits::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
 }
 
+void AppLimits::reset()
+{
+    int delTimes = Notification::xmlMap.size();
+    for(int i = 0; i < delTimes; ++i) {
+        delLimitedApp(0);
+    }
+}
+
 void AppLimits::addBtnClicked()
 {
     addBtn->hide();

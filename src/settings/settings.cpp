@@ -9,6 +9,9 @@ Settings::Settings(QWidget *parent) : QWidget(parent)
     setWindowStyleSheet();
     setWindowLayout();
     createToolBtns();
+
+    connect(reset, &Reset::resetStarting, appLimits, &AppLimits::reset);
+    connect(reset, &Reset::resetStarting, [this](){ emit resetStarting(); });
 }
 
 void Settings::setWindowStyleSheet()
