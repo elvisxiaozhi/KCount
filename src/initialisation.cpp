@@ -1,13 +1,11 @@
 #include "initialisation.h"
 #include <QDebug>
 #include <QXmlStreamWriter>
-#include <QXmlStreamReader>
 #include <QFile>
 #include "core/database.h"
 
 QSettings Initialisation::settings("InitSettings", "Nana");
 QSettings Initialisation::startOnBoot("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-//bool Initialisation::quit = false;
 
 Initialisation::Initialisation()
 {

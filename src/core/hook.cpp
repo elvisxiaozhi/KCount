@@ -17,7 +17,6 @@ LRESULT CALLBACK MyLowLevelKeyBoardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     //WPARAM is WM_KEYDOWn, WM_KEYUP, WM_SYSKEYDOWN, or WM_SYSKEYUP
     //LPARAM is the key information
-
     if (wParam == WM_KEYUP) { //Note: KEYUP not KEYDOWN
         //Get the key information
         KBDLLHOOKSTRUCT cKey = *((KBDLLHOOKSTRUCT*)lParam);
@@ -71,19 +70,8 @@ LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWND hwnd, LONG/* idObject*/, LONG/* idChild*/, DWORD/* dwEventThread*/, DWORD/* dwmsEventTime*/)
 {
     if(dwEvent == EVENT_SYSTEM_FOREGROUND) {
-//        wchar_t wnd_title[256];
 
         hwnd = GetForegroundWindow();
-
-//        HWND hParent = GetWindow(hwnd, GW_OWNER);
-
-//        if(hParent == NULL) {
-//            GetWindowText(hwnd, wnd_title, sizeof(wnd_title));
-////            std::wcout << wnd_title << std::endl;
-//        }
-//        else {
-//            GetWindowText(hParent, wnd_title, sizeof(wnd_title));
-//        }
 
         DWORD dwPID;
         GetWindowThreadProcessId(hwnd, &dwPID);
@@ -97,13 +85,10 @@ void CALLBACK MyWinEventProc(HWINEVENTHOOK/* hWinEventHook*/, DWORD dwEvent, HWN
             TCHAR Buffer[MAX_PATH];
             if(GetModuleFileNameEx(Handle, 0, Buffer, MAX_PATH)) {
                 // At this point, buffer contains the full path to the executable
-//                qDebug() << "Path" << QString::fromUtf16((ushort*)Buffer);
                 Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)Buffer));
             }
             CloseHandle(Handle);
         }
-
-//        Emitter::Instance()->appChanged(QString::fromUtf16((ushort*)wnd_title));
     }
 }
 
@@ -115,21 +100,8 @@ Hook::Hook()
         qDebug() << "Hook Failed";
     }
 
-//    MSG msg;
     winEventHook = ::SetWinEventHook(EVENT_MIN, EVENT_MAX, NULL, MyWinEventProc, 0, 0, WINEVENT_OUTOFCONTEXT);
     if (winEventHook == NULL) {
         qDebug() << "Win Event Hook failed";
     }
-
-    //the code below will cause QLineEdit unable to put in lower case letter
-    //I am not sure what the code below does nowadays, cause I forgot to write comments before
-
-//    while(GetMessageW(&msg, 0, 0, 0)) {
-//        DispatchMessageW(&msg);
-
-//        if(Initialisation::quit) {
-//            PostQuitMessage(0);
-//            break;
-//        }
-//    }
 }

@@ -9,7 +9,6 @@ public:
     Initialisation();
     static QSettings settings;
     static QSettings startOnBoot;
-//    static bool quit;
 
     static void writeInitXml();
 };
